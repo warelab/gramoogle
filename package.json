@@ -1,0 +1,41 @@
+{
+  "name": "gramoogle",
+  "version": "0.0.0",
+  "description": "Gramene search interface",
+  "main": "index.js",
+  "scripts": {
+    "build": "browserify -t reactify src/index.js -o build/bundle.js",
+    "start": "watchify -t reactify src/index.js -o build/bundle.js --debug -v",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:warelab/gramoogle"
+  },
+  "author": "warelab",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/warelab/gramoogle/issues"
+  },
+  "homepage": "https://github.com/warelab/gramoogle",
+  "dependencies": {
+    "jquery": "^2.1.3",
+    "lodash": "^3.1.0",
+    "q": "^1.1.2",
+    "react": "^0.12.2"
+  },
+  "devDependencies": {
+    "browserify": "^8.1.3",
+    "gulp": "^3.8.11",
+    "gulp-batch": "^1.0.5",
+    "gulp-debug": "^2.0.0",
+    "gulp-jshint": "^1.9.2",
+    "gulp-sourcemaps": "^1.3.0",
+    "gulp-util": "^3.0.3",
+    "jshint": "^2.6.0",
+    "reactify": "^1.0.0",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.0.0",
+    "watchify": "^2.3.0"
+  }
+}
