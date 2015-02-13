@@ -17,7 +17,7 @@ var paths = {
   data: ['./data/*'],
   scripts: {
     index: './index.js',
-    watchable: ["./index.js", "./scripts/*.js*"],
+    watchable: ["./index.js", "./scripts/**/*.js*"],
     browserify: ["./scripts/*.js*"],
     vendor: ["./scripts/vendor/*.js"]
   },
@@ -69,7 +69,7 @@ gulp.task('test', function () {
   }));
 });
 
-gulp.task('build', ['lint', 'test', 'browserify'])
+gulp.task('build', ['lint', 'test', 'browserify']);
 
 gulp.task('watch', function() {
   watch(paths.scripts.watchable, batch(function () {

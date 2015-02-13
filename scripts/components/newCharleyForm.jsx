@@ -12,7 +12,7 @@ var NewCharleyForm = React.createClass({
   render: function() {
     return (
       <form ref="newCharleyForm" onSubmit={this.handleNewCharley}>
-        <label htmlFor="newCharleySays">What should Charley say?</label>
+        <label htmlFor="newCharleySays">What should Charley say&#63;</label>
         <input type="text" ref="newCharleySays" placeholder="React" />
         <button>New Charley</button>
       </form>
