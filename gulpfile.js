@@ -9,6 +9,7 @@ var buffer = require('vinyl-buffer');
 var watch = require('gulp-watch');
 var batch = require('gulp-batch');
 var debug = require('gulp-debug');
+var jest = require('gulp-jest');
 
 var paths = {
   styles: ['./styles/*.styl'],
@@ -49,9 +50,24 @@ gulp.task('browserify', function() {
     .pipe(gulp.dest('build'));
 });
 
-gulp.task('test', function() {
-  console.error('testing not yet implemented');
-})
+gulp.task('test', function () {
+  return gulp.src('__tests__')
+    .pipe(jest({
+      testDirectoryName: "__tests__",
+      scriptPreprocessor: "../preprocessor.js",
+      unmockedModulePathPatterns: [
+        "node_modules/react"
+      ],
+      testPathIgnorePatterns: [
+        "node_modules"
+      ],
+      moduleFileExtensions: [
+        "js",
+        "jsx",
+        "json"
+      ]
+  }));
+});
 
 gulp.task('build', ['lint', 'test', 'browserify'])
 
