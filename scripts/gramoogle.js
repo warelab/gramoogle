@@ -3,4 +3,4 @@
 var React = require('react');
 var App = require('./components/app.jsx');
 
-React.renderComponent(new App(), document.getElementById('content'));
+React.render(new App(), document.getElementById('content'));

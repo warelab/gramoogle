@@ -10,7 +10,7 @@ var CharleyList = React.createClass({
   render: function() {
     var charlies = this.props.sayings.map(function(saying, index) {
       return (
-        <li><Charley what={saying} index={index} onDelete={this.deleteCharley} /></li>
+        <li key={saying + index}><Charley what={saying} index={index} onDelete={this.deleteCharley} /></li>
       )
     }.bind(this));
 
