@@ -19,7 +19,8 @@
   },
   "homepage": "https://github.com/warelab/gramoogle",
   "dependencies": {
-    "react": "^0.12.2"
+    "react": "^0.12.2",
+    "reflux": "^0.2.5"
   },
   "devDependencies": {
     "browserify": "^8.1.3",

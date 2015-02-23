@@ -10,7 +10,7 @@ describe('CharleyList', function() {
 
   var newCharleyList = function(deleteFunction) {
     return TestUtils.renderIntoDocument(
-      <CharleyList sayings={theSayings} onDelete={deleteFunction} />
+      <CharleyList sayings={theSayings} />
     );
   };
 
@@ -21,16 +21,16 @@ describe('CharleyList', function() {
     expect(ol.props.children.length).toEqual(theSayings.length);
   });
 
-  it('should invoke callback when deleteCharley is pressed', function() {
-    var deleteWasCalled = false;
-    var exampleIndex = 1;
-    var charleyListEl = newCharleyList(function (deletedIndex) {
-      deleteWasCalled = true;
-      expect(deletedIndex).toEqual(exampleIndex);
-    });
-
-    charleyListEl.deleteCharley(exampleIndex);
-
-    expect(deleteWasCalled).toEqual(true);
-  })
+  //it('should invoke callback when deleteCharley is pressed', function() {
+  //  var deleteWasCalled = false;
+  //  var exampleIndex = 1;
+  //  var charleyListEl = newCharleyList(function (deletedIndex) {
+  //    deleteWasCalled = true;
+  //    expect(deletedIndex).toEqual(exampleIndex);
+  //  });
+  //
+  //  charleyListEl.deleteCharley(exampleIndex);
+  //
+  //  expect(deleteWasCalled).toEqual(true);
+  //})
 });

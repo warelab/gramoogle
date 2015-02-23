@@ -25,23 +25,23 @@ describe('App', function() {
     expect(charleyList.length).toEqual(1);
   });
 
-  it('should add additional Charley components when a new one is added', function() {
-    var app = newApp();
-
-    var charleys = TestUtils.scryRenderedComponentsWithType(app, Charley);
-    expect(charleys.length).toEqual(1);
-
-    app.addNewCharley('another one');
-    app.addNewCharley('and another');
-
-    charleys = TestUtils.scryRenderedComponentsWithType(app, Charley);
-    expect(charleys.length).toEqual(3);
-
-    app.deleteCharley(2);
-    app.deleteCharley(0);
-
-    charleys = TestUtils.scryRenderedComponentsWithType(app, Charley);
-    expect(charleys.length).toEqual(1);
-    expect(charleys[0].getDOMNode().textContent).toContain('another one');
-  });
+  //it('should add additional Charley components when a new one is added', function() {
+  //  var app = newApp();
+  //
+  //  var charleys = TestUtils.scryRenderedComponentsWithType(app, Charley);
+  //  expect(charleys.length).toEqual(1);
+  //
+  //  app.addNewCharley('another one');
+  //  app.addNewCharley('and another');
+  //
+  //  charleys = TestUtils.scryRenderedComponentsWithType(app, Charley);
+  //  expect(charleys.length).toEqual(3);
+  //
+  //  app.deleteCharley(2);
+  //  app.deleteCharley(0);
+  //
+  //  charleys = TestUtils.scryRenderedComponentsWithType(app, Charley);
+  //  expect(charleys.length).toEqual(1);
+  //  expect(charleys[0].getDOMNode().textContent).toContain('another one');
+  //});
 });

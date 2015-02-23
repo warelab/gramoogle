@@ -1,12 +1,13 @@
 'use strict';
 
 var React = require('react');
+var CharleyActions = require('../actions/charleyActions');
 
 var NewCharleyForm = React.createClass({
   handleNewCharley: function (e) {
     var whatCharleySays = this.refs.newCharleySays.getDOMNode();
     e.preventDefault();
-    this.props.onNewCharley(whatCharleySays.value.trim());
+    CharleyActions.addCharley(whatCharleySays.value.trim());
     whatCharleySays.value = '';
   },
   render: function() {

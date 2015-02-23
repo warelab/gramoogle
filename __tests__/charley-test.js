@@ -9,9 +9,9 @@ describe('Charley', function() {
   var theIndex = 1;
   var theSaying = 'The rain in Spain stays mainly in the plain';
 
-  var newCharley = function(deleteFunction) {
+  var newCharley = function() {
     return TestUtils.renderIntoDocument(
-      <Charley what={theSaying} index={theIndex} onDelete={deleteFunction} />
+      <Charley what={theSaying} index={theIndex} />
     );
   };
 
@@ -31,17 +31,17 @@ describe('Charley', function() {
     expect(image.getDOMNode().alt).toEqual('Charlie Says…');
   });
 
-  it('should invoke callback when delete button pressed', function() {
-    var deleteWasCalled = false;
-    var charleyEl = newCharley(function (deletedIndex) {
-      deleteWasCalled = true;
-      expect(deletedIndex).toEqual(theIndex);
-    });
-
-    var button = TestUtils.findRenderedDOMComponentWithTag(
-      charleyEl, 'button');
-    TestUtils.Simulate.click(button);
-
-    expect(deleteWasCalled).toEqual(true);
-  })
+  //it('should invoke callback when delete button pressed', function() {
+  //  var deleteWasCalled = false;
+  //  var charleyEl = newCharley(function (deletedIndex) {
+  //    deleteWasCalled = true;
+  //    expect(deletedIndex).toEqual(theIndex);
+  //  });
+  //
+  //  var button = TestUtils.findRenderedDOMComponentWithTag(
+  //    charleyEl, 'button');
+  //  TestUtils.Simulate.click(button);
+  //
+  //  expect(deleteWasCalled).toEqual(true);
+  //})
 })

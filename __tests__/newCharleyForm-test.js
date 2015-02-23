@@ -26,19 +26,19 @@ describe('NewCharleyForm', function() {
     expect(els.button.getDOMNode().textContent).toEqual('New Charley');
   });
 
-  it('should call the callback when the "New Charley" button is pressed', function() {
-    var callbackWasCalled = false;
-    var saying = 'TEST';
-    var component = newCharleyForm(function(passedSaying) {
-      callbackWasCalled = true;
-      expect(passedSaying).toEqual(saying);
-    });
-    var form = TestUtils.findRenderedDOMComponentWithTag(component, 'form');
-    var input = TestUtils.findRenderedDOMComponentWithTag(form, 'input');
-    input.getDOMNode().value = saying;
-
-    TestUtils.Simulate.submit(form);
-
-    expect(callbackWasCalled).toEqual(true);
-  });
+  //it('should call the callback when the "New Charley" button is pressed', function() {
+  //  var callbackWasCalled = false;
+  //  var saying = 'TEST';
+  //  var component = newCharleyForm(function(passedSaying) {
+  //    callbackWasCalled = true;
+  //    expect(passedSaying).toEqual(saying);
+  //  });
+  //  var form = TestUtils.findRenderedDOMComponentWithTag(component, 'form');
+  //  var input = TestUtils.findRenderedDOMComponentWithTag(form, 'input');
+  //  input.getDOMNode().value = saying;
+  //
+  //  TestUtils.Simulate.submit(form);
+  //
+  //  expect(callbackWasCalled).toEqual(true);
+  //});
 });
