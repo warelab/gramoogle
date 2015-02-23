@@ -1,9 +1,9 @@
 'use strict';
-jest.dontMock('../scripts/components/charleyList.jsx');
+jest.dontMock('../../scripts/components/charleyList.jsx');
 
 describe('CharleyList', function() {
   var React = require('react/addons');
-  var CharleyList = require('../scripts/components/charleyList.jsx');
+  var CharleyList = require('../../scripts/components/charleyList.jsx');
   var TestUtils = React.addons.TestUtils;
 
   var theSayings = ['The rain in Spain stays mainly in the plain', 'React'];
