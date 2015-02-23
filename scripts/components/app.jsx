@@ -8,7 +8,7 @@ var App = React.createClass({
   getInitialState: function () {
     return {
       charleySayings: [
-        'always tell your mummy before you go off somewhere'
+        'always tell your mummy before you go off somewhere (especially with travis)'
       ]
     };
   },
