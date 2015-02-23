@@ -1,10 +1,11 @@
 'use strict';
 
 var React = require('react');
+var CharleyActions = require('../actions/charleyActions');
 
 var Charley = React.createClass({
   handleDelete: function() {
-    this.props.onDelete(this.props.index);
+    CharleyActions.deleteCharley(this.props.index);
   },
   render: function(){
     return (

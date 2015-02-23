@@ -1,17 +1,18 @@
 'use strict';
-jest.dontMock('../scripts/components/charley.jsx');
+jest.dontMock('../../scripts/components/charley.jsx');
 
 describe('Charley', function() {
   var React = require('react/addons');
-  var Charley = require('../scripts/components/charley.jsx');
+  var Charley = require('../../scripts/components/charley.jsx');
+  var charleyActions = require('../../scripts/actions/charleyActions');
   var TestUtils = React.addons.TestUtils;
 
   var theIndex = 1;
   var theSaying = 'The rain in Spain stays mainly in the plain';
 
-  var newCharley = function(deleteFunction) {
+  var newCharley = function() {
     return TestUtils.renderIntoDocument(
-      <Charley what={theSaying} index={theIndex} onDelete={deleteFunction} />
+      <Charley what={theSaying} index={theIndex} />
     );
   };
 
@@ -31,17 +32,18 @@ describe('Charley', function() {
     expect(image.getDOMNode().alt).toEqual('Charlie Says…');
   });
 
-  it('should invoke callback when delete button pressed', function() {
-    var deleteWasCalled = false;
-    var charleyEl = newCharley(function (deletedIndex) {
-      deleteWasCalled = true;
-      expect(deletedIndex).toEqual(theIndex);
-    });
-
+  it('should invoke CharleyActions.deleteCharley when delete button pressed', function() {
+    var charleyEl = newCharley();
     var button = TestUtils.findRenderedDOMComponentWithTag(
       charleyEl, 'button');
+
+    charleyActions.deleteCharley = jest.genMockFn();
+
+    expect(charleyActions.deleteCharley).not.toBeCalled();
+
     TestUtils.Simulate.click(button);
 
-    expect(deleteWasCalled).toEqual(true);
-  })
-})
+    expect(charleyActions.deleteCharley.mock.calls.length).toBe(1);
+    expect(charleyActions.deleteCharley).toBeCalledWith(1);
+  });
+});
