@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/warelab/gramoogle",
   "dependencies": {
+    "debounce": "^1.0.0",
     "react": "^0.12.2",
     "reflux": "^0.2.5"
   },
