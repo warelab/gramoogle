@@ -29,7 +29,7 @@ var Filters = React.createClass({
       )
     }
     return (
-      <section class="filters">
+      <section className="filters">
         <h4>Filters</h4><button onClick={this.toggleDisplayState}>{this.state.expanded ? "Contract" : "Expand" }</button>
         {contents}
       </section>
