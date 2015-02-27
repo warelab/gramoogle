@@ -3,6 +3,5 @@
 var Reflux = require('reflux');
 
 module.exports = Reflux.createActions([
-  'addCharley',
-  'deleteCharley'
+  'setQueryString'
 ]);
