@@ -1,8 +1,8 @@
 'use strict';
 
-jest.dontMock('../scripts/components/app.jsx');
+jest.dontMock('../scripts/components/textSearch.jsx');
 
-describe('App', function() {
+describe('TextSearch', function() {
   var React = require('react/addons');
   var TextSearch = React.createFactory(require('../scripts/components/textSearch.jsx'));
   var TestUtils = React.addons.TestUtils;

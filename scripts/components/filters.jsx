@@ -1,6 +1,8 @@
 'use strict';
 
 var React = require('react');
+var FilterSummary = require('./filtersSummary.jsx');
+var FilterPickers = require('./filterPickers.jsx');
 //var SearchActions = require('../actions/searchActions');
 
 var Filters = React.createClass({
@@ -12,21 +14,14 @@ var Filters = React.createClass({
   },
   render: function(){
     var contents;
-    if(!this.state.expanded) {
+    if(this.state.expanded) {
       contents = (
-        <p>Filter summary</p>
-      )
-    }
-    else {
+        <FilterPickers />
+      );
+    } else {
       contents = (
-        <ol>
-          <li>Detailed</li>
-          <li>Information</li>
-          <li>About</li>
-          <li>The</li>
-          <li>Filters</li>
-        </ol>
-      )
+        <FilterSummary />
+      );
     }
     return (
       <section className="filters">
