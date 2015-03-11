@@ -16,11 +16,11 @@ var Filters = React.createClass({
     var contents;
     if(this.state.expanded) {
       contents = (
-        <FilterPickers />
+        <FilterPickers filters={this.props.filters} metadata={this.props.metadata} />
       );
     } else {
       contents = (
-        <FilterSummary />
+        <FilterSummary filters={this.props.filters} metadata={this.props.metadata} />
       );
     }
     return (

@@ -11,7 +11,7 @@ var TextSearch = React.createClass({
       node.value = e.target.value;
     }
     var val = node.value;
-    SearchActions.setQueryString(val);
+    SearchActions.search(val);
   },
   render: function(){
     return (
