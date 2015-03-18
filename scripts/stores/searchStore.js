@@ -2,75 +2,97 @@
 
 var Reflux = require('reflux');
 var _ = require('lodash');
-var SearchActions = require('../actions/searchActions');
+var searchInterface = require('../libs/searchInterface');
+var QueryActions = require('../actions/queryActions');
 
 var resultTypes = require('../config/resultTypes');
 
 module.exports = Reflux.createStore({
-  init: function() {
+  listenables: QueryActions,
+
+  init: function () {
     console.log('store init called');
 
-    for(var actionName in SearchActions) {
-      var action = SearchActions[actionName];
-      var listenerName = 'updateResults';
-
-      // listen to the child methods (ie of async actions)
-      if(action.children.length) {
-        this.listenTo(action, listenerName);
-        this.listenTo(action.completed, listenerName + 'Complete');
-        this.listenTo(action.failed, listenerName + 'Error');
+    this.state = {
+      query: {
+        q: '',
+        filters: {}, // fieldName => object of solr parameters
+        resultTypes: {} // fieldName => object of solr parameters
+      },
+      results: {
+        list: [],
+        metadata: {}
       }
-    }
+    };
 
-    SearchActions.setQueryString.preEmit = function(queryString) {
-      var queryState = this.cloneQueryState();
-      queryState.q = queryString;
-      return queryState;
-    }.bind(this);
+    // make a copy of the query to keep with the results
+    this.state.results.searchQuery = _.cloneDeep(this.state.query);
 
-    SearchActions.setResultType.preEmit = function(typeName, resultType) {
-      var queryState = this.cloneQueryState();
-      queryState.resultTypes[typeName] = resultType;
-      return queryState;
-    }.bind(this);
-
-    SearchActions.removeResultType.preEmit = function(typeName) {
-      var queryState = this.cloneQueryState();
-      delete queryState.resultTypes[typeName];
-      return queryState;
-    }.bind(this);
-
+    this.search = _.debounce(this.search, 500);
   },
 
   getInitialState: function () {
-    if (!this.searchState) {
-      this.searchState = {
-        query: {
-          q: '*',
-          filters: {}, // identifiable key => object of solr parameters
-          resultTypes: { list: resultTypes.get('list') }
-        },
-        // N.B. the keys for resultTypes and results should match
-        results: {}
-      };
-    }
-    return this.searchState;
+    return this.state;
   },
 
-  cloneQueryState: function() {
-    return _.cloneDeep(this.searchState.query);
+  setResultType: function (fieldName, params) {
+    console.log('setResultType', arguments);
+    this.state.query.resultTypes[fieldName] = params;
+    this.search();
   },
 
-  updateResults: function() {
-    console.log('Async call to solr to update results is happening now');
+  removeResultType: function (fieldName) {
+    console.log('removeResultType', arguments);
+    delete this.state.query.resultTypes[fieldName];
+    this.search();
   },
 
-  updateResultsComplete: function(response) {
-    console.log('Got data: ', response);
-    // TODO: update state
+  setQueryString: function (newQueryString) {
+    console.log('setResultType', arguments);
+    this.state.query.q = newQueryString;
+    this.search();
   },
 
-  updateResultsError: function(error) {
+  // Note that this function is debounced in init. It might be called many
+  // times in succession when a user is interacting with the page,
+  // but only the last one will fire.
+  search: function () {
+
+    // make a copy of the query state when we make the async call
+    // and use it as curried parameter for the checkDataAndAddQuery method
+    var query = _.cloneDeep(this.state.query);
+    var check = _.curry(checkDataAndAddQuery)(query);
+
+    console.log('doing search', query);
+
+    searchInterface.geneSearch(query)
+      .then(check)
+      .then(this.searchComplete)
+      .catch(this.searchError);
+  },
+
+  searchComplete: function (results) {
+    console.log('Got data: ', results);
+
+    // TODO: compare query state used for search with the current one
+    this.state.results = results;
+
+    this.trigger(this.state);
+  },
+
+  searchError: function (error) {
     console.error('Error updating results', error);
   }
 });
+
+function checkDataAndAddQuery(query, data) {
+  _.forIn(query.resultTypes, function (params, key) {
+    if (!data[key]) {
+      console.error(key + ' not found in search results');
+    }
+  });
+
+  data.searchQuery = query;
+
+  return data;
+}

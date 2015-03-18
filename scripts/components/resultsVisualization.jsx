@@ -1,15 +1,31 @@
 'use strict';
 
 var React = require('react');
-var SearchActions = require('../actions/searchActions');
+var QueryActions = require('../actions/queryActions');
 var resultTypes = require('../config/resultTypes');
 
 var ResultsVisualization = React.createClass({
+  getInitialState: function() {
+    return { binWidth: '10Mb'};
+  },
+  getFieldName: function() {
+    return 'bin_' + this.state.binWidth;
+  },
+  getDistributionParameters: function() {
+    var fieldName = this.getFieldName();
+    return resultTypes.get(
+      'distribution',
+      {'facet.field': fieldName}
+    );
+  },
   componentWillMount: function() {
-    SearchActions.setResultType('distribution', resultTypes.get('distribution'));
+    QueryActions.setResultType(
+      this.getFieldName(),
+      this.getDistributionParameters()
+    );
   },
   componentWillUnmount: function() {
-    SearchActions.removeResultType('distribution');
+    QueryActions.removeResultType(this.getFieldName());
   },
 
   render: function(){

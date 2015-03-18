@@ -1,7 +1,7 @@
 'use strict';
 
 var React = require('react');
-var SearchActions = require('../actions/searchActions');
+var QueryActions = require('../actions/queryActions');
 var _ = require('lodash');
 var filters = require('../config/filters');
 
@@ -13,13 +13,13 @@ var TextSearch = React.createClass({
       node.value = e.target.value;
     }
     var queryString = node.value;
-    SearchActions.setQueryString(queryString);
+    QueryActions.setQueryString(queryString);
   },
   render: function(){
     return (
       <section className="search">
         <label htmlFor="searchBox">Search for Genes</label>
-        <input ref="searchBox" type="text" defaultValue={this.props.search.queryString} onChange={this.handleChange} />
+        <input ref="searchBox" type="text" defaultValue={this.props.query.q} onChange={this.handleChange} />
       </section>
     );
   }

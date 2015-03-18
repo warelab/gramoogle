@@ -7,7 +7,7 @@ describe('TextSearch', function() {
   var TextSearch = React.createFactory(require('../scripts/components/textSearch.jsx'));
   var TestUtils = React.addons.TestUtils;
 
-  var searchActions = require('../scripts/actions/searchActions');
+  var searchActions = require('../scripts/actions/queryActions');
   var testString = 'TEST';
 
   var newTextSearch = function() {

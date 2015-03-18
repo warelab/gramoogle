@@ -13,8 +13,9 @@ var resultTypes = {
     'facet.field': 'bin_10Mb'
   },
   facet: {
-    'facet.limit': 10,
-    'facet.mincount': 0
+    'facet.limit': 50,
+    'facet.mincount': 0,
+    'facet.field': 'species'
   }
 };
 
@@ -34,7 +35,10 @@ module.exports = {
     }
 
     // special case: if 'facet.field' is defined then rename any
-    // facet-specific config to apply only to that field.
+    // facet-specific config to apply only to that field, e.g.
+    // if facet.field is 'bin_10Mb', then solr param 'facet.limit'
+    // would be renamed 'f.bin_10Mb.facet.limit'. This allows different
+    // facet limits for different result types.
     facetField = rt['facet.field'];
     if (facetField) {
       rt = _.transform(rt, function (result, val, key) {

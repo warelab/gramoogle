@@ -12,13 +12,6 @@ function geneSearch(query) {
 
   return axios.get(url, {params: params})
     .then(reformatData);
-      //.then(reformatData)
-      //.then(incorporateLinksIntoResults)
-      //.then(incorporateHighlightsIntoResults)
-      //.then(addFunctions)
-      //.catch(function(error) {
-      //  console.log(error);
-      //});
 }
 
 function defaultSolrParameters() {
@@ -32,12 +25,30 @@ function defaultSolrParameters() {
 function getSolrParameters(query) {
   var result = defaultSolrParameters();
 
-  if(query.q) {
-    result.q = query.q;
-  }
+  result.q = query.q || '*';
 
   for(var rtName in query.resultTypes) {
-    _.assign(result, query.resultTypes[rtName]);
+    _.assign(result, query.resultTypes[rtName], function(existing, another) {
+      var result = existing;
+
+      // handle the case where the same key may be defined in many result types, for example
+      // facet.field. It's typical for solr to have multiple facet.field parameters in the URL,
+      // e.g. http://data.gramene.org/search/genes?wt=json&indent=true&q=*&rows=2&start=0&facet=true&facet.field=bin_10Mb&facet.field=bin_5Mb&facet.limit=10&facet.mincount=1&f.bin_10Mb.facet.limit=10&fq=Interpro_xrefs:(IPR008978 IPR002068)
+      if(existing) {
+        if(_.isArray(existing)) {
+          existing.push(another);
+          result = existing;
+        }
+        else {
+          result = [existing, another];
+        }
+      }
+      else {
+        result = another;
+      }
+
+      return result;
+    });
   }
 
   return result;
@@ -91,111 +102,4 @@ function reformatFacet(facetData, numericIds, displayName) {
   return result;
 }
 
-//
-//function incorporateHighlightsIntoResults(data) {
-//  var results = data.response.docs
-//    , highlights = data.highlighting;
-//
-//  for(var i = 0; i < results.length; i++) {
-//    var result = results[i]
-//      , highlight = highlights[result.id];
-//
-//    for(var field in highlight) {
-//      result[field] = highlight[field][0];
-//    }
-//  }
-//  return data;
-//}
-//
-//function incorporateLinksIntoResults(data) {
-//  var ensemblUrl = 'http://ensembl.gramene.org/SYSTEM_NAME/Gene/Summary?db=DATABASE;g=GENEID';
-//  var genetreeUrl = 'http://ensembl.gramene.org/Multi/GeneTree/Image?gt=GENETREE';
-//  var results = data.response.docs;
-//
-//  for(var i = 0; i < results.length; i++) {
-//    var result = results[i];
-//    result.geneUrl = ensemblUrl.replace('SYSTEM_NAME', result.system_name)
-//      .replace('DATABASE', result.database)
-//      .replace('GENEID', result.id);
-//
-//    if(result.eg_gene_tree) {
-//      result.egGenetreeUrl = genetreeUrl.replace('GENETREE', result.eg_gene_tree);
-//    }
-//
-//    if(result.epl_gene_tree) {
-//      result.eplGenetreeUrl = genetreeUrl.replace('GENETREE', result.epl_gene_tree);
-//    }
-//  }
-//
-//  return data;
-//}
-//
-//
-//function addFunctions(data) {
-//  data.getSpecies = getSpeciesFunction(data);
-//  data.getFilters = getFiltersFunction(data);
-//  return data;
-//}
-//
-//function getSpeciesFunction(results) {
-//  return function(callback) {
-//    if(results && results.facets && results.facets.taxon_id) {
-//      var promise = facetSearch('taxonomy', results.facets.taxon_id);
-//      promise.then(callback);
-//    }
-//  }
-//}
-//
-//function getFiltersFunction(results) {
-//  return function (callback) {
-//    if (results && results.facets) {
-//      var promises = Object.keys(results.facets).map(function (f) {
-//        var facet = results.facets[f]
-//          , core = cores.getXrefCore(f);
-//        return facetSearch(core, facet);
-//      });
-//      Q.all(promises).done(function () {
-//        callback(results.facets);
-//      })
-//    }
-//  }
-//}
-//
-//function facetSearch(core, facet) {
-//  var url = cores.getUrlForCore(core)
-//    , params = cores.getFacetDetailsParams(core);
-//
-//  if(facet.ids.length === 0) {
-//    return Q(facet);
-//  }
-//
-//  params.q = 'id:('+facet.ids.join(' ')+')';
-//  params.rows = facet.ids.length;
-//
-//  return Q($.getJSON(url, params)).then(function(data) {
-//    return mergeFacetData(facet, data);
-//  });
-//}
-//
-//function mergeFacetData(facet, data) {
-//  var facetData = data.response.docs;
-//  for(var i = 0; i < facetData.length; i++) {
-//    var facetDatum = facetData[i]
-//      , toUpdate = facet.data['' + facetDatum.id];
-//
-//    for(var key in facetDatum) {
-//      toUpdate[key] = facetDatum[key];
-//    }
-//  }
-//  toUpdate.hasAdditionalData = true;
-//  return facet;
-//}
-
-
 exports.geneSearch = geneSearch;
-//exports.addFilter = addFilter;
-//exports.getFilters = getFilters;
-//exports.clearFilter = clearFilter;
-////exports.clearFilters = clearFilters;
-//exports.getSpecies = getSpecies;
-//exports.getFilters = getFilters;

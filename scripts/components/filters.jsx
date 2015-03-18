@@ -3,7 +3,7 @@
 var React = require('react');
 var FilterSummary = require('./filtersSummary.jsx');
 var FilterPickers = require('./filterPickers.jsx');
-//var SearchActions = require('../actions/searchActions');
+//var QueryActions = require('../actions/searchActions');
 
 var Filters = React.createClass({
   getInitialState: function() {
@@ -16,11 +16,13 @@ var Filters = React.createClass({
     var contents;
     if(this.state.expanded) {
       contents = (
-        <FilterPickers filters={this.props.filters} metadata={this.props.metadata} />
+        <FilterPickers filters={this.props.query.filters}
+                       results={this.props.results} />
       );
     } else {
       contents = (
-        <FilterSummary filters={this.props.filters} metadata={this.props.metadata} />
+        <FilterSummary filters={this.props.query.filters}
+                       results={this.props.results} />
       );
     }
     return (

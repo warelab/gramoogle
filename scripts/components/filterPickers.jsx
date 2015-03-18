@@ -1,7 +1,7 @@
 'use strict';
 
 var React = require('react');
-//var SearchActions = require('../actions/searchActions');
+//var QueryActions = require('../actions/searchActions');
 
 var FilterPickers = React.createClass({
   render: function() {

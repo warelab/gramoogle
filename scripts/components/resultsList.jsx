@@ -2,16 +2,25 @@
 
 var React = require('react');
 var resultTypes = require('../config/resultTypes');
-var SearchActions = require('../actions/searchActions');
+var QueryActions = require('../actions/queryActions');
 
 var ResultsList = React.createClass({
-  componentWillMount: function() {
-    SearchActions.setResultType('list', resultTypes.get('list'));
+  getInitialState: function () {
+    return {rows: 10};
   },
-  componentWillUnmount: function() {
-    SearchActions.removeResultType('list');
+  getResultType: function() {
+    return resultTypes.get(
+      'list',
+      {rows: this.state.rows}
+    );
   },
-  render: function(){
+  componentWillMount: function () {
+    QueryActions.setResultType('list', this.getResultType());
+  },
+  componentWillUnmount: function () {
+    QueryActions.removeResultType('list');
+  },
+  render: function () {
     return (
       <ol className="resultsList">
         <li>Results</li>

@@ -14,7 +14,13 @@ var Results = React.createClass({
     this.setState({visible: e.target.value});
   },
   render: function () {
-    var view = this.state.visible === this.VIZ ? <ResultsVisualization /> : <ResultsList />;
+    var view;
+    if(this.state.visible === this.VIZ) {
+      view = (<ResultsVisualization results={this.props.results}/>);
+    } else {
+      view = (<ResultsList results={this.props.results}/>);
+    }
+
     return (
       <section className="results">
         <h4>Results</h4>
