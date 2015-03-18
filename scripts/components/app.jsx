@@ -15,7 +15,7 @@ var App = React.createClass({
     return (
       <div>
         <header>Gramene Logo</header>
-        <TextSearch queryString={search.queryString} />
+        <TextSearch search={search} />
         <Filters filters={search.filters} metadata={search.metadata} /> {/* use metadata to display result count, time, etc in summary view.*/}
         <Results results={search.results} />
       </div>

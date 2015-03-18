@@ -1,4 +1,5 @@
 'use strict';
+var _ = require('lodash');
 
 var rootURL = 'http://data.gramene.org/44/search/';
 var cores = {
@@ -129,12 +130,17 @@ exports.getFacetDetailsParams = function (core) {
 
 exports.hasXrefs = function (core) {
   return cores[core].hasOwnProperty('xref');
-}
+};
 
 exports.getXrefCore = function (xref) {
   return cores.genes.xref[xref].core;
-}
+};
 
-exports.getXrefDisplayName = function (xref) {
-  return cores.genes.xref[xref].displayName;
-}
+exports.getXrefDisplayName = function (xrefName) {
+  var xref = cores.genes.xref[xrefName];
+  return xref ? xref.displayName : xrefName;
+};
+
+exports.valuesAreNumeric = function(fieldName) {
+  return fieldName && (_.startsWith(fieldName, 'bin') || _.endsWith(fieldName, 'i'));
+};

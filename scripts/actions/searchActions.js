@@ -4,11 +4,23 @@ var Reflux = require('reflux');
 var searchInterface = require('../libs/searchInterface');
 
 var SearchActions = Reflux.createActions({
-  'setQueryString': {},
-  'search': {asyncResult: true}
+  // use these when components become visible/invisible to specify what result types this component requires.
+  'setResultType': {asyncResult: true},
+  'removeResultType': {asyncResult: true},
+
+  // queryString actions.
+  'setQueryString': {asyncResult: true},
+
+  // filter actions.
+  'setFilter': {asyncResult: true},
+  'removeFilter': {asyncResult: true}
 });
 
-SearchActions.search.listenAndPromise( searchInterface.geneSearch );
+//SearchActions.setFilter.listenAndPromise( searchInterface.geneSearch );
+//SearchActions.removeFilter.listenAndPromise( searchInterface.geneSearch );
+SearchActions.setQueryString.listenAndPromise( searchInterface.geneSearch );
+SearchActions.setResultType.listenAndPromise( searchInterface.geneSearch );
+SearchActions.removeResultType.listenAndPromise( searchInterface.geneSearch );
 
 // this is equivalent to:
 //searchAction.listen(function (queryString, filters) {

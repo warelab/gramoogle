@@ -1,9 +1,16 @@
 'use strict';
 
 var React = require('react');
-//var SearchActions = require('../actions/searchActions');
+var resultTypes = require('../config/resultTypes');
+var SearchActions = require('../actions/searchActions');
 
 var ResultsList = React.createClass({
+  componentWillMount: function() {
+    SearchActions.setResultType('list', resultTypes.get('list'));
+  },
+  componentWillUnmount: function() {
+    SearchActions.removeResultType('list');
+  },
   render: function(){
     return (
       <ol className="resultsList">

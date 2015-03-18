@@ -4,51 +4,73 @@ var Reflux = require('reflux');
 var _ = require('lodash');
 var SearchActions = require('../actions/searchActions');
 
+var resultTypes = require('../config/resultTypes');
+
 module.exports = Reflux.createStore({
-  listenables: [SearchActions],
-  getInitialState: function () { // TODO find out why it's idiomatic to use both an instance variable *and* react state for our state.
-    if (!this.search) {
-      this.search = {
-        queryString: '',
-        filters: {},
-        results: [],
-        metadata: {
-          count: 0,
-          qtime: 0
+  init: function() {
+    console.log('store init called');
+
+    for(var actionName in SearchActions) {
+      var action = SearchActions[actionName];
+      var listenerName = 'updateResults';
+
+      // listen to the child methods (ie of async actions)
+      if(action.children.length) {
+        this.listenTo(action, listenerName);
+        this.listenTo(action.completed, listenerName + 'Complete');
+        this.listenTo(action.failed, listenerName + 'Error');
+      }
+    }
+
+    SearchActions.setQueryString.preEmit = function(queryString) {
+      var queryState = this.cloneQueryState();
+      queryState.q = queryString;
+      return queryState;
+    }.bind(this);
+
+    SearchActions.setResultType.preEmit = function(typeName, resultType) {
+      var queryState = this.cloneQueryState();
+      queryState.resultTypes[typeName] = resultType;
+      return queryState;
+    }.bind(this);
+
+    SearchActions.removeResultType.preEmit = function(typeName) {
+      var queryState = this.cloneQueryState();
+      delete queryState.resultTypes[typeName];
+      return queryState;
+    }.bind(this);
+
+  },
+
+  getInitialState: function () {
+    if (!this.searchState) {
+      this.searchState = {
+        query: {
+          q: '*',
+          filters: {}, // identifiable key => object of solr parameters
+          resultTypes: { list: resultTypes.get('list') }
         },
-        updating: false
+        // N.B. the keys for resultTypes and results should match
+        results: {}
       };
-
-      SearchActions.search(this.search.queryString, this.search.filters);
     }
-    return this.search;
+    return this.searchState;
   },
 
-  search: function() {
-    console.log('called when async call made');
-    return false;
-    // TODO does return false stop the call being made?
+  cloneQueryState: function() {
+    return _.cloneDeep(this.searchState.query);
   },
 
-  searchCompleted: function(data) {
-    console.log('called on success of search async call', data);
-    //this.search.queryString = queryString;
-    //this.search.filters = filters;
-    //this.search.results = results.response.docs;
-    //this.search.metadata.count = results.response.numFound;
-    //this.search.metadata.qtime = results.responseHeader.QTime;
-    //this.search.updating = false;
+  updateResults: function() {
+    console.log('Async call to solr to update results is happening now');
   },
 
-  searchFailed: function(error) {
-    console.log('called when error in async call', error);
+  updateResultsComplete: function(response) {
+    console.log('Got data: ', response);
+    // TODO: update state
   },
 
-  onSetQueryString: function (newQueryString) {
-    //this.performSearch(newQueryString, this.search.filters);
-    if(newQueryString !== this.search.queryString)
-    {
-      SearchActions.search(newQueryString, this.search.filters);
-    }
+  updateResultsError: function(error) {
+    console.error('Error updating results', error);
   }
 });
