@@ -10,7 +10,7 @@ var resultTypes = {
   distribution: {
     'facet.limit': -1,
     'facet.mincount': 1,
-    'facet.field': 'bin_10Mb'
+    'facet.field': 'bin_1Mb'
   },
   facet: {
     'facet.limit': 50,

@@ -1,0 +1,15 @@
+.bins {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    align-content: flex-start;
+    width: 80%;
+    padding: 0;
+    margin: 0;
+}
+
+.bin {
+    width: 10px;
+    height: 10px;
+}

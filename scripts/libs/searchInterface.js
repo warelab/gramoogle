@@ -25,7 +25,7 @@ function defaultSolrParameters() {
 function getSolrParameters(query) {
   var result = defaultSolrParameters();
 
-  result.q = query.q || '*';
+  result.q = (query.q || '') + '*';
 
   for(var rtName in query.resultTypes) {
     _.assign(result, query.resultTypes[rtName], function(existing, another) {
