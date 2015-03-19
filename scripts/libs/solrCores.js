@@ -107,7 +107,7 @@ exports.getSearchParams = function (coreName, queryString, filters) {
   if (filters) {
     for (var prop in filters) {
       var xref;
-      if(core.xref && (xref = core.xref[prop])) {
+      if (core.xref && (xref = core.xref[prop])) {
         var ids = filters[prop];
         if (ids.length > 0) {
           if (xref.core === 'taxonomy') {
@@ -141,6 +141,11 @@ exports.getXrefDisplayName = function (xrefName) {
   return xref ? xref.displayName : xrefName;
 };
 
-exports.valuesAreNumeric = function(fieldName) {
-  return fieldName && (_.startsWith(fieldName, 'bin') || _.endsWith(fieldName, 'i'));
+exports.valuesAreNumeric = function (fieldName) {
+  return fieldName && (
+    _.startsWith(fieldName, 'bin')
+    || _.endsWith(fieldName, 'i')
+    || _.endsWith(fieldName, '_bin')
+    || _.endsWith(fieldName, '_id')
+  );
 };

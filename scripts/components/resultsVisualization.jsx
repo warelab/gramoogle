@@ -5,30 +5,30 @@ var QueryActions = require('../actions/queryActions');
 var resultTypes = require('../config/resultTypes');
 
 var ResultsVisualization = React.createClass({
-  getInitialState: function() {
-    return { binWidth: '10Mb'};
+  getInitialState: function () {
+    return {binWidth: '10Mb'};
   },
-  getFieldName: function() {
+  getFieldName: function () {
     return 'bin_' + this.state.binWidth;
   },
-  getDistributionParameters: function() {
+  getDistributionParameters: function () {
     var fieldName = this.getFieldName();
     return resultTypes.get(
       'distribution',
       {'facet.field': fieldName}
     );
   },
-  componentWillMount: function() {
+  componentWillMount: function () {
     QueryActions.setResultType(
       this.getFieldName(),
       this.getDistributionParameters()
     );
   },
-  componentWillUnmount: function() {
+  componentWillUnmount: function () {
     QueryActions.removeResultType(this.getFieldName());
   },
 
-  render: function(){
+  render: function () {
     return (
       <figure className="vis">
         <img src="images/charlie.jpg" alt="Charlie Says…" />

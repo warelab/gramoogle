@@ -15,7 +15,7 @@ var resultTypes = {
   facet: {
     'facet.limit': 50,
     'facet.mincount': 0,
-    'facet.field': 'species'
+    'facet.field': 'taxon_id'
   }
 };
 

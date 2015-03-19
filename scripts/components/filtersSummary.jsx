@@ -8,17 +8,17 @@ var resultType = resultTypes.get('facet');
 
 var FilterSummary = React.createClass({
   componentWillMount: function () {
-    QueryActions.setResultType('species', resultType);
+    QueryActions.setResultType('taxon_id', resultType);
   },
   componentWillUnmount: function () {
-    QueryActions.removeResultType('species');
+    QueryActions.removeResultType('taxon_id');
   },
   render: function(){
     var results = this.props.results;
     var metadata = results.metadata;
 
     return (
-        <p>{metadata.count} genes in {results.species ? results.species.length : 'n'} genomes found in {metadata.qtime}ms</p>
+        <p>{metadata.count} genes in {results.taxon_id ? results.taxon_id.count : 'n'} genomes found in {metadata.qtime}ms</p>
     );
   }
 });

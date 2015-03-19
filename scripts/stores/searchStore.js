@@ -26,7 +26,7 @@ module.exports = Reflux.createStore({
     };
 
     // make a copy of the query to keep with the results
-    this.state.results.searchQuery = _.cloneDeep(this.state.query);
+    this.state.results.metadata.searchQuery = _.cloneDeep(this.state.query);
 
     this.search = _.debounce(this.search, 500);
   },
@@ -92,7 +92,7 @@ function checkDataAndAddQuery(query, data) {
     }
   });
 
-  data.searchQuery = query;
+  data.metadata.searchQuery = query;
 
   return data;
 }
