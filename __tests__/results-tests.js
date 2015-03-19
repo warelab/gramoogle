@@ -4,6 +4,7 @@ jest.dontMock('../scripts/components/results.jsx');
 
 describe('Filters', function() {
   var React = require('react/addons');
+  var searchStore = require('../scripts/stores/searchStore');
   var _ = require('lodash');
   var Results = React.createFactory(require('../scripts/components/results.jsx'));
   var ResultsList = React.createFactory(require('../scripts/components/resultsList.jsx'));
@@ -11,7 +12,8 @@ describe('Filters', function() {
   var TestUtils = React.addons.TestUtils;
 
   var newResults = function() {
-    return TestUtils.renderIntoDocument(Results({}));
+    var searchState = searchStore.getInitialState();
+    return TestUtils.renderIntoDocument(Results({results: searchState.results}));
   };
 
   it('initially be display result overview visualization', function() {

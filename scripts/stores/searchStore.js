@@ -11,8 +11,6 @@ module.exports = Reflux.createStore({
   listenables: QueryActions,
 
   init: function () {
-    console.log('store init called');
-
     this.state = {
       query: {
         q: '',
@@ -28,7 +26,7 @@ module.exports = Reflux.createStore({
     // make a copy of the query to keep with the results
     this.state.results.metadata.searchQuery = _.cloneDeep(this.state.query);
 
-    this.search = _.debounce(this.search, 500);
+    this.search = _.debounce(this.searchNoDebounce, 500);
   },
 
   getInitialState: function () {
@@ -48,7 +46,7 @@ module.exports = Reflux.createStore({
   },
 
   setQueryString: function (newQueryString) {
-    console.log('setResultType', arguments);
+    console.log('setQueryString', arguments);
     this.state.query.q = newQueryString;
     this.search();
   },
@@ -56,19 +54,23 @@ module.exports = Reflux.createStore({
   // Note that this function is debounced in init. It might be called many
   // times in succession when a user is interacting with the page,
   // but only the last one will fire.
-  search: function () {
+  searchNoDebounce: function () {
 
-    // make a copy of the query state when we make the async call
-    // and use it as curried parameter for the checkDataAndAddQuery method
+    // make a copy of the query state when we make the async call...
     var query = _.cloneDeep(this.state.query);
+
+    // ...and use it as curried parameter for the stateless
+    // checkDataAndAddQuery method
     var check = _.curry(checkDataAndAddQuery)(query);
 
-    console.log('doing search', query);
-
-    searchInterface.geneSearch(query)
+    this.searchPromise(query)
       .then(check)
       .then(this.searchComplete)
       .catch(this.searchError);
+  },
+
+  searchPromise: function(query) {
+    return searchInterface.geneSearch(query)
   },
 
   searchComplete: function (results) {

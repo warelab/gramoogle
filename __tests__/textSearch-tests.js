@@ -11,7 +11,7 @@ describe('TextSearch', function() {
   var testString = 'TEST';
 
   var newTextSearch = function() {
-    return TestUtils.renderIntoDocument(TextSearch({queryString:testString}));
+    return TestUtils.renderIntoDocument(TextSearch({query:{q:testString}}));
   };
 
   it('should contain a text box', function() {

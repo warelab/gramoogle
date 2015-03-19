@@ -30,9 +30,7 @@ describe('App', function() {
     var app = newApp();
 
     expect(app.state.search).toBeDefined();
+    expect(app.state.search.query).toBeDefined();
     expect(app.state.search.results).toBeDefined();
-    expect(app.state.search.queryString).toBeDefined();
-    expect(app.state.search.filters).toBeDefined();
-    expect(app.state.search.metadata).toBeDefined();
   });
 });

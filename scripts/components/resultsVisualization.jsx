@@ -33,13 +33,13 @@ var ResultsVisualization = React.createClass({
   render: function () {
     var fieldName = this.getFieldName();
     var bins = this.props.results[fieldName];
-    if(bins) {
-      var maxCount = _.max(bins.data, function(bin) {
+    if (bins) {
+      var maxCount = _.max(bins.data, function (bin) {
         return bin.count;
       }).count;
       var maxBin = _.last(bins.ids);
 
-      var boxes = _.range(maxBin).map(function(idx) {
+      var boxes = _.range(maxBin).map(function (idx) {
         var bin = bins.data[idx];
         var count = bin ? bins.data[idx].count : 0;
         var backgroundColorHex = calculateHexColor(count, maxCount);
@@ -68,13 +68,17 @@ function calculateHexColor(count, max) {
   var minRgb = [255, 255, 255]; // white
   var maxRgb = [255, 0, 0]; // red
 
-  if(!count) {
+  if (!count) {
     return '#' + rgbHex.apply(this, minRgb);
   }
 
-  var ratio = count / max;
+  if (!max) {
+    return '#' + rgbHex.apply(this, maxRgb);
+  }
 
-  var rgb = _.range(3).map(function(idx) {
+  var ratio = Math.log(count) / Math.log(max);
+
+  var rgb = _.range(3).map(function (idx) {
     return Math.floor(((maxRgb[idx] - minRgb[idx]) * ratio) + minRgb[idx]);
   });
 

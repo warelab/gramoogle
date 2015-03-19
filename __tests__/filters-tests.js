@@ -4,13 +4,15 @@ jest.dontMock('../scripts/components/filters.jsx');
 
 describe('Filters', function() {
   var React = require('react/addons');
+  var searchStore = require('../scripts/stores/searchStore');
   var Filters = React.createFactory(require('../scripts/components/filters.jsx'));
   var FilterSummary = React.createFactory(require('../scripts/components/filtersSummary.jsx'));
   var FilterPickers = React.createFactory(require('../scripts/components/filterPickers.jsx'));
   var TestUtils = React.addons.TestUtils;
 
   var newFilters = function() {
-    return TestUtils.renderIntoDocument(Filters({}));
+    var searchState = searchStore.getInitialState();
+    return TestUtils.renderIntoDocument(Filters({query: searchState.query, results: searchState.results}));
   };
 
   it('should contain a button', function() {

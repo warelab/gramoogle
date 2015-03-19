@@ -31,7 +31,7 @@ describe('resultTypes', function() {
 
   it('should incorporate details', function() {
     // given
-    var type = 'facet';
+    var type = 'distribution';
     var details = {bar: 'foo'};
 
     // when
@@ -39,7 +39,7 @@ describe('resultTypes', function() {
 
     // then
     expect(rt).toBeDefined();
-    expect(rt['facet.limit']).toEqual(10);
+    expect(rt['facet.limit']).toEqual(-1);
     expect(rt.bar).toEqual(details.bar);
   });
 
@@ -56,7 +56,7 @@ describe('resultTypes', function() {
     expect(rt['facet.limit']).not.toBeDefined();
     expect(rt['facet.stuff']).not.toBeDefined();
     expect(rt['facet.field']).toEqual('foo');
-    expect(rt['f.foo.facet.limit']).toEqual(10);
+    expect(rt['f.foo.facet.limit']).toEqual(50);
     expect(rt['f.foo.facet.stuff']).toEqual(details['facet.stuff']);
     expect(rt['f.foo.facet.field']).not.toBeDefined();
   });
@@ -66,7 +66,7 @@ describe('resultTypes', function() {
     var type = 'distribution';
 
     // when
-    var rt = resultTypes.get(type);
+    var rt = resultTypes.get(type, {'facet.field': 'bin_10Mb'});
 
     // then
     expect(rt).toBeDefined();

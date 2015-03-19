@@ -56,7 +56,8 @@ gulp.task('test', function () {
       testDirectoryName: "__tests__",
       scriptPreprocessor: "../preprocessor.js",
       unmockedModulePathPatterns: [
-        "node_modules/react"
+        "node_modules/react",
+        "node_modules/reflux"
       ],
       testPathIgnorePatterns: [
         "node_modules"
