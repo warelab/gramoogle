@@ -8,7 +8,7 @@ var rgbHex = require('rgb-hex');
 
 var ResultsVisualization = React.createClass({
   getInitialState: function () {
-    return {binWidth: '10Mb'};
+    return {binWidth: '5Mb'};
   },
   getFieldName: function () {
     return 'bin_' + this.state.binWidth;
@@ -37,8 +37,9 @@ var ResultsVisualization = React.createClass({
       var maxCount = _.max(bins.data, function(bin) {
         return bin.count;
       }).count;
+      var maxBin = _.last(bins.ids);
 
-      var boxes = _.range(2335).map(function(idx) {
+      var boxes = _.range(maxBin).map(function(idx) {
         var bin = bins.data[idx];
         var count = bin ? bins.data[idx].count : 0;
         var backgroundColorHex = calculateHexColor(count, maxCount);
@@ -64,8 +65,8 @@ var ResultsVisualization = React.createClass({
 });
 
 function calculateHexColor(count, max) {
-  var minRgb = [255, 255, 255];
-  var maxRgb = [255, 0, 0];
+  var minRgb = [255, 255, 255]; // white
+  var maxRgb = [255, 0, 0]; // red
 
   if(!count) {
     return '#' + rgbHex.apply(this, minRgb);
@@ -73,11 +74,9 @@ function calculateHexColor(count, max) {
 
   var ratio = count / max;
 
-  var rgb = [
-    Math.floor(((maxRgb[0] - minRgb[0]) * ratio) + minRgb[0]),
-    Math.floor(((maxRgb[1] - minRgb[1]) * ratio) + minRgb[1]),
-    Math.floor(((maxRgb[2] - minRgb[2]) * ratio) + minRgb[2])
-  ];
+  var rgb = _.range(3).map(function(idx) {
+    return Math.floor(((maxRgb[idx] - minRgb[idx]) * ratio) + minRgb[idx]);
+  });
 
   var hex = rgbHex.apply(this, rgb);
 
