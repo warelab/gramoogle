@@ -8,10 +8,10 @@ var rgbHex = require('rgb-hex');
 
 var ResultsVisualization = React.createClass({
   getInitialState: function () {
-    return {binWidth: '5Mb'};
+    return {binWidth: 1000, binType: 'fixed'};
   },
   getFieldName: function () {
-    return 'bin_' + this.state.binWidth;
+    return this.state.binType + '_' + this.state.binWidth + '_bin';
   },
   getDistributionParameters: function () {
     var fieldName = this.getFieldName();

@@ -4,12 +4,12 @@
     justify-content: flex-start;
     align-items: flex-start;
     align-content: flex-start;
-    width: 80%;
+    width: 100%;
     padding: 0;
     margin: 0;
 }
 
 .bin {
-    width: 10px;
+    width: 3px;
     height: 10px;
 }
