@@ -55,9 +55,10 @@ module.exports = Reflux.createStore({
   // times in succession when a user is interacting with the page,
   // but only the last one will fire.
   searchNoDebounce: function () {
-
     // make a copy of the query state when we make the async call...
     var query = _.cloneDeep(this.state.query);
+
+    console.log('performing search', query);
 
     // ...and use it as curried parameter for the stateless
     // checkDataAndAddQuery method

@@ -1,6 +1,10 @@
 'use strict';
 
 jest.dontMock('../scripts/components/app.jsx');
+jest.dontMock('../scripts/components/textSearch.jsx');
+jest.dontMock('../scripts/components/filters.jsx');
+jest.dontMock('../scripts/components/results.jsx');
+jest.dontMock('../scripts/stores/searchStore');
 
 describe('App', function() {
   var React = require('react/addons');
