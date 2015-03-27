@@ -4,9 +4,9 @@
   "description": "Gramene search interface",
   "main": "index.js",
   "scripts": {
-    "build": "./node_modules/.bin/gulp build",
-    "start": "watchify -t reactify index.js -o build/bundle.js --debug -v",
-    "test": "node --harmony ./node_modules/.bin/gulp test"
+    "build": "grunt package",
+    "start": "grunt",
+    "test": "grunt jest"
   },
   "repository": {
     "type": "git",
