@@ -25,7 +25,7 @@ module.exports = function (grunt) {
         browserifyOptions: {
           debug: true
         },
-        transform: ['reactify', 'debowerify']
+        transform: ['reactify']
       },
       dev: {
         src: './index.js',
@@ -71,6 +71,6 @@ module.exports = function (grunt) {
     }
   });
 
-  grunt.registerTask('default', ['jest', 'less', 'browserify:dev', 'watch']);
+  grunt.registerTask('default', ['less', 'browserify:dev', 'watch']);
   grunt.registerTask('package', ['jest', 'less', 'browserify:production']);
 };

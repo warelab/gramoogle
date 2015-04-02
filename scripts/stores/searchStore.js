@@ -71,7 +71,7 @@ module.exports = Reflux.createStore({
   },
 
   searchPromise: function(query) {
-    return searchInterface.geneSearch(query)
+    return searchInterface.geneSearch(query);
   },
 
   searchComplete: function (results) {
