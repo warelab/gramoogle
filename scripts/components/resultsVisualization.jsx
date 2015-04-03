@@ -7,12 +7,6 @@ var visualizationStore = require('../stores/visualizationStore');
 var _ = require('lodash');
 var rgbHex = require('rgb-hex');
 
-//var GenomeVis = React.createClass({
-//  propTypes: function() {
-//    genome: React.propTypes.object.isRequired
-//  }
-//});
-
 var ResultsVisualization = React.createClass({
   mixins: [
     Reflux.connect(visualizationStore, 'visData')
@@ -46,7 +40,7 @@ var ResultsVisualization = React.createClass({
     }
 
     return (
-      <figure className="vis">
+      <figure className="resultsVis">
         {thing}
         <img src="images/charlie.jpg" alt="Charlie Says…" />
         <figcaption>A Visualization</figcaption>

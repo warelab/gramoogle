@@ -18,7 +18,7 @@ var FilterSummary = React.createClass({
     var metadata = results.metadata;
 
     return (
-        <p>{metadata.count} genes in {results.taxon_id ? results.taxon_id.count : 'n'} genomes found in {metadata.qtime}ms</p>
+        <p className="filtersSummary">{metadata.count} genes in {results.taxon_id ? results.taxon_id.count : 'n'} genomes found in {metadata.qtime}ms</p>
     );
   }
 });

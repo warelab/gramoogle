@@ -9,8 +9,6 @@ describe('Filters', function() {
   var React = require('react/addons');
   var searchStore = require('../scripts/stores/searchStore');
   var Filters = React.createFactory(require('../scripts/components/filters.jsx'));
-  var FilterSummary = React.createFactory(require('../scripts/components/filtersSummary.jsx'));
-  var FilterPickers = React.createFactory(require('../scripts/components/filterPickers.jsx'));
   var TestUtils = React.addons.TestUtils;
 
   var newFilters = function() {
@@ -27,8 +25,8 @@ describe('Filters', function() {
 
   it('initially be in compact state', function() {
     var filters = newFilters();
-    var summary = TestUtils.scryRenderedComponentsWithType(filters, FilterSummary);
-    var details = TestUtils.scryRenderedComponentsWithType(filters, FilterPickers);
+    var summary = TestUtils.scryRenderedDOMComponentsWithClass(filters, 'filtersSummary');
+    var details = TestUtils.scryRenderedDOMComponentsWithClass(filters, 'filterPickers');
 
     expect(filters.state.expanded).toEqual(false);
     expect(summary.length).toEqual(1);
@@ -42,8 +40,8 @@ describe('Filters', function() {
     // click the button to expand.
     TestUtils.Simulate.click(button);
 
-    var summary = TestUtils.scryRenderedComponentsWithType(filters, FilterSummary);
-    var details = TestUtils.scryRenderedComponentsWithType(filters, FilterPickers);
+    var summary = TestUtils.scryRenderedDOMComponentsWithClass(filters, 'filtersSummary');
+    var details = TestUtils.scryRenderedDOMComponentsWithClass(filters, 'filterPickers');
 
     expect(filters.state.expanded).toEqual(true);
     expect(summary.length).toEqual(0);
@@ -52,8 +50,8 @@ describe('Filters', function() {
     // do it again to contract
     TestUtils.Simulate.click(button);
 
-    summary = TestUtils.scryRenderedComponentsWithType(filters, FilterSummary);
-    details = TestUtils.scryRenderedComponentsWithType(filters, FilterPickers);
+    summary = TestUtils.scryRenderedDOMComponentsWithClass(filters, 'filtersSummary');
+    details = TestUtils.scryRenderedDOMComponentsWithClass(filters, 'filterPickers');
 
     expect(filters.state.expanded).toEqual(false);
     expect(summary.length).toEqual(1);
@@ -62,8 +60,8 @@ describe('Filters', function() {
     // one more time
     TestUtils.Simulate.click(button);
 
-    summary = TestUtils.scryRenderedComponentsWithType(filters, FilterSummary);
-    details = TestUtils.scryRenderedComponentsWithType(filters, FilterPickers);
+    summary = TestUtils.scryRenderedDOMComponentsWithClass(filters, 'filtersSummary');
+    details = TestUtils.scryRenderedDOMComponentsWithClass(filters, 'filterPickers');
 
     expect(filters.state.expanded).toEqual(true);
     expect(summary.length).toEqual(0);
