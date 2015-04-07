@@ -1,17 +1,10 @@
 'use strict';
 
-jest.dontMock('../scripts/components/app.jsx');
-jest.dontMock('../scripts/components/textSearch.jsx');
-jest.dontMock('../scripts/components/filters.jsx');
-jest.dontMock('../scripts/components/results.jsx');
-jest.dontMock('../scripts/stores/searchStore');
+jest.autoMockOff();
 
 describe('App', function() {
   var React = require('react/addons');
   var App = React.createFactory(require('../scripts/components/app.jsx'));
-  var TextSearch = React.createFactory(require('../scripts/components/textSearch.jsx'));
-  var Filters = React.createFactory(require('../scripts/components/filters.jsx'));
-  var Results = React.createFactory(require('../scripts/components/results.jsx'));
   var TestUtils = React.addons.TestUtils;
 
   var newApp = function() {

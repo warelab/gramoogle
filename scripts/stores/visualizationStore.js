@@ -16,11 +16,11 @@ function getMethodName(type) {
 }
 
 module.exports = Reflux.createStore({
-  //listenables: VisualizationActions,
+  listenables: VisualizationActions,
 
   init: function () {
-    //this.listenTo(searchStore, this.updateBinState);
-    //binsPromise.get().then(this.initBinsGenerator);
+    this.listenTo(searchStore, this.updateBinState);
+    binsPromise.get().then(this.initBinsGenerator);
   },
 
   onRemoveDistribution: function(type, param) {
