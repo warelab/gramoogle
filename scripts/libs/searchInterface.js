@@ -81,21 +81,19 @@ function reformatFacet(facetData, numericIds, displayName) {
   // facet data is an array of alternating ids (string) and counts (int),
   // e.g. ["4565", 99155, "3847", 54159, "109376", 46500, ... ]
 
-  // we will make an object that contains an ordered list of ids
-  // and an associative array with id key and an object for count and other values
-  // e.g. { ids  : [ "4565", "3847", "109376" ],
-  //        data : { "4565" : { count : 99155 }, // order here not guaranteed :-(
+  // we will make an associative array with id key and an object
+  // for count and other values that may be added later.
+  // e.g. { data : { "4565" : { count : 99155 }, // order here not guaranteed :-(
   //                 "3847" : { count: 54159 },
   //                 "109376" : { count: 46500 }
   //               }
   //      }
-  var result = {ids: [], data: {}, count: 0, displayName: displayName};
+  var result = {data: {}, count: 0, displayName: displayName};
   for (var i=0;i<facetData.length;i+=2) {
     var id = facetData[i]
       , count = facetData[i+1];
 
     if(numericIds) id = +id;
-    result.ids.push(id);
     result.data[id] = { count: count };
     if(count > 0) result.count++;
   }
