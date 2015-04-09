@@ -2,7 +2,7 @@
 
 var React = require('react');
 var QueryActions = require('../actions/queryActions');
-var resultTypes = require('../config/resultTypes');
+var resultTypes = require('gramene-search-client').resultTypes;
 
 var resultType = resultTypes.get('facet');
 

@@ -4,7 +4,7 @@ var Reflux = require('reflux');
 var binsPromise = require('gramene-bins-client').binsPromise;
 var VisualizationActions = require('../actions/visualizationActions');
 var searchStore = require('./searchStore');
-var resultTypes = require('../config/resultTypes');
+var resultTypes = require('gramene-search-client').resultTypes;
 var QueryActions = require('../actions/queryActions');
 
 function getFieldName(type, param) {
@@ -23,13 +23,14 @@ module.exports = Reflux.createStore({
     binsPromise.get().then(this.initBinsGenerator);
   },
 
-  onRemoveDistribution: function(type, param) {
+  onRemoveDistribution: function() {
     this.onSetDistribution(); // set distribution to undefined
   },
 
   onSetDistribution: function (type, param) {
     var newFieldName = getFieldName(type, param);
-    console.log('visStore will assemble distributions from field', newFieldName);
+    console.log('visStore will assemble distributions from field',
+      newFieldName);
 
     if (this.fieldName) {
       if (this.fieldName !== newFieldName) {
@@ -82,8 +83,8 @@ module.exports = Reflux.createStore({
 
   binnedGenomesIsUpToDate: function() {
     return this.binnedGenomes &&
-      this.binnedGenomes.params.methodName == this.binMapperMethodName &&
-      this.binnedGenomes.params.param == this.binMapperParam;
+      this.binnedGenomes.params.methodName === this.binMapperMethodName &&
+      this.binnedGenomes.params.param === this.binMapperParam;
   },
 
   canInitBinnedGenomes: function() {
@@ -93,24 +94,32 @@ module.exports = Reflux.createStore({
   },
 
   possiblyInitBinnedGenomesAndTrigger: function() {
-    if (this.canInitBinnedGenomes() && !this.binnedGenomesIsUpToDate()) {
+    if (this.canInitBinnedGenomes() &&
+        !this.binnedGenomesIsUpToDate()) {
       var binFunction = this.binsGenerator[this.binMapperMethodName];
       this.binnedGenomes = binFunction(this.binMapperParam).binnedGenomes();
-      this.binnedGenomes.params = { methodName: this.binMapperMethodName, param: this.binMapperParam };
+      this.binnedGenomes.params = {
+        methodName: this.binMapperMethodName,
+        param: this.binMapperParam
+      };
       this.possiblyTrigger();
     }
   },
 
   haveNecessaryDataToTrigger: function() {
-    return this.binnedGenomesIsUpToDate()
-      && this.binnedResults;
+    return this.binnedGenomesIsUpToDate() &&
+      this.binnedResults;
   },
 
   possiblyTrigger: function () {
-    // ensure binsGenerator, binMapperMethodName, binMapperParam and binResults populated
+    // ensure binsGenerator, binMapperMethodName,
+    // binMapperParam and binResults populated
     if (this.haveNecessaryDataToTrigger()) {
       console.log('visStore triggering');
-      this.trigger({ binnedGenomes: this.binnedGenomes, binnedResults: this.binnedResults });
+      this.trigger({
+        binnedGenomes: this.binnedGenomes,
+        binnedResults: this.binnedResults
+      });
     }
   }
 });
