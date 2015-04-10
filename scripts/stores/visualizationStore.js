@@ -1,7 +1,9 @@
 'use strict';
 
 var Reflux = require('reflux');
+var Q = require('q');
 var binsPromise = require('gramene-bins-client').binsPromise;
+var treesPromise = require('gramene-trees-client').promise;
 var VisualizationActions = require('../actions/visualizationActions');
 var searchStore = require('./searchStore');
 var resultTypes = require('gramene-search-client').resultTypes;
@@ -20,7 +22,10 @@ module.exports = Reflux.createStore({
 
   init: function () {
     this.listenTo(searchStore, this.updateBinState);
-    binsPromise.get().then(this.initBinsGenerator);
+    Q.all([
+      binsPromise.get(),
+      treesPromise.get()
+    ]).spread(this.initBinsGeneratorAndSpeciesTree);
   },
 
   onRemoveDistribution: function() {
@@ -75,8 +80,9 @@ module.exports = Reflux.createStore({
     }
   },
 
-  initBinsGenerator: function (binsGenerator) {
+  initBinsGeneratorAndSpeciesTree: function (binsGenerator, speciesTree) {
     this.binsGenerator = binsGenerator;
+    this.speciesTree = speciesTree;
     console.log('binsGenerator initialized');
     this.possiblyInitBinnedGenomesAndTrigger();
   },

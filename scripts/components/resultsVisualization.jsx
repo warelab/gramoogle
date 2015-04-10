@@ -5,32 +5,51 @@ var Reflux = require('reflux');
 var VisualizationActions = require('../actions/visualizationActions');
 var visualizationStore = require('../stores/visualizationStore');
 var _ = require('lodash');
-var rgbHex = require('rgb-hex');
+
+var Genome = React.createClass({
+  propTypes: {
+    genome: React.PropTypes.object.isRequired,
+    hits: React.PropTypes.object.isRequired
+  },
+  render: function() {
+    return (
+      <li className="genome">{this.props.genome.taxon_id}</li>
+    )
+  }
+});
 
 var ResultsVisualization = React.createClass({
   mixins: [
     Reflux.connect(visualizationStore, 'visData')
   ],
   getInitialState: function () {
-    return {binWidth: 1000, binType: 'fixed'};
+    return {binWidth: 200, binType: 'fixed'};
   },
   componentWillMount: function () {
     VisualizationActions.setDistribution(this.state.binType, this.state.binWidth);
-    //QueryActions.setResultType(
-    //  this.getFieldName(),
-    //  this.getDistributionParameters()
-    //);
   },
   componentWillUnmount: function () {
-    VisualizationActions.removeDistribution(this.state.binType, this.state.binWidth);
+    VisualizationActions.removeDistribution();
   },
 
   render: function () {
-    var thing;
+    var thing, genomes;
 
     if(this.state.visData) {
+      genomes = _.map(this.state.visData.binnedGenomes, function(genome) {
+        return (
+          <Genome ref={genome.taxon_id} genome={genome} hits={this.state.visData.binnedResults} />
+        )
+      }.bind(this));
       thing = (
-        <p>{this.state.visData.binnedResults.ids.length} bins with stuff in them</p>
+        <div class="resultsVis">
+          <p>{_.size(this.state.visData.binnedResults.data)} bins with
+            stuff in them
+          </p>
+          <ol>
+            {genomes}
+          </ol>
+        </div>
       );
     }
     else {
