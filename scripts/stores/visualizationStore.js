@@ -121,10 +121,12 @@ module.exports = Reflux.createStore({
     // ensure binsGenerator, binMapperMethodName,
     // binMapperParam and binResults populated
     if (this.haveNecessaryDataToTrigger()) {
+      this.binnedGenomes.setResults(this.binnedResults);
+
       console.log('visStore triggering');
       this.trigger({
         binnedGenomes: this.binnedGenomes,
-        binnedResults: this.binnedResults
+        speciesTree: this.speciesTree
       });
     }
   }
