@@ -1,13 +1,10 @@
 'use strict';
 
-jest.dontMock('../scripts/components/app.jsx');
+jest.autoMockOff();
 
 describe('App', function() {
   var React = require('react/addons');
   var App = React.createFactory(require('../scripts/components/app.jsx'));
-  var TextSearch = React.createFactory(require('../scripts/components/textSearch.jsx'));
-  var Filters = React.createFactory(require('../scripts/components/filters.jsx'));
-  var Results = React.createFactory(require('../scripts/components/results.jsx'));
   var TestUtils = React.addons.TestUtils;
 
   var newApp = function() {
@@ -17,9 +14,9 @@ describe('App', function() {
   it('should contain the expected components', function() {
     var app = newApp();
 
-    var textSearch = TestUtils.scryRenderedComponentsWithType(app, TextSearch);
-    var filters = TestUtils.scryRenderedComponentsWithType(app, Filters);
-    var results = TestUtils.scryRenderedComponentsWithType(app, Results);
+    var textSearch = TestUtils.scryRenderedDOMComponentsWithClass(app, 'search');
+    var filters = TestUtils.scryRenderedDOMComponentsWithClass(app, 'filters');
+    var results = TestUtils.scryRenderedDOMComponentsWithClass(app, 'results');
 
     expect(textSearch.length).toEqual(1);
     expect(filters.length).toEqual(1);

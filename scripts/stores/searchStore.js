@@ -2,10 +2,8 @@
 
 var Reflux = require('reflux');
 var _ = require('lodash');
-var searchInterface = require('../libs/searchInterface');
+var searchInterface = require('gramene-search-client').client;
 var QueryActions = require('../actions/queryActions');
-
-var resultTypes = require('../config/resultTypes');
 
 module.exports = Reflux.createStore({
   listenables: QueryActions,
@@ -55,6 +53,7 @@ module.exports = Reflux.createStore({
   // times in succession when a user is interacting with the page,
   // but only the last one will fire.
   searchNoDebounce: function () {
+    console.log('performing search', this.state.query);
 
     // make a copy of the query state when we make the async call...
     var query = _.cloneDeep(this.state.query);
@@ -70,7 +69,7 @@ module.exports = Reflux.createStore({
   },
 
   searchPromise: function(query) {
-    return searchInterface.geneSearch(query)
+    return searchInterface.geneSearch(query);
   },
 
   searchComplete: function (results) {

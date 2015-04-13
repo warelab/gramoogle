@@ -1,12 +1,11 @@
 'use strict';
 
 var React = require('react');
-//var QueryActions = require('../actions/searchActions');
 
 var FilterPickers = React.createClass({
   render: function() {
     return (
-      <ol>
+      <ol className="filterPickers">
         <li>Detailed</li>
         <li>Information</li>
         <li>About</li>

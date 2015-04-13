@@ -1,90 +1,71 @@
 'use strict';
 
 var React = require('react');
-var QueryActions = require('../actions/queryActions');
-var resultTypes = require('../config/resultTypes');
+var Reflux = require('reflux');
+var VisualizationActions = require('../actions/visActions');
+var visualizationStore = require('../stores/visualizationStore');
 var _ = require('lodash');
-var rgbHex = require('rgb-hex');
+
+var Genome = React.createClass({
+  propTypes: {
+    genome: React.PropTypes.object.isRequired,
+    hits: React.PropTypes.object.isRequired
+  },
+  render: function() {
+    return (
+      <li className="genome">{this.props.genome.taxon_id}</li>
+    )
+  }
+});
 
 var ResultsVisualization = React.createClass({
+  mixins: [
+    Reflux.connect(visualizationStore, 'visData')
+  ],
   getInitialState: function () {
-    return {binWidth: 1000, binType: 'fixed'};
-  },
-  getFieldName: function () {
-    return this.state.binType + '_' + this.state.binWidth + '_bin';
-  },
-  getDistributionParameters: function () {
-    var fieldName = this.getFieldName();
-    return resultTypes.get(
-      'distribution',
-      {'facet.field': fieldName}
-    );
+    return {binWidth: 200, binType: 'fixed'};
   },
   componentWillMount: function () {
-    QueryActions.setResultType(
-      this.getFieldName(),
-      this.getDistributionParameters()
-    );
+    VisualizationActions.setDistribution(this.state.binType, this.state.binWidth);
   },
   componentWillUnmount: function () {
-    QueryActions.removeResultType(this.getFieldName());
+    VisualizationActions.removeDistribution();
   },
 
   render: function () {
-    var fieldName = this.getFieldName();
-    var bins = this.props.results[fieldName];
-    if (bins) {
-      var maxCount = _.max(bins.data, function (bin) {
-        return bin.count;
-      }).count;
-      var maxBin = _.last(bins.ids);
+    var thing, genomes;
 
-      var boxes = _.range(maxBin).map(function (idx) {
-        var bin = bins.data[idx];
-        var count = bin ? bins.data[idx].count : 0;
-        var backgroundColorHex = calculateHexColor(count, maxCount);
+    if(this.state.visData) {
+      genomes = _.map(this.state.visData.binnedGenomes, function(genome) {
         return (
-          <span key={fieldName + idx} className="bin" style={{backgroundColor: backgroundColorHex}} title={count + ' in bin ' + idx}></span>
-        );
-      });
-
-      return (
-        <div className="bins">
-          {boxes}
+          <Genome ref={genome.taxon_id} genome={genome} hits={this.state.visData.binnedResults} />
+        )
+      }.bind(this));
+      thing = (
+        <div class="resultsVis">
+          <p>{_.size(this.state.visData.binnedResults.data)} bins with
+            stuff in them
+          </p>
+          <ol>
+            {genomes}
+          </ol>
         </div>
+      );
+    }
+    else {
+      thing = (
+        <p>I would appreciate some binned data</p>
       );
     }
 
     return (
-      <figure className="vis">
+      <figure className="resultsVis">
+        {thing}
         <img src="images/charlie.jpg" alt="Charlie Says…" />
         <figcaption>A Visualization</figcaption>
       </figure>
     );
   }
 });
-
-function calculateHexColor(count, max) {
-  var minRgb = [255, 255, 255]; // white
-  var maxRgb = [255, 0, 0]; // red
-
-  if (!count) {
-    return '#' + rgbHex.apply(this, minRgb);
-  }
-
-  if (!max) {
-    return '#' + rgbHex.apply(this, maxRgb);
-  }
-
-  var ratio = Math.log(count) / Math.log(max);
-
-  var rgb = _.range(3).map(function (idx) {
-    return Math.floor(((maxRgb[idx] - minRgb[idx]) * ratio) + minRgb[idx]);
-  });
-
-  var hex = rgbHex.apply(this, rgb);
-
-  return '#' + hex;
-}
 
 module.exports = ResultsVisualization;
