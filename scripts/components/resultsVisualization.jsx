@@ -2,7 +2,7 @@
 
 var React = require('react');
 var Reflux = require('reflux');
-var VisualizationActions = require('../actions/visualizationActions');
+var VisualizationActions = require('../actions/visActions');
 var visualizationStore = require('../stores/visualizationStore');
 var _ = require('lodash');
 
