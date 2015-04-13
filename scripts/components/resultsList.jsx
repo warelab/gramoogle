@@ -1,7 +1,7 @@
 'use strict';
 
 var React = require('react');
-var resultTypes = require('../config/resultTypes');
+var resultTypes = require('gramene-search-client').resultTypes;
 var QueryActions = require('../actions/queryActions');
 var Result = require('./result.jsx');
 
