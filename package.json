@@ -23,10 +23,12 @@
     "jquery": "^2.1.3",
     "lodash": "^3.3.1",
     "q": "^1.2.0",
-    "react": "^0.12.2",
+    "react": "^0.13.1",
     "reflux": "^0.2.5",
     "rgb-hex": "^1.0.0",
-    "bins": "git://github.com/warelab/gramene-bins-client.git#master"
+    "bins": "git://github.com/warelab/gramene-bins-client.git#master",
+    "search": "git://github.com/warelab/gramene-search-client.git#master",
+    "trees": "git://github.com/warelab/gramene-trees-client.git#master"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
@@ -35,7 +37,7 @@
     "grunt-contrib-watch": "^0.6.1",
     "grunt-jest": "^0.1.3",
     "grunt-jsxhint": "^0.5.0",
-    "jest-cli": "^0.2.2",
+    "jest-cli": "^0.4.0",
     "jit-grunt": "^0.9.1",
     "jshint": "^2.6.0",
     "jshint-stylish": "^1.0.1",

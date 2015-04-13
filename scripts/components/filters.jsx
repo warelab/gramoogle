@@ -3,7 +3,6 @@
 var React = require('react');
 var FilterSummary = require('./filtersSummary.jsx');
 var FilterPickers = require('./filterPickers.jsx');
-//var QueryActions = require('../actions/searchActions');
 
 var Filters = React.createClass({
   getInitialState: function() {
