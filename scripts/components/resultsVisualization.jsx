@@ -8,12 +8,11 @@ var _ = require('lodash');
 
 var Genome = React.createClass({
   propTypes: {
-    genome: React.PropTypes.object.isRequired,
-    hits: React.PropTypes.object.isRequired
+    species: React.PropTypes.object.isRequired
   },
   render: function() {
     return (
-      <li className="genome">{this.props.genome.taxon_id}</li>
+      <li className="genome">{this.props.species.name}</li>
     )
   }
 });
@@ -33,17 +32,18 @@ var ResultsVisualization = React.createClass({
   },
 
   render: function () {
-    var thing, genomes;
+    var thing, taxonomy, genomes;
 
     if(this.state.visData) {
-      genomes = _.map(this.state.visData.binnedGenomes, function(genome) {
+      taxonomy = this.state.visData.taxonomy;
+      genomes = taxonomy.speciesWithResults().map(function(species) {
         return (
-          <Genome ref={genome.taxon_id} genome={genome} hits={this.state.visData.binnedResults} />
-        )
-      }.bind(this));
+          <Genome key={species.id} species={species} />
+        );
+      });
       thing = (
-        <div class="resultsVis">
-          <p>{_.size(this.state.visData.binnedResults.data)} bins with
+        <div className="resultsVis">
+          <p>{taxonomy.results().bins} of {taxonomy.binCount()} bins with
             stuff in them
           </p>
           <ol>
