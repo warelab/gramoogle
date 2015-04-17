@@ -11,8 +11,11 @@ var Genome = React.createClass({
     species: React.PropTypes.object.isRequired
   },
   render: function() {
+    var species = this.props.species;
     return (
-      <li className="genome">{this.props.species.name}</li>
+      <li className="genome">
+        {species.name} ({species.genome.results.count})
+      </li>
     )
   }
 });
@@ -36,13 +39,13 @@ var ResultsVisualization = React.createClass({
 
     if(this.state.visData) {
       taxonomy = this.state.visData.taxonomy;
-      genomes = taxonomy.speciesWithResults().map(function(species) {
+      genomes = taxonomy.species().map(function(species) {
         return (
           <Genome key={species.id} species={species} />
         );
       });
       thing = (
-        <div className="resultsVis">
+        <div>
           <p>{taxonomy.results().bins} of {taxonomy.binCount()} bins with
             stuff in them
           </p>
@@ -54,16 +57,18 @@ var ResultsVisualization = React.createClass({
     }
     else {
       thing = (
-        <p>I would appreciate some binned data</p>
+        <div>
+          <p>I would appreciate some binned data</p>
+          <img src="images/charlie.jpg" alt="Charlie Says…" />
+          <figcaption>A Visualization</figcaption>
+        </div>
       );
     }
 
     return (
-      <figure className="resultsVis">
+      <div className="resultsVis">
         {thing}
-        <img src="images/charlie.jpg" alt="Charlie Says…" />
-        <figcaption>A Visualization</figcaption>
-      </figure>
+      </div>
     );
   }
 });
