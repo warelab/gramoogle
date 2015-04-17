@@ -26,9 +26,8 @@
     "react": "^0.13.1",
     "reflux": "^0.2.5",
     "rgb-hex": "^1.0.0",
-    "bins": "git://github.com/warelab/gramene-bins-client.git#master",
     "search": "git://github.com/warelab/gramene-search-client.git#master",
-    "trees": "git://github.com/warelab/gramene-trees-client.git#master"
+    "taxonomy": "git://github.com/warelab/gramene-taxonomy-with-genomes.git#master"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
