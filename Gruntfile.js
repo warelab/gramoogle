@@ -15,7 +15,7 @@ module.exports = function (grunt) {
           optimization: 2
         },
         files: {
-          "build/style.css": "styles/*.less"
+          "build/style.css": "styles/main.less"
         }
       }
     },
