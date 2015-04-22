@@ -2,6 +2,7 @@
 
 module.exports = function (grunt) {
   require('jit-grunt')(grunt);
+  var browserslist = require('browserslist');
 
   grunt.loadNpmTasks('grunt-jest');
   grunt.loadNpmTasks('grunt-jsxhint');
@@ -12,14 +13,29 @@ module.exports = function (grunt) {
         options: {
           compress: false,
           yuicompress: true,
-          optimization: 2
+          optimization: 2,
+          sourceMap: true
         },
+        plugins: [
+          new (require('less-plugin-autoprefix'))({browsers: ["last 2 versions"]})
+        ],
         files: {
           "build/style.css": "styles/main.less"
         }
       }
     },
-
+    autoprefixer: {
+      options: {
+        // Task-specific options go here.
+      },
+      less_css_file: {
+        options: {
+          diff: true,
+          map: { inline: false }
+        },
+        src: 'build/style.css'
+      }
+    },
     browserify: {
       options: {
         browserifyOptions: {
