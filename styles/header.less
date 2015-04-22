@@ -1,0 +1,23 @@
+@header-height: 3rem;
+
+.app > header {
+  height: @header-height;
+  display: block;
+  overflow: scroll;
+
+  /* all direct children */
+  > * {
+    display: inline-block;
+    margin-right: 1rem;
+    vertical-align: middle;
+  }
+
+  .logo {
+    width: 10rem;
+    height: @header-height;
+    background-image: url(../images/gramene_logo.svg);
+    background-size: 70%;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+}

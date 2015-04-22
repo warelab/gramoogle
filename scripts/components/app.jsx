@@ -4,6 +4,7 @@ var React = require('react');
 var Reflux = require('reflux');
 var TextSearch = require('./textSearch.jsx');
 var Filters = require('./filters.jsx');
+var SearchSummary = require('./searchSummary.jsx');
 var Results = require('./results.jsx');
 var searchStore = require('../stores/searchStore');
 
@@ -16,9 +17,13 @@ var App = React.createClass({
 
     return (
       <div className="app">
-        <header>Gramene Logo</header>
-        <TextSearch query={search.query} />
-        <Filters query={search.query} results={search.results} /> {/* use metadata to display result count, time, etc in summary view.*/}
+        <header>
+          <div className="logo"> </div>
+          <TextSearch query={search.query} metadata={search.metadata} />
+          <SearchSummary filters={search.query.filters}
+                         results={search.results} />
+          <Filters query={search.query} results={search.results} />
+        </header>
         <Results results={search.results} />
       </div>
     );

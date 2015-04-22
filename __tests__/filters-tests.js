@@ -1,7 +1,7 @@
 'use strict';
 
 jest.dontMock('../scripts/components/filters.jsx');
-jest.dontMock('../scripts/components/filtersSummary.jsx');
+jest.dontMock('../scripts/components/searchSummary.jsx');
 jest.dontMock('../scripts/components/filterPickers.jsx');
 jest.dontMock('../scripts/stores/searchStore');
 

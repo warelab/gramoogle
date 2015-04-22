@@ -17,10 +17,9 @@ var TextSearch = React.createClass({
   },
   render: function(){
     return (
-      <section className="search">
-        <label htmlFor="searchBox">Search for Genes</label>
-        <input ref="searchBox" type="text" defaultValue={this.props.query.q} onChange={this.handleChange} />
-      </section>
+      <div className="search">
+        <input placeholder="Search for Genes" ref="searchBox" type="text" defaultValue={this.props.query.q} onChange={this.handleChange} />
+      </div>
     );
   }
 });

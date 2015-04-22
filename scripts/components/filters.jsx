@@ -1,7 +1,6 @@
 'use strict';
 
 var React = require('react');
-var FilterSummary = require('./filtersSummary.jsx');
 var FilterPickers = require('./filterPickers.jsx');
 
 var Filters = React.createClass({
@@ -20,15 +19,16 @@ var Filters = React.createClass({
       );
     } else {
       contents = (
-        <FilterSummary filters={this.props.query.filters}
-                       results={this.props.results} />
+        <span></span>
+        //<FilterSummary filters={this.props.query.filters}
+        //               results={this.props.results} />
       );
     }
     return (
-      <section className="filters">
-        <h4>Filters</h4><button onClick={this.toggleDisplayState}>{this.state.expanded ? "Contract" : "Expand" }</button>
+      <div className="filters">
+        <button onClick={this.toggleDisplayState}>Filter</button>
         {contents}
-      </section>
+      </div>
     );
   }
 });
