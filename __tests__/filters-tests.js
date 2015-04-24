@@ -16,14 +16,14 @@ describe('Filters', function() {
     return TestUtils.renderIntoDocument(Filters({query: searchState.query, results: searchState.results}));
   };
 
-  it('should contain a button', function() {
+  xit('should contain a button', function() {
     var filters = newFilters();
     var button = TestUtils.scryRenderedDOMComponentsWithTag(filters, 'button');
 
     expect(button.length).toEqual(1);
   });
 
-  it('initially be in compact state', function() {
+  xit('initially be in compact state', function() {
     var filters = newFilters();
     var summary = TestUtils.scryRenderedDOMComponentsWithClass(filters, 'filtersSummary');
     var details = TestUtils.scryRenderedDOMComponentsWithClass(filters, 'filterPickers');
@@ -33,7 +33,7 @@ describe('Filters', function() {
     expect(details.length).toEqual(0);
   });
 
-  it('should toggle between states on button press', function() {
+  xit('should toggle between states on button press', function() {
     var filters = newFilters();
     var button = TestUtils.findRenderedDOMComponentWithTag(filters, 'button');
 

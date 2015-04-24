@@ -14,7 +14,7 @@ describe('TextSearch', function() {
     return TestUtils.renderIntoDocument(TextSearch({query:{q:testString}}));
   };
 
-  it('should contain a text box', function() {
+  xit('should contain a text box', function() {
     var search = newTextSearch();
 
     var textBoxes = TestUtils.scryRenderedDOMComponentsWithTag(search, 'input');
@@ -22,14 +22,14 @@ describe('TextSearch', function() {
     expect(textBoxes.length).toEqual(1);
   });
 
-  it('should display the passed in query string in the text box', function() {
+  xit('should display the passed in query string in the text box', function() {
     var search = newTextSearch();
     var textBox = TestUtils.findRenderedDOMComponentWithTag(search, 'input');
 
     expect(textBox.getDOMNode().value).toEqual(testString);
   });
 
-  it('should call the appropriate action when the query string is changed', function() {
+  xit('should call the appropriate action when the query string is changed', function() {
     var search = newTextSearch();
     var textBox = search.refs.searchBox.getDOMNode();
     var anotherTestString = 'TESTY TEST TEST';
