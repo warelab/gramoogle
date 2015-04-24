@@ -12,7 +12,7 @@
     }
 
     @media only screen and (min-width: 768px) {
-      padding: 0 2rem;
+      padding: 0 @padding-base-horizontal;
     }
   }
   .logo {
@@ -24,15 +24,14 @@
     background-position: center;
   }
 
-  .searchBoxNav {
+  ul.searchBoxNav {
     margin: 0.6rem 0;
 
-    .tiny {
-      font-size: 11px;
-    }
-
     .input-group-addon {
-      padding: 0.25rem 0.75rem;
+      padding: @padding-xs-vertical @padding-small-horizontal;
+      strong {
+        color: @gramene-midgreen;
+      }
     }
 
     @media only screen {
@@ -42,7 +41,7 @@
     }
 
     @media only screen and (min-width: @screen-sm-min) {
-      width: calc(~'100% - @{logo-width} - @{search-padding}');
+      width: calc(~'100% - @{logo-width} - @{padding-base-horizontal}');
       padding-right: @grid-gutter-width;
     }
   }

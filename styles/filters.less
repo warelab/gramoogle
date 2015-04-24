@@ -1,10 +1,9 @@
 @import 'colors';
 
 .filters {
-  margin-top: 6rem;
-
-  /* Make Panel fit inside a Navbar */
+  /* Make Panel fit inside a Navbar; this is not normal */
   @media only screen and (min-width: @screen-sm-min) {
+    margin-top: @input-height-base + 3 * @padding-base-vertical;
     width: calc(~'100% - @{grid-gutter-width}');
   }
 }
