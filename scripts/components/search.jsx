@@ -40,7 +40,7 @@ var TextSearch = React.createClass({
     );
 
     return (
-      <Nav right={true} className="searchBoxNav">
+      <Nav right={true} className="search-box-nav">
         <Input className="foo"
                type="search"
                ref="searchBox"

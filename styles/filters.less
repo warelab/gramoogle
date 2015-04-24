@@ -1,6 +1,28 @@
 @import 'colors';
 
 .filters {
+  background-color: lighten(@gramene-lightgreen, 7.5%);
+
+
+  .filter-chooser {
+    .filter-item {
+      cursor: pointer;
+    }
+
+    .filter-item.active {
+      background-color: @gramene-darkgreen;
+      color: @gramene-offwhite
+    }
+
+    .filter-item.active:hover {
+      background-color: @gramene-orange;
+    }
+
+    .filter-item:not(.active):hover {
+      background-color: @gramene-yellow;
+    }
+  }
+
   /* Make Panel fit inside a Navbar; this is not normal */
   @media only screen and (min-width: @screen-sm-min) {
     margin-top: @input-height-base + 3 * @padding-base-vertical;
