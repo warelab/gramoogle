@@ -1,7 +1,8 @@
 'use strict';
 
 var React = require('react');
-var TextSearch = require('./textSearch.jsx');
+var Search = require('./search.jsx');
+var Filters = require('./filters.jsx');
 
 var bs = require('react-bootstrap');
 var Navbar = bs.Navbar,
@@ -16,6 +17,17 @@ var Header = React.createClass({
   propTypes: {
     search: React.PropTypes.object
   },
+  getInitialState: function() {
+    return {
+      filtersVisible: false
+    };
+  },
+  toggleFiltersVisibility: function() {
+    var newState = {
+      filtersVisible: !this.state.filtersVisible
+    };
+    this.setState(newState);
+  },
   render: function() {
     var search = this.props.search;
 
@@ -23,36 +35,15 @@ var Header = React.createClass({
       <a className="logo-link"><div className="logo"></div></a>
     );
 
-    var resultsCountStatement = (
-      <span className="tiny">
-        <div className="resultsCount"><strong>1634634</strong> genes</div>
-        <div><strong>38</strong> genomes</div>
-      </span>
-    );
-
-    var filterDropdown = (
-      <Button>Filter <span className="caret"></span></Button>
-    );
+    var filters;
+    if(this.state.filtersVisible) {
+      filters = <Filters />
+    }
 
     return (
       <Navbar className="header" brand={logo}>
-        <TextSearch search={search} />
-        <Panel className="filters">
-          <bs.Row>
-            <bs.Col xs={12} md={4}>
-              <bs.ListGroup className="filterChooser">
-                <bs.ListGroupItem active>Species<bs.Badge>38</bs.Badge></bs.ListGroupItem>
-                <bs.ListGroupItem>Domain<bs.Badge>65376</bs.Badge></bs.ListGroupItem>
-                <bs.ListGroupItem>GO<bs.Badge>6750</bs.Badge></bs.ListGroupItem>
-                <bs.ListGroupItem>Expression</bs.ListGroupItem>
-              </bs.ListGroup>
-            </bs.Col>
-            <bs.Col xs={12} md={8}>
-              <h1>Do some filtering here!</h1>
-              <p>This is where the filter UI would go</p>
-            </bs.Col>
-          </bs.Row>
-        </Panel>
+        <Search search={search} onFilterButtonPress={this.toggleFiltersVisibility}/>
+        {filters}
       </Navbar>
     );
   }
