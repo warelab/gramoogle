@@ -34,15 +34,27 @@
       }
     }
 
+    .typeahead {
+      position: absolute;
+    }
+
     @media only screen {
       padding-left: 0;
       padding-right: 0;
       width: 100%;
+
+      .typeahead {
+        width: calc(~'100% - @{grid-gutter-width}');
+      }
     }
 
     @media only screen and (min-width: @screen-sm-min) {
-      width: calc(~'100% - @{logo-width} - @{padding-base-horizontal}');
+      width: calc(~'100% - (@{logo-width} + @{padding-base-horizontal})');
       padding-right: @grid-gutter-width;
+
+      .typeahead {
+        width: calc(~'100% - (@{logo-width} + @{padding-base-horizontal} + @{grid-gutter-width})');
+      }
     }
   }
 }

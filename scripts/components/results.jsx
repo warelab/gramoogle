@@ -23,7 +23,6 @@ var Results = React.createClass({
 
     return (
       <section className="results">
-        <h4>Results</h4>
         <form>
           <input type="radio" name="resultView" value={this.VIZ} checked={this.state.visible === this.VIZ} onChange={this.updateView}>Result Distribution</input>
           <input type="radio" name="resultView" value={this.LIST} checked={this.state.visible === this.LIST} onChange={this.updateView}>List of Results</input>

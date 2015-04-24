@@ -17,14 +17,29 @@ var TextSearch = React.createClass({
     search: React.PropTypes.object.isRequired,
     onFilterButtonPress: React.PropTypes.func
   },
+  getInitialState: function() {
+    return {
+      typeaheadVisible: false
+    };
+  },
   handleQueryChange: function(e) {
     var node = this.refs.searchBox.getDOMNode();
     // required for testing.
-    if(e.target.value != node.value) {
+    if(e.target.value !== node.value) {
       node.value = e.target.value;
     }
     var queryString = node.value;
     QueryActions.setQueryString(queryString);
+
+    // For now, show typeahead if query string is not empty
+    this.setState({
+      typeaheadVisible: !!queryString.length
+    });
+  },
+  inputLostFocus: function() {
+    this.setState({
+      typeaheadVisible: false
+    });
   },
   render: function(){
     var search = this.props.search;
@@ -39,16 +54,26 @@ var TextSearch = React.createClass({
       </Button>
     );
 
+    var typeahead;
+    if(this.state.typeaheadVisible) {
+      typeahead = (
+        <bs.Panel className="typeahead">
+          <p>This is where suggested terms will go</p>
+        </bs.Panel>
+      );
+    }
+
     return (
       <Nav right={true} className="search-box-nav">
-        <Input className="foo"
-               type="search"
+        <Input type="search"
                ref="searchBox"
                placeholder="Search for genes…"
                standalone={true}
                addonAfter={resultsCountStatement}
                buttonAfter={filterDropdown}
-               onChange={this.handleQueryChange} />
+               onChange={this.handleQueryChange}
+               onBlur={this.inputLostFocus} />
+        {typeahead}
       </Nav>
     );
   }
