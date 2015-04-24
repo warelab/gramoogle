@@ -1,18 +1,18 @@
 @import 'colors';
 
 @logo-width: 14rem;
-@search-padding: 4rem;
+@search-padding: 3rem;
 
 .header {
   background-color: @gramene-lightgreen;
 
   .logo-link {
     @media only screen and (min-width: 320px) {
-      padding: 0 calc((100% - @logo-width) / 2);
+      padding: 0 calc(~'(100% - @{logo-width}) / 2');
     }
 
     @media only screen and (min-width: 768px) {
-      padding: 0;
+      padding: 0 2rem;
     }
   }
   .logo {
@@ -27,10 +27,6 @@
   .searchBoxNav {
     margin: 0.6rem 0;
 
-    .form-group {
-      margin: 0;
-    }
-
     .tiny {
       font-size: 11px;
     }
@@ -39,14 +35,15 @@
       padding: 0.25rem 0.75rem;
     }
 
-    @media only screen and (min-width: 320px) {
-      padding-left: 1rem;
-      padding-right: 1rem;
+    @media only screen {
+      padding-left: 0;
+      padding-right: 0;
       width: 100%;
     }
 
-    @media only screen and (min-width: 768px) {
-      width: calc(100% - @logo-width - @search-padding);
+    @media only screen and (min-width: @screen-sm-min) {
+      width: calc(~'100% - @{logo-width} - @{search-padding}');
+      padding-right: @grid-gutter-width;
     }
   }
 }

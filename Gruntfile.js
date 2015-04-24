@@ -21,19 +21,9 @@ module.exports = function (grunt) {
           new (require('less-plugin-autoprefix'))({browsers: ["last 2 versions"]})
         ],
         files: {
-          "build/less-style.css": "styles/main.less"
+          "build/style.css": "styles/main.less"
         }
       }
-    },
-
-    concat_css: {
-      options: {
-        // Task-specific options go here.
-      },
-      all: {
-        src: ['node_modules/bootstrap/dist/css/bootstrap.css', 'build/less-style.css'],
-        dest: 'build/style.css'
-      },
     },
 
     browserify: {
@@ -59,7 +49,7 @@ module.exports = function (grunt) {
     watch: {
       styles: {
         files: ['styles/*.less'],
-        tasks: ['less', 'concat_css'],
+        tasks: ['less'/*, 'concat_css'*/],
         options: {
           nospawn: true
         }
@@ -87,6 +77,6 @@ module.exports = function (grunt) {
     }
   });
 
-  grunt.registerTask('default', ['less', 'concat_css', 'browserify:dev', 'watch']);
-  grunt.registerTask('package', ['jest', 'less', 'concat_css', 'browserify:production']);
+  grunt.registerTask('default', ['less', /*'concat_css', */'browserify:dev', 'watch']);
+  grunt.registerTask('package', ['jest', 'less', /*'concat_css',*/ 'browserify:production']);
 };

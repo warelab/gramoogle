@@ -1,0 +1,10 @@
+@import 'colors';
+
+.filters {
+  margin-top: 6rem;
+
+  /* Make Panel fit inside a Navbar */
+  @media only screen and (min-width: @screen-sm-min) {
+    width: calc(~'100% - @{grid-gutter-width}');
+  }
+}

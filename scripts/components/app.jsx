@@ -8,13 +8,14 @@ var SearchSummary = require('./searchSummary.jsx');
 var Results = require('./results.jsx');
 var searchStore = require('../stores/searchStore');
 
-var bootstrap = require('react-bootstrap');
-var Navbar = bootstrap.Navbar,
-    NavItem = bootstrap.NavItem,
-    Nav = bootstrap.Nav,
-    MenuItem = bootstrap.MenuItem,
-    Button = bootstrap.Button,
-    Input = bootstrap.Input;
+var bs = require('react-bootstrap');
+var Navbar = bs.Navbar,
+    NavItem = bs.NavItem,
+    Nav = bs.Nav,
+    MenuItem = bs.MenuItem,
+    Button = bs.Button,
+    Input = bs.Input,
+    Panel = bs.Panel;
 
 var App = React.createClass({
   mixins: [
@@ -41,8 +42,30 @@ var App = React.createClass({
     return (
       <Navbar className="header" brand={logo}>
         <Nav right={true} className="searchBoxNav">
-          <Input className="foo" type="search" placeholder="Search for genes…" addonAfter={resultsCountStatement} buttonAfter={filterDropdown} />
+          <Input className="foo"
+                 type="search"
+                 placeholder="Search for genes…"
+                 standalone={true}
+                 addonAfter={resultsCountStatement}
+                 buttonAfter={filterDropdown} />
         </Nav>
+        <div class="clearfix"></div>
+        <Panel className="filters">
+          <bs.Row>
+            <bs.Col xs={12} md={4}>
+              <bs.ListGroup className="filterChooser">
+                <bs.ListGroupItem active>Species<bs.Badge>38</bs.Badge></bs.ListGroupItem>
+                <bs.ListGroupItem>Domain<bs.Badge>65376</bs.Badge></bs.ListGroupItem>
+                <bs.ListGroupItem>GO<bs.Badge>6750</bs.Badge></bs.ListGroupItem>
+                <bs.ListGroupItem>Expression</bs.ListGroupItem>
+              </bs.ListGroup>
+            </bs.Col>
+            <bs.Col xs={12} md={8}>
+              <h1>Do some filtering here!</h1>
+              <p>This is where the filter UI would go</p>
+            </bs.Col>
+          </bs.Row>
+        </Panel>
       </Navbar>
     );
     //
