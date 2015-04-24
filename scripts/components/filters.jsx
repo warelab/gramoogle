@@ -3,13 +3,9 @@
 var React = require('react');
 var bs = require('react-bootstrap');
 var FilterPickers = require('./filterPickers.jsx');
+var _ = require('lodash');
 
-var staticFilters = [
-  {name: 'Species', count: 38},
-  {name: 'Domain', count: 65376},
-  {name: 'GO', count: 6750},
-  {name: 'Other'}
-];
+var filterInventory = require('./filterInterfaces/_inventory');
 
 var Filters = React.createClass({
   getInitialState: function() {
@@ -19,12 +15,19 @@ var Filters = React.createClass({
   },
   selectFilter: function(name) {
     return function() {
-      this.setState({selectedFilter: name})
+      this.setState({
+        selectedFilter: filterInventory[name]
+      });
     }.bind(this);
   },
   render: function(){
     var selectedFilter = this.state.selectedFilter;
-    var listItems = staticFilters.map(function(filter) {
+    var filter;
+    if(selectedFilter) {
+      filter = React.createElement(selectedFilter.reactClass, {search: this.props.search});
+    }
+
+    var listItems = _.map(filterInventory, function(filter) {
       var active = filter.name === selectedFilter;
       var badge;
       if(filter.count !== 'undefined') {
@@ -44,6 +47,8 @@ var Filters = React.createClass({
       );
     }.bind(this));
 
+
+
     return (
       <bs.Well className="filters">
         <bs.Row>
@@ -53,8 +58,7 @@ var Filters = React.createClass({
             </bs.ListGroup>
           </bs.Col>
           <bs.Col xs={12} md={8}>
-            <h1>Do some filtering{selectedFilter ? ' of ' + selectedFilter : ''} here!</h1>
-            <p>This is where the filter UI would go</p>
+            {filter}
           </bs.Col>
         </bs.Row>
       </bs.Well>

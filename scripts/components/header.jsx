@@ -37,7 +37,7 @@ var Header = React.createClass({
 
     var filters;
     if(this.state.filtersVisible) {
-      filters = <Filters />
+      filters = <Filters search={search}/>
     }
 
     return (
