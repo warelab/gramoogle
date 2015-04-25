@@ -6,11 +6,11 @@
   background-color: @gramene-lightgreen;
 
   .logo-link {
-    @media only screen and (min-width: 320px) {
+    @media only screen {
       padding: 0 calc(~'(100% - @{logo-width}) / 2');
     }
 
-    @media only screen and (min-width: 768px) {
+    @media only screen and (min-width: @screen-sm-min) {
       padding: 0 @padding-base-horizontal;
     }
 
@@ -36,7 +36,7 @@
 
     .typeahead {
       position: absolute;
-
+      z-index: 5;
     }
 
     @media only screen {
