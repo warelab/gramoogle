@@ -77,6 +77,6 @@ module.exports = function (grunt) {
     }
   });
 
-  grunt.registerTask('default', ['less', /*'concat_css', */'browserify:dev', 'watch']);
-  grunt.registerTask('package', ['jest', 'less', /*'concat_css',*/ 'browserify:production']);
+  grunt.registerTask('default', ['less', 'browserify:dev', 'watch']);
+  grunt.registerTask('package', ['jest', 'less', 'browserify:production']);
 };
