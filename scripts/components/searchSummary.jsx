@@ -7,6 +7,9 @@ var resultTypes = require('gramene-search-client').resultTypes;
 var resultType = resultTypes.get('facet');
 
 var FilterSummary = React.createClass({
+  propTypes: {
+    results: React.PropTypes.object.isRequired
+  },
   componentWillMount: function () {
     QueryActions.setResultType('taxon_id', resultType);
   },
@@ -18,7 +21,10 @@ var FilterSummary = React.createClass({
     var metadata = results.metadata;
 
     return (
-        <p className="filtersSummary">{metadata.count} genes in {results.taxon_id ? results.taxon_id.count : 'n'} genomes found in {metadata.qtime}ms</p>
+    <small>
+      <div className="resultsCount"><strong>{metadata.count || 'loading…'}</strong> genes</div>
+      <div><strong>{results.taxon_id ? results.taxon_id.count : 'loading…'}</strong> genomes</div>
+    </small>
     );
   }
 });

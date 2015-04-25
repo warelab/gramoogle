@@ -14,7 +14,7 @@ describe('Filters', function() {
     return TestUtils.renderIntoDocument(Results({results: searchState.results}));
   };
 
-  it('initially be display result overview visualization', function() {
+  xit('initially be display result overview visualization', function() {
     var results = newResults();
     var radios = TestUtils.scryRenderedDOMComponentsWithTag(results, 'input');
 
@@ -26,7 +26,7 @@ describe('Filters', function() {
     expect(results.state.visible).toEqual(results.VIZ);
   });
 
-  it('should switch to list state on radio button press', function() {
+  xit('should switch to list state on radio button press', function() {
     // given
     var results = newResults();
     var radios = TestUtils.scryRenderedDOMComponentsWithTag(results, 'input');

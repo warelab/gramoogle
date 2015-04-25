@@ -5,6 +5,7 @@ module.exports = function (grunt) {
 
   grunt.loadNpmTasks('grunt-jest');
   grunt.loadNpmTasks('grunt-jsxhint');
+  grunt.loadNpmTasks('grunt-concat-css');
 
   grunt.initConfig({
     less: {
@@ -12,10 +13,15 @@ module.exports = function (grunt) {
         options: {
           compress: false,
           yuicompress: true,
-          optimization: 2
+          optimization: 2,
+          sourceMap: true,
+          sourceMapFileInline: true
         },
+        plugins: [
+          new (require('less-plugin-autoprefix'))({browsers: ["last 2 versions"]})
+        ],
         files: {
-          "build/style.css": "styles/*.less"
+          "build/style.css": "styles/main.less"
         }
       }
     },
@@ -43,7 +49,7 @@ module.exports = function (grunt) {
     watch: {
       styles: {
         files: ['styles/*.less'],
-        tasks: ['less'],
+        tasks: ['less'/*, 'concat_css'*/],
         options: {
           nospawn: true
         }
@@ -71,6 +77,6 @@ module.exports = function (grunt) {
     }
   });
 
-  grunt.registerTask('default', ['less', 'browserify:dev', 'watch']);
-  grunt.registerTask('package', ['jest', 'less', 'browserify:production']);
+  grunt.registerTask('default', ['less', /*'concat_css', */'browserify:dev', 'watch']);
+  grunt.registerTask('package', ['jest', 'less', /*'concat_css',*/ 'browserify:production']);
 };

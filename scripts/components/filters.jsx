@@ -1,35 +1,69 @@
 'use strict';
 
 var React = require('react');
-var FilterSummary = require('./filtersSummary.jsx');
+var bs = require('react-bootstrap');
 var FilterPickers = require('./filterPickers.jsx');
+var _ = require('lodash');
+
+var filterInventory = require('./filterInterfaces/_inventory');
 
 var Filters = React.createClass({
   getInitialState: function() {
-    return { expanded: false };
+    return {
+      selectedFilter: undefined
+    };
   },
-  toggleDisplayState: function() {
-    this.setState({ expanded: !this.state.expanded });
+  selectFilter: function(name) {
+    return function() {
+      this.setState({
+        selectedFilter: filterInventory[name]
+      });
+    }.bind(this);
   },
   render: function(){
-    var contents;
-    if(this.state.expanded) {
-      contents = (
-        <FilterPickers filters={this.props.query.filters}
-                       results={this.props.results} />
-      );
-    } else {
-      contents = (
-        <FilterSummary filters={this.props.query.filters}
-                       results={this.props.results} />
-      );
+    var selectedFilter = this.state.selectedFilter;
+    var filter;
+    if(selectedFilter) {
+      filter = React.createElement(selectedFilter.reactClass, {search: this.props.search});
     }
+
+    var listItems = _.map(filterInventory, function(filter) {
+      var active = filter.name === selectedFilter;
+      var badge;
+      if(filter.count !== 'undefined') {
+        badge = (
+          <bs.Badge>{filter.count}</bs.Badge>
+        );
+      }
+      return (
+        <bs.ListGroupItem
+            className="filter-item"
+            key={filter.name}
+            active={active}
+            onClick={this.selectFilter(filter.name)}>
+          {filter.name}
+          {badge}
+        </bs.ListGroupItem>
+      );
+    }.bind(this));
+
+
+
     return (
-      <section className="filters">
-        <h4>Filters</h4><button onClick={this.toggleDisplayState}>{this.state.expanded ? "Contract" : "Expand" }</button>
-        {contents}
-      </section>
+      <bs.Well className="filters">
+        <bs.Row>
+          <bs.Col xs={12} md={4}>
+            <bs.ListGroup className="filter-chooser">
+              {listItems}
+            </bs.ListGroup>
+          </bs.Col>
+          <bs.Col xs={12} md={8}>
+            {filter}
+          </bs.Col>
+        </bs.Row>
+      </bs.Well>
     );
   }
 });
+
 module.exports = Filters;
