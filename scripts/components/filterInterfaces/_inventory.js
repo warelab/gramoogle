@@ -3,18 +3,28 @@
 module.exports = {
   Species: {
     name: 'Species',
-    count: 38,
+    field: 'species',
     reactClass: require('./species.jsx')
   },
   Domain: {
     name: 'Domain',
-    count: 65376,
+    field: 'domains',
     reactClass: require('./domain.jsx')
   },
   GO: {
     name: 'GO',
-    count: 6750,
+    field: 'GO',
     reactClass: require('./go.jsx')
+  },
+  PO: {
+    name: 'PO',
+    field: 'PO',
+    reactClass: require('./po.jsx')
+  },
+  Biotype: {
+    name: 'Biotype',
+    field: 'biotype',
+    reactClass: require('./biotype.jsx')
   },
   Other: {
     name: 'Other',

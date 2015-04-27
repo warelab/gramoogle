@@ -17,7 +17,8 @@ module.exports = Reflux.createStore({
       },
       results: {
         list: [],
-        metadata: {}
+        metadata: {},
+        tally: {}
       }
     };
 

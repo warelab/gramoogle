@@ -7,6 +7,11 @@ var _ = require('lodash');
 
 var filterInventory = require('./filterInterfaces/_inventory');
 
+var QueryActions = require('../actions/queryActions');
+var resultTypes = require('gramene-search-client').resultTypes;
+
+var resultType = resultTypes.get('tally');
+
 var Filters = React.createClass({
   getInitialState: function() {
     return {
@@ -20,7 +25,20 @@ var Filters = React.createClass({
       });
     }.bind(this);
   },
+  componentWillMount: function () {
+    QueryActions.setResultType('tally', resultType);
+  },
+  componentWillUnmount: function () {
+    QueryActions.removeResultType('tally');
+  },
   render: function(){
+    var tally = this.props.search.results.tally;
+    if(!tally) {
+      return (
+        <img src="images/charley.jpg"/>
+      )
+    }
+    
     var selectedFilter = this.state.selectedFilter;
     var filter;
     if(selectedFilter) {
@@ -29,12 +47,9 @@ var Filters = React.createClass({
 
     var listItems = _.map(filterInventory, function(filter) {
       var active = filter.name === selectedFilter;
-      var badge;
-      if(filter.count !== 'undefined') {
-        badge = (
-          <bs.Badge>{filter.count}</bs.Badge>
-        );
-      }
+      var badge = (
+        <bs.Badge>{tally[filter.field]}</bs.Badge>
+      );
       return (
         <bs.ListGroupItem
             className="filter-item"
@@ -45,7 +60,7 @@ var Filters = React.createClass({
           {badge}
         </bs.ListGroupItem>
       );
-    }.bind(this));
+    }, this);
 
 
 
