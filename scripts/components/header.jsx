@@ -43,7 +43,7 @@ var Header = React.createClass({
     return (
       <Navbar className="header" brand={logo}>
         <Search search={search} onFilterButtonPress={this.toggleFiltersVisibility}/>
-        {filters}
+          {filters}
       </Navbar>
     );
   }
