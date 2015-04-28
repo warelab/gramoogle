@@ -28,7 +28,7 @@ var Filters = React.createClass({
     }
 
     var listItems = _.map(filterInventory, function(filter) {
-      var active = filter.name === selectedFilter;
+      var active = selectedFilter && filter.name === selectedFilter.name;
       var badge;
       if(filter.count !== 'undefined') {
         badge = (
