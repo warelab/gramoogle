@@ -1,27 +1,27 @@
 @import 'colors';
 
 @logo-width: 14rem;
-@search-padding: 3rem;
 
 .header {
   background-color: @gramene-lightgreen;
 
   .logo-link {
-    @media only screen and (min-width: 320px) {
+    @media only screen {
       padding: 0 calc(~'(100% - @{logo-width}) / 2');
     }
 
-    @media only screen and (min-width: 768px) {
+    @media only screen and (min-width: @screen-sm-min) {
       padding: 0 @padding-base-horizontal;
     }
-  }
-  .logo {
-    width: @logo-width;
-    height: 100%;
-    background-image: url(../images/gramene_logo.svg);
-    background-size: 100%;
-    background-repeat: no-repeat;
-    background-position: center;
+
+    .logo {
+      width: @logo-width;
+      height: 100%;
+      background-image: url(../images/gramene_logo.svg);
+      background-size: 100%;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
   }
 
   ul.search-box-nav {
@@ -36,6 +36,7 @@
 
     .typeahead {
       position: absolute;
+      z-index: 5;
     }
 
     @media only screen {
@@ -53,7 +54,7 @@
       padding-right: @grid-gutter-width;
 
       .typeahead {
-        width: calc(~'100% - (@{logo-width} + @{padding-base-horizontal} + @{grid-gutter-width})');
+        width: calc(~'100% - (@{logo-width} + @{padding-base-horizontal} + @{grid-gutter-width} - 2px)');
       }
     }
   }

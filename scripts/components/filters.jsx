@@ -46,7 +46,7 @@ var Filters = React.createClass({
     }
 
     var listItems = _.map(filterInventory, function(filter) {
-      var active = filter.name === selectedFilter;
+      var active = selectedFilter && filter.name === selectedFilter.name;
       var badge = (
         <bs.Badge>{tally[filter.field]}</bs.Badge>
       );
@@ -61,8 +61,6 @@ var Filters = React.createClass({
         </bs.ListGroupItem>
       );
     }, this);
-
-
 
     return (
       <bs.Well className="filters">
