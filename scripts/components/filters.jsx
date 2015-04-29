@@ -35,7 +35,7 @@ var Filters = React.createClass({
     var tally = this.props.search.results.tally;
     if(!tally) {
       return (
-        <img src="images/charley.jpg"/>
+        <img src="images/charlie.jpg"/>
       )
     }
     
