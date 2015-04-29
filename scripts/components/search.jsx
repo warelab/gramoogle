@@ -6,6 +6,7 @@ var _ = require('lodash');
 var filters = require('../config/filters');
 
 var SearchSummary = require('./searchSummary.jsx');
+var Suggest = require('./suggest.jsx');
 
 var bs = require('react-bootstrap');
 var Nav = bs.Nav,
@@ -57,9 +58,7 @@ var TextSearch = React.createClass({
     var typeahead;
     if(this.state.typeaheadVisible) {
       typeahead = (
-        <bs.Panel className="typeahead">
-          <p>This is where suggested terms will go</p>
-        </bs.Panel>
+        <Suggest queryString={this.props.search.query.q} />
       );
     }
 
