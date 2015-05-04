@@ -8,15 +8,17 @@ var searchInterface = require('gramene-search-client').client;
 var SuggestActions = require('../actions/suggestActions');
 var GrameneCache = require('gramene-client-cache');
 var visualizationStore = require('../stores/visualizationStore');
+var searchStore = require('../stores/searchStore');
 var constants = require('../config/constants');
 
 module.exports = Reflux.createStore({
   init: function () {
     this.listenTo(QueryActions.setQueryString, this.provideSuggestions);
     this.listenTo(visualizationStore, this.setTaxonomy);
+    this.listenTo(searchStore, this.setSearchState);
     this.cache = GrameneCache.init(100);
 
-    this.suggest = _.debounce(this.suggestNoDebounce, 150);
+    this.suggest = _.debounce(this.suggestNoDebounce, constants.suggest.debounce);
   },
 
   provideSuggestions: function (queryString) {
@@ -27,6 +29,10 @@ module.exports = Reflux.createStore({
 
   setTaxonomy: function(visState) {
     this.taxonomy = visState.taxonomy;
+  },
+
+  setSearchState: function(searchState) {
+    this.searchState = searchState;
   },
 
   // Note that this function is debounced in init. It might be called many
@@ -53,9 +59,20 @@ module.exports = Reflux.createStore({
     }
 
     promise
+      .then(this.removeAcceptedSuggestions)
       .then(this.findTopSuggestions)
       .then(this.suggestComplete)
       .catch(this.suggestError);
+  },
+
+  removeAcceptedSuggestions: function(data) {
+    var accepted = this.searchState.query.filters;
+    var result = _.forEach(data, function(category) {
+      category.suggestions = _.filter(category.suggestions, function(suggestion) {
+        return !accepted[suggestion.fq];
+      });
+    });
+    return result;
   },
 
   findTopSuggestions: function(data) {

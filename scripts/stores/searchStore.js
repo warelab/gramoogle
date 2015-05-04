@@ -14,7 +14,7 @@ module.exports = Reflux.createStore({
     this.state = {
       query: {
         q: '',
-        filters: {}, // fieldName => object of solr parameters
+        filters: {}, // filterKey => object of solr parameters
         resultTypes: {} // fieldName => object of solr parameters
       },
       results: {
@@ -45,6 +45,18 @@ module.exports = Reflux.createStore({
   removeResultType: function (fieldName) {
     console.log('removeResultType', arguments);
     delete this.state.query.resultTypes[fieldName];
+    this.search();
+  },
+
+  setFilter: function(filter) {
+    console.log('setFilter', arguments);
+    this.state.query.filters[filter.fq] = filter;
+    this.search();
+  },
+
+  removeFilter: function(filter) {
+    console.log('removeFilter', arguments);
+    delete this.state.query.filters[filter.fq];
     this.search();
   },
 

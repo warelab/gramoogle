@@ -8,11 +8,12 @@ var QueryActions = Reflux.createActions([
   'removeResultType',
 
   // queryString actions.
-  'setQueryString'
+  'setQueryString',
+  'removeQueryString',
 
   // filter actions.
-  //'setFilter',
-  //'removeFilter'
+  'setFilter',
+  'removeFilter'
 ]);
 
 module.exports = QueryActions;

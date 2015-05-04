@@ -9,5 +9,22 @@
       color: @gray-light;
       font-size-adjust: -2;
     }
+
+    .category {
+
+      .terms {
+        &:extend(.list-unstyled);
+
+        .term {
+          padding: @padding-small-vertical;
+          a {
+            &:extend(.btn);
+            &:extend(.btn-default);
+            color: @gramene-darkgreen;
+            border-color: @gramene-darkgreen;
+          }
+        }
+      }
+    }
   }
 }
