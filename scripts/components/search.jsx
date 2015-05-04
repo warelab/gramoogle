@@ -8,6 +8,7 @@ var filters = require('../config/filters');
 var SearchSummary = require('./searchSummary.jsx');
 var Suggest = require('./suggest.jsx');
 
+var constants = require('../config/constants');
 var bs = require('react-bootstrap');
 var Nav = bs.Nav,
   Button = bs.Button,
@@ -20,7 +21,7 @@ var TextSearch = React.createClass({
   },
   getInitialState: function() {
     return {
-      typeaheadVisible: false
+      suggestionsVisible: false
     };
   },
   handleQueryChange: function(e) {
@@ -34,12 +35,17 @@ var TextSearch = React.createClass({
 
     // For now, show typeahead if query string is not empty
     this.setState({
-      typeaheadVisible: !!queryString.length
+      suggestionsVisible: !!queryString.length
     });
   },
   inputLostFocus: function() {
     this.setState({
-      typeaheadVisible: false
+      suggestionsVisible: false
+    });
+  },
+  inputGainedFocus: function() {
+    this.setState({
+      suggestionsVisible: !!this.props.search.query.q.length
     });
   },
   render: function(){
@@ -55,9 +61,9 @@ var TextSearch = React.createClass({
       </Button>
     );
 
-    var typeahead;
-    if(this.state.typeaheadVisible) {
-      typeahead = (
+    var suggestions;
+    if(this.state.suggestionsVisible) {
+      suggestions = (
         <Suggest queryString={this.props.search.query.q} />
       );
     }
@@ -71,8 +77,10 @@ var TextSearch = React.createClass({
                addonAfter={resultsCountStatement}
                buttonAfter={filterDropdown}
                onChange={this.handleQueryChange}
-               onBlur={this.inputLostFocus} />
-        {typeahead}
+               onFocus={this.inputGainedFocus}
+               onBlur={this.inputLostFocus}
+          />
+        {suggestions}
       </Nav>
     );
   }

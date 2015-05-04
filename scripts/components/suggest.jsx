@@ -15,8 +15,8 @@ var Suggest = React.createClass({
 
     if(!suggestions) {
       return (
-        <bs.Panel className="typeahead">
-          <p>Loading…</p>
+        <bs.Panel className="suggestions">
+          <p>Finding suggestions…</p>
         </bs.Panel>
       );
     }
@@ -25,14 +25,14 @@ var Suggest = React.createClass({
 
       var categorySuggestions = category.suggestions.map(function(suggestion) {
         return (
-          <li className="suggestion" dangerouslySetInnerHTML={{__html:suggestion.term}}/>
+          <li className="term" dangerouslySetInnerHTML={{__html:suggestion.term}}/>
         );
       });
 
       return (
         <li className="category">
           <h3>{category.label}</h3>
-          <ul className="suggestions">
+          <ul className="terms">
             {categorySuggestions}
           </ul>
         </li>
@@ -40,7 +40,7 @@ var Suggest = React.createClass({
     });
 
     return (
-      <bs.Panel className="typeahead">
+      <bs.Panel className="suggestions">
         <ul className="categories">
           {suggestLayout}
         </ul>
