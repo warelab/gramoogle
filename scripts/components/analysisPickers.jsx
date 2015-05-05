@@ -2,10 +2,10 @@
 
 var React = require('react');
 
-var FilterPickers = React.createClass({
+var AnalysisPickers = React.createClass({
   render: function() {
     return (
-      <div className="filterPickers">
+      <div className="analysisPickers">
         <header>
           Hello
         </header>
@@ -14,10 +14,10 @@ var FilterPickers = React.createClass({
           <li>Information</li>
           <li>About</li>
           <li>The</li>
-          <li>Filters</li>
+          <li>Analysiss</li>
         </ol>
       </div>
     );
   }
 });
-module.exports = FilterPickers;
+module.exports = AnalysisPickers;

@@ -16,7 +16,7 @@ var Result = React.createClass({
       category: 'Gene Tree',
       fq:'epl_gene_tree:' + gt,
       id:'epl_gene_tree:' + gt,
-      term: gt
+      term: 'Homolog of ' + this.props.gene.name
     };
   },
 

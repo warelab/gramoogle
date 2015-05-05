@@ -2,26 +2,26 @@
 
 var React = require('react');
 var bs = require('react-bootstrap');
-var FilterPickers = require('./filterPickers.jsx');
+var AnalysisPickers = require('./analysisPickers.jsx');
 var _ = require('lodash');
 
-var filterInventory = require('./filterInterfaces/_inventory');
+var analysisInventory = require('./analysisInterfaces/_inventory');
 
 var QueryActions = require('../actions/queryActions');
 var resultTypes = require('gramene-search-client').resultTypes;
 
 var resultType = resultTypes.get('tally');
 
-var Filters = React.createClass({
+var Analysis = React.createClass({
   getInitialState: function() {
     return {
-      selectedFilter: undefined
+      selectedAnalysis: undefined
     };
   },
-  selectFilter: function(name) {
+  selectAnalysis: function(name) {
     return function() {
       this.setState({
-        selectedFilter: filterInventory[name]
+        selectedAnalysis: analysisInventory[name]
       });
     }.bind(this);
   },
@@ -39,39 +39,39 @@ var Filters = React.createClass({
       )
     }
     
-    var selectedFilter = this.state.selectedFilter;
-    var filter;
-    if(selectedFilter) {
-      filter = React.createElement(selectedFilter.reactClass, {search: this.props.search});
+    var selectedAnalysis = this.state.selectedAnalysis;
+    var analysis;
+    if(selectedAnalysis) {
+      analysis = React.createElement(selectedAnalysis.reactClass, {search: this.props.search});
     }
 
-    var listItems = _.map(filterInventory, function(filter) {
-      var active = selectedFilter && filter.name === selectedFilter.name;
+    var listItems = _.map(analysisInventory, function(analysis) {
+      var active = selectedAnalysis && analysis.name === selectedAnalysis.name;
       var badge = (
-        <bs.Badge>{tally[filter.field]}</bs.Badge>
+        <bs.Badge>{tally[analysis.field]}</bs.Badge>
       );
       return (
         <bs.ListGroupItem
-            className="filter-item"
-            key={filter.name}
+            className="analysis-item"
+            key={analysis.name}
             active={active}
-            onClick={this.selectFilter(filter.name)}>
-          {filter.name}
+            onClick={this.selectAnalysis(analysis.name)}>
+          {analysis.name}
           {badge}
         </bs.ListGroupItem>
       );
     }, this);
 
     return (
-      <bs.Well className="filters">
+      <bs.Well className="analysis">
         <bs.Row>
           <bs.Col xs={12} md={4}>
-            <bs.ListGroup className="filter-chooser">
+            <bs.ListGroup className="analysis-chooser">
               {listItems}
             </bs.ListGroup>
           </bs.Col>
           <bs.Col xs={12} md={8}>
-            {filter}
+            {analysis}
           </bs.Col>
         </bs.Row>
       </bs.Well>
@@ -79,4 +79,4 @@ var Filters = React.createClass({
   }
 });
 
-module.exports = Filters;
+module.exports = Analysis;

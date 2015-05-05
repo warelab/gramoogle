@@ -6,6 +6,11 @@ module.exports = {
     field: 'species',
     reactClass: require('./species.jsx')
   },
+  Homologs: {
+    name: 'Homologs',
+    field: 'epl_gene_tree',
+    reactClass: require('./gene_tree.jsx')
+  },
   Domain: {
     name: 'Domain',
     field: 'domains',

@@ -37,7 +37,7 @@ var TextSearch = React.createClass({
   mixins: [Reflux.ListenerMixin],
   propTypes: {
     search: React.PropTypes.object.isRequired,
-    onFilterButtonPress: React.PropTypes.func
+    onAnalysisButtonPress: React.PropTypes.func.isRequired
   },
   getInitialState: function() {
     return {
@@ -94,9 +94,9 @@ var TextSearch = React.createClass({
       <SearchSummary results={search.results} />
     );
 
-    var filterDropdown = (
-      <Button onClick={this.props.onFilterButtonPress}>
-        Filter <span className="caret"></span>
+    var analysisDropdown = (
+      <Button onClick={this.props.onAnalysisButtonPress}>
+        Analysis <span className="caret"></span>
       </Button>
     );
 
@@ -123,7 +123,7 @@ var TextSearch = React.createClass({
                placeholder="Search for genes…"
                standalone={true}
                addonAfter={resultsCountStatement}
-               buttonAfter={filterDropdown}
+               buttonAfter={analysisDropdown}
                onChange={this.handleQueryChange}
           />
         <ol className="list-inline search-filters">
