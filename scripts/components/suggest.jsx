@@ -12,7 +12,13 @@ var Term = React.createClass({
     suggestedTerm: React.PropTypes.object.isRequired
   },
   acceptSuggestion: function() {
+    var suggestedTerm = this.props.suggestedTerm;
+
     console.log('user wants', this.props.suggestedTerm);
+
+    // remove highlighting now.
+    suggestedTerm.term = suggestedTerm.term.replace(/<\/?em>/g, '');
+
     // Notify the rest of the app
     queryActions.setFilter(this.props.suggestedTerm);
     queryActions.removeQueryString();
@@ -20,8 +26,8 @@ var Term = React.createClass({
     // immediately hide the node. This is very un-react-like
     // however we are not currently storing state inside
     // suggestStore so it is difficult to update the list
-    // of suggestions. Besides, suggestions are meant to be
-    // ephemeral so this somewhat makes sense to me.
+    // of suggestions. (This lack-of-state makes sense because
+    // Suggestions are meant to be ephemeral.)
     React.findDOMNode(this).className += " hidden";
   },
   render: function() {

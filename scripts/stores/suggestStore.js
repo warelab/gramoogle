@@ -113,9 +113,9 @@ module.exports = Reflux.createStore({
       .sortBy(function(suggestion) {
         return -suggestion.score;
       })
-      .take(50)
+      .take(5)
       .value();
-    data.push({label: 'Top', suggestions: top5});
+    data.unshift({label: 'Top', suggestions: top5});
     return data;
   },
 

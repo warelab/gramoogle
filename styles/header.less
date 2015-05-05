@@ -24,38 +24,5 @@
     }
   }
 
-  ul.search-box-nav {
-    margin: 0.6rem 0;
-
-    .input-group-addon {
-      padding: @padding-xs-vertical @padding-small-horizontal;
-      strong {
-        color: @gramene-midgreen;
-      }
-    }
-
-    .suggestions {
-      position: absolute;
-      z-index: 5;
-    }
-
-    @media only screen {
-      padding-left: 0;
-      padding-right: 0;
-      width: 100%;
-
-      .suggestions {
-        width: calc(~'100% - @{grid-gutter-width}');
-      }
-    }
-
-    @media only screen and (min-width: @screen-sm-min) {
-      width: calc(~'100% - (@{logo-width} + @{padding-base-horizontal})');
-      padding-right: @grid-gutter-width;
-
-      .suggestions {
-        width: calc(~'100% - (@{logo-width} + @{padding-base-horizontal} + @{grid-gutter-width} - 2px)');
-      }
-    }
-  }
+  @import 'search';
 }

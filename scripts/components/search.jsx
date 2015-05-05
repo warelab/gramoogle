@@ -15,6 +15,24 @@ var Nav = bs.Nav,
   Button = bs.Button,
   Input = bs.Input;
 
+var SearchFilter = React.createClass({
+  propTypes: {
+    term: React.PropTypes.object.isRequired
+  },
+  removeFilter: function() {
+    QueryActions.removeFilter(this.props.term);
+  },
+  render: function() {
+    var term = this.props.term;
+    return (
+      <li className="search-filter">
+        {term.term}
+        <Button bsSize="xsmall" onClick={this.removeFilter}>&times;</Button>
+      </li>
+    );
+  }
+});
+
 var TextSearch = React.createClass({
   mixins: [Reflux.ListenerMixin],
   propTypes: {
@@ -89,9 +107,9 @@ var TextSearch = React.createClass({
       );
     }
 
-    var filters = _.map(search.query.filters, function(filter, fq) {
+    var filters = _.map(search.query.filters, function(term, fq) {
       return (
-        <div className="filterLozenge">${filter}</div>
+        <SearchFilter term={term} />
       )
     });
 
@@ -108,7 +126,9 @@ var TextSearch = React.createClass({
                buttonAfter={filterDropdown}
                onChange={this.handleQueryChange}
           />
-        {filters}
+        <ol className="list-inline search-filters">
+          {filters}
+        </ol>
         {suggestions}
       </Nav>
     );
