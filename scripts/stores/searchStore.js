@@ -66,6 +66,12 @@ module.exports = Reflux.createStore({
     this.search();
   },
 
+  removeQueryString: function() {
+    console.log('removeQueryString');
+    this.state.query.q = '';
+    this.search();
+  },
+
   // Note that this function is debounced in init. It might be called many
   // times in succession when a user is interacting with the page,
   // but only the last one will fire.
