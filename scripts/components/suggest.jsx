@@ -83,7 +83,7 @@ var Suggest = React.createClass({
 
     var suggestLayout = suggestions.map(function(category) {
       return (
-        <SuggestCategory category={category} />
+        <SuggestCategory key={category.label} category={category} />
       );
     });
 

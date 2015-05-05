@@ -24,6 +24,11 @@ module.exports = Reflux.createStore({
       }
     };
 
+    // TODO use react-router
+    if(window && window.location.hash) {
+      this.state.query = JSON.parse(decodeURI(window.location.hash.substring(1)));
+    }
+
     // make a copy of the query to keep with the results
     this.state.results.metadata.searchQuery = _.cloneDeep(this.state.query);
 
@@ -51,6 +56,12 @@ module.exports = Reflux.createStore({
   setFilter: function(filter) {
     console.log('setFilter', arguments);
     this.state.query.filters[filter.fq] = filter;
+    this.search();
+  },
+
+  setAllFilters: function(filters) {
+    console.log('setAllFilters', arguments);
+    this.state.query.filters = filters;
     this.search();
   },
 
@@ -189,6 +200,8 @@ module.exports = Reflux.createStore({
 
   searchComplete: function (results) {
     console.log('Got data: ', results);
+
+    window.location.hash = encodeURI(JSON.stringify(this.state.query));
 
     // TODO: compare query state used for search with the current one
     this.state.results = results;

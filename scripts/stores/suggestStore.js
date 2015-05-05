@@ -55,7 +55,6 @@ module.exports = Reflux.createStore({
           return response;
         }.bind(this));
       console.log('going to hit server for suggestions for ' + queryString);
-
     }
 
     promise

@@ -13,6 +13,7 @@ var QueryActions = Reflux.createActions([
 
   // filter actions.
   'setFilter',
+  'setAllFilters',
   'removeFilter'
 ]);
 
