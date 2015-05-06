@@ -10,7 +10,7 @@ var Result = React.createClass({
     gene: React.PropTypes.object.isRequired
   },
 
-  createFilter: function() {
+  createHomologyFilter: function() {
     var gt = this.props.gene.epl_gene_tree;
     return {
       category: 'Gene Tree',
@@ -20,12 +20,41 @@ var Result = React.createClass({
     };
   },
 
+  createDomainsFilter: function() {
+    var drList = this.props.gene.domainRoots.split(' ');
+    var qString;
+    if (drList.length === 1) {
+      qString = 'domainRoots:'+drList[0];
+    }
+    else {
+      qString = '{!surround}domainRoots:2w('+drList.join(',')+')';
+    }
+    return {
+      category: 'Domain Structure',
+      fq:qString,
+      id:qString,
+      term: 'Domain structure like ' + this.props.gene.name
+    };
+  },
+
   filterQ: function() {
-    queryActions.setFilter(this.createFilter());
+    queryActions.setFilter(this.createHomologyFilter());
   },
 
   newQ: function() {
-    var filter = this.createFilter();
+    var filter = this.createHomologyFilter();
+    var filters = {};
+    filters[filter.fq] = filter;
+
+    queryActions.setAllFilters(filters);
+  },
+
+  filterD: function() {
+    queryActions.setFilter(this.createDomainsFilter());
+  },
+
+  newD: function() {
+    var filter = this.createDomainsFilter();
     var filters = {};
     filters[filter.fq] = filter;
 
@@ -43,6 +72,16 @@ var Result = React.createClass({
         </li>
       );
     }
+    
+    var domainArch;
+    if(gene.domainRoots) {
+      domainArch = (
+        <li>
+          <bs.Button bsSize="small" onClick={this.filterD}>Apply domain structure filter</bs.Button>
+          <bs.Button bsSize="small" onClick={this.newD}>All genes with this domain structure</bs.Button>
+        </li>
+      );
+    }
 
     return (
       <li className="result">
@@ -50,7 +89,7 @@ var Result = React.createClass({
         </h4>
         <p>{gene.description}</p>
         <ul className="change-search">
-          {genetreeLi}
+          {genetreeLi}{domainArch}
         </ul>
       </li>
     );
