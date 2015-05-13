@@ -14,7 +14,13 @@ var Term = React.createClass({
   acceptSuggestion: function() {
     var suggestedTerm = this.props.suggestedTerm;
 
-    console.log('user wants', this.props.suggestedTerm);
+    console.log('user wants', suggestedTerm);
+
+    if(suggestedTerm.weight == 0) {
+      console.log('not adding filter for ' + suggestedTerm.term + ' because it will have no results');
+      return;
+      // TODO maybe tell the user?
+    }
 
     // remove highlighting now.
     suggestedTerm.term = suggestedTerm.term.replace(/<\/?em>/g, '');
@@ -32,8 +38,9 @@ var Term = React.createClass({
   },
   render: function() {
     var suggestion = this.props.suggestedTerm;
+    var className = 'term' + (suggestion.weight == 0 ? ' empty' : '');
     return (
-      <li className="term">
+      <li className={className}>
         <a onClick={this.acceptSuggestion} dangerouslySetInnerHTML={{__html:suggestion.term}} />
       </li>
     );
