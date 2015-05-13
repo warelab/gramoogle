@@ -109,6 +109,9 @@ module.exports = Reflux.createStore({
         return category.suggestions;
       })
       .flatten()
+      .filter(function(suggestion) {
+        return suggestion.weight > 0;
+      })
       .sortBy(function(suggestion) {
         return -suggestion.score;
       })
