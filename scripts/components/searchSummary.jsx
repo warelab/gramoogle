@@ -6,7 +6,7 @@ var resultTypes = require('gramene-search-client').resultTypes;
 
 var resultType = resultTypes.get('facet');
 
-var FilterSummary = React.createClass({
+var SearchSummary = React.createClass({
   propTypes: {
     results: React.PropTypes.object.isRequired
   },
@@ -28,4 +28,4 @@ var FilterSummary = React.createClass({
     );
   }
 });
-module.exports = FilterSummary;
+module.exports = SearchSummary;
