@@ -1,8 +1,10 @@
 'use strict';
 
 var React = require('react');
+var dataMixin = require('./NeedsDataMixin').for('biotype');
 
 var Species = React.createClass({
+  mixins: [dataMixin],
   render: function() {
     return (
       <div className="filter">
