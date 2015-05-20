@@ -3,6 +3,7 @@
 var React = require('react');
 var bs = require('react-bootstrap');
 var queryActions = require('../actions/queryActions');
+var Browser = require('./browser.jsx');
 
 var Result = React.createClass({
 
@@ -91,6 +92,7 @@ var Result = React.createClass({
         <ul className="change-search">
           {genetreeLi}{domainArch}
         </ul>
+        <Browser gene={gene} />
       </li>
     );
   }
