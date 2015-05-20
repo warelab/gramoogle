@@ -17,7 +17,10 @@ var DallianceBrowser = React.createClass({
     var g = this.props.gene;
     var span = g.end - g.start + 1;
     var padding = Math.floor(.1*span);
-    new Browser(
+
+    // GLOBAL alert! This code is added to the window object in the root
+    // javascript class for the application, gramoogle.js
+    new window.Browser(
       {
         pageName: g.id + 'Browser',
         chr: g.region,
@@ -52,7 +55,7 @@ var DallianceBrowser = React.createClass({
         noDefaultLabels: true,
         noPersist: true,
         noPersistView: true,
-        maxWorkers: 0,
+        maxWorkers: 2,
         noTitle: true,
         noLocationField: true,
         noLeapButtons: true,

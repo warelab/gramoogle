@@ -30,7 +30,8 @@
     "reflux": "^0.2.5",
     "rgb-hex": "^1.0.0",
     "search": "git://github.com/mycrobe/gramene-search-client.git#master",
-    "taxonomy": "git://github.com/warelab/gramene-taxonomy-with-genomes.git#master"
+    "taxonomy": "git://github.com/warelab/gramene-taxonomy-with-genomes.git#master",
+    "biodalliance": "git://github.com/ajo2995/dalliance.git"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
