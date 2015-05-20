@@ -3,27 +3,42 @@
 var React = require('react');
 var resultTypes = require('gramene-search-client').resultTypes;
 var QueryActions = require('../../actions/queryActions');
+var _ = require('lodash');
 
 module.exports = {
-  for: function(field) {
+  of: function() {
+    var fields = Array.prototype.slice.call(arguments),
+        keys = fields.map(function(field) {
+          return field + '_for_analysis';
+        }),
+        rts = fields.map(function(field) {
+          return resultTypes.get(
+            'distribution',
+            {
+              'facet.field': field,
+              key: field + '_for_analysis'
+            }
+          );
+        }),
+        rtByKey = _.zipObject(keys, rts);
+
     return {
       propTypes: {
-        search: React.PropTypes.object.isRequired
+        search: React.PropTypes.object.isRequired //,
+        //filters: React.PropTypes.object.isRequired
       },
-      getResultType: function() {
-        return resultTypes.get(
-          'facet',
-          {
-            'facet.field': field,
-            'mincount': 1
-          }
-        );
+      getNeededData: function(key) {
+        return this.props.search.results[key + '_for_analysis'];
       },
       componentWillMount: function () {
-        QueryActions.setResultType(field, this.getResultType());
+        _.forOwn(rtByKey, function(rt, key) {
+          QueryActions.setResultType(key, rt);
+        });
       },
       componentWillUnmount: function () {
-        QueryActions.removeResultType(field);
+        _.forOwn(rtByKey, function(rt, key) {
+          QueryActions.removeResultType(key);
+        });
       }
     };
   }

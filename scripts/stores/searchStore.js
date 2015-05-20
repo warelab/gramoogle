@@ -15,7 +15,7 @@ module.exports = Reflux.createStore({
       query: {
         q: '',
         filters: {}, // filterKey => object of solr parameters
-        resultTypes: {} // fieldName => object of solr parameters
+        resultTypes: {} // key || fieldName => object of solr parameters
       },
       results: {
         list: [],
@@ -41,15 +41,15 @@ module.exports = Reflux.createStore({
     return this.state;
   },
 
-  setResultType: function (fieldName, params) {
+  setResultType: function (rtKey, params) {
     console.log('setResultType', arguments);
-    this.state.query.resultTypes[fieldName] = params;
+    this.state.query.resultTypes[rtKey] = params;
     this.search();
   },
 
-  removeResultType: function (fieldName) {
+  removeResultType: function (rtKey) {
     console.log('removeResultType', arguments);
-    delete this.state.query.resultTypes[fieldName];
+    delete this.state.query.resultTypes[rtKey];
     this.search();
   },
 
@@ -152,6 +152,7 @@ module.exports = Reflux.createStore({
       return !cachedData;
     }, this);
 
+    // remove them from the ones we will ask for from SOLR
     query.resultTypes = _.omit(
       query.resultTypes,
       _.keys(query.cachedResultTypes)

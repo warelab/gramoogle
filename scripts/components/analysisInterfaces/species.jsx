@@ -1,8 +1,12 @@
 'use strict';
 
 var React = require('react');
+var NeedsDataMixin = require('./NeedsDataMixin');
+
+var taxonId = 'taxon_id';
 
 var Species = React.createClass({
+  mixins: [ NeedsDataMixin.of(taxonId) ],
   render: function() {
     return (
       <div className="filter">

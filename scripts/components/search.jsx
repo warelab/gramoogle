@@ -58,7 +58,7 @@ var TextSearch = React.createClass({
     this.listenTo(QueryActions.removeQueryString, this.clearInputString);
   },
   handleQueryChange: function(e) {
-    var node = this.refs.searchBox.getDOMNode();
+    var node = React.findDOMNode(this.refs.searchBox);
     // required for testing.
     if(e.target.value !== node.value) {
       node.value = e.target.value;
