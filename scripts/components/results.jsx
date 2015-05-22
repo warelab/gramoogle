@@ -10,8 +10,6 @@ var Results = React.createClass({
   getInitialState: function () {
     return {viz: true, list: false};
   },
-  VIZ: 'viz',
-  LIST: 'list',
   toggleViz: function() {
     var newState = {
       viz: !this.state.viz
