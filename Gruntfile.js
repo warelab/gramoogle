@@ -5,7 +5,7 @@ module.exports = function (grunt) {
 
   grunt.loadNpmTasks('grunt-jest');
   grunt.loadNpmTasks('grunt-jsxhint');
-  grunt.loadNpmTasks('grunt-concat-css');
+  grunt.loadNpmTasks('grunt-jasmine-node');
 
   grunt.initConfig({
     less: {
@@ -27,29 +27,32 @@ module.exports = function (grunt) {
     },
 
     browserify: {
-      options: {
-        browserifyOptions: {
-          debug: true
-        },
-        transform: ['reactify']
-      },
       dev: {
+        options: {
+          browserifyOptions: {
+            debug: true
+          },
+          transform: ['reactify']
+        },
         src: './index.js',
         dest: 'build/bundle.js'
       },
       production: {
-        browserifyOptions: {
-          debug: false
+        options: {
+          transform: ['reactify', ['uglifyify', {global: true}]],
+          browserifyOptions: {
+            debug: false
+          }
         },
         src: '<%= browserify.dev.src %>',
-        dest: 'build/bundle.js'
+        dest: '<%= browserify.dev.dest %>'
       }
     },
 
     watch: {
       styles: {
         files: ['styles/*.less'],
-        tasks: ['less'/*, 'concat_css'*/],
+        tasks: ['less'],
         options: {
           nospawn: true
         }
@@ -68,6 +71,17 @@ module.exports = function (grunt) {
       }
     },
 
+    jasmine_node: {
+      options: {
+        forceExit: true,
+        match: '.',
+        matchall: false,
+        extensions: 'js',
+        specNameMatcher: 'spec'
+      },
+      all: ['spec/']
+    },
+
     jshint: {
       all: ['Gruntfile.js', 'scripts/**/*'],
       options: {
@@ -77,6 +91,7 @@ module.exports = function (grunt) {
     }
   });
 
-  grunt.registerTask('default', ['less', /*'concat_css', */'browserify:dev', 'watch']);
-  grunt.registerTask('package', ['jest', 'less', /*'concat_css',*/ 'browserify:production']);
+  grunt.registerTask('test', ['jest', 'jasmine_node']);
+  grunt.registerTask('default', ['less', 'browserify:dev', 'watch']);
+  grunt.registerTask('package', ['jest', 'less', 'browserify:production']);
 };

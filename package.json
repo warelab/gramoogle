@@ -6,7 +6,7 @@
   "scripts": {
     "build": "grunt package",
     "start": "grunt",
-    "test": "grunt jest"
+    "test": "grunt test"
   },
   "repository": {
     "type": "git",
@@ -20,7 +20,7 @@
   "homepage": "https://github.com/warelab/gramoogle",
   "dependencies": {
     "axios": "^0.5.2",
-    "bootstrap": "^3.3.4",
+    "gramene-client-cache": "git://github.com/mycrobe/gramene-client-cache.git#master",
     "jquery": "^2.1.3",
     "lodash": "^3.3.1",
     "normalize.less": "^1.0.0",
@@ -29,7 +29,7 @@
     "react-bootstrap": "^0.21.0",
     "reflux": "^0.2.5",
     "rgb-hex": "^1.0.0",
-    "search": "git://github.com/warelab/gramene-search-client.git#master",
+    "search": "git://github.com/mycrobe/gramene-search-client.git#master",
     "taxonomy": "git://github.com/warelab/gramene-taxonomy-with-genomes.git#master"
   },
   "devDependencies": {
@@ -38,15 +38,19 @@
     "grunt-concat-css": "^0.3.1",
     "grunt-contrib-less": "^1.0.0",
     "grunt-contrib-watch": "^0.6.1",
+    "grunt-jasmine-node": "^0.3.1",
     "grunt-jest": "^0.1.3",
     "grunt-jsxhint": "^0.5.0",
+    "jasmine-expect": "^2.0.0-beta1",
+    "jasmine-pit": "^2.0.2",
     "jest-cli": "^0.4.0",
     "jit-grunt": "^0.9.1",
     "jshint": "^2.6.0",
     "jshint-stylish": "^1.0.1",
     "less-plugin-autoprefix": "^1.4.1",
     "react-tools": "^0.13.1",
-    "reactify": "^1.0.0"
+    "reactify": "^1.0.0",
+    "uglifyify": "^3.0.1"
   },
   "jest": {
     "scriptPreprocessor": "./preprocessor.js",

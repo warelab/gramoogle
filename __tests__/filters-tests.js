@@ -8,7 +8,7 @@ jest.dontMock('../scripts/stores/searchStore');
 describe('Filters', function() {
   var React = require('react/addons');
   var searchStore = require('../scripts/stores/searchStore');
-  var Filters = React.createFactory(require('../scripts/components/filters.jsx'));
+  var Filters = React.createFactory(require('../scripts/components/analysis.jsx'));
   var TestUtils = React.addons.TestUtils;
 
   var newFilters = function() {
