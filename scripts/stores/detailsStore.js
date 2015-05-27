@@ -89,6 +89,9 @@ module.exports = Reflux.createStore({
         // when we get data from the server, put it in the
         // cache
         .then(function (data) {
+          for(var id in data) {
+            data[id] = data[id][0];
+          }
           _.assign(this.details[core],data);
         }.bind(this));
     }
