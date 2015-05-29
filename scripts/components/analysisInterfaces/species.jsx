@@ -1,12 +1,17 @@
 'use strict';
 
 var React = require('react');
+var Reflux = require('reflux');
 var NeedsDataMixin = require('./NeedsDataMixin');
+var visualizationStore = require('../../stores/visualizationStore');
 
 var taxonId = 'taxon_id';
 
 var Species = React.createClass({
-  mixins: [ NeedsDataMixin.of(taxonId) ],
+  mixins: [
+    NeedsDataMixin.of(taxonId),
+    Reflux.connect(visualizationStore, 'visData')
+  ],
   render: function() {
     return (
       <div className="filter">
