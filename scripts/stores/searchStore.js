@@ -5,7 +5,7 @@ var _ = require('lodash');
 var Q = require('q');
 var searchInterface = require('gramene-search-client').client;
 var QueryActions = require('../actions/queryActions');
-var GrameneCache = require('gramene-client-cache');
+var searchCache = require('../search/searchInterfaceCache');
 
 module.exports = Reflux.createStore({
   listenables: QueryActions,
@@ -33,8 +33,6 @@ module.exports = Reflux.createStore({
     this.state.results.metadata.searchQuery = _.cloneDeep(this.state.query);
 
     this.search = _.debounce(this.searchNoDebounce, 200);
-
-    this.cache = GrameneCache.init(100);
   },
 
   getInitialState: function () {
@@ -94,7 +92,7 @@ module.exports = Reflux.createStore({
 
     // find cached results and move them from
     // query.resultTypes to query.cachedResultTypes
-    this.findCachedResults(query);
+    searchCache.findCachedResults(query);
 
     // if we have any uncached result types, we need to
     // ask the server for some data, otherwise we will
@@ -105,7 +103,7 @@ module.exports = Reflux.createStore({
 
         // when we get data from the server, put it in the
         // cache
-        .then(this.addResultsToCache(query))
+        .then(searchCache.addResultsToCache(query))
 
         // and also add the query for the actual search
         // to the results metadata.
@@ -120,7 +118,7 @@ module.exports = Reflux.createStore({
 
     promise
       // add any cached data
-      .then(this.getResultsFromCache)
+      .then(searchCache.getResultsFromCache)
 
       // console.log for anything we asked for but didn't get
       // TODO should we error out here?
@@ -129,37 +127,6 @@ module.exports = Reflux.createStore({
       // tell interested parties about what has happened
       .then(this.searchComplete)
       .catch(this.searchError);
-  },
-
-  findCachedResults: function(query) {
-    // get cached result count
-    var countKey = {
-      q: query.q,
-      filters: query.filters
-    };
-    var count = this.cache.get(countKey);
-    if(count !== undefined) {
-      query.count = count;
-    }
-
-    // find result types with a cached result
-    query.cachedResultTypes = _.omit(query.resultTypes, function(rt, name) {
-      var key = _.assign({resultType: rt}, countKey);
-      var cachedData = this.cache.get(key);
-      if(cachedData) {
-        rt.cachedResult = cachedData;
-      }
-      return !cachedData;
-    }, this);
-
-    // remove them from the ones we will ask for from SOLR
-    query.resultTypes = _.omit(
-      query.resultTypes,
-      _.keys(query.cachedResultTypes)
-    );
-
-    console.log('cached results found', _.keys(query.cachedResultTypes))
-    return query;
   },
 
   searchPromise: function(query) {
@@ -173,30 +140,6 @@ module.exports = Reflux.createStore({
       var metadata = {searchQuery: query, count: query.count};
       return {metadata: metadata};
     });
-  },
-
-  getResultsFromCache: function(results) {
-    _.forOwn(results.metadata.searchQuery.cachedResultTypes, function(rt, name) {
-      results[name] = rt.cachedResult;
-    });
-
-    return results;
-  },
-
-  addResultsToCache: function(query) {
-    return function (results) {
-      // add count
-      var countKey = {q: query.q, filters: query.filters};
-      this.cache.set(countKey, results.metadata.count);
-
-      // add result types
-      _.forOwn(query.resultTypes, function(rt, rtName) {
-        var key = _.assign({resultType: rt}, countKey);
-        this.cache.set(key, results[rtName]);
-      }, this);
-
-      return results;
-    }.bind(this);
   },
 
   searchComplete: function (results) {
