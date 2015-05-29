@@ -1,6 +1,7 @@
 'use strict';
 
 var Q = require('q');
+var _ = require('lodash');
 
 var searchCache = require('./searchInterfaceCache');
 var searchInterface = require('gramene-search-client').client;
@@ -17,14 +18,21 @@ function checkRequestedResultTypesArePresent(data) {
 }
 
 module.exports = {
-  // Note that this function is debounced in init. It might be called many
-  // times in succession when a user is interacting with the page,
-  // but only the last one will fire.
-  search: function (query, searchComplete, searchError) {
-    console.log('performing search', query);
+  debounced: function(stateObj, searchComplete, searchError, time) {
+    var func = function() {
+      this.search(stateObj, searchComplete, searchError);
+    }.bind(this);
+    return _.debounce(func, time);
+  },
 
+  // Note that this function should probably be used via debounced.
+  // It might be called many times in succession when a user is
+  // interacting with the page, and then only the last one will fire.
+  search: function (search, searchComplete, searchError) {
     // make a copy of the query state when we make the async call...
-    var queryCopy = _.cloneDeep(query);
+    var queryCopy = _.cloneDeep(search.query);
+
+    console.log('performing search', queryCopy);
 
     // find cached results and move them from
     // query.resultTypes to query.cachedResultTypes

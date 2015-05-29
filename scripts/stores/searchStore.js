@@ -3,9 +3,8 @@
 var Reflux = require('reflux');
 var _ = require('lodash');
 var Q = require('q');
-var searchInterface = require('gramene-search-client').client;
 var QueryActions = require('../actions/queryActions');
-var searchCache = require('../search/searchInterfaceCache');
+var search = require('../search/search');
 
 module.exports = Reflux.createStore({
   listenables: QueryActions,
@@ -32,7 +31,12 @@ module.exports = Reflux.createStore({
     // make a copy of the query to keep with the results
     this.state.results.metadata.searchQuery = _.cloneDeep(this.state.query);
 
-    this.search = _.debounce(this.searchNoDebounce, 200);
+    this.search = search.debounced(
+      this.state, // state object so search can access current query state
+      this.searchComplete, // called when done
+      this.searchError, // called on error
+      200 // debounce time in ms
+    );
   },
 
   getInitialState: function () {
@@ -81,67 +85,6 @@ module.exports = Reflux.createStore({
     this.search();
   },
 
-  // Note that this function is debounced in init. It might be called many
-  // times in succession when a user is interacting with the page,
-  // but only the last one will fire.
-  searchNoDebounce: function () {
-    console.log('performing search', this.state.query);
-
-    // make a copy of the query state when we make the async call...
-    var query = _.cloneDeep(this.state.query);
-
-    // find cached results and move them from
-    // query.resultTypes to query.cachedResultTypes
-    searchCache.findCachedResults(query);
-
-    // if we have any uncached result types, we need to
-    // ask the server for some data, otherwise we will
-    // just use what we have
-    var promise;
-    if(_.size(query.resultTypes) || !query.count) {
-      promise = this.searchPromise(query)
-
-        // when we get data from the server, put it in the
-        // cache
-        .then(searchCache.addResultsToCache(query))
-
-        // and also add the query for the actual search
-        // to the results metadata.
-        .then(function addQueryToResults(data) {
-          data.metadata.searchQuery = query;
-          return data;
-        });
-    }
-    else {
-      promise = this.nullSearchPromise(query);
-    }
-
-    promise
-      // add any cached data
-      .then(searchCache.getResultsFromCache)
-
-      // console.log for anything we asked for but didn't get
-      // TODO should we error out here?
-      .then(checkRequestedResultTypesArePresent)
-
-      // tell interested parties about what has happened
-      .then(this.searchComplete)
-      .catch(this.searchError);
-  },
-
-  searchPromise: function(query) {
-    console.log('asking search interface for', query);
-    return searchInterface.geneSearch(query);
-  },
-
-  nullSearchPromise: function(query) {
-    return Q.fcall(function refactorQueryToHaveShapeOfResponse() {
-      console.log('remote query not required');
-      var metadata = {searchQuery: query, count: query.count};
-      return {metadata: metadata};
-    });
-  },
-
   searchComplete: function (results) {
     console.log('Got data: ', results);
 
@@ -157,14 +100,3 @@ module.exports = Reflux.createStore({
     console.error('Error updating results', error);
   }
 });
-
-function checkRequestedResultTypesArePresent(data) {
-  _.forIn(data.metadata.searchQuery.resultTypes,
-      function (params, key) {
-    if (!data[key]) {
-      console.error(key + ' not found in search results');
-    }
-  });
-
-  return data;
-}
