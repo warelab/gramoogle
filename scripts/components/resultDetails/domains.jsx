@@ -3,9 +3,9 @@
 var React = require('react');
 var Reflux = require('reflux');
 var bs = require('react-bootstrap');
-var queryActions = require('../actions/queryActions');
-var detailsActions = require('../actions/detailsActions');
-var detailsStore = require('../stores/detailsStore');
+var queryActions = require('../../actions/queryActions');
+var detailsActions = require('../../actions/detailsActions');
+var detailsStore = require('../../stores/detailsStore');
 
 var Domains = React.createClass({
   mixins: [Reflux.listenTo(detailsStore,"onStatusChange")],
@@ -17,7 +17,7 @@ var Domains = React.createClass({
   },
 
   getInitialState: function() {
-    return {}
+    return {};
   },
 
   propTypes: {
@@ -32,7 +32,7 @@ var Domains = React.createClass({
     detailsActions.forsakeDetails('domains');
   },
 
-  createDomainsFilter: function() {
+  createFilter: function() {
     var drList = this.props.gene.domainRoots.split(' ');
     var qString;
     if (drList.length === 1) {
@@ -50,7 +50,7 @@ var Domains = React.createClass({
   },
 
   filter: function() {
-    queryActions.setFilter(this.createDomainsFilter());
+    queryActions.setFilter(this.createFilter());
   },
   
   render: function () {
