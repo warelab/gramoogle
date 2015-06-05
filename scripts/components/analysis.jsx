@@ -2,7 +2,6 @@
 
 var React = require('react');
 var bs = require('react-bootstrap');
-var AnalysisPickers = require('./analysisPickers.jsx');
 var _ = require('lodash');
 
 var analysisInventory = require('./analysisInterfaces/_inventory');
