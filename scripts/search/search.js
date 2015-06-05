@@ -1,12 +1,15 @@
 'use strict';
 
+/* @flow */
+type map = { [key: string]: any };
+
 var Q = require('q');
 var _ = require('lodash');
 
 var searchCache = require('./searchInterfaceCache');
 var searchInterface = require('gramene-search-client').client;
 
-function checkRequestedResultTypesArePresent(data) {
+function checkRequestedResultTypesArePresent(data: map): map {
   _.forIn(data.metadata.searchQuery.resultTypes,
     function (params, key) {
       if (!data[key]) {
@@ -18,7 +21,7 @@ function checkRequestedResultTypesArePresent(data) {
 }
 
 module.exports = {
-  debounced: function(stateObj, searchComplete, searchError, time) {
+  debounced: function(stateObj: map, searchComplete: Function, searchError: Function, time: number): Function {
     var func = function() {
       this.search(stateObj, searchComplete, searchError);
     }.bind(this);
@@ -28,7 +31,7 @@ module.exports = {
   // Note that this function should probably be used via debounced.
   // It might be called many times in succession when a user is
   // interacting with the page, and then only the last one will fire.
-  search: function (search, searchComplete, searchError) {
+  search: function (search: map, searchComplete: Function, searchError: Function): void {
     // make a copy of the query state when we make the async call...
     var queryCopy = _.cloneDeep(search.query);
 
@@ -73,12 +76,12 @@ module.exports = {
       .catch(searchError);
   },
 
-  searchPromise: function(query) {
+  searchPromise: function(query: map): Promise {
     console.log('asking search interface for', query);
     return searchInterface.geneSearch(query);
   },
 
-  nullSearchPromise: function(query) {
+  nullSearchPromise: function(query: map): map {
     return Q.fcall(function refactorQueryToHaveShapeOfResponse() {
       console.log('remote query not required');
       var metadata = {searchQuery: query, count: query.count};

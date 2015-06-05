@@ -19,21 +19,21 @@ module.exports = Reflux.createStore({
       PO: 0,
       taxonomy: 0,
       genetrees: 0
-    },
+    };
     this.detailsField = { // for each core, the field to gather ids from
       domains: 'domainList',
       GO: 'GO_xrefi',
       PO: 'PO_xrefi',
       taxonomy: 'taxon_id',
-      genetrees: 'epl_gene_tree'
-    }
+      genetrees: 'grm_gene_tree'
+    };
     this.details = { // for each core, keys are ids, values are mongodb docs
       domains: {},
       GO: {},
       PO: {},
       taxonomy: {},
       genetrees: {}
-    },
+    };
     this.fetch = _.debounce(this.fetchNoDebounce, 200);
   },
   updateDetails: function (searchState) {
@@ -59,7 +59,7 @@ module.exports = Reflux.createStore({
   },
   requireDetails: function (core) {
     this.activeCores[core]++;
-    this.trigger(this.details);
+    //this.trigger(this.details);
   },
   forsakeDetails: function (core) {
     this.activeCores[core] = Math.max(0, --this.activeCores[core]);

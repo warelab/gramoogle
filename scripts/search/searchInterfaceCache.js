@@ -1,36 +1,39 @@
 'use strict';
 
+/* @flow */
+type Map = { [keys:string]: any };
+
 var _ = require('lodash');
 
 module.exports = {
   GrameneCache: require('gramene-client-cache').init(100),
 
-  getCountKey: function getCountKey(query) {
+  getCountKey: function getCountKey(query: Map): Map {
     return {
       q: query.q,
       filters: query.filters
     };
   },
 
-  getRtKey: function getRtKey(countKey, rt) {
+  getRtKey: function getRtKey(countKey: Map, rt: Map): Map {
     return _.assign({resultType: rt}, countKey);
   },
   // find portions of the result set for a query that is already cached
   // and modify the query to prevent those items from being requested
   // from SOLR.
-  findCachedResults: function findCachedResults(query) {
+  findCachedResults: function findCachedResults(query: Map): Map {
 
     // get cached result count
-    var countKey = this.getCountKey(query);
-    var count = this.GrameneCache.get(countKey);
+    var countKey: Map = this.getCountKey(query);
+    var count: ?number = this.GrameneCache.get(countKey);
     if (count !== undefined) {
       query.count = count;
     }
 
     // find result types with a cached result
     query.cachedResultTypes = _.omit(query.resultTypes, function (rt) {
-      var key = this.getRtKey(countKey, rt);
-      var cachedData = this.GrameneCache.get(key);
+      var key: Map = this.getRtKey(countKey, rt);
+      var cachedData: Map = this.GrameneCache.get(key);
       if (cachedData) {
         rt.cachedResult = cachedData;
       }
@@ -48,7 +51,7 @@ module.exports = {
   },
 
   // Incorporate cached results into results object.
-  getResultsFromCache: function getResultsFromCache(results) {
+  getResultsFromCache: function getResultsFromCache(results: Map): Map {
     _.forOwn(results.metadata.searchQuery.cachedResultTypes, function (rt, name) {
       results[name] = rt.cachedResult;
     });
@@ -57,10 +60,16 @@ module.exports = {
   },
 
   // Add results from SOLR to the cache
-  addResultsToCache: function addResultsToCache(query) {
-    return function (results) {
+  addResultsToCache: function addResultsToCache(query: Map): Function {
+    return function (results: Map): Map {
       // add count
-      var countKey = {q: query.q, filters: query.filters};
+      var countKey: Map = {
+        q: query.q,
+        filters: query.filters,
+        resultTypes: undefined,
+        cachedResultTypes: undefined,
+        count: undefined
+      };
       this.GrameneCache.set(countKey, results.metadata.count);
 
       // add result types

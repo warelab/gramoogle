@@ -6,6 +6,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-jest');
   grunt.loadNpmTasks('grunt-jsxhint');
   grunt.loadNpmTasks('grunt-jasmine-node');
+  grunt.loadNpmTasks('grunt-flow');
 
   grunt.initConfig({
     less: {
@@ -26,20 +27,31 @@ module.exports = function (grunt) {
       }
     },
 
+    flow: {
+      options: {
+        style: 'color'
+      }
+    },
+
     browserify: {
       dev: {
         options: {
           browserifyOptions: {
             debug: true
           },
-          transform: ['reactify']
+          transform: [
+            ['reactify', {stripTypes: true}]
+          ]
         },
         src: './index.js',
         dest: 'build/bundle.js'
       },
       production: {
         options: {
-          transform: ['reactify', ['uglifyify', {global: true}]],
+          transform: [
+            ['reactify', {stripTypes: true}],
+            ['uglifyify', {global: true}]
+          ],
           browserifyOptions: {
             debug: false
           }

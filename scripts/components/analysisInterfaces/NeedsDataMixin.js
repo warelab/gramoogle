@@ -1,17 +1,20 @@
 'use strict';
 
+/* @flow */
+type Map = { [keys:string]: any };
+
 var React = require('react');
 var resultTypes = require('gramene-search-client').resultTypes;
 var QueryActions = require('../../actions/queryActions');
 var _ = require('lodash');
 
 module.exports = {
-  of: function() {
+  of: function(): Map {
     var fields = Array.prototype.slice.call(arguments),
-        keys = fields.map(function(field) {
+        keys = fields.map(function(field: string): string {
           return field + '_for_analysis';
         }),
-        rts = fields.map(function(field) {
+        rts = fields.map(function(field: string): { [keys: string]: string } {
           return resultTypes.get(
             'distribution',
             {
@@ -27,8 +30,9 @@ module.exports = {
         search: React.PropTypes.object.isRequired //,
         //filters: React.PropTypes.object.isRequired
       },
-      getNeededData: function(key) {
-        return this.props.search.results[key + '_for_analysis'];
+      getNeededData: function(key: number, newProps) {
+        var props = newProps || this.props;
+        return props.search.results[key + '_for_analysis'];
       },
       componentWillMount: function () {
         _.forOwn(rtByKey, function(rt, key) {

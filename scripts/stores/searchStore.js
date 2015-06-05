@@ -1,5 +1,7 @@
 'use strict';
 
+/* @flow */
+
 var Reflux = require('reflux');
 var _ = require('lodash');
 var Q = require('q');
@@ -31,6 +33,10 @@ module.exports = Reflux.createStore({
     // make a copy of the query to keep with the results
     this.state.results.metadata.searchQuery = _.cloneDeep(this.state.query);
 
+    // hook up search from ../search/search.js.
+    // search.js' debounce function would like a reference of this store's state so that
+    // it can get an up-to-date query object, functions to use for success and failure
+    // and a debounce time in ms.
     this.search = search.debounced(
       this.state, // state object so search can access current query state
       this.searchComplete, // called when done
@@ -39,17 +45,17 @@ module.exports = Reflux.createStore({
     );
   },
 
-  getInitialState: function () {
+  getInitialState: function() {
     return this.state;
   },
 
-  setResultType: function (rtKey, params) {
+  setResultType: function (rtKey: string, params) {
     console.log('setResultType', arguments);
     this.state.query.resultTypes[rtKey] = params;
     this.search();
   },
 
-  removeResultType: function (rtKey) {
+  removeResultType: function (rtKey: string) {
     console.log('removeResultType', arguments);
     delete this.state.query.resultTypes[rtKey];
     this.search();
@@ -73,7 +79,7 @@ module.exports = Reflux.createStore({
     this.search();
   },
 
-  setQueryString: function (newQueryString) {
+  setQueryString: function (newQueryString: string) {
     console.log('setQueryString', arguments);
     this.state.query.q = newQueryString;
     this.search();

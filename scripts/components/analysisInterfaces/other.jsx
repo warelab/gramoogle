@@ -1,65 +1,74 @@
 'use strict';
 
+/* @flow */
+
 var React = require('react');
 var bs = require('react-bootstrap');
+var _ = require('lodash');
 var queryActions = require('../../actions/queryActions');
 var resultTypes = require('gramene-search-client').resultTypes;
 
-var properties = [
-  undefined,
-  'biotype',
-  //'id', // TODO these can be faceted, or distributioned if >1000 results
-  'map',
-  //'name',
-  'region',
-  'species',
-  'system_name',
-  'taxon_id',
-  //'canonical_translation',
-  'canonical_translation_length',
-  //'start',
-  'strand',
-  //'end',
-  'epl_gene_tree',
-  'epl_gene_tree_root_taxon_id',
-  'fixed_100_bin',
-  'fixed_200_bin',
-  'fixed_500_bin',
-  'fixed_1000_bin',
-  'uniform_1Mb_bin',
-  'uniform_2Mb_bin',
-  'uniform_5Mb_bin',
-  'uniform_10Mb_bin'
-];
+var properties = {
+  '': {},
+  'biotype' : { displayName: 'Biotype', type: 'distribution' },
+  'id' : { displayName: 'ID', type: 'facet' },
+  'map' : { displayName: 'Genome map', type: 'distribution' },
+  'name' : { displayName: 'Name', type: 'facet' },
+  'region' : { displayName: 'Genomic region', type: 'distribution' },
+  'system_name' : { displayName: 'Species', type: 'distribution' },
+  'taxon_id' : { displayName: 'Taxon ID', type: 'distribution' },
+  'canonical_translation' : { displayName: 'Canonical translation', type: 'facet' },
+  'canonical_translation_length' : { displayName: 'Canonical translation length', type: 'distribution' },
+  'start' : { displayName: 'Start position', type: 'facet' },
+  'strand' : { displayName: 'Strand', type: 'distribution' },
+  'end' : { displayName: 'End position', type: 'facet' },
+  'epl_gene_tree' : { displayName: 'Gene tree', type: 'distribution' },
+  'epl_gene_tree_root_taxon_id' : { displayName: 'Gene tree root taxon', type: 'distribution' },
+  'fixed_100_bin' : { type: 'distribution' },
+  'fixed_200_bin' : { type: 'distribution' },
+  'fixed_500_bin' : { type: 'distribution' },
+  'fixed_1000_bin' : { type: 'distribution' },
+  'uniform_1Mb_bin' : { type: 'distribution' },
+  'uniform_2Mb_bin' : { type: 'distribution' },
+  'uniform_5Mb_bin' : { type: 'distribution' },
+  'uniform_10Mb_bin' : { type: 'distribution' }
+};
 
 var Other = React.createClass({
   getInitialState: function() {
-    return {field: undefined};
+    return {field: undefined, previousRt: undefined};
   },
   changeField: function() {
     this.setState({field: this.refs.chooser.getValue()});
   },
-  componentWillUpdate: function(newProps, newState) {
-    var newRt;
-    if(newState.field !== this.state.field) {
-      newRt = resultTypes.get('distribution', {
+  componentWillUpdate: function(newProps: {[key:string]: any}, newState: {[key:string]: any}) {
+    var rt, type;
+
+    if(newState.field) {
+      type = properties[newState.field].type;
+      rt = resultTypes.get(type, {
+        'facet.mincount': 1,
         'facet.field': newState.field,
         key: newState.field + '_for_other_analysis'
       });
+    }
 
-      queryActions.removeResultType(this.state.field + '_for_other_analysis');
-      queryActions.setResultType(newState.field + '_for_other_analysis', newRt);
+    if(rt && !_.isEqual(rt, this.state.previousRt)) {
+      queryActions.removeResultType(newState.field + '_for_other_analysis');
+      queryActions.setResultType(newState.field + '_for_other_analysis', rt);
+      this.setState({previousRt: rt});
     }
   },
   componentWillUnmount: function() {
     queryActions.removeResultType(this.state.field + '_for_other_analysis');
   },
-  render: function() {
+  render: function(): any {
     var selected = this.state.field,
+        selectedDetails = properties[selected],
         data = this.props.search.results[selected + '_for_other_analysis'],
-        options = properties.map(function(prop, idx) {
+        options = _.map(properties, function(details, prop) {
           return (
-            <option key={idx} value={prop}>{prop}</option>
+            <option key={prop} value={prop}>{details.displayName || prop}</option>
           );
         }),
         chooser = (
@@ -77,7 +86,7 @@ var Other = React.createClass({
     if(data) {
       results = (
         <div>
-          {data.sorted.length} results for {selected}
+          {data.sorted.length} results for {selectedDetails.displayName}
         </div>
       );
     }

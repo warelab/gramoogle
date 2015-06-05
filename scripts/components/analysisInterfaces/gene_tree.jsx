@@ -1,12 +1,31 @@
 'use strict';
 
-var geneTreeField = 'epl_gene_tree';
-var geneTreeTaxonField = 'epl_gene_tree_root_taxon_id';
+var geneTreeField = 'grm_gene_tree';
+var geneTreeTaxonField = 'grm_gene_tree_root_taxon_id';
 var React = require('react');
+var Reflux = require('reflux');
 var NeedsData = require('./NeedsDataMixin');
+var DetailsActions = require('../../actions/detailsActions');
+var detailsStore = require('../../stores/detailsStore');
 
 var GeneTree = React.createClass({
-  mixins: [ NeedsData.of(geneTreeField, geneTreeTaxonField) ],
+  mixins: [
+    NeedsData.of(geneTreeField, geneTreeTaxonField),
+    Reflux.listenTo(detailsStore,"updateDetails")
+  ],
+  updateDetails: function(details) {
+    setState({details: details.genetrees});
+  },
+  componentWillUpdate: function(newProps, newState) {
+    var data = this.getNeededData(geneTreeField, newProps);
+
+    if(data && data.sorted && data.sorted.length === 1) {
+      DetailsActions.requireDetails('genetrees');
+    }
+    else {
+      DetailsActions.forsakeDetails('genetrees');
+    }
+  },
   render: function() {
     var data = this.getNeededData(geneTreeField) || [];
     var taxa = this.getNeededData(geneTreeTaxonField) || [];
