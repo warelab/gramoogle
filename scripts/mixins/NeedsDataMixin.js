@@ -5,7 +5,7 @@ type Map = { [keys:string]: any };
 
 var React = require('react');
 var resultTypes = require('gramene-search-client').resultTypes;
-var QueryActions = require('../../actions/queryActions');
+var QueryActions = require('../actions/queryActions');
 var _ = require('lodash');
 
 module.exports = {
@@ -27,8 +27,7 @@ module.exports = {
 
     return {
       propTypes: {
-        search: React.PropTypes.object.isRequired //,
-        //filters: React.PropTypes.object.isRequired
+        search: React.PropTypes.object.isRequired
       },
       getNeededData: function(key: number, newProps) {
         var props = newProps || this.props;

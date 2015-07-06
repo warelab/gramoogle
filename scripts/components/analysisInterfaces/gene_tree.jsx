@@ -4,7 +4,7 @@ var geneTreeField = 'grm_gene_tree';
 var geneTreeTaxonField = 'grm_gene_tree_root_taxon_id';
 var React = require('react');
 var Reflux = require('reflux');
-var NeedsData = require('./NeedsDataMixin');
+var NeedsData = require('./../../mixins/NeedsDataMixin');
 var DetailsActions = require('../../actions/detailsActions');
 var detailsStore = require('../../stores/detailsStore');
 
@@ -14,7 +14,7 @@ var GeneTree = React.createClass({
     Reflux.listenTo(detailsStore,"updateDetails")
   ],
   updateDetails: function(details) {
-    setState({details: details.genetrees});
+    this.setState({details: details.genetrees});
   },
   componentWillUpdate: function(newProps, newState) {
     var data = this.getNeededData(geneTreeField, newProps);
