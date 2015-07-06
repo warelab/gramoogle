@@ -1,0 +1,35 @@
+@import 'colors';
+
+.analysis {
+  background-color: @gramene-lightergreen;
+
+
+  .analysis-chooser {
+    .analysis-item {
+      cursor: pointer;
+    }
+
+    .analysis-item-filtered:not(.active) {
+      background-color: lighten(@gramene-yellow, 15%);
+    }
+
+    //.analysis-item.active {
+    //  background-color: @gramene-darkgreen;
+    //  color: @gramene-offwhite
+    //}
+    //
+    //.analysis-item.active:hover {
+    //  background-color: @gramene-orange;
+    //}
+    //
+    //.analysis-item:not(.active):hover {
+    //  background-color: @gramene-yellow;
+    //}
+  }
+
+  /* Make Panel fit inside a Navbar; this is not normal */
+  @media only screen and (min-width: @screen-sm-min) {
+    margin-top: @input-height-base + 3 * @padding-base-vertical;
+    width: calc(~'100% - @{grid-gutter-width}');
+  }
+}

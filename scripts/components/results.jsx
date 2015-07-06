@@ -4,30 +4,49 @@ var React = require('react');
 var ResultsList = require('./resultsList.jsx');
 var ResultsVisualization = require('./resultsVisualization.jsx');
 
+var bs = require('react-bootstrap');
+
 var Results = React.createClass({
   getInitialState: function () {
-    return {visible: this.VIZ};
+    return {viz: true, list: false};
   },
-  VIZ: 'viz',
-  LIST: 'list',
-  updateView: function (e) {
-    this.setState({visible: e.target.value});
+  toggleViz: function() {
+    var newState = {
+      viz: !this.state.viz
+    };
+    this.setState(newState);
+  },
+  toggleList: function() {
+    var newState = {
+      list: !this.state.list
+    };
+    this.setState(newState);
   },
   render: function () {
-    var view;
-    if(this.state.visible === this.VIZ) {
-      view = (<ResultsVisualization results={this.props.results}/>);
-    } else {
-      view = (<ResultsList results={this.props.results}/>);
+    var theViz, theList;
+    if(this.state.viz) {
+      theViz = (<ResultsVisualization results={this.props.results}/>);
+    }
+    if(this.state.list) {
+      theList = (<ResultsList results={this.props.results}/>);
     }
 
     return (
       <section className="results">
-        <form>
-          <input type="radio" name="resultView" value={this.VIZ} checked={this.state.visible === this.VIZ} onChange={this.updateView}>Result Distribution</input>
-          <input type="radio" name="resultView" value={this.LIST} checked={this.state.visible === this.LIST} onChange={this.updateView}>List of Results</input>
-        </form>
-      {view}
+        <bs.ButtonGroup vertical className="pull-right">
+          <bs.Button ref="viz-button"
+              active={this.state.viz}
+              onClick={this.toggleViz}>
+            Distribution
+          </bs.Button>
+          <bs.Button ref="list-button"
+              active={this.state.list}
+              onClick={this.toggleList}>
+            List of Results
+          </bs.Button>
+        </bs.ButtonGroup>
+      {theViz}
+      {theList}
       </section>
     );
   }
