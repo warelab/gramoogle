@@ -5,8 +5,7 @@ before_script:
 - npm install -g grunt-cli
 script: grunt jasmine_node
 before_install:
-- openssl aes-256-cbc -K $encrypted_9690695c329b_key -iv $encrypted_9690695c329b_iv
-  -in deploy/gramene_deploy_key.enc -out deploy/gramene_deploy_key -d
+- openssl aes-256-cbc -K $encrypted_9690695c329b_key -iv $encrypted_9690695c329b_iv -in deploy/gramene_deploy_key2.enc -out deploy/gramene_deploy_key2 -d
 after_success:
   - chmod 600 deploy/gramene_deploy_key2
   - scp -r -i deploy/gramene_deploy_key2 build images index.html mulvaney@brie.cshl.edu:test-deploy
