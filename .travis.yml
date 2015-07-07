@@ -1,6 +1,14 @@
 language: node_js
 node_js:
-  - 0.10
+- 0.1
 before_script:
-  - npm install -g grunt-cli
+- npm install -g grunt-cli
 script: grunt jasmine_node
+before_install:
+- openssl aes-256-cbc -K $encrypted_9690695c329b_key -iv $encrypted_9690695c329b_iv
+  -in gramene_deploy_key.enc -out gramene_deploy_key -d
+after_success:
+  - chmod 600 deploy/gramene_deploy_key # this key should have push access
+  - ssh-add deploy/gramene_deploy_key
+  - git remote add deploy mulvaney@search.gramene.org:test-deploy
+  - git push deploy master
