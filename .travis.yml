@@ -7,17 +7,16 @@ script: grunt jasmine_node
 before_install:
 - openssl aes-256-cbc -K $encrypted_9690695c329b_key -iv $encrypted_9690695c329b_iv -in deploy/gramene_deploy_key2.enc -out deploy/gramene_deploy_key2 -d
 after_success:
-  after_success:
-    if ["$TRAVIS_REPO_SLUG" == "warelab/gramoogle"] && 
-        ([ "$TRAVIS_BRANCH" == "master" ] || [ ! -z "$TRAVIS_TAG" ]) && 
-        [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
-      echo "Deploying build $TRAVIS_REPO_SLUG#$TRAVIS_BRANCH (tag $TRAVIS_TAG isPullReq $TRAVIS_PULL_REQUEST) to production";
-      chmod 600 deploy/gramene_deploy_key2;
-      scp -r -i deploy/gramene_deploy_key2 build images index.html mulvaney@brie.cshl.edu:test-deploy;
-      ssh brie "scp -i ~/.ssh/id_rsa_copy_to_gorgonzola -r test-deploy/* search.gramene.org:/usr/local/apache2/htdocs/gramene-search"
-    else
-      echo "Not deploying this build $TRAVIS_REPO_SLUG#$TRAVIS_BRANCH (tag $TRAVIS_TAG isPullReq $TRAVIS_PULL_REQUEST)"
-    fi
+  if ["$TRAVIS_REPO_SLUG" == "warelab/gramoogle"] && 
+      ([ "$TRAVIS_BRANCH" == "master" ] || [ ! -z "$TRAVIS_TAG" ]) && 
+      [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+    echo "Deploying build $TRAVIS_REPO_SLUG#$TRAVIS_BRANCH (tag $TRAVIS_TAG isPullReq $TRAVIS_PULL_REQUEST) to production";
+    chmod 600 deploy/gramene_deploy_key2;
+    scp -r -i deploy/gramene_deploy_key2 build images index.html mulvaney@brie.cshl.edu:test-deploy;
+    ssh brie "scp -i ~/.ssh/id_rsa_copy_to_gorgonzola -r test-deploy/* search.gramene.org:/usr/local/apache2/htdocs/gramene-search"
+  else
+    echo "Not deploying this build $TRAVIS_REPO_SLUG#$TRAVIS_BRANCH (tag $TRAVIS_TAG isPullReq $TRAVIS_PULL_REQUEST)"
+  fi
 addons:
   ssh_known_hosts: 
     - brie.cshl.edu
