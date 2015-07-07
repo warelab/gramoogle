@@ -2,6 +2,7 @@
 
 # deploy key
 /deploy/gramene_deploy_key
+/deploy/gramene_deploy_key2
 
 # compiled output
 /dist
