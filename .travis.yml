@@ -9,6 +9,7 @@ before_install:
 after_success:
   - chmod 600 deploy/gramene_deploy_key2
   - scp -r -i deploy/gramene_deploy_key2 build images index.html mulvaney@brie.cshl.edu:test-deploy
+  - ssh brie "scp -i ~/.ssh/id_rsa_copy_to_gorgonzola -r test-deploy/* search.gramene.org:/usr/local/apache2/htdocs/gramene-search"
 addons:
   ssh_known_hosts: 
     - brie.cshl.edu
