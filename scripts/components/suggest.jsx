@@ -62,7 +62,7 @@ var SuggestCategory = React.createClass({
     return (
       <li className="category">
         <h3>{category.label}</h3>
-        <ul className="terms">
+        <ul className="terms {category.className}">
           {categorySuggestions}
         </ul>
       </li>

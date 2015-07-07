@@ -16,13 +16,15 @@
         &:extend(.list-unstyled);
 
         .term {
-          padding: @padding-small-vertical;
+          display: inline;
+          padding: 0;
           a {
             &:extend(.btn);
             &:extend(.btn-default);
             color: @gramene-darkgreen;
             border-color: @gramene-darkgreen;
             background-color: @gramene-lightergreen;
+            margin: @padding-xs-vertical;
           }
         }
         .term.empty {

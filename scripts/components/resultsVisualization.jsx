@@ -21,26 +21,27 @@ var ResultsVisualization = React.createClass({
     VisualizationActions.removeDistribution();
   },
 
+  handleTaxonomyRootChange: function (taxonNode, isRoot) {
+
+  },
+
   render: function () {
     var taxonomy, summary;
 
-    if(this.state.visData) {
+    if (this.state.visData) {
       taxonomy = this.state.visData.taxonomy;
       summary = (
         <div>
-          <p>{taxonomy.results().bins} of {taxonomy.binCount()} bins with
-            stuff in them
-          </p>
-          <Vis taxonomy={taxonomy} />
+          <Vis
+            taxonomy={taxonomy}
+            onTreeRootChange={this.handleTaxonomyRootChange} />
         </div>
       );
     }
     else {
       summary = (
         <div>
-          <p>I would appreciate some binned data</p>
-          <img src="images/charlie.jpg" alt="Charlie Says…" />
-          <figcaption>A Visualization</figcaption>
+          <p>Loading…</p>
         </div>
       );
     }
