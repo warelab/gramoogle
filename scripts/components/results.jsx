@@ -8,7 +8,7 @@ var bs = require('react-bootstrap');
 
 var Results = React.createClass({
   getInitialState: function () {
-    return {viz: true, list: false};
+    return {viz: true, list: true};
   },
   toggleViz: function() {
     var newState = {
@@ -33,20 +33,10 @@ var Results = React.createClass({
 
     return (
       <section className="results">
-        <bs.ButtonGroup vertical className="pull-right">
-          <bs.Button ref="viz-button"
-              active={this.state.viz}
-              onClick={this.toggleViz}>
-            Distribution
-          </bs.Button>
-          <bs.Button ref="list-button"
-              active={this.state.list}
-              onClick={this.toggleList}>
-            List of Results
-          </bs.Button>
-        </bs.ButtonGroup>
-      {theViz}
-      {theList}
+        <div>
+          {theViz}
+          {theList}
+        </div>
       </section>
     );
   }

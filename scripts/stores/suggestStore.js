@@ -59,6 +59,7 @@ module.exports = Reflux.createStore({
 
     promise
       .then(this.removeAcceptedSuggestions)
+      .then(this.addCategoryClassNames)
       .then(this.findTopSuggestions)
       .then(this.suggestComplete)
       .catch(this.suggestError);
@@ -72,6 +73,13 @@ module.exports = Reflux.createStore({
       });
     });
     return result;
+  },
+
+  addCategoryClassNames: function(data) {
+    return _.map(data, function(category) {
+      category.className = category.label.toLowerCase().replace(/\s/g, '-');
+      return category;
+    });
   },
 
   findTopSuggestions: function(data) {

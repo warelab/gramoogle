@@ -95,7 +95,7 @@ var TextSearch = React.createClass({
     );
 
     var analysisDropdown = (
-      <Button onClick={this.props.onAnalysisButtonPress}>
+      <Button onClick={this.props.onAnalysisButtonPress} disabled={true}>
         Analysis <span className="caret"></span>
       </Button>
     );
