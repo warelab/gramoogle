@@ -10,5 +10,5 @@ before_install:
 after_success:
   - chmod 600 deploy/gramene_deploy_key # this key should have push access
   - ssh-add deploy/gramene_deploy_key
-  - git remote add deploy mulvaney@search.gramene.org:test-deploy
+  - git remote add deploy mulvaney@brie.cshl.edu:test-deploy
   - git push deploy master
