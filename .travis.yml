@@ -9,7 +9,7 @@ before_install:
   -in deploy/gramene_deploy_key.enc -out deploy/gramene_deploy_key -d
 after_success:
   - chmod 600 deploy/gramene_deploy_key
-  - scp -ri deploy/gramene_deploy_key build index.html mulvaney@brie.cshl.edu:test-deploy
+  - scp -r -i deploy/gramene_deploy_key build index.html mulvaney@brie.cshl.edu:test-deploy
 addons:
   ssh_known_hosts: 
     - brie.cshl.edu
