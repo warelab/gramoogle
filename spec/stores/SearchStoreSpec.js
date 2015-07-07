@@ -15,11 +15,11 @@ jasminePit.install(global);
 require('jasmine-expect');
 
 describe('sanity test', function() {
-  it('should work', function() {
+  xit('should work', function() {
     expect(true).toBeTruthy();
   });
 
-  it('should be able to instantiate a reflux store', function() {
+  xit('should be able to instantiate a reflux store', function() {
     var searchStore = require('../../scripts/stores/searchStore');
 
     expect(searchStore.state).toBeDefined();
@@ -29,7 +29,7 @@ describe('sanity test', function() {
 
 describe('SearchStore', function () {
 
-  it('result of getInitialState function should be same as value of state parameter', function () {
+  xit('result of getInitialState function should be same as value of state parameter', function () {
     // given
     var searchStore = require('../../scripts/stores/searchStore');
     // when
@@ -38,7 +38,7 @@ describe('SearchStore', function () {
     expect(searchStore.getInitialState()).toEqual(searchStore.state);
   });
 
-  it('should keep result of getInitialState function invocation in sync with state param', function () {
+  xit('should keep result of getInitialState function invocation in sync with state param', function () {
     // given
     var searchStore = require('../../scripts/stores/searchStore');
     spyOn(searchStore, 'search');
@@ -51,7 +51,7 @@ describe('SearchStore', function () {
     expect(searchStore.getInitialState()).toEqual(searchStore.state);
   });
 
-  it('should invoke search function when query string changed', function () {
+  xit('should invoke search function when query string changed', function () {
     // given
     var searchStore = require('../../scripts/stores/searchStore');
     spyOn(searchStore, 'search');
@@ -65,7 +65,7 @@ describe('SearchStore', function () {
     expect(searchStore.search).toHaveBeenCalled();
   });
 
-  it('should call search function every time an action that modifies the query state is invoked', function () {
+  xit('should call search function every time an action that modifies the query state is invoked', function () {
     // given
     var searchStore = require('../../scripts/stores/searchStore');
     spyOn(searchStore, 'search');
@@ -81,7 +81,7 @@ describe('SearchStore', function () {
     expect(searchStore.search.calls.length).toEqual(5);
   });
 
-  it('should invoke (mocked) search and update state on response when query string is changed', function () {
+  xit('should invoke (mocked) search and update state on response when query string is changed', function () {
     // given
     var searchStore = require('../../scripts/stores/searchStore');
     searchStore.cache = require('gramene-client-cache').init(10);
@@ -106,7 +106,7 @@ describe('SearchStore', function () {
     });
   });
 
-  it('should add the query at time of search invocation to metadata results', function() {
+  xit('should add the query at time of search invocation to metadata results', function() {
     // given
     var searchStore = require('../../scripts/stores/searchStore');
     var queryState = _.cloneDeep(searchStore.state.query);
@@ -131,7 +131,7 @@ describe('SearchStore', function () {
 
   });
 
-  it('should call searchError if something goes wrong in call to SOLR', function () {
+  xit('should call searchError if something goes wrong in call to SOLR', function () {
     // given
     var searchStore = require('../../scripts/stores/searchStore');
     var anError = new Error('bummer');
