@@ -25,12 +25,13 @@
     "lodash": "^3.3.1",
     "normalize.less": "^1.0.0",
     "q": "^1.2.0",
-    "react": "^0.13.1",
+    "react": "^0.13.3",
     "react-bootstrap": "^0.22.6",
     "reflux": "^0.2.5",
     "rgb-hex": "^1.0.0",
     "search": "git://github.com/mycrobe/gramene-search-client.git#master",
-    "taxonomy": "git://github.com/warelab/gramene-taxonomy-with-genomes.git#master"
+    "taxonomy": "git://github.com/warelab/gramene-taxonomy-with-genomes.git#master",
+    "gramene-search-vis": "git://github.com/warelab/gramene-search-vis.git"
   },
   "devDependencies": {
     "grunt": "^0.4.5",

@@ -5,20 +5,7 @@ var Reflux = require('reflux');
 var VisualizationActions = require('../actions/visActions');
 var visualizationStore = require('../stores/visualizationStore');
 var _ = require('lodash');
-
-var Genome = React.createClass({
-  propTypes: {
-    species: React.PropTypes.object.isRequired
-  },
-  render: function() {
-    var species = this.props.species;
-    return (
-      <li className="genome">
-        {species.name} ({species.genome.results.count})
-      </li>
-    )
-  }
-});
+var Vis = require('gramene-search-vis').Vis;
 
 var ResultsVisualization = React.createClass({
   mixins: [
@@ -35,28 +22,21 @@ var ResultsVisualization = React.createClass({
   },
 
   render: function () {
-    var thing, taxonomy, genomes;
+    var taxonomy, summary;
 
     if(this.state.visData) {
       taxonomy = this.state.visData.taxonomy;
-      genomes = taxonomy.species().map(function(species) {
-        return (
-          <Genome key={species.id} species={species} />
-        );
-      });
-      thing = (
+      summary = (
         <div>
           <p>{taxonomy.results().bins} of {taxonomy.binCount()} bins with
             stuff in them
           </p>
-          <ol>
-            {genomes}
-          </ol>
+          <Vis taxonomy={taxonomy} />
         </div>
       );
     }
     else {
-      thing = (
+      summary = (
         <div>
           <p>I would appreciate some binned data</p>
           <img src="images/charlie.jpg" alt="Charlie Says…" />
@@ -67,7 +47,7 @@ var ResultsVisualization = React.createClass({
 
     return (
       <div className="resultsVis">
-        {thing}
+        {summary}
       </div>
     );
   }

@@ -119,6 +119,7 @@ module.exports = Reflux.createStore({
   },
 
   searchComplete: function () {
+    console.log('Got details', this.details);
     this.trigger(this.details);
   },
 

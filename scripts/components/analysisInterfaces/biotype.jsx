@@ -1,7 +1,7 @@
 'use strict';
 
 var React = require('react');
-var dataMixin = require('./NeedsDataMixin').of('biotype');
+var dataMixin = require('./../../mixins/NeedsDataMixin').of('biotype');
 
 var Species = React.createClass({
   mixins: [dataMixin],

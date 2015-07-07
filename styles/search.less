@@ -33,6 +33,26 @@ ul.search-box-nav {
   }
 
   ol.search-filters {
+    margin: 0;
+    padding-top: @padding-small-vertical;
     list-style: none;
+  }
+
+  .search-filter {
+    &:extend(.btn-sm);
+    &:extend(.btn-default);
+    color: @gramene-darkgreen;
+    background-color: @gramene-offwhite;
+    padding: @padding-small-vertical @padding-xs-horizontal;
+
+    button {
+      margin-left: @padding-xs-horizontal;
+      border-color: @gramene-orange;
+      color: @gramene-orange;
+    }
+  }
+
+  .search-filter:not(:first-child) {
+    margin-left: @padding-xs-horizontal;
   }
 }

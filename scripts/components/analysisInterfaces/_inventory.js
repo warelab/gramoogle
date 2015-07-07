@@ -9,8 +9,8 @@ module.exports = {
   },
   Homologs: {
     name: 'Homologs',
-    field: 'epl_gene_tree',
-    queryField: 'epl_gene_tree',
+    field: 'grm_gene_tree',
+    queryField: 'grm_gene_tree',
     reactClass: require('./gene_tree.jsx')
   },
   Domain: {

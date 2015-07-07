@@ -2,7 +2,7 @@
 
 var React = require('react');
 var Reflux = require('reflux');
-var NeedsDataMixin = require('./NeedsDataMixin');
+var NeedsDataMixin = require('./../../mixins/NeedsDataMixin');
 var visualizationStore = require('../../stores/visualizationStore');
 
 var taxonId = 'taxon_id';
