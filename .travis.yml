@@ -12,3 +12,7 @@ after_success:
   - ssh-add deploy/gramene_deploy_key
   - git remote add deploy mulvaney@brie.cshl.edu:test-deploy
   - git push deploy master
+addons:
+  ssh_known_hosts: 
+    - brie.cshl.edu
+	- search.gramene.org
