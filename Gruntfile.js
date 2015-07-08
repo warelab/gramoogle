@@ -103,7 +103,7 @@ module.exports = function (grunt) {
     }
   });
 
-  grunt.registerTask('test', ['jest', 'jasmine_node']);
+  grunt.registerTask('test', ['jasmine_node']);
   grunt.registerTask('default', ['less', 'browserify:dev', 'watch']);
-  grunt.registerTask('package', ['jest', 'less', 'browserify:production']);
+  grunt.registerTask('package', ['less', 'browserify:production', 'test']);
 };
