@@ -1,0 +1,28 @@
+@import 'colors';
+
+@logo-width: 14rem;
+
+.header {
+  background-color: @gramene-lightgreen;
+
+  .logo-link {
+    @media only screen {
+      padding: 0 calc(~'(100% - @{logo-width}) / 2');
+    }
+
+    @media only screen and (min-width: @screen-sm-min) {
+      padding: 0 @padding-base-horizontal;
+    }
+
+    .logo {
+      width: @logo-width;
+      height: 100%;
+      background-image: url(../images/gramene_logo.svg);
+      background-size: 100%;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+  }
+
+  @import 'search';
+}

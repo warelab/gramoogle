@@ -2,30 +2,18 @@
 
 var Reflux = require('reflux');
 var Q = require('q');
-var binsPromise = require('gramene-bins-client').binsPromise;
-var treesPromise = require('gramene-trees-client').promise;
-var VisualizationActions = require('../actions/visualizationActions');
+var taxonomy = require('gramene-taxonomy-with-genomes');
+var VisualizationActions = require('../actions/visActions');
 var searchStore = require('./searchStore');
 var resultTypes = require('gramene-search-client').resultTypes;
 var QueryActions = require('../actions/queryActions');
-
-function getFieldName(type, param) {
-  return type ? type + '_' + param + '_bin' : undefined;
-}
-
-function getMethodName(type) {
-  return type ? type + 'BinMapper' : undefined;
-}
 
 module.exports = Reflux.createStore({
   listenables: VisualizationActions,
 
   init: function () {
     this.listenTo(searchStore, this.updateBinState);
-    Q.all([
-      binsPromise.get(),
-      treesPromise.get()
-    ]).spread(this.initBinsGeneratorAndSpeciesTree);
+    taxonomy.get().then(this.initBinsGeneratorAndSpeciesTree);
   },
 
   onRemoveDistribution: function() {
@@ -48,14 +36,10 @@ module.exports = Reflux.createStore({
       }
     }
 
-    this.fieldName = newFieldName;
-    this.binMapperMethodName = getMethodName(type);
+    this.binMapperType = type;
     this.binMapperParam = param;
 
-    if(!newFieldName) {
-      this.trigger({});
-      return;
-    }
+    this.fieldName = newFieldName;
 
     this.possiblyInitBinnedGenomesAndTrigger();
 
@@ -80,40 +64,32 @@ module.exports = Reflux.createStore({
     }
   },
 
-  initBinsGeneratorAndSpeciesTree: function (binsGenerator, speciesTree) {
-    this.binsGenerator = binsGenerator;
-    this.speciesTree = speciesTree;
-    console.log('binsGenerator initialized');
+  initBinsGeneratorAndSpeciesTree: function (taxonomy) {
+    this.taxonomy = taxonomy;
     this.possiblyInitBinnedGenomesAndTrigger();
   },
 
-  binnedGenomesIsUpToDate: function() {
-    return this.binnedGenomes &&
-      this.binnedGenomes.params.methodName === this.binMapperMethodName &&
-      this.binnedGenomes.params.param === this.binMapperParam;
-  },
-
   canInitBinnedGenomes: function() {
-    return this.binsGenerator &&
-      this.binMapperMethodName &&
+    return this.taxonomy &&
+      this.binMapperType &&
       this.binMapperParam;
   },
 
   possiblyInitBinnedGenomesAndTrigger: function() {
-    if (this.canInitBinnedGenomes() &&
-        !this.binnedGenomesIsUpToDate()) {
-      var binFunction = this.binsGenerator[this.binMapperMethodName];
-      this.binnedGenomes = binFunction(this.binMapperParam).binnedGenomes();
-      this.binnedGenomes.params = {
-        methodName: this.binMapperMethodName,
-        param: this.binMapperParam
-      };
+    if(!this.fieldName) {
+      taxonomy.removeBins();
+      this.trigger({taxonomy: taxonomy});
+    }
+
+    else if (this.canInitBinnedGenomes()) {
+      this.taxonomy.setBinType(this.binMapperType, this.binMapperParam);
       this.possiblyTrigger();
     }
   },
 
   haveNecessaryDataToTrigger: function() {
-    return this.binnedGenomesIsUpToDate() &&
+    return this.taxonomy &&
+      this.taxonomy.binParams.method &&
       this.binnedResults;
   },
 
@@ -121,13 +97,16 @@ module.exports = Reflux.createStore({
     // ensure binsGenerator, binMapperMethodName,
     // binMapperParam and binResults populated
     if (this.haveNecessaryDataToTrigger()) {
-      this.binnedGenomes.setResults(this.binnedResults);
+      this.taxonomy.setResults(this.binnedResults);
 
       console.log('visStore triggering');
       this.trigger({
-        binnedGenomes: this.binnedGenomes,
-        speciesTree: this.speciesTree
+        taxonomy: this.taxonomy
       });
     }
   }
 });
+
+function getFieldName(type, param) {
+  return type ? type + '_' + param + '_bin' : undefined;
+}

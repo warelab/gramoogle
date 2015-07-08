@@ -11,7 +11,7 @@ describe('App', function() {
     return TestUtils.renderIntoDocument(App());
   };
 
-  it('should contain the expected components', function() {
+  xit('should contain the expected components', function() {
     var app = newApp();
 
     var textSearch = TestUtils.scryRenderedDOMComponentsWithClass(app, 'search');
@@ -23,7 +23,7 @@ describe('App', function() {
     expect(results.length).toEqual(1);
   });
 
-  it('should have state populated from store', function() {
+  xit('should have state populated from store', function() {
     var app = newApp();
 
     expect(app.state.search).toBeDefined();

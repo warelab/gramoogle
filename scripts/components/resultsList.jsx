@@ -26,11 +26,11 @@ var ResultsList = React.createClass({
     if(list) {
       var results = list.map(function(result) {
         return (
-          <Result gene={result} />
+          <Result key={result.id} gene={result} />
         );
       });
       return (
-        <ol className="resultsList">
+        <ol className="results-list">
         {results}
         </ol>
       );

@@ -1,9 +1,12 @@
 'use strict';
 
+/* @flow */
+
 var Reflux = require('reflux');
 var _ = require('lodash');
-var searchInterface = require('gramene-search-client').client;
+var Q = require('q');
 var QueryActions = require('../actions/queryActions');
+var search = require('../search/search');
 
 module.exports = Reflux.createStore({
   listenables: QueryActions,
@@ -12,68 +15,86 @@ module.exports = Reflux.createStore({
     this.state = {
       query: {
         q: '',
-        filters: {}, // fieldName => object of solr parameters
-        resultTypes: {} // fieldName => object of solr parameters
+        filters: {}, // filterKey => object of solr parameters
+        resultTypes: {} // key || fieldName => object of solr parameters
       },
       results: {
         list: [],
-        metadata: {}
+        metadata: {},
+        tally: {}
       }
     };
+
+    // TODO use react-router
+    if(window && window.location.hash) {
+      this.state.query = JSON.parse(decodeURI(window.location.hash.substring(1)));
+    }
 
     // make a copy of the query to keep with the results
     this.state.results.metadata.searchQuery = _.cloneDeep(this.state.query);
 
-    this.search = _.debounce(this.searchNoDebounce, 500);
+    // hook up search from ../search/search.js.
+    // search.js' debounce function would like a reference of this store's state so that
+    // it can get an up-to-date query object, functions to use for success and failure
+    // and a debounce time in ms.
+    this.search = search.debounced(
+      this.state, // state object so search can access current query state
+      this.searchComplete, // called when done
+      this.searchError, // called on error
+      200 // debounce time in ms
+    );
   },
 
-  getInitialState: function () {
+  getInitialState: function() {
     return this.state;
   },
 
-  setResultType: function (fieldName, params) {
+  setResultType: function (rtKey: string, params) {
     console.log('setResultType', arguments);
-    this.state.query.resultTypes[fieldName] = params;
+    this.state.query.resultTypes[rtKey] = params;
     this.search();
   },
 
-  removeResultType: function (fieldName) {
+  removeResultType: function (rtKey: string) {
     console.log('removeResultType', arguments);
-    delete this.state.query.resultTypes[fieldName];
+    delete this.state.query.resultTypes[rtKey];
     this.search();
   },
 
-  setQueryString: function (newQueryString) {
+  setFilter: function(filter) {
+    console.log('setFilter', arguments);
+    this.state.query.filters[filter.fq] = filter;
+    this.search();
+  },
+
+  setAllFilters: function(filters) {
+    console.log('setAllFilters', arguments);
+    this.state.query.filters = filters;
+    this.search();
+  },
+
+  removeFilter: function(filter) {
+    console.log('removeFilter', arguments);
+    delete this.state.query.filters[filter.fq];
+    this.search();
+  },
+
+  setQueryString: function (newQueryString: string) {
     console.log('setQueryString', arguments);
     this.state.query.q = newQueryString;
     this.search();
   },
 
-  // Note that this function is debounced in init. It might be called many
-  // times in succession when a user is interacting with the page,
-  // but only the last one will fire.
-  searchNoDebounce: function () {
-    console.log('performing search', this.state.query);
-
-    // make a copy of the query state when we make the async call...
-    var query = _.cloneDeep(this.state.query);
-
-    // ...and use it as curried parameter for the stateless
-    // checkDataAndAddQuery method
-    var check = _.curry(checkDataAndAddQuery)(query);
-
-    this.searchPromise(query)
-      .then(check)
-      .then(this.searchComplete)
-      .catch(this.searchError);
-  },
-
-  searchPromise: function(query) {
-    return searchInterface.geneSearch(query);
+  removeQueryString: function() {
+    console.log('removeQueryString');
+    this.state.query.q = '';
+    this.search();
   },
 
   searchComplete: function (results) {
     console.log('Got data: ', results);
+
+    window.location.hash = encodeURI(JSON.stringify(this.state.query));
 
     // TODO: compare query state used for search with the current one
     this.state.results = results;
@@ -85,15 +106,3 @@ module.exports = Reflux.createStore({
     console.error('Error updating results', error);
   }
 });
-
-function checkDataAndAddQuery(query, data) {
-  _.forIn(query.resultTypes, function (params, key) {
-    if (!data[key]) {
-      console.error(key + ' not found in search results');
-    }
-  });
-
-  data.metadata.searchQuery = query;
-
-  return data;
-}

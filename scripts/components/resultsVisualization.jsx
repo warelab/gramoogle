@@ -2,21 +2,10 @@
 
 var React = require('react');
 var Reflux = require('reflux');
-var VisualizationActions = require('../actions/visualizationActions');
+var VisualizationActions = require('../actions/visActions');
 var visualizationStore = require('../stores/visualizationStore');
 var _ = require('lodash');
-
-var Genome = React.createClass({
-  propTypes: {
-    genome: React.PropTypes.object.isRequired,
-    hits: React.PropTypes.object.isRequired
-  },
-  render: function() {
-    return (
-      <li className="genome">{this.props.genome.taxon_id}</li>
-    )
-  }
-});
+var Vis = require('gramene-search-vis').Vis;
 
 var ResultsVisualization = React.createClass({
   mixins: [
@@ -32,38 +21,35 @@ var ResultsVisualization = React.createClass({
     VisualizationActions.removeDistribution();
   },
 
-  render: function () {
-    var thing, genomes;
+  handleTaxonomyRootChange: function (taxonNode, isRoot) {
 
-    if(this.state.visData) {
-      genomes = _.map(this.state.visData.binnedGenomes, function(genome) {
-        return (
-          <Genome ref={genome.taxon_id} genome={genome} hits={this.state.visData.binnedResults} />
-        )
-      }.bind(this));
-      thing = (
-        <div class="resultsVis">
-          <p>{_.size(this.state.visData.binnedResults.data)} bins with
-            stuff in them
-          </p>
-          <ol>
-            {genomes}
-          </ol>
+  },
+
+  render: function () {
+    var taxonomy, summary;
+
+    if (this.state.visData) {
+      taxonomy = this.state.visData.taxonomy;
+      summary = (
+        <div>
+          <Vis
+            taxonomy={taxonomy}
+            onTreeRootChange={this.handleTaxonomyRootChange} />
         </div>
       );
     }
     else {
-      thing = (
-        <p>I would appreciate some binned data</p>
+      summary = (
+        <div>
+          <p>Loading…</p>
+        </div>
       );
     }
 
     return (
-      <figure className="resultsVis">
-        {thing}
-        <img src="images/charlie.jpg" alt="Charlie Says…" />
-        <figcaption>A Visualization</figcaption>
-      </figure>
+      <div className="resultsVis">
+        {summary}
+      </div>
     );
   }
 });
