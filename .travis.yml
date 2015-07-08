@@ -5,16 +5,20 @@ before_script:
 - npm install -g grunt-cli
 script: grunt package
 before_install:
-  if [ "$TRAVIS_REPO_SLUG" == "warelab/gramoogle" ] && 
-      ([ "$TRAVIS_BRANCH" == "master" ] || [ ! -z "$TRAVIS_TAG" ]) && 
+  if [ "$TRAVIS_REPO_SLUG" == "warelab/gramoogle" ] &&
+      ([ "$TRAVIS_BRANCH" == "master" ] || [ "$TRAVIS_BRANCH" == "dev" ] || [ ! -z "$TRAVIS_TAG" ]) &&
       [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
     openssl aes-256-cbc -K $encrypted_9690695c329b_key -iv $encrypted_9690695c329b_iv -in deploy/gramene_deploy_key2.enc -out deploy/gramene_deploy_key2 -d;
   fi
 after_success:
   if [ "$TRAVIS_REPO_SLUG" == "warelab/gramoogle" ] && 
-      ([ "$TRAVIS_BRANCH" == "master" ] || [ ! -z "$TRAVIS_TAG" ]) && 
+      ([ "$TRAVIS_BRANCH" == "master" ] ) &&
       [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
-    echo "Deploying build $TRAVIS_REPO_SLUG#$TRAVIS_BRANCH (tag $TRAVIS_TAG isPullReq $TRAVIS_PULL_REQUEST) to production" && chmod 600 deploy/gramene_deploy_key2 && scp -r -i deploy/gramene_deploy_key2 build images index.html mulvaney@brie.cshl.edu:test-deploy && ssh -i deploy/gramene_deploy_key2 mulvaney@brie.cshl.edu "scp -i ~/.ssh/id_rsa_copy_to_gorgonzola -r test-deploy/* search.gramene.org:/usr/local/apache2/htdocs/gramene-search";
+    echo "Deploying build $TRAVIS_REPO_SLUG#$TRAVIS_BRANCH (tag $TRAVIS_TAG isPullReq $TRAVIS_PULL_REQUEST) to production" && chmod 600 deploy/gramene_deploy_key2 && scp -r -i deploy/gramene_deploy_key2 build images index.html mulvaney@brie.cshl.edu:deploy/master && ssh -i deploy/gramene_deploy_key2 mulvaney@brie.cshl.edu "scp -i ~/.ssh/id_rsa_copy_to_gorgonzola -r deploy/master/* search.gramene.org:/usr/local/apache2/htdocs/gramene-search";
+  elif [ "$TRAVIS_REPO_SLUG" == "warelab/gramoogle" ] &&
+      ([ "$TRAVIS_BRANCH" == "dev" ] ) &&
+      [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+    echo "Deploying build $TRAVIS_REPO_SLUG#$TRAVIS_BRANCH (tag $TRAVIS_TAG isPullReq $TRAVIS_PULL_REQUEST) to dev" && chmod 600 deploy/gramene_deploy_key2 && scp -r -i deploy/gramene_deploy_key2 build images index.html mulvaney@brie.cshl.edu:deploy/dev && ssh -i deploy/gramene_deploy_key2 mulvaney@brie.cshl.edu "cp -pr deploy/dev/* /usr/local/apache2/htdocs/gramene-search-dev";
   else
     echo "Not deploying this build $TRAVIS_REPO_SLUG#$TRAVIS_BRANCH (tag $TRAVIS_TAG isPullReq $TRAVIS_PULL_REQUEST)";
   fi
