@@ -3,7 +3,7 @@ node_js:
 - 0.1
 before_script:
 - npm install -g grunt-cli
-script: grunt jasmine_node
+script: grunt package
 before_install:
 - openssl aes-256-cbc -K $encrypted_9690695c329b_key -iv $encrypted_9690695c329b_iv -in deploy/gramene_deploy_key2.enc -out deploy/gramene_deploy_key2 -d
 after_success:
