@@ -1,16 +1,44 @@
 'use strict';
 
 var React = require('react');
-//var SearchActions = require('../actions/searchActions');
+var resultTypes = require('gramene-search-client').resultTypes;
+var QueryActions = require('../actions/queryActions');
+var Result = require('./result.jsx');
 
 var ResultsList = React.createClass({
-  render: function(){
-    return (
-      <ol className="resultsList">
-        <li>Results</li>
-        <li>List</li>
-      </ol>
+  getInitialState: function () {
+    return {rows: 10};
+  },
+  getResultType: function() {
+    return resultTypes.get(
+      'list',
+      {rows: this.state.rows}
     );
+  },
+  componentWillMount: function () {
+    QueryActions.setResultType('list', this.getResultType());
+  },
+  componentWillUnmount: function () {
+    QueryActions.removeResultType('list');
+  },
+  render: function () {
+    var list = this.props.results.list;
+    if(list) {
+      var results = list.map(function(result) {
+        return (
+          <Result key={result.id} gene={result} />
+        );
+      });
+      return (
+        <ol className="results-list">
+        {results}
+        </ol>
+      );
+    }
+
+    return (
+      <p>No results</p>
+    )
   }
 });
 module.exports = ResultsList;

@@ -1,0 +1,41 @@
+.suggestions {
+  .categories {
+    &:extend(.list-unstyled);
+
+    h3 {
+      padding: @padding-base-vertical 0 0;
+      margin: 0;
+      font-variant: small-caps;
+      color: @gray-light;
+      font-size-adjust: -2;
+    }
+
+    .category {
+
+      .terms {
+        &:extend(.list-unstyled);
+
+        .term {
+          display: inline;
+          padding: 0;
+          a {
+            &:extend(.btn);
+            &:extend(.btn-default);
+            color: @gramene-darkgreen;
+            border-color: @gramene-darkgreen;
+            background-color: @gramene-lightergreen;
+            margin: @padding-xs-vertical;
+          }
+        }
+        .term.empty {
+          a {
+            border-color: @gramene-mediumgreen;
+            color: @gramene-mediumgreen;
+            background-color: @gray-lighter;
+            cursor:not-allowed;
+          }
+        }
+      }
+    }
+  }
+}
