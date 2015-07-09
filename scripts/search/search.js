@@ -20,6 +20,30 @@ function checkRequestedResultTypesArePresent(data: map): map {
   return data;
 }
 
+function prepFilters(filters: map): void {
+  var newFilters = {};
+  var fieldValues = {};
+  for (var fq in filters) {
+    if (fq.substr(0,1) === '-') {
+      newFilters[fq] = {};
+    }
+    else {
+      var fv = fq.split(':');
+      var field = fv[0];
+      var value = fv[1];
+      if (!fieldValues.hasOwnProperty(field)) {
+        fieldValues[field] = [];
+      }
+      fieldValues[field].push(value);
+    }
+  }
+  for (var field in fieldValues) {
+    newFilters[field+':'+'('+fieldValues[field].join(' ')+')'] = {};
+  }
+  console.log('prepFilters',filters,newFilters);
+  return newFilters;
+}
+
 module.exports = {
   debounced: function(stateObj: map, searchComplete: Function, searchError: Function, time: number): Function {
     var func = function() {
@@ -34,6 +58,10 @@ module.exports = {
   search: function (search: map, searchComplete: Function, searchError: Function): void {
     // make a copy of the query state when we make the async call...
     var queryCopy = _.cloneDeep(search.query);
+
+    if (queryCopy.filters) {
+      queryCopy.filters = prepFilters(queryCopy.filters);
+    }
 
     console.log('performing search', queryCopy);
 
