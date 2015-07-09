@@ -2,6 +2,7 @@
 
 var React = require('react');
 var Reflux = require('reflux');
+var queryActions = require('../actions/queryActions');
 var VisualizationActions = require('../actions/visActions');
 var visualizationStore = require('../stores/visualizationStore');
 var _ = require('lodash');
@@ -21,8 +22,28 @@ var ResultsVisualization = React.createClass({
     VisualizationActions.removeDistribution();
   },
 
-  handleTaxonomyRootChange: function (taxonNode, isRoot) {
+  handleGeneSelection: function (bins) {
+    console.log("handleGeneSelection",bins);
+  },
 
+  handleTreeRootChange: function (taxonNode) {
+    console.log("handleTaxonomyRootChange",taxonNode);
+    // TODO: clobber other positive NCBITaxon_ancestors filters?
+  },
+  
+  handleSubtreeCollapse: function (taxonNode) {
+    console.log("handleTaxonomySubtreeCollapse",taxonNode);
+    queryActions.setFilter({
+      fq: '-NCBITaxon_ancestors:'+taxonNode.model.id,
+      term: 'exclude NCBITaxon:'+taxonNode.model.id+' | '+taxonNode.model.name
+    });
+  },
+
+  handleSubtreeExpand: function (taxonNode) {
+    console.log("handleTaxonomySubtreeExpand",taxonNode);
+    queryActions.removeFilter({
+      fq: '-NCBITaxon_ancestors:'+taxonNode.model.id,
+    });
   },
 
   render: function () {
@@ -34,7 +55,10 @@ var ResultsVisualization = React.createClass({
         <div>
           <Vis
             taxonomy={taxonomy}
-            onTreeRootChange={this.handleTaxonomyRootChange} />
+            onGeneSelection={this.handleGeneSelection}
+            onSubtreeCollapse={this.handleSubtreeCollapse}
+            onSubtreeExpand={this.handleSubtreeExpand}
+            onTreeRootChange={this.handleTreeRootChange} />
         </div>
       );
     }
