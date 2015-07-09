@@ -14,7 +14,8 @@ var QueryActions = Reflux.createActions([
   // filter actions.
   'setFilter',
   'setAllFilters',
-  'removeFilter'
+  'removeFilter',
+  'toggleFilter'
 ]);
 
 module.exports = QueryActions;

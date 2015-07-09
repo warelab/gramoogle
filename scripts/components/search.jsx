@@ -22,11 +22,16 @@ var SearchFilter = React.createClass({
   removeFilter: function() {
     QueryActions.removeFilter(this.props.term);
   },
+  toggleFilter: function() {
+    QueryActions.toggleFilter(this.props.term);
+  },
   render: function() {
     var term = this.props.term;
+    var thumb = term.include ? '+' : '-'
     return (
       <li className="search-filter">
-        {term.term}
+        <Button bsSize="xsmall" onClick={this.toggleFilter}>{thumb}</Button>
+        {term.category} | {term.term}
         <Button bsSize="xsmall" onClick={this.removeFilter}>&times;</Button>
       </li>
     );

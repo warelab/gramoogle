@@ -67,6 +67,21 @@ module.exports = Reflux.createStore({
     this.search();
   },
 
+  toggleFilter: function(filter) {
+    console.log('toggleFilter', arguments);
+    delete this.state.query.filters[filter.fq];
+    if (filter.include) {
+      filter.include=false;
+      filter.fq = '-'+filter.fq;
+    }
+    else {
+      filter.include=true;
+      filter.fq = filter.fq.replace(/-/,'');
+    }
+    this.state.query.filters[filter.fq] = filter;
+    this.search();
+  },
+
   setAllFilters: function(filters) {
     console.log('setAllFilters', arguments);
     this.state.query.filters = filters;
