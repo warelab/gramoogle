@@ -5,6 +5,7 @@ var bs = require('react-bootstrap');
 var _ = require('lodash');
 var queryActions = require('../actions/queryActions');
 var detailsInventory = require('./resultDetails/_inventory');
+var Browser = require('./browser.jsx');
 
 var Result = React.createClass({
 
@@ -31,6 +32,7 @@ var Result = React.createClass({
         <ul className="change-search">
           {details}
         </ul>
+        <Browser gene={gene} />
       </li>
     );
   }
