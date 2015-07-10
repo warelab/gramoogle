@@ -1,9 +1,41 @@
-.results-list {
-  .result {
-    .result-links {
-      button {
-        margin-left: @padding-small-horizontal;
+.results-list-container {
+  .results-list {
+    &:extend(.list-unstyled all);
+    .result {
+      padding-top: @padding-base-vertical;
+
+      .result-links {
+        &:extend(.list-inline all);
+
+        padding-left: @padding-large-horizontal;
+
+        .result-gene-detail-name {
+          padding: @padding-base-vertical @padding-base-horizontal;
+        }
+
+        .result-gene-detail-name:hover {
+          background-color: @gramene-lightergreen;
+        }
+
+        .result-gene-detail-name.active {
+          background-color: @gramene-darkgreen;
+          > a {
+            color: @gramene-offwhite;
+          }
+        }
+
+        .result-gene-detail-name > a {
+          cursor: pointer;
+        }
+      }
+
+      .visible-detail {
+        border: 1px solid @gramene-darkgreen;
+        margin-left: calc(@padding-base-horizontal - 1px);
+        margin-right: @padding-base-horizontal;
+        padding: @padding-base-vertical @padding-base-horizontal;
       }
     }
   }
+  padding-bottom: @padding-large-vertical;
 }

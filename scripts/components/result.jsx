@@ -5,32 +5,59 @@ var bs = require('react-bootstrap');
 var _ = require('lodash');
 var queryActions = require('../actions/queryActions');
 var detailsInventory = require('./resultDetails/_inventory');
-var Browser = require('./browser.jsx');
 
 var Result = React.createClass({
 
   propTypes: {
     gene: React.PropTypes.object.isRequired
   },
+
+  getInitialState: function() {
+    return { visibleDetail: undefined };
+  },
+
+  detailClickHandlerFactory: function(geneDetail) {
+    return function() {
+      // hide if already visible
+      if(this.state.visibleDetail && this.state.visibleDetail.name === geneDetail.name) {
+        this.setState(this.getInitialState());
+      }
+      else {
+        this.setState({ visibleDetail: geneDetail });
+      }
+    }.bind(this);
+  },
   
   render: function () {
-    var gene = this.props.gene;
-    var details = _.chain(detailsInventory)
+    var gene = this.props.gene,
+        handlerFactory = this.detailClickHandlerFactory,
+        details = _.chain(detailsInventory)
       .filter(function(geneDetail) {
         return geneDetail.test(gene);
       })
       .map(function(geneDetail) {
-        //var detail = React.createElement(geneDetail.reactClass, {gene: gene});
-        //<div className="result-gene-detail">{detail}</div>
+        var handler = handlerFactory(geneDetail),
+            isActive = this.state.visibleDetail &&
+              geneDetail.name === this.state.visibleDetail.name,
+            className = 'result-gene-detail-name' + (isActive ? ' active' : '');
 
         return (
-          <li>
-            <div className="result-gene-detail-name">{geneDetail.name}</div>
+          <li className={className}>
+            <a onClick={handler}>{geneDetail.name}</a>
           </li>
         );
-      })
+      }.bind(this))
       .value();
-    
+
+    var visibleDetail;
+    if(this.state.visibleDetail) {
+      visibleDetail = (
+        <div className="visible-detail">
+          {React.createElement(this.state.visibleDetail.reactClass, {gene: gene})}
+        </div>
+      )
+    }
+
     return (
       <li className="result">
         <h4>{gene.name} <small>{gene.species}</small>
@@ -39,7 +66,7 @@ var Result = React.createClass({
         <ul className="result-links">
           {details}
         </ul>
-        <Browser gene={gene} />
+        {visibleDetail}
       </li>
     );
   }

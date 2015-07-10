@@ -1,18 +1,17 @@
 'use strict';
 
 var React = require('react');
+var bs = require('react-bootstrap');
 var resultTypes = require('gramene-search-client').resultTypes;
 var QueryActions = require('../actions/queryActions');
 var Result = require('./result.jsx');
 
+
 var ResultsList = React.createClass({
-  getInitialState: function () {
-    return {rows: 10};
-  },
   getResultType: function() {
     return resultTypes.get(
       'list',
-      {rows: this.state.rows}
+      {rows: 10}
     );
   },
   componentWillMount: function () {
@@ -20,6 +19,9 @@ var ResultsList = React.createClass({
   },
   componentWillUnmount: function () {
     QueryActions.removeResultType('list');
+  },
+  moreResults: function() {
+    QueryActions.moreResults(20);
   },
   render: function () {
     var list = this.props.results.list;
@@ -30,9 +32,12 @@ var ResultsList = React.createClass({
         );
       });
       return (
-        <ol className="results-list">
-        {results}
-        </ol>
+        <div className="results-list-container">
+          <ol className="results-list">
+            {results}
+          </ol>
+          <bs.Button className="more-results" onClick={this.moreResults}>More genes</bs.Button>
+        </div>
       );
     }
 
