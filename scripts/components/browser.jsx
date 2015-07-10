@@ -1,6 +1,7 @@
 'use strict';
 
 var React = require('react');
+var Dalliance = require('dalliance').browser;
 var bs = require('react-bootstrap');
 
 var DallianceBrowser = React.createClass({
@@ -20,7 +21,7 @@ var DallianceBrowser = React.createClass({
 
     // GLOBAL alert! This code is added to the window object in the root
     // javascript class for the application, gramoogle.js
-    new window.Browser(
+    var browser = new Dalliance(
       {
         pageName: g.id + 'Browser',
         chr: g.region,
@@ -87,11 +88,8 @@ var DallianceBrowser = React.createClass({
     var gene = this.props.gene;
     return (
       <bs.Row>
-        <bs.Col xs={12} md={8}>
+        <bs.Col xs={12} md={12}>
           <div id={gene.id + 'Browser'}></div>
-        </bs.Col>
-        <bs.Col xs={12} md={4}>
-          <bs.Button bsSize="small">full screen</bs.Button>
         </bs.Col>
       </bs.Row>
     );

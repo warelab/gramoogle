@@ -32,7 +32,7 @@
     "search": "git://github.com/warelab/gramene-search-client.git#master",
     "taxonomy": "git://github.com/warelab/gramene-taxonomy-with-genomes.git#master",
     "gramene-search-vis": "git://github.com/warelab/gramene-search-vis.git",
-    "biodalliance": "git://github.com/ajo2995/dalliance.git"
+    "biodalliance": "git://github.com/ajo2995/dalliance.git#master"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
