@@ -20,7 +20,14 @@ var Result = React.createClass({
         return geneDetail.test(gene);
       })
       .map(function(geneDetail) {
-        return React.createElement(geneDetail.reactClass, {gene: gene});
+        //var detail = React.createElement(geneDetail.reactClass, {gene: gene});
+        //<div className="result-gene-detail">{detail}</div>
+
+        return (
+          <li>
+            <div className="result-gene-detail-name">{geneDetail.name}</div>
+          </li>
+        );
       })
       .value();
     
@@ -29,7 +36,7 @@ var Result = React.createClass({
         <h4>{gene.name} <small>{gene.species}</small>
         </h4>
         <p>{gene.description}</p>
-        <ul className="change-search">
+        <ul className="result-links">
           {details}
         </ul>
         <Browser gene={gene} />
