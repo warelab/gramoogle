@@ -83,11 +83,16 @@ var DallianceBrowser = React.createClass({
     this.cancel();
   },
   render: function () {
-    var gene = this.props.gene;
+    var gene, ensemblUrl;
+
+    gene = this.props.gene;
+    ensemblUrl = '//ensembl.gramene.org/' + gene.system_name + '/Gene/Summary?g=' + gene.id;
     return (
       <bs.Row>
         <bs.Col xs={12} md={12}>
-          <div id={gene.id + 'Browser'}></div>
+          <a className="biodalliance-link-to-ensembl" href={ensemblUrl}>
+            <div id={gene.id + 'Browser'}></div>
+          </a>
         </bs.Col>
       </bs.Row>
     );
