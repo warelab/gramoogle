@@ -10,7 +10,7 @@ var DallianceBrowser = React.createClass({
     gene: React.PropTypes.object.isRequired
   },
 
-  shouldComponentUpdate: function(props) {
+  shouldComponentUpdate: function() {
     return false;
   },
 
@@ -19,8 +19,6 @@ var DallianceBrowser = React.createClass({
     var span = g.end - g.start + 1;
     var padding = Math.floor(.1*span);
 
-    // GLOBAL alert! This code is added to the window object in the root
-    // javascript class for the application, gramoogle.js
     var browser = new Dalliance(
       {
         pageName: g.id + 'Browser',

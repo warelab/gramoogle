@@ -24,6 +24,14 @@ module.exports = [
       return gene.domainList || gene.domainRoots;
     },
     reactClass: require('./domains.jsx')
+  },
+
+  {
+    name: 'Cross-references',
+    test: function(gene) {
+      return !!gene;
+    },
+    reactClass: require('./xrefs.jsx')
   }
 
 ];
