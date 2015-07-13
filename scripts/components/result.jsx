@@ -13,8 +13,25 @@ var ResultExpanded = React.createClass({
   },
 
   render: function() {
+    var gene, details;
+
+    gene = this.props.gene;
+
+    details = this.props.details.map(function(detail) {
+      var component = React.createElement(detail.reactClass, {gene: gene});
+      return (
+        <div className="visible-detail">
+          <h5>{detail.name}</h5>
+          {component}
+        </div>
+      );
+    });
+
+
     return (
-      <div>I am expanded</div>
+      <div>
+        {details}
+      </div>
     );
   }
 });
@@ -22,8 +39,7 @@ var ResultExpanded = React.createClass({
 var ResultSmall = React.createClass({
   propTypes: {
     gene: React.PropTypes.object.isRequired,
-    details: React.PropTypes.array.isRequired,
-    expandResult: React.PropTypes.func.isRequired
+    details: React.PropTypes.array.isRequired
   },
 
   getInitialState: function() {
@@ -74,7 +90,6 @@ var ResultSmall = React.createClass({
       <div className="result-content">
         <ul className="result-links">
           {detailLinks}
-          <li><a onClick={this.props.expandResult}>[Expand All]</a></li>
         </ul>
         {visibleDetail}
       </div>
@@ -111,7 +126,7 @@ var Result = React.createClass({
       glyph = 'menu-down';
     }
     else {
-      content = <ResultSmall gene={gene} details={details} expandResult={this.toggleExpanded} />;
+      content = <ResultSmall gene={gene} details={details} />;
       glyph = 'menu-right';
     }
 
