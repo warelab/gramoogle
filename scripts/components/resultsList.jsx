@@ -36,7 +36,11 @@ var ResultsList = React.createClass({
           <ol className="results-list">
             {results}
           </ol>
-          <bs.Button className="more-results" onClick={this.moreResults}>More genes</bs.Button>
+          <ul className="more-results">
+            <li>
+              <a onClick={this.moreResults}>More genes</a>
+            </li>
+          </ul>
         </div>
       );
     }
