@@ -19,7 +19,7 @@ module.exports = React.createClass({
         return (
           <tr>
             <td>{displayName}</td>
-            <td><ol>{vals}</ol></td>
+            <td><ol className="xref-id-list">{vals}</ol></td>
           </tr>
         );
       })
@@ -28,7 +28,11 @@ module.exports = React.createClass({
 
   render: function() {
     return (
-      <bs.Table condensed hover>
+      <bs.Table className="xrefs" condensed hover>
+        <thead>
+          <th className="xref-name-col">Database</th>
+          <th className="xref-value-col">IDs and links</th>
+        </thead>
         <tbody>
           {this.xrefs}
         </tbody>

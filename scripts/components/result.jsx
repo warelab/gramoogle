@@ -20,8 +20,8 @@ var ResultExpanded = React.createClass({
     details = this.props.details.map(function(detail) {
       var component = React.createElement(detail.reactClass, {gene: gene});
       return (
-        <div className="visible-detail">
-          <h5>{detail.name}</h5>
+        <div className="expanded-detail">
+          <h4>{detail.name}</h4>
           {component}
         </div>
       );
@@ -29,7 +29,7 @@ var ResultExpanded = React.createClass({
 
 
     return (
-      <div>
+      <div className="expanded-details">
         {details}
       </div>
     );
@@ -114,9 +114,10 @@ var Result = React.createClass({
   },
   
   render: function () {
-    var gene, details, content, glyph;
+    var gene, details, content, glyph, className;
 
     gene = this.props.gene;
+    className = 'result';
     details = _.filter(detailsInventory, function(geneDetail) {
       return geneDetail.test(gene);
     });
@@ -124,6 +125,7 @@ var Result = React.createClass({
     if(this.state.expanded) {
       content = <ResultExpanded gene={gene} details={details} />;
       glyph = 'menu-down';
+      className += ' expanded';
     }
     else {
       content = <ResultSmall gene={gene} details={details} />;
@@ -131,11 +133,12 @@ var Result = React.createClass({
     }
 
     return (
-      <li className="result">
-        <h4>
-          <a onClick={this.toggleExpanded}><bs.Glyphicon glyph={glyph} /> {gene.name}</a>
+      <li className={className}>
+        <h3 className="gene-name">
+          <a onClick={this.toggleExpanded}><bs.Glyphicon glyph={glyph} /></a>
+          <a onClick={this.toggleExpanded}>{gene.name}</a>
           &nbsp;<small>{gene.species}</small>
-        </h4>
+        </h3>
         <p>{gene.description}</p>
         {content}
       </li>

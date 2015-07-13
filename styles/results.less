@@ -1,8 +1,21 @@
 .results-list-container {
+  padding-top: @padding-large-vertical;
+
   .results-list {
     &:extend(.list-unstyled all);
     .result {
       padding-top: @padding-base-vertical;
+
+      .gene-name {
+        .glyphicon {
+          color: @gramene-orange;
+          font-size: smaller;
+        }
+
+        a {
+          cursor: pointer;
+        }
+      }
 
       .result-links {
         &:extend(.list-inline all);
@@ -34,6 +47,40 @@
         margin-left: calc(@padding-base-horizontal - 1px);
         margin-right: @padding-base-horizontal;
         padding: @padding-base-vertical @padding-base-horizontal;
+      }
+
+      .expanded-details {
+        padding: @padding-large-vertical 0;
+
+        .expanded-detail {
+          padding: @padding-large-vertical 0;
+        }
+      }
+
+      .xrefs {
+        table-layout: fixed;
+
+        .xref-name-col {
+          width: 20%;
+        }
+
+        .xref-value-col {
+          width: 80%;
+
+          ol.xref-id-list {
+            &:extend(.list-unstyled all);
+          }
+        }
+      }
+    }
+
+    .result.expanded {
+      &:extend(.well all);
+      background-color: @gramene-lightergreen;
+      margin-top: @padding-large-vertical;
+      padding: @padding-large-vertical @padding-small-horizontal;
+      .gene-name {
+        margin-top: 0;
       }
     }
   }
