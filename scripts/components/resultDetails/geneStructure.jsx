@@ -7,7 +7,8 @@ var bs = require('react-bootstrap');
 var DallianceBrowser = React.createClass({
 
   propTypes: {
-    gene: React.PropTypes.object.isRequired
+    gene: React.PropTypes.object.isRequired,
+    expanded: React.PropTypes.bool
   },
 
   shouldComponentUpdate: function() {
@@ -56,13 +57,13 @@ var DallianceBrowser = React.createClass({
         noPersistView: true,
         maxWorkers: 2,
         noTitle: true,
-        noLocationField: true,
-        noLeapButtons: true,
-        noZoomSlider: true,
-        noTrackAdder: true,
+        noLocationField: !this.props.expanded,
+        noLeapButtons: !this.props.expanded,
+        noZoomSlider: !this.props.expanded,
+        noTrackAdder: !this.props.expanded,
         noTrackEditor: true,
         noExport: true,
-        noOptions: true,
+        noOptions: !this.props.expanded,
         noHelp: true
       }
     );

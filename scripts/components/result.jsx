@@ -18,7 +18,7 @@ var ResultExpanded = React.createClass({
     gene = this.props.gene;
 
     details = this.props.details.map(function(detail) {
-      var component = React.createElement(detail.reactClass, {gene: gene});
+      var component = React.createElement(detail.reactClass, {gene: gene, expanded: true});
       return (
         <div className="expanded-detail">
           <h4>{detail.name}</h4>
@@ -81,7 +81,7 @@ var ResultSmall = React.createClass({
     if(this.state.visibleDetail) {
       visibleDetail = (
         <div className="visible-detail">
-          {React.createElement(this.state.visibleDetail.reactClass, {gene: gene})}
+          {React.createElement(this.state.visibleDetail.reactClass, {gene: gene, expanded: false})}
         </div>
       )
     }
