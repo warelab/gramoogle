@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-- 0.1
+- 0.12
 before_script:
 - npm install -g grunt-cli
 script: grunt package
@@ -11,13 +11,13 @@ after_success: if [ "$TRAVIS_REPO_SLUG" == "warelab/gramoogle" ] && ([ "$TRAVIS_
   == "master" ] ) && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo "Deploying build
   $TRAVIS_REPO_SLUG#$TRAVIS_BRANCH (tag $TRAVIS_TAG isPullReq $TRAVIS_PULL_REQUEST)
   to http://search.gramene.org (production)" && chmod 600 deploy/gramene_deploy_key2 && scp -r -i deploy/gramene_deploy_key2
-  build images index.html mulvaney@brie.cshl.edu:deploy/master && ssh -i deploy/gramene_deploy_key2
+  build assets index.html mulvaney@brie.cshl.edu:deploy/master && ssh -i deploy/gramene_deploy_key2
   mulvaney@brie.cshl.edu "scp -i ~/.ssh/id_rsa_copy_to_gorgonzola -r deploy/master/*
   search.gramene.org:/usr/local/apache2/htdocs/gramene-search"; elif [ "$TRAVIS_REPO_SLUG"
   == "warelab/gramoogle" ] && [ "$TRAVIS_PULL_REQUEST"
   == "false" ]; then echo "Deploying build $TRAVIS_REPO_SLUG#$TRAVIS_BRANCH (tag $TRAVIS_TAG
   isPullReq $TRAVIS_PULL_REQUEST) to http://brie.cshl.edu/gramene-search-dev/$TRAVIS_BRANCH" && chmod 600 deploy/gramene_deploy_key2
-  && scp -r -i deploy/gramene_deploy_key2 build images index.html mulvaney@brie.cshl.edu:deploy/dev
+  && scp -r -i deploy/gramene_deploy_key2 build assets index.html mulvaney@brie.cshl.edu:deploy/dev
   && ssh -i deploy/gramene_deploy_key2 mulvaney@brie.cshl.edu "mkdir -p /usr/local/apache2/htdocs/gramene-search-dev/$TRAVIS_BRANCH && cp -pr deploy/dev/*
   /usr/local/apache2/htdocs/gramene-search-dev/$TRAVIS_BRANCH"; else echo "Not deploying this build
   $TRAVIS_REPO_SLUG#$TRAVIS_BRANCH (tag $TRAVIS_TAG isPullReq $TRAVIS_PULL_REQUEST)";

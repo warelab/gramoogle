@@ -8,29 +8,29 @@ var detailsActions = require('../../actions/detailsActions');
 var detailsStore = require('../../stores/detailsStore');
 
 var Domains = React.createClass({
-  mixins: [Reflux.listenTo(detailsStore,"onStatusChange")],
+  //mixins: [Reflux.listenTo(detailsStore,"onStatusChange")],
 
-  onStatusChange: function(details) {
-    this.setState({
-      details: details.domains
-    });
-  },
+  //onStatusChange: function(details) {
+  //  this.setState({
+  //    details: details.domains
+  //  });
+  //},
 
-  getInitialState: function() {
-    return {};
-  },
+  //getInitialState: function() {
+  //  return {};
+  //},
 
   propTypes: {
     gene: React.PropTypes.object.isRequired
   },
 
-  componentWillMount: function () {
-    detailsActions.requireDetails('domains');
-  },
-
-  componentWillUnmount: function () {
-    detailsActions.forsakeDetails('domains');
-  },
+  //componentWillMount: function () {
+  //  detailsActions.requireDetails('domains');
+  //},
+  //
+  //componentWillUnmount: function () {
+  //  detailsActions.forsakeDetails('domains');
+  //},
 
   createFilter: function() {
     var drList = this.props.gene.domainRoots.split(' ');
@@ -55,31 +55,14 @@ var Domains = React.createClass({
   
   render: function () {
     var gene = this.props.gene;
-    var details = this.state.details;
-    var listOfDomains;
-    var filterButton;
-    if(gene.domainList && details) {
-      var dList = gene.domainList.map(function(ipr_id) {
-        if (details[ipr_id]) {
-          var name = details[ipr_id].name
-          var rand = Math.random();
-          return (
-            <li key={rand}>{name}</li>
-          );
-        }
-        else {
-          console.log(ipr_id,'has no details',details);
-        }
-      });
-      listOfDomains = (<ol>{dList}</ol>);
-    }
+    var filterLink;
     if (gene.domainRoots) {
-      filterButton = (
-        <bs.Button bsSize="small" onClick={this.filter}>Apply domain structure filter</bs.Button>
+      filterLink = (
+        <a onClick={this.filter}>Protein Domains</a>
       );
     }
     return (
-      <div>{listOfDomains}{filterButton}</div>
+      <span>{filterLink}</span>
     );
   }
 });

@@ -91,6 +91,14 @@ module.exports = Reflux.createStore({
     this.search();
   },
 
+  moreResults: function(howManyMore) {
+    var listRt = this.state.query.resultTypes.list;
+    if(listRt) {
+      listRt.rows += howManyMore;
+    }
+    this.search();
+  },
+
   searchComplete: function (results) {
     console.log('Got data: ', results);
 
