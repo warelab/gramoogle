@@ -4,12 +4,12 @@
   .results-list {
     &:extend(.list-unstyled all);
     .result {
-      padding-top: @padding-base-vertical;
+      padding: @padding-base-vertical (@padding-base-horizontal - 1px);
 
       .gene-name {
         .glyphicon {
           color: @gramene-orange;
-          font-size: smaller;
+          font-size: @padding-large-horizontal;
         }
 
         a {
@@ -17,10 +17,15 @@
         }
       }
 
+      .gene-description {
+        padding-left: @padding-large-horizontal;
+      }
+
       .result-links {
         &:extend(.list-inline all);
 
         padding-left: @padding-large-horizontal;
+        margin-left: 0;
 
         .result-gene-detail-name {
           padding: @padding-base-vertical @padding-base-horizontal;
@@ -44,13 +49,13 @@
 
       .visible-detail {
         border: 1px solid @gramene-darkgreen;
-        margin-left: calc(@padding-base-horizontal - 1px);
-        margin-right: @padding-base-horizontal;
+        margin-left: @padding-large-horizontal;
+        margin-right: @padding-large-horizontal;
         padding: @padding-base-vertical @padding-base-horizontal;
       }
 
       .expanded-details {
-        padding: @padding-large-vertical 0;
+        padding: @padding-large-vertical @padding-large-horizontal;
 
         .expanded-detail {
           padding: @padding-large-vertical 0;
@@ -80,7 +85,7 @@
       margin-top: @padding-large-vertical;
       padding: @padding-large-vertical @padding-small-horizontal;
       .gene-name {
-        margin-top: 0;
+        margin-top: @padding-base-vertical - 1px;
       }
     }
   }

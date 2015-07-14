@@ -139,7 +139,7 @@ var Result = React.createClass({
           <a onClick={this.toggleExpanded}>{gene.name}</a>
           &nbsp;<small>{gene.species}</small>
         </h3>
-        <p>{gene.description}</p>
+        <p className="gene-description">{gene.description}</p>
         {content}
       </li>
     );
