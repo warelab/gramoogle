@@ -90,9 +90,8 @@ var DallianceBrowser = React.createClass({
     return (
       <bs.Row>
         <bs.Col xs={12} md={12}>
-          <a className="biodalliance-link-to-ensembl" href={ensemblUrl}>
-            <div id={gene.id + 'Browser'}></div>
-          </a>
+          <div id={gene.id + 'Browser'}></div>
+          <a className="biodalliance-link-to-ensembl" href={ensemblUrl}>Ensembl Gene view</a>
         </bs.Col>
       </bs.Row>
     );

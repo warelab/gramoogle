@@ -24,14 +24,17 @@ var ResultsList = React.createClass({
     QueryActions.moreResults(20);
   },
   render: function () {
-    var list = this.props.results.list;
-    if(list) {
+    var list, markup;
+
+    list = this.props.results.list;
+    if(list && list.length) {
       var results = list.map(function(result) {
         return (
           <Result key={result.id} gene={result} />
         );
       });
-      return (
+
+      markup = (
         <div className="results-list-container">
           <ol className="results-list">
             {results}
@@ -44,10 +47,11 @@ var ResultsList = React.createClass({
         </div>
       );
     }
+    else {
+      markup = (<p></p>);
+    }
 
-    return (
-      <p>No results</p>
-    )
+    return markup;
   }
 });
 module.exports = ResultsList;

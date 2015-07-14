@@ -18,8 +18,8 @@ module.exports = React.createClass({
         });
         return (
           <tr>
-            <td>{displayName}</td>
-            <td><ol className="xref-id-list">{vals}</ol></td>
+            <td className="xref-name-col">{displayName}</td>
+            <td className="xref-value-col"><ol className="xref-id-list">{vals}</ol></td>
           </tr>
         );
       })
