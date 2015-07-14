@@ -8,22 +8,16 @@ module.exports = React.createClass({
   componentWillMount: function() {
     this.xrefs = _(this.props.gene)
       .pick(function(val, name) {
-        return name.indexOf('_xref') !== -1;
-      })
-      .pick(function(val, name) {
-        name = name.replace('_xrefs','');
         return dbxrefs.isKnown(name);
       })
       .map(function(val, name) {
-        name = name.replace('_xrefs','');
-        console.log(name,val);
         var xref = dbxrefs.fetch(name);
         var displayName = xref.label,
           vals = val.map(function(item) {
             var url = xref.url(item);
-          return (
-            <li><a href={url}>{item}</a></li>
-          );
+            return (
+              <li><a href={url}>{item}</a></li>
+            );
         });
         return (
           <tr>
