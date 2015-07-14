@@ -1,6 +1,7 @@
 var React = require('react');
 var _ = require('lodash');
 var bs = require('react-bootstrap');
+var dbxrefs = require('gramene-dbxrefs');
 
 module.exports = React.createClass({
 
@@ -9,11 +10,19 @@ module.exports = React.createClass({
       .pick(function(val, name) {
         return name.indexOf('_xref') !== -1;
       })
+      .pick(function(val, name) {
+        name = name.replace('_xrefs','');
+        return dbxrefs.isKnown(name);
+      })
       .map(function(val, name) {
-        var displayName = name.substring(0, name.indexOf('_')),
+        name = name.replace('_xrefs','');
+        console.log(name,val);
+        var xref = dbxrefs.fetch(name);
+        var displayName = xref.label,
           vals = val.map(function(item) {
+            var url = xref.url(item);
           return (
-            <li><a>{item}</a></li>
+            <li><a href={url}>{item}</a></li>
           );
         });
         return (
