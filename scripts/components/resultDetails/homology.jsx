@@ -2,7 +2,6 @@
 
 var React = require('react');
 var Reflux = require('reflux');
-var bs = require('react-bootstrap');
 var queryActions = require('../../actions/queryActions');
 var detailsActions = require('../../actions/detailsActions');
 var detailsStore = require('../../stores/detailsStore');
@@ -29,9 +28,7 @@ var Homology = React.createClass({
 
   render: function () {
     return (
-      <li>
-        <bs.Button bsSize="small" onClick={this.filter}>Only homologs</bs.Button>
-      </li>
+      <a onClick={this.filter}>Only homologs</a>
     );
   }
 });

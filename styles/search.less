@@ -44,6 +44,7 @@ ul.search-box-nav {
     color: @gramene-darkgreen;
     background-color: @gramene-offwhite;
     padding: @padding-small-vertical @padding-xs-horizontal;
+    margin-bottom: @padding-xs-horizontal;
 
     button {
       margin-left: @padding-xs-horizontal;
@@ -52,7 +53,7 @@ ul.search-box-nav {
     }
   }
 
-  .search-filter:not(:first-child) {
-    margin-left: @padding-xs-horizontal;
+  .search-filter:not(:last-child) {
+    margin-right: @padding-xs-horizontal;
   }
 }

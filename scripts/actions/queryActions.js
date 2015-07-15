@@ -16,6 +16,9 @@ var QueryActions = Reflux.createActions([
   'setAllFilters',
   'removeFilter',
   'toggleFilter'
+
+  // list scroll actions
+  'moreResults'
 ]);
 
 module.exports = QueryActions;
