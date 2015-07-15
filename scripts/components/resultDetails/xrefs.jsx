@@ -7,26 +7,26 @@ module.exports = React.createClass({
 
   componentWillMount: function() {
     this.xrefs = _(this.props.gene)
-      .pick(function(val, name) {
-        return dbxrefs.isKnown(name);
-      })
-      .map(function(val, name) {
-        var xref = dbxrefs.fetch(name);
-        var displayName = xref.label,
+    .pick(function(val, name) {
+      return dbxrefs.isKnown(name);
+    })
+    .map(function(val, name) {
+      var xref = dbxrefs.fetch(name);
+      var displayName = xref.label,
           vals = val.map(function(item) {
             var url = xref.url(item);
             return (
               <li><a href={url}>{item}</a></li>
             );
-        });
-        return (
-          <tr>
-            <td className="xref-name-col">{displayName}</td>
-            <td className="xref-value-col"><ol className="xref-id-list">{vals}</ol></td>
-          </tr>
-        );
-      })
-      .value();
+          });
+      return (
+        <tr>
+          <td className="xref-name-col">{displayName}</td>
+          <td className="xref-value-col"><ol className="xref-id-list">{vals}</ol></td>
+        </tr>
+      );
+    })
+    .value();
   },
 
   render: function() {
