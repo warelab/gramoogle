@@ -27,12 +27,12 @@ var SearchFilter = React.createClass({
   },
   render: function() {
     var term = this.props.term;
-    var thumb = term.include ? '+' : '-'
+    var thumb = term.include ? 'include' : 'exclude'
     return (
       <li className="search-filter">
-        <Button bsSize="xsmall" onClick={this.toggleFilter}>{thumb}</Button>
-        {term.category} | {term.term}
-        <Button bsSize="xsmall" onClick={this.removeFilter}>&times;</Button>
+        {term.category} | &nbsp;
+        <a className={thumb} onClick={this.toggleFilter}>{term.term}</a> &nbsp;
+        <a onClick={this.removeFilter}><bs.Glyphicon glyph='remove' /></a>
       </li>
     );
   }
