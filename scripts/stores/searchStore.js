@@ -70,13 +70,13 @@ module.exports = Reflux.createStore({
   toggleFilter: function(filter) {
     console.log('toggleFilter', arguments);
     delete this.state.query.filters[filter.fq];
-    if (filter.include) {
-      filter.include=false;
-      filter.fq = '-'+filter.fq;
+    if (filter.exclude) {
+      filter.exclude=false;
+      filter.fq = filter.fq.replace(/-/,'');
     }
     else {
-      filter.include=true;
-      filter.fq = filter.fq.replace(/-/,'');
+      filter.exclude=true;
+      filter.fq = '-'+filter.fq;
     }
     this.state.query.filters[filter.fq] = filter;
     this.search();

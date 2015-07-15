@@ -28,7 +28,7 @@ var Term = React.createClass({
     // shorten the term
     suggestedTerm.term = suggestedTerm.term.replace(/.*\|\s/,'');
 
-    suggestedTerm.include = true; // so we can toggle between include/exclude
+    suggestedTerm.exclude = false; // so we can toggle between include/exclude
 
     // Notify the rest of the app
     queryActions.setFilter(this.props.suggestedTerm);

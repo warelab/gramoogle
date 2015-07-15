@@ -36,7 +36,7 @@ var ResultsVisualization = React.createClass({
     queryActions.setFilter({
       fq: '-NCBITaxon_ancestors:'+taxonNode.model.id,
       category: 'Taxonomy',
-      include: false,
+      exclude: true,
       term: taxonNode.model.name
     });
   },

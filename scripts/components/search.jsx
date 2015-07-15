@@ -27,7 +27,7 @@ var SearchFilter = React.createClass({
   },
   render: function() {
     var term = this.props.term;
-    var thumb = term.include ? 'include' : 'exclude'
+    var thumb = term.exclude ? 'exclude' : 'include'
     return (
       <li className="search-filter">
         {term.category} | &nbsp;
