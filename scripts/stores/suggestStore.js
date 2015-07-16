@@ -59,6 +59,7 @@ module.exports = Reflux.createStore({
 
     promise
       .then(this.removeAcceptedSuggestions)
+      .then(this.addQueryTermFactory(queryString))
       .then(this.addCategoryClassNames)
       .then(this.findTopSuggestions)
       .then(this.suggestComplete)
@@ -73,6 +74,27 @@ module.exports = Reflux.createStore({
       });
     });
     return result;
+  },
+
+  addQueryTermFactory: function(queryString) {
+    return function(data) {
+      data.splice(0,0,{
+        label: 'Text search',
+        suggestions: [
+          {
+            term: queryString,
+            fq: 'text:' + queryString,
+            label: 'Exactly `' + queryString + '`'
+          },
+          {
+            term: queryString + '*',
+            fq: 'text:' + queryString + '*',
+            label: 'Starts with `' + queryString + '`'
+          }
+        ]
+      });
+      return data;
+    }.bind(this);
   },
 
   addCategoryClassNames: function(data) {
