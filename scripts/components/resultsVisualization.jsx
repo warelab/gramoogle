@@ -35,7 +35,9 @@ var ResultsVisualization = React.createClass({
     console.log("handleTaxonomySubtreeCollapse",taxonNode);
     queryActions.setFilter({
       fq: '-NCBITaxon_ancestors:'+taxonNode.model.id,
-      term: 'exclude NCBITaxon:'+taxonNode.model.id+' | '+taxonNode.model.name
+      category: 'Taxonomy',
+      exclude: true,
+      term: taxonNode.model.name
     });
   },
 
