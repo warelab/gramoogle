@@ -12,13 +12,29 @@ module.exports = React.createClass({
     })
     .map(function(val, name) {
       var xref = dbxrefs.fetch(name);
-      var displayName = xref.label,
-          vals = val.map(function(item) {
-            var url = xref.url(item);
-            return (
-              <li><a href={url}>{item}</a></li>
-            );
-          });
+      return {url: xref.url, label: xref.label, val: val};
+      //   urls: val.map(function(item) {
+      //           var url = xref.url(item);
+      //             return (
+      //               <li><a href={url}>{item}</a></li>
+      //             );
+      //         })
+      // };
+    })
+    .groupBy('label')
+    .map(function(members, displayName) {
+      var vals = [];
+      members.forEach(function(m) {
+        vals.push(m.val)
+      });
+      vals = _.flatten(vals,true).sort();
+      vals = _.uniq(vals,true)
+      .map(function(item) {
+        var url = members[0].url(item);
+        return (
+          <li><a href={url}>{item}</a></li>
+        )
+      });
       return (
         <tr>
           <td className="xref-name-col">{displayName}</td>
