@@ -44,7 +44,10 @@ ul.search-box-nav {
     color: @gramene-darkgreen;
     background-color: @gramene-offwhite;
     padding: @padding-small-vertical @padding-xs-horizontal;
-
+    margin-bottom: @padding-xs-horizontal;
+    .exclude {
+      text-decoration: line-through;
+    }
     button {
       margin-left: @padding-xs-horizontal;
       border-color: @gramene-orange;
@@ -52,7 +55,7 @@ ul.search-box-nav {
     }
   }
 
-  .search-filter:not(:first-child) {
-    margin-left: @padding-xs-horizontal;
+  .search-filter:not(:last-child) {
+    margin-right: @padding-xs-horizontal;
   }
 }

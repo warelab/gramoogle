@@ -29,9 +29,11 @@
     "react-bootstrap": "^0.22.6",
     "reflux": "^0.2.5",
     "rgb-hex": "^1.0.0",
-    "search": "git://github.com/warelab/gramene-search-client.git#master",
-    "taxonomy": "git://github.com/warelab/gramene-taxonomy-with-genomes.git#master",
-    "gramene-search-vis": "git://github.com/warelab/gramene-search-vis.git"
+    "gramene-search-client": "git://github.com/warelab/gramene-search-client.git#master",
+    "gramene-taxonomy-with-genomes": "git://github.com/warelab/gramene-taxonomy-with-genomes.git#master",
+    "gramene-search-vis": "git://github.com/warelab/gramene-search-vis.git",
+    "gramene-dbxrefs": "git://github.com/warelab/gramene-dbxrefs.git",
+    "dalliance": "git://github.com/ajo2995/dalliance.git#master"
   },
   "devDependencies": {
     "grunt": "^0.4.5",

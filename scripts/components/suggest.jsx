@@ -25,6 +25,11 @@ var Term = React.createClass({
     // remove highlighting now.
     suggestedTerm.term = suggestedTerm.term.replace(/<\/?em>/g, '');
 
+    // shorten the term
+    suggestedTerm.term = suggestedTerm.term.replace(/.*\|\s/,'');
+
+    suggestedTerm.exclude = false; // so we can toggle between include/exclude
+
     // Notify the rest of the app
     queryActions.setFilter(this.props.suggestedTerm);
     queryActions.removeQueryString();

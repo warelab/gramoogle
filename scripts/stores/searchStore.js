@@ -67,6 +67,21 @@ module.exports = Reflux.createStore({
     this.search();
   },
 
+  toggleFilter: function(filter) {
+    console.log('toggleFilter', arguments);
+    delete this.state.query.filters[filter.fq];
+    if (filter.exclude) {
+      filter.exclude=false;
+      filter.fq = filter.fq.replace(/-/,'');
+    }
+    else {
+      filter.exclude=true;
+      filter.fq = '-'+filter.fq;
+    }
+    this.state.query.filters[filter.fq] = filter;
+    this.search();
+  },
+
   setAllFilters: function(filters) {
     console.log('setAllFilters', arguments);
     this.state.query.filters = filters;
@@ -88,6 +103,14 @@ module.exports = Reflux.createStore({
   removeQueryString: function() {
     console.log('removeQueryString');
     this.state.query.q = '';
+    this.search();
+  },
+
+  moreResults: function(howManyMore) {
+    var listRt = this.state.query.resultTypes.list;
+    if(listRt) {
+      listRt.rows += howManyMore;
+    }
     this.search();
   },
 
