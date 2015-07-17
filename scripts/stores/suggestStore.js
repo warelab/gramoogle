@@ -78,21 +78,31 @@ module.exports = Reflux.createStore({
 
   addQueryTermFactory: function(queryString) {
     return function(data) {
-      data.splice(0,0,{
-        label: 'Text search',
-        suggestions: [
-          {
-            term: queryString,
-            fq: 'text:' + queryString,
-            label: 'Exactly `' + queryString + '`'
-          },
-          {
-            term: queryString + '*',
-            fq: 'text:' + queryString + '*',
-            label: 'Starts with `' + queryString + '`'
-          }
-        ]
+      var exact, beginsWith, textCategory;
+      
+      exact = {
+        term: 'Exactly "' + queryString + '"',
+        fq: 'text:' + queryString,
+        label: 'Exactly "' + queryString + '"'
+      };
+        
+      beginsWith = {
+        term: 'Starts with "' + queryString + '"',
+        fq: 'text:' + queryString + '*',
+        label: 'Starts with "' + queryString + '"'
+      };
+      
+      textCategory = _.find(data, function(category) {
+        return category.label === 'Text search';
       });
+      
+      _.remove(textCategory.suggestions, function(suggestion) {
+        return suggestion.label === queryString;
+      });
+      
+      // .splice mutates the existing array.
+      textCategory.suggestions.splice(0, 0, exact, beginsWith);
+      
       return data;
     }.bind(this);
   },
