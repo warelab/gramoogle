@@ -94,18 +94,6 @@ module.exports = Reflux.createStore({
     this.search();
   },
 
-  setQueryString: function (newQueryString: string) {
-    console.log('setQueryString', arguments);
-    this.state.query.q = newQueryString;
-    this.search();
-  },
-
-  removeQueryString: function() {
-    console.log('removeQueryString');
-    this.state.query.q = '';
-    this.search();
-  },
-
   moreResults: function(howManyMore) {
     var listRt = this.state.query.resultTypes.list;
     if(listRt) {

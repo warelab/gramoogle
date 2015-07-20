@@ -59,6 +59,7 @@ module.exports = Reflux.createStore({
 
     promise
       .then(this.removeAcceptedSuggestions)
+      .then(this.addQueryTermFactory(queryString))
       .then(this.addCategoryClassNames)
       .then(this.findTopSuggestions)
       .then(this.suggestComplete)
@@ -73,6 +74,37 @@ module.exports = Reflux.createStore({
       });
     });
     return result;
+  },
+
+  addQueryTermFactory: function(queryString) {
+    return function(data) {
+      var exact, beginsWith, textCategory;
+      
+      exact = {
+        term: 'Exactly "' + queryString + '"',
+        fq: 'text:' + queryString,
+        label: 'Exactly "' + queryString + '"'
+      };
+        
+      beginsWith = {
+        term: 'Starts with "' + queryString + '"',
+        fq: 'text:' + queryString + '*',
+        label: 'Starts with "' + queryString + '"'
+      };
+      
+      textCategory = _.find(data, function(category) {
+        return category.label === 'Text search';
+      });
+      
+      _.remove(textCategory.suggestions, function(suggestion) {
+        return suggestion.label === queryString;
+      });
+      
+      // .splice mutates the existing array.
+      textCategory.suggestions.splice(0, 0, exact, beginsWith);
+      
+      return data;
+    }.bind(this);
   },
 
   addCategoryClassNames: function(data) {

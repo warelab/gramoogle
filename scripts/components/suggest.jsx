@@ -57,17 +57,19 @@ var SuggestCategory = React.createClass({
     category: React.PropTypes.object.isRequired
   },
   render: function () {
-    var category = this.props.category;
-    var categorySuggestions = category.suggestions.map(function (suggestedTerm) {
+    var category, categorySuggestions, listClassName;
+    category = this.props.category;
+    categorySuggestions = category.suggestions.map(function (suggestedTerm) {
       return (
         <Term suggestedTerm={suggestedTerm} />
       );
     });
+    listClassName = 'terms ' + category.className;
 
     return (
       <li className="category">
         <h3>{category.label}</h3>
-        <ul className="terms {category.className}">
+        <ul className={listClassName}>
           {categorySuggestions}
         </ul>
       </li>
