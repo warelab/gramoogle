@@ -29,6 +29,13 @@ var ResultsVisualization = React.createClass({
   handleTreeRootChange: function (taxonNode) {
     console.log("handleTaxonomyRootChange",taxonNode);
     // TODO: clobber other positive NCBITaxon_ancestors filters?
+    var fq = 'NCBITaxon_ancestors:'+taxonNode.model.id;
+    queryActions.setFilter({
+      fq: fq,
+      category: 'Taxonomy',
+      exclude: false,
+      term: taxonNode.model.name
+    });
   },
   
   handleSubtreeCollapse: function (taxonNode) {

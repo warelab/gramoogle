@@ -63,8 +63,10 @@ module.exports = Reflux.createStore({
 
   setFilter: function(filter) {
     console.log('setFilter', arguments);
-    this.state.query.filters[filter.fq] = filter;
-    this.search();
+    if (!this.state.query.filters.hasOwnProperty(filter.fq)) {
+      this.state.query.filters[filter.fq] = filter;
+      this.search();
+    }
   },
 
   toggleFilter: function(filter) {
@@ -93,7 +95,6 @@ module.exports = Reflux.createStore({
     delete this.state.query.filters[filter.fq];
     this.search();
   },
-
   moreResults: function(howManyMore) {
     var listRt = this.state.query.resultTypes.list;
     if(listRt) {
