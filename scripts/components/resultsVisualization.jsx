@@ -26,16 +26,18 @@ var ResultsVisualization = React.createClass({
     console.log("handleGeneSelection",bins);
   },
 
-  handleTreeRootChange: function (taxonNode) {
-    console.log("handleTaxonomyRootChange",taxonNode);
+  handleTreeRootChange: function (newRoot, oldRoot) {
+    console.log("handleTaxonomyRootChange",newRoot,oldRoot);
     // TODO: clobber other positive NCBITaxon_ancestors filters?
-    var fq = 'NCBITaxon_ancestors:'+taxonNode.model.id;
-    queryActions.setFilter({
-      fq: fq,
-      category: 'Taxonomy',
-      exclude: false,
-      term: taxonNode.model.name
-    });
+    queryActions.removeFilter({fq: 'NCBITaxon_ancestors:'+oldRoot.model.id});
+    if (newRoot.id != "root/Eukaryota") {
+      queryActions.setFilter({
+        fq: 'NCBITaxon_ancestors:'+newRoot.model.id,
+        category: 'Taxonomy',
+        exclude: false,
+        term: newRoot.model.name
+      });
+    }
   },
   
   handleSubtreeCollapse: function (taxonNode) {

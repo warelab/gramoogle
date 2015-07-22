@@ -92,9 +92,12 @@ module.exports = Reflux.createStore({
 
   removeFilter: function(filter) {
     console.log('removeFilter', arguments);
-    delete this.state.query.filters[filter.fq];
-    this.search();
+    if (this.state.query.filters.hasOwnProperty(filter.fq)) {
+      delete this.state.query.filters[filter.fq];
+      this.search();
+    }
   },
+  
   moreResults: function(howManyMore) {
     var listRt = this.state.query.resultTypes.list;
     if(listRt) {
