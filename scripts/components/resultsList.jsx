@@ -24,7 +24,7 @@ var ResultsList = React.createClass({
     QueryActions.moreResults(20);
   },
   render: function () {
-    var list, markup;
+    var list, markup, more;
 
     list = this.props.results.list;
     if(list && list.length) {
@@ -34,16 +34,22 @@ var ResultsList = React.createClass({
         );
       });
 
-      markup = (
-        <div className="results-list-container">
-          <ol className="results-list">
-            {results}
-          </ol>
+      if (list.length < this.props.results.metadata.count) {
+        more = (
           <ul className="more-results">
             <li>
               <a onClick={this.moreResults}>More genes</a>
             </li>
           </ul>
+        );
+      }
+
+      markup = (
+        <div className="results-list-container">
+          <ol className="results-list">
+            {results}
+          </ol>
+          {more}
         </div>
       );
     }
