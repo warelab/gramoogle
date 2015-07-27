@@ -31,7 +31,7 @@
     "rgb-hex": "^1.0.0",
     "gramene-search-client": "git://github.com/warelab/gramene-search-client.git#master",
     "gramene-taxonomy-with-genomes": "git://github.com/warelab/gramene-taxonomy-with-genomes.git#master",
-    "gramene-search-vis": "git://github.com/warelab/gramene-search-vis.git#dev",
+    "gramene-search-vis": "git://github.com/warelab/gramene-search-vis.git#master",
     "gramene-dbxrefs": "git://github.com/warelab/gramene-dbxrefs.git",
     "dalliance": "git://github.com/ajo2995/dalliance.git#master"
   },
