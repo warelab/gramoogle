@@ -7,6 +7,7 @@ var VisualizationActions = require('../actions/visActions');
 var visualizationStore = require('../stores/visualizationStore');
 var _ = require('lodash');
 var Vis = require('gramene-search-vis').Vis;
+var RegionBrowser = require('./regionBrowser.jsx');
 
 var ResultsVisualization = React.createClass({
   mixins: [
@@ -24,11 +25,21 @@ var ResultsVisualization = React.createClass({
 
   handleGeneSelection: function (bins) {
     console.log("handleGeneSelection",bins);
+    VisualizationActions.selectRegion(bins);
   },
 
-  handleTreeRootChange: function (taxonNode) {
-    console.log("handleTaxonomyRootChange",taxonNode);
+  handleTreeRootChange: function (newRoot, oldRoot) {
+    console.log("handleTaxonomyRootChange",newRoot,oldRoot);
     // TODO: clobber other positive NCBITaxon_ancestors filters?
+    queryActions.removeFilter({fq: 'NCBITaxon_ancestors:'+oldRoot.model.id});
+    if (newRoot.id != "root/Eukaryota") {
+      queryActions.setFilter({
+        fq: 'NCBITaxon_ancestors:'+newRoot.model.id,
+        category: 'Taxonomy',
+        exclude: false,
+        term: newRoot.model.name
+      });
+    }
   },
   
   handleSubtreeCollapse: function (taxonNode) {
@@ -49,10 +60,15 @@ var ResultsVisualization = React.createClass({
   },
 
   render: function () {
-    var taxonomy, summary;
+    var taxonomy, summary, regionBrowser;
 
     if (this.state.visData) {
       taxonomy = this.state.visData.taxonomy;
+      if (this.state.visData.browser)  {
+        regionBrowser = (
+          <RegionBrowser settings={this.state.visData.browser} />
+        )
+      }
       summary = (
         <div>
           <Vis
@@ -61,6 +77,7 @@ var ResultsVisualization = React.createClass({
             onSubtreeCollapse={this.handleSubtreeCollapse}
             onSubtreeExpand={this.handleSubtreeExpand}
             onTreeRootChange={this.handleTreeRootChange} />
+          {regionBrowser}
         </div>
       );
     }
