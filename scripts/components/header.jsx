@@ -3,6 +3,7 @@
 var React = require('react');
 var Search = require('./search.jsx');
 var Analysis = require('./analysis.jsx');
+var QueryActions = require('../actions/queryActions');
 
 var bs = require('react-bootstrap');
 var Navbar = bs.Navbar,
@@ -28,11 +29,14 @@ var Header = React.createClass({
     };
     this.setState(newState);
   },
+  removeAllFilters: function() {
+    QueryActions.removeAllFilters();
+  },
   render: function() {
     var search = this.props.search;
 
     var logo = (
-      <a className="logo-link"><div className="logo"></div></a>
+      <a className="logo-link" onClick={this.removeAllFilters}><div className="logo"></div></a>
     );
 
     var analysis;
