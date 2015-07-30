@@ -39,11 +39,17 @@ module.exports = React.createClass({
 
         <h2>Search</h2>
 
-        <p>We have a new search engine that you can use to ask sophisticated questions
-          about the genes across all of our databases concerning crop and model plant genomes. For example:</p>
+        <p>We have a new, easy to use search engine.
+          Try typing into the box at the top of the screen!</p>
+
+        <p>You can use to ask sophisticated questions
+          about the genes across all of our databases
+          concerning crop and model plant genomes. For example:</p>
+
         <ul>
           {examples}
         </ul>
+
         <h2>Specialized Services</h2>
 
         <p>Alternatively, you can access the underlying databases directly:</p>
