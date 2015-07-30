@@ -97,6 +97,11 @@ module.exports = Reflux.createStore({
       this.search();
     }
   },
+
+  removeAllFilters: function() {
+    console.log('removeAllFilters');
+    this.setAllFilters({});
+  },
   
   moreResults: function(howManyMore) {
     var listRt = this.state.query.resultTypes.list;

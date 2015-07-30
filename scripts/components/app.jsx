@@ -17,12 +17,10 @@ var App = React.createClass({
 
   render: function () {
     var search = this.state.search,
-        showResults = !!_.size(search.query.filters),
-        content;
-
-    content = showResults ?
-      <Results results={search.results}/> :
-      <Welcome/>
+      showResults = !!_.size(this.state.search.query.filters),
+      content = showResults ?
+        <Results results={search.results}/> :
+        <Welcome/>
     ;
 
     return (
