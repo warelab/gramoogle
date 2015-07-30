@@ -4,6 +4,7 @@ var React = require('react');
 var Reflux = require('reflux');
 var suggestStore = require('../stores/suggestStore');
 var queryActions = require('../actions/queryActions');
+var _ = require('lodash');
 
 var bs = require('react-bootstrap');
 
@@ -11,12 +12,12 @@ var Term = React.createClass({
   propTypes: {
     suggestedTerm: React.PropTypes.object.isRequired
   },
-  acceptSuggestion: function() {
+  acceptSuggestion: function () {
     var suggestedTerm = this.props.suggestedTerm;
 
     console.log('user wants', suggestedTerm);
 
-    if(suggestedTerm.weight == 0) {
+    if (suggestedTerm.weight == 0) {
       console.log('not adding filter for ' + suggestedTerm.term + ' because it will have no results');
       return;
       // TODO maybe tell the user?
@@ -26,7 +27,7 @@ var Term = React.createClass({
     suggestedTerm.term = suggestedTerm.term.replace(/<\/?em>/g, '');
 
     // shorten the term
-    suggestedTerm.term = suggestedTerm.term.replace(/.*\|\s/,'');
+    suggestedTerm.term = suggestedTerm.term.replace(/.*\|\s/, '');
 
     suggestedTerm.exclude = false; // so we can toggle between include/exclude
 
@@ -41,12 +42,12 @@ var Term = React.createClass({
     // Suggestions are meant to be ephemeral.)
     React.findDOMNode(this).className += " hidden";
   },
-  render: function() {
+  render: function () {
     var suggestion = this.props.suggestedTerm;
     var className = 'term' + (suggestion.weight == 0 ? ' empty' : '');
     return (
       <li className={className}>
-        <a onClick={this.acceptSuggestion} dangerouslySetInnerHTML={{__html:suggestion.term}} />
+        <a onClick={this.acceptSuggestion} dangerouslySetInnerHTML={{__html:suggestion.term}}/>
       </li>
     );
   }
@@ -57,11 +58,11 @@ var SuggestCategory = React.createClass({
     category: React.PropTypes.object.isRequired
   },
   render: function () {
-    var category, categorySuggestions, listClassName;
+    var category, categorySuggestions, listClassName, result;
     category = this.props.category;
     categorySuggestions = category.suggestions.map(function (suggestedTerm) {
       return (
-        <Term suggestedTerm={suggestedTerm} />
+        <Term suggestedTerm={suggestedTerm}/>
       );
     });
     listClassName = 'terms ' + category.className;
@@ -84,10 +85,10 @@ var Suggest = React.createClass({
   propTypes: {
     queryString: React.PropTypes.string.isRequired
   },
-  render: function() {
+  render: function () {
     var suggestions = this.state.suggestions;
 
-    if(!suggestions) {
+    if (!suggestions) {
       return (
         <bs.Panel className="suggestions">
           <p>Finding suggestions…</p>
@@ -95,11 +96,16 @@ var Suggest = React.createClass({
       );
     }
 
-    var suggestLayout = suggestions.map(function(category) {
-      return (
-        <SuggestCategory key={category.label} category={category} />
-      );
-    });
+    var suggestLayout = _(suggestions)
+      .filter(function (category) {
+        return !!category.suggestions.length;
+      })
+      .map(function (category) {
+        return (
+          <SuggestCategory key={category.label} category={category}/>
+        );
+      })
+      .value();
 
     return (
       <bs.Panel className="suggestions">
