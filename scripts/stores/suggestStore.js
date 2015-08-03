@@ -117,25 +117,29 @@ module.exports = Reflux.createStore({
   findTopSuggestions: function(data) {
 
     function defaultScoreFunc(suggestion) {
-      return suggestion.weight;
+      return suggestion.weight || 1;
+    }
+    function goScoreFunc(suggestion) {
+      return -suggestion.weight;
     }
     var scoreFuncs = {
       Taxonomy: function(suggestion) {
-        var defaultScore = defaultScoreFunc(suggestion);
+        var defaultScore = defaultScoreFunc(suggestion),
+            taxonomy = this.taxonomy || visualizationStore.taxonomy;
 
-        if(this.taxonomy) {
+        if(taxonomy) {
           var taxon_id = +suggestion.id.substring(10);
-          var taxon = this.taxonomy.indices.id[taxon_id];
-          var isASpecies = !!taxon.model.genome;
+          var taxon = taxonomy.indices.id[taxon_id];
+          var isASpecies = !taxon.children.length;
           return defaultScore * (isASpecies ? 1000 : 1);
         }
         else {
           return defaultScore;
         }
       }.bind(this),
-      'Gene ontology': function(suggestion) {
-        return -suggestion.weight;
-      }
+      'GO component': goScoreFunc,
+      'GO function': goScoreFunc,
+      'GO process': goScoreFunc
     };
 
     var top5 = _.chain(data)
