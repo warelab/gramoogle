@@ -39,8 +39,31 @@ module.exports = React.createClass({
 
         <h2>Search</h2>
 
-        <p>We have a new, easy to use search engine.
-          Try typing into the box at the top of the screen!</p>
+        <p>We have a new, easy to use search engine. <strong>
+          Try typing into the box at the top of the screen!</strong>
+          </p>
+
+        <h3>Features</h3>
+
+        <ol className="features">
+          <li>
+            <strong>Suggestions</strong>
+            <p>Suggested terms are provided as you type</p>
+            <img className="img-responsive" src="/assets/images/welcome/suggestions.png" />
+          </li>
+
+          <li>
+            <strong>Gene view</strong>
+            <p>A summary of available information about a gene and links to more in-depth resources.</p>
+            <img className="img-responsive" src="/assets/images/welcome/gene_view.png" />
+          </li>
+
+          <li>
+            <strong>Visualization</strong>
+            <p>Visualize the distribution of results across all genomes in Gramene</p>
+            <img className="img-responsive" src="/assets/images/welcome/vis.png" />
+          </li>
+        </ol>
 
         <p>You can use to ask sophisticated questions
           about the genes across all of our databases
@@ -50,14 +73,17 @@ module.exports = React.createClass({
           {examples}
         </ul>
 
-        <h2>Specialized Services</h2>
+        <h2>Gramene Portals</h2>
 
-        <p>Alternatively, you can access the underlying databases directly:</p>
+        <p>Alternatively, you can access the underlying data sources directly:</p>
         <ul>
-          <li>Gramene Ensembl</li>
-          <li>Plant Reactome</li>
-          <li>Ensembl Biomart</li>
-          <li>Archive (markers, QTLs, comparative maps)</li>
+          <li><a href="http://ensembl.gramene.org/genome_browser/index.html"><strong>Genome Browser</strong></a>: Browse gene annotations &amp; diversity data</li>
+          <li><a href="http://ensembl.gramene.org/Tools/Blast?db=core"><strong>BLAST</strong></a>: Align DNA &amp; protein sequences</li>
+          <li><a href="http://plantreactome.gramene.org"><strong>Plant Reactome</strong></a>: Browse metabolic &amp; regulatory pathways</li>
+          <li><a href="http://pathway.gramene.org"><strong>Pathways databases</strong></a>: BioCyc based cellular metabolic networks for 10 plant species</li>
+          <li><a href="http://www.gramene.org/biomart/martview"><strong>Gramene Mart</strong></a>: Customized data queries</li>
+          <li><a href="http://gramene.org/ftp-download"><strong>Bulk downloads</strong></a></li>
+          <li><a href="/archive">ARCHIVE</a> - Markers, Proteins and Ontology databases, QTLs, Comparative Maps</li>
         </ul>
       </div>
     );
