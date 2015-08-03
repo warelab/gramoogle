@@ -45,29 +45,36 @@ module.exports = React.createClass({
 
         <h3>Features</h3>
 
-        <ol className="features">
-          <li>
-            <strong>Suggestions</strong>
-            <p>Suggested terms are provided as you type</p>
-            <img className="img-responsive" src="/assets/images/welcome/suggestions.png" />
-          </li>
+        <div className="features row">
+          <div className="feature col-md-4">
+            <div className="well">
+              <strong>Suggestions</strong>
+              <p>Suggested terms are provided as you type:</p>
+              <img className="img-responsive" src="/assets/images/welcome/suggestions.png" />
+            </div>
+          </div>
 
-          <li>
-            <strong>Gene view</strong>
-            <p>A summary of available information about a gene and links to more in-depth resources.</p>
-            <img className="img-responsive" src="/assets/images/welcome/gene_view.png" />
-          </li>
+          <div className="feature col-md-4">
+            <div className="well">
+              <strong>Visualization</strong>
+              <p>See the distribution of results across all genomes:</p>
+              <img className="img-responsive" src="/assets/images/welcome/vis.png" />
+            </div>
+          </div>
 
-          <li>
-            <strong>Visualization</strong>
-            <p>Visualize the distribution of results across all genomes in Gramene</p>
-            <img className="img-responsive" src="/assets/images/welcome/vis.png" />
-          </li>
-        </ol>
+          <div className="feature col-md-4">
+            <div className="well">
+              <strong>Gene view</strong>
+              <p>Concise view of available information about a gene:</p>
+              <img className="img-responsive" src="/assets/images/welcome/gene_view.png" />
+            </div>
+          </div>
+        </div>
 
+        <h3>For Example</h3>
         <p>You can use to ask sophisticated questions
           about the genes across all of our databases
-          concerning crop and model plant genomes. For example:</p>
+          concerning crop and model plant genomes:</p>
 
         <ul>
           {examples}
