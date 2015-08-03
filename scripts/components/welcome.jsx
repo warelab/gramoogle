@@ -50,7 +50,7 @@ module.exports = React.createClass({
             <div className="well">
               <strong>Suggestions</strong>
               <p>Suggested terms are provided as you type:</p>
-              <img className="img-responsive" src="/assets/images/welcome/suggestions.png" />
+              <img className="img-responsive" src="assets/images/welcome/suggestions.png" />
             </div>
           </div>
 
@@ -58,7 +58,7 @@ module.exports = React.createClass({
             <div className="well">
               <strong>Visualization</strong>
               <p>See the distribution of results across all genomes:</p>
-              <img className="img-responsive" src="/assets/images/welcome/vis.png" />
+              <img className="img-responsive" src="assets/images/welcome/vis.png" />
             </div>
           </div>
 
@@ -66,7 +66,7 @@ module.exports = React.createClass({
             <div className="well">
               <strong>Gene view</strong>
               <p>Concise view of available information about a gene:</p>
-              <img className="img-responsive" src="/assets/images/welcome/gene_view.png" />
+              <img className="img-responsive" src="assets/images/welcome/gene_view.png" />
             </div>
           </div>
         </div>
