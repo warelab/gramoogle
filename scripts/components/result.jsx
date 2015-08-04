@@ -21,7 +21,7 @@ var ResultExpanded = React.createClass({
       var component = React.createElement(detail.reactClass, {gene: gene, expanded: true}),
         key = gene.id + '-exp-' + detail.name;
       return (
-        <div className="expanded-detail">
+        <div key={key} className="expanded-detail">
           <h4>{detail.name}</h4>
           {component}
         </div>

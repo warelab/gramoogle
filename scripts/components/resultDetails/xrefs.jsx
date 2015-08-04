@@ -75,8 +75,7 @@ var Xref = React.createClass({
   }
 });
 
-module.exports = React.createClass({
-
+var Xrefs = React.createClass({
   componentWillMount: function() {
     this.xrefs = _(this.props.gene)
     .pick(function(val, name) {
@@ -89,7 +88,7 @@ module.exports = React.createClass({
     .groupBy('label')
     .map(function(members, displayName) {
       return (
-        <Xref displayName={displayName} members={members} />
+        <Xref key={displayName} displayName={displayName} members={members} />
       )
     })
     .value();
@@ -109,3 +108,5 @@ module.exports = React.createClass({
     );
   }
 });
+
+module.exports = Xrefs;

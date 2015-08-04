@@ -61,8 +61,9 @@ var SuggestCategory = React.createClass({
     var category, categorySuggestions, listClassName, result;
     category = this.props.category;
     categorySuggestions = category.suggestions.map(function (suggestedTerm) {
+      var key = suggestedTerm.category + '-' + suggestedTerm.key;
       return (
-        <Term suggestedTerm={suggestedTerm}/>
+        <Term key={key} suggestedTerm={suggestedTerm}/>
       );
     });
     listClassName = 'terms ' + category.className;
