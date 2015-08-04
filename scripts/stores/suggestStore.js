@@ -46,10 +46,12 @@ module.exports = Reflux.createStore({
 
     if(cached) {
       console.log('got results for ' + queryString + ' from cache');
-      promise = Q(cached);
+      promise = Q(_.cloneDeep(cached));
     }
     else {
       promise = this.suggestPromise(queryString)
+        .then(this.addQueryTermFactory(queryString))
+        .then(this.addCategoryClassNames)
         .then(function addToCache(response) {
           this.cache.set(queryString, _.cloneDeep(response));
           return response;
@@ -59,8 +61,6 @@ module.exports = Reflux.createStore({
 
     promise
       .then(this.removeAcceptedSuggestions)
-      .then(this.addQueryTermFactory(queryString))
-      .then(this.addCategoryClassNames)
       .then(this.findTopSuggestions)
       .then(this.suggestComplete)
       .catch(this.suggestError);
@@ -77,7 +77,7 @@ module.exports = Reflux.createStore({
   },
 
   addQueryTermFactory: function(queryString) {
-    return function(data) {
+    return function addQueryTerm(data) {
       var exact, beginsWith, textCategory;
       
       exact = {
