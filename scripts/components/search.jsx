@@ -113,8 +113,9 @@ var TextSearch = React.createClass({
     }
 
     var filters = _.map(search.query.filters, function(term, fq) {
+      var key = term.category + '-' + term.term;
       return (
-        <SearchFilter term={term} />
+        <SearchFilter key={key} term={term} />
       )
     });
 
