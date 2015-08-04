@@ -9,6 +9,16 @@ var searchStore = require('../stores/searchStore');
 var QueryActions = require('../actions/queryActions');
 var _ = require('lodash');
 
+var Footer = React.createClass({
+  render: function() {
+    return (
+      <div className="footer">
+        <p>I am the footer</p>
+      </div>
+    )
+  }
+});
+
 var App = React.createClass({
 
   mixins: [
@@ -24,9 +34,12 @@ var App = React.createClass({
     ;
 
     return (
-      <div className="app container">
-        <Header search={search}/>
-        {content}
+      <div className="app">
+        <div className="container">
+          <Header search={search}/>
+          {content}
+        </div>
+        <Footer/>
       </div>
     );
   }
