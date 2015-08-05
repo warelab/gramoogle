@@ -3,10 +3,7 @@
 module.exports = function (grunt) {
   require('jit-grunt')(grunt);
 
-  grunt.loadNpmTasks('grunt-jest');
-  grunt.loadNpmTasks('grunt-jsxhint');
-  grunt.loadNpmTasks('grunt-jasmine-node');
-  grunt.loadNpmTasks('grunt-flow');
+  require('matchdep').filterAll('grunt-*').forEach(grunt.loadNpmTasks);
 
   grunt.initConfig({
     less: {
