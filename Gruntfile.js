@@ -40,7 +40,7 @@ module.exports = function (grunt) {
             debug: true
           },
           transform: [
-            ['reactify', {stripTypes: true}]
+            ['babelify']
           ]
         },
         src: './index.js',
@@ -49,7 +49,7 @@ module.exports = function (grunt) {
       production: {
         options: {
           transform: [
-            ['reactify', {stripTypes: true}],
+            ['babelify'],
             ['uglifyify', {global: true}]
           ],
           browserifyOptions: {
