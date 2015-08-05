@@ -54,6 +54,7 @@
     "jshint-stylish": "^1.0.1",
     "less-plugin-autoprefix": "^1.4.1",
     "matchdep": "^0.3.0",
+    "node-lessify": "0.0.10",
     "uglifyify": "^3.0.1"
   },
   "jest": {
