@@ -2,39 +2,15 @@
 
 module.exports = function (grunt) {
   require('jit-grunt')(grunt);
-
   require('matchdep').filterAll('grunt-*').forEach(grunt.loadNpmTasks);
 
   var lessifyOptions = {
-    compress: false,
-    yuicompress: true,
-    optimization: 2,
-    sourceMap: true,
-    sourceMapFileInline: true,
     plugins: [
       new (require('less-plugin-autoprefix'))({browsers: ["last 2 versions"]})
     ]
   };
 
   grunt.initConfig({
-    //less: {
-    //  development: {
-    //    options: {
-    //      compress: false,
-    //      yuicompress: true,
-    //      optimization: 2,
-    //      sourceMap: true,
-    //      sourceMapFileInline: true
-    //    },
-    //    plugins: [
-    //      new (require('less-plugin-autoprefix'))({browsers: ["last 2 versions"]})
-    //    ],
-    //    files: {
-    //      "build/style.css": "styles/main.less"
-    //    }
-    //  }
-    //},
-
     flow: {
       options: {
         style: 'color'
@@ -72,14 +48,6 @@ module.exports = function (grunt) {
     },
 
     watch: {
-      //styles: {
-      //  files: [],
-      //  tasks: ['less'],
-      //  options: {
-      //    nospawn: true
-      //  }
-      //},
-
       browserify: {
         files: ['scripts/**/*', 'styles/*.less'],
         tasks: ['browserify:dev']
