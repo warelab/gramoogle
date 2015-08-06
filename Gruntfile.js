@@ -70,14 +70,6 @@ module.exports = function (grunt) {
         specNameMatcher: 'spec'
       },
       all: ['spec/']
-    },
-
-    jshint: {
-      all: ['Gruntfile.js', 'scripts/**/*'],
-      options: {
-        jshintrc: true,
-        reporter: require('jshint-stylish')
-      }
     }
   });
 
