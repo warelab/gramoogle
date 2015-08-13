@@ -5,6 +5,9 @@
 // directly where necessary (at the moment, in components/browser.jsx)
 require('../node_modules/dalliance/js/exports');
 
+// import the styles (using lessify)
+require('../styles/main.less');
+
 var React = require('react');
 var App = React.createFactory(require('./components/app.jsx'));
 
