@@ -7,7 +7,7 @@ var _ = require('lodash');
 var analysisInventory = require('./analysisInterfaces/_inventory');
 
 var QueryActions = require('../actions/queryActions');
-var resultTypes = require('gramene-search-client').resultTypes;
+var resultTypes = require('@warelab/gramene-search-client').resultTypes;
 
 var resultType = resultTypes.get('tally');
 

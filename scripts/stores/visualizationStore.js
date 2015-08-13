@@ -5,7 +5,7 @@ var Q = require('q');
 var taxonomy = require('gramene-taxonomy-with-genomes');
 var VisualizationActions = require('../actions/visActions');
 var searchStore = require('./searchStore');
-var resultTypes = require('gramene-search-client').resultTypes;
+var resultTypes = require('@warelab/gramene-search-client').resultTypes;
 var QueryActions = require('../actions/queryActions');
 
 module.exports = Reflux.createStore({

@@ -7,7 +7,7 @@ var Q = require('q');
 var _ = require('lodash');
 
 var searchCache = require('./searchInterfaceCache');
-var searchInterface = require('gramene-search-client').client;
+var searchInterface = require('@warelab/gramene-search-client').client;
 
 function checkRequestedResultTypesArePresent(data: map): map {
   _.forIn(data.metadata.searchQuery.resultTypes,

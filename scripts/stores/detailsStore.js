@@ -5,7 +5,7 @@ var _ = require('lodash');
 var Q = require('q');
 var DetailsActions = require('../actions/detailsActions');
 var searchStore = require('./searchStore');
-var searchInterface = require('gramene-search-client').client;
+var searchInterface = require('@warelab/gramene-search-client').client;
 
 module.exports = Reflux.createStore({
   listenables: DetailsActions,
