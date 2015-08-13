@@ -17,7 +17,12 @@
     .logo {
       width: @logo-width;
       height: 100%;
-      background-image: url(../assets/images/gramene_logo.svg);
+      // now that we inline the compiled CSS into the page, the URL path
+      // is relative to the page, not the former build/style.css. So the path
+      // no longer starts with a `../` and thus is flagged by Webstorm as
+      // being invalid unless the following comment is included.
+      // noinspection CssUnknownTarget
+      background-image: url(assets/images/gramene_logo.svg);
       background-size: 100%;
       background-repeat: no-repeat;
       background-position: center;
