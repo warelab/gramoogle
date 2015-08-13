@@ -6,7 +6,7 @@ var React = require('react');
 var bs = require('react-bootstrap');
 var _ = require('lodash');
 var queryActions = require('../../actions/queryActions');
-var resultTypes = require('@warelab/gramene-search-client').resultTypes;
+var resultTypes = require('gramene-search-client').resultTypes;
 
 var properties = {
   '': {},

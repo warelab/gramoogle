@@ -4,7 +4,7 @@
 type Map = { [keys:string]: any };
 
 var React = require('react');
-var resultTypes = require('@warelab/gramene-search-client').resultTypes;
+var resultTypes = require('gramene-search-client').resultTypes;
 var QueryActions = require('../actions/queryActions');
 var _ = require('lodash');
 

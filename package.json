@@ -29,7 +29,7 @@
     "react-bootstrap": "^0.22.6",
     "reflux": "^0.2.5",
     "rgb-hex": "^1.0.0",
-    "@warelab/gramene-search-client": "^1.0.2",
+    "gramene-search-client": "^1.0.3",
     "gramene-taxonomy-with-genomes": "git://github.com/warelab/gramene-taxonomy-with-genomes.git#master",
     "gramene-search-vis": "git://github.com/warelab/gramene-search-vis.git#master",
     "gramene-dbxrefs": "git://github.com/warelab/gramene-dbxrefs.git",

@@ -2,7 +2,7 @@
 
 var React = require('react');
 var bs = require('react-bootstrap');
-var resultTypes = require('@warelab/gramene-search-client').resultTypes;
+var resultTypes = require('gramene-search-client').resultTypes;
 var QueryActions = require('../actions/queryActions');
 var Result = require('./result.jsx');
 
