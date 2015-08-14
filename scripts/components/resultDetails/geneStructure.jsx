@@ -1,7 +1,7 @@
 'use strict';
 
 var React = require('react');
-var Dalliance = require('dalliance').browser;
+var Dalliance = require('gramene-dalliance').browser;
 var bs = require('react-bootstrap');
 
 var DallianceBrowser = React.createClass({
