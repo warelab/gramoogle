@@ -18,9 +18,10 @@ var ResultExpanded = React.createClass({
     gene = this.props.gene;
 
     details = this.props.details.map(function(detail) {
-      var component = React.createElement(detail.reactClass, {gene: gene, expanded: true});
+      var component = React.createElement(detail.reactClass, {gene: gene, expanded: true}),
+        key = gene.id + '-exp-' + detail.name;
       return (
-        <div className="expanded-detail">
+        <div key={key} className="expanded-detail">
           <h4>{detail.name}</h4>
           {component}
         </div>
@@ -68,11 +69,12 @@ var ResultSmall = React.createClass({
     detailLinks = _.map(this.props.details, function(geneDetail) {
       var handler = handlerFactory(geneDetail),
         isActive = this.state.visibleDetail &&
-          geneDetail.name === this.state.visibleDetail.name,
+        geneDetail.name === this.state.visibleDetail.name,
+        key = gene.id + '-' + geneDetail.name,
         className = 'result-gene-detail-name' + (isActive ? ' active' : '');
 
       return (
-        <li className={className}>
+        <li key={key} className={className}>
           <a onClick={handler}>{geneDetail.name}</a>
         </li>
       );
@@ -98,7 +100,6 @@ var ResultSmall = React.createClass({
 });
 
 var Result = React.createClass({
-
   propTypes: {
     gene: React.PropTypes.object.isRequired
   },

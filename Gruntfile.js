@@ -2,31 +2,15 @@
 
 module.exports = function (grunt) {
   require('jit-grunt')(grunt);
+  require('matchdep').filterAll('grunt-*').forEach(grunt.loadNpmTasks);
 
-  grunt.loadNpmTasks('grunt-jest');
-  grunt.loadNpmTasks('grunt-jsxhint');
-  grunt.loadNpmTasks('grunt-jasmine-node');
-  grunt.loadNpmTasks('grunt-flow');
+  var lessifyOptions = {
+    plugins: [
+      new (require('less-plugin-autoprefix'))({browsers: ["last 2 versions"]})
+    ]
+  };
 
   grunt.initConfig({
-    less: {
-      development: {
-        options: {
-          compress: false,
-          yuicompress: true,
-          optimization: 2,
-          sourceMap: true,
-          sourceMapFileInline: true
-        },
-        plugins: [
-          new (require('less-plugin-autoprefix'))({browsers: ["last 2 versions"]})
-        ],
-        files: {
-          "build/style.css": "styles/main.less"
-        }
-      }
-    },
-
     flow: {
       options: {
         style: 'color'
@@ -40,7 +24,8 @@ module.exports = function (grunt) {
             debug: true
           },
           transform: [
-            ['reactify', {stripTypes: true}]
+            ['node-lessify', lessifyOptions],
+            ['babelify']
           ]
         },
         src: './index.js',
@@ -49,7 +34,8 @@ module.exports = function (grunt) {
       production: {
         options: {
           transform: [
-            ['reactify', {stripTypes: true}],
+            ['node-lessify', lessifyOptions],
+            ['babelify'],
             ['uglifyify', {global: true}]
           ],
           browserifyOptions: {
@@ -62,16 +48,8 @@ module.exports = function (grunt) {
     },
 
     watch: {
-      styles: {
-        files: ['styles/*.less'],
-        tasks: ['less'],
-        options: {
-          nospawn: true
-        }
-      },
-
       browserify: {
-        files: 'scripts/**/*',
+        files: ['scripts/**/*', 'styles/*.less'],
         tasks: ['browserify:dev']
       }
     },
@@ -92,18 +70,10 @@ module.exports = function (grunt) {
         specNameMatcher: 'spec'
       },
       all: ['spec/']
-    },
-
-    jshint: {
-      all: ['Gruntfile.js', 'scripts/**/*'],
-      options: {
-        jshintrc: true,
-        reporter: require('jshint-stylish')
-      }
     }
   });
 
   grunt.registerTask('test', ['jasmine_node']);
-  grunt.registerTask('default', ['less', 'browserify:dev', 'watch']);
-  grunt.registerTask('package', ['less', 'browserify:production', 'test']);
+  grunt.registerTask('default', ['browserify:dev', 'watch']);
+  grunt.registerTask('package', ['browserify:production', 'test']);
 };
