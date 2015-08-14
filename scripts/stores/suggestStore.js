@@ -130,7 +130,7 @@ module.exports = Reflux.createStore({
         if(taxonomy) {
           var taxon_id = +suggestion.id.substring(10);
           var taxon = taxonomy.indices.id[taxon_id];
-          var isASpecies = !taxon.children.length;
+          var isASpecies = !taxon.children || !taxon.children.length;
           return defaultScore * (isASpecies ? 1000 : 1);
         }
         else {
