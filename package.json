@@ -29,7 +29,7 @@
     "react-bootstrap": "^0.22.6",
     "reflux": "^0.2.5",
     "rgb-hex": "^1.0.0",
-    "gramene-search-client": "1.0.3",
+    "gramene-search-client": "1.0.4",
     "gramene-taxonomy-with-genomes": "1.0.0",
     "gramene-search-vis": "1.0.1",
     "gramene-dbxrefs": "1.0.0",
