@@ -18,7 +18,7 @@ var exampleQueries = [
   }
 ];
 
-module.exports = React.createClass({
+var Welcome = React.createClass({
   render: function () {
     var examples = _.map(exampleQueries, function(egQ, idx) {
       var resetFilters = function() {
@@ -96,3 +96,5 @@ module.exports = React.createClass({
     );
   }
 });
+
+module.exports = Welcome;

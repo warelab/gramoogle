@@ -4,12 +4,10 @@ var React = require('react');
 var Reflux = require('reflux');
 var QueryActions = require('../actions/queryActions');
 var _ = require('lodash');
-var filters = require('../config/filters');
 
 var SearchSummary = require('./searchSummary.jsx');
 var Suggest = require('./suggest.jsx');
 
-var constants = require('../config/constants');
 var bs = require('react-bootstrap');
 var Nav = bs.Nav,
   Button = bs.Button,
@@ -113,8 +111,9 @@ var TextSearch = React.createClass({
     }
 
     var filters = _.map(search.query.filters, function(term, fq) {
+      var key = term.category + '-' + term.term;
       return (
-        <SearchFilter term={term} />
+        <SearchFilter key={key} term={term} />
       )
     });
 
