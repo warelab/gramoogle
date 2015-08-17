@@ -1,5 +1,7 @@
 'use strict';
 
+var pkg = require('./package.json');
+
 module.exports = function (grunt) {
   require('jit-grunt')(grunt);
   require('matchdep').filterAll('grunt-*').forEach(grunt.loadNpmTasks);
@@ -71,6 +73,13 @@ module.exports = function (grunt) {
       },
       all: ['spec/']
     }
+  });
+
+  grunt.registerTask('buildIndexHtml', 'Build index.html for distribution.', function() {
+    console.log("Will copy <root>/index.html to build/index.html and maybe change it a bit.");
+    var indexHtml = grunt.file.read('./index.html');
+    console.log(indexHtml);
+    console.log(process.env);
   });
 
   grunt.registerTask('test', ['jasmine_node']);
