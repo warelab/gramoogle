@@ -5,17 +5,56 @@
     <title>Gramene Search</title>
     <script async src="//www.google-analytics.com/analytics.js"></script>
     <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function () {
+                        (i[r].q = i[r].q || []).push(arguments)
+                    }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                    m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
-      ga('create', 'UA-1624628-5', 'gramene.org');
-      ga('send', 'pageview');
+        ga('create', 'UA-1624628-5', 'gramene.org');
+        ga('send', 'pageview');
     </script>
 </head>
 <body>
-    <div id="content"></div>
-    <script src="build/bundle.js"></script>
+<div id="content"></div>
+<div class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-sm-12">
+                <p>Gramene is a collaborative effort among
+                    <a href="http://www.cshl.edu">Cold Spring Harbor Laboratory</a>,
+                    <a href="http://www.cgrb.oregonstate.edu">Oregon State University</a>, and
+                    <a href="http://www.ebi.ac.uk">EMBL-EBI</a>.
+                </p>
+
+                <p>
+                    Funding is provided by the
+                    <a href="http://www.nsf.gov/awardsearch/showAward?AWD_ID=1127112">NSF</a> and
+                    <a href="http://www.ars.usda.gov">USDA ARS</a>.
+                </p>
+            </div>
+            <div class="col-md-4 col-sm-12">
+                <div class="well">
+                    Build Info
+                    <ul class="buildInfo">
+                        <li>Version <a title="Release on github"
+                                       href="https://github.com/warelab/gramoogle/releases/tag/v1.0.2">1.0.2</a>
+                            (pkg.version)
+                        </li>
+                        <li>Build # (process.env.TRAVIS_BUILD_NUMBER) (process.env.TRAVIS_JOB_ID)</li>
+                        <li>Built by mulvaney (process.env.USER) on (date)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="build/bundle.js"></script>
 </body>
 </html>

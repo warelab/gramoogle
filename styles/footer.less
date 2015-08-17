@@ -1,4 +1,25 @@
 .footer {
+  color: @gramene-lightgreen;
+  background-color: @gramene-darkgreen;
+
+  font-size: smaller;
+
+  a {
+    color: @gramene-orange;
+  }
+
+  p {
+    padding-bottom: @padding-large-vertical;
+  }
+
+  .well {
+    margin-top: -2 * @padding-large-vertical;
+    background-color: lighten(@gramene-darkgreen, 5%);
+
+    ul {
+      padding-left: @padding-large-horizontal;
+    }
+  }
 
   * {
     margin-bottom: 0;
@@ -6,7 +27,8 @@
 
   margin-top: @padding-large-vertical * 5;
   border-top: @padding-large-vertical solid @gramene-orange;
+  padding-top: @padding-large-vertical * 5;
+  padding-bottom: @padding-large-vertical * 5;
 
-  color: @gramene-offwhite;
-  background-color: @gramene-darkgreen;
+  //color: @gramene-offwhite;
 }

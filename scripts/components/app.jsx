@@ -10,10 +10,12 @@ var QueryActions = require('../actions/queryActions');
 var _ = require('lodash');
 
 var Footer = React.createClass({
-  render: function() {
+  render: function () {
     return (
       <div className="footer">
-        <p>I am the footer</p>
+        <div className="container">
+          <p>I am the footer</p>
+        </div>
       </div>
     )
   }
@@ -31,7 +33,7 @@ var App = React.createClass({
       content = showResults ?
         <Results results={search.results}/> :
         <Welcome/>
-    ;
+      ;
 
     return (
       <div className="app">
@@ -39,7 +41,6 @@ var App = React.createClass({
           <Header search={search}/>
           {content}
         </div>
-        <Footer/>
       </div>
     );
   }
