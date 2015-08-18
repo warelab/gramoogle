@@ -13,7 +13,9 @@
   }
 
   .well {
-    margin-top: -2 * @padding-large-vertical;
+    @media (min-width: @screen-md-min) {
+      margin-top: -2 * @padding-large-vertical;
+    }
     background-color: lighten(@gramene-darkgreen, 5%);
 
     ul {
