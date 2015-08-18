@@ -112,7 +112,7 @@ module.exports = function (grunt) {
         branch: process.env.TRAVIS_BRANCH,
         tag: process.env.TRAVIS_TAG,
         user: process.env.USER,
-        date: new Date().toJSON().substring(0, 10),
+        date: new Date().toJSON(),
         isDev: process.env.isDev
       };
 
