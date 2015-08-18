@@ -1,0 +1,42 @@
+<div class="footer" style="display:none;">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-sm-12">
+                <p>Gramene is a collaborative effort among
+                    <a href="http://www.cshl.edu">Cold Spring Harbor Laboratory</a>,
+                    <a href="http://www.cgrb.oregonstate.edu">Oregon State University</a>, and
+                    <a href="http://www.ebi.ac.uk">EMBL-EBI</a>.
+                </p>
+
+                <p>
+                    Funding is provided by the
+                    <a href="http://www.nsf.gov/awardsearch/showAward?AWD_ID=1127112">NSF</a> and
+                    <a href="http://www.ars.usda.gov">USDA ARS</a>.
+                </p>
+            </div>
+            <div class="col-md-4 col-sm-12">
+                <div class="well">
+                    Build Info
+                    <ul class="buildInfo">
+                        <li>Gramene Search UI
+                            <% if(tag) { %>
+                            <a title="Release available on github"
+                               href="https://github.com/warelab/gramoogle/releases/tag/<%= tag %>">Release <%= tag %></a>
+                            <% }
+
+                              if (buildNumber) { %>
+                            <a title="Built by Travis-CI"
+                               href="https://travis-ci.org/warelab/gramoogle/builds/<%= buildId %>">Build #<%= buildNumber %></a>
+                            <% } else if(isDev) { %>
+                            LOCAL DEVELOPMENT BUILD
+                            <% } else { %>
+                            LOCAL PACKAGED BUILD
+                            <% } %>
+                        </li>
+                      <li>Built on <%= date %></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

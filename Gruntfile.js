@@ -1,5 +1,8 @@
 'use strict';
 
+var _ = require('lodash');
+var moment = require('moment');
+
 module.exports = function (grunt) {
   require('jit-grunt')(grunt);
   require('matchdep').filterAll('grunt-*').forEach(grunt.loadNpmTasks);
@@ -11,6 +14,17 @@ module.exports = function (grunt) {
   };
 
   grunt.initConfig({
+    env: {
+      dev: {
+        NODE_ENV : 'development',
+        isDev : true
+      },
+      prod: {
+        NODE_ENV : 'production',
+        isDev : false
+      }
+    },
+
     flow: {
       options: {
         style: 'color'
@@ -28,7 +42,7 @@ module.exports = function (grunt) {
             ['babelify']
           ]
         },
-        src: './index.js',
+        src: './scripts/gramoogle.js',
         dest: 'build/bundle.js'
       },
       production: {
@@ -50,7 +64,14 @@ module.exports = function (grunt) {
     watch: {
       browserify: {
         files: ['scripts/**/*', 'styles/*.less'],
-        tasks: ['browserify:dev']
+        tasks: ['browserify:dev', 'packageIndexHtml'],
+        //options: {
+        //  livereload: 8080
+        //}
+      },
+      html: {
+        files: ['*.template.html'],
+        tasks: ['packageIndexHtml']
       }
     },
 
@@ -70,10 +91,49 @@ module.exports = function (grunt) {
         specNameMatcher: 'spec'
       },
       all: ['spec/']
+    },
+
+    copy: {
+      assets: {
+        files: [
+          {expand: true, cwd: 'assets/', src: ['**'], dest: 'build/assets/'}
+        ]
+      }
     }
   });
 
+  grunt.registerTask('packageIndexHtml', 'Build index.html for distribution.', function () {
+
+    var footer = (function compileFooterTemplate() {
+      var template = _.template(grunt.file.read('./footer.template.html'));
+
+      var props = {
+        buildId: process.env.TRAVIS_BUILD_ID,
+        buildNumber: process.env.TRAVIS_BUILD_NUMBER,
+        branch: process.env.TRAVIS_BRANCH,
+        tag: process.env.TRAVIS_TAG,
+        user: process.env.USER,
+        date: moment().format('MMMM Do YYYY [at] h:mm:ss a'),
+        isDev: process.env.isDev
+      };
+
+      return template(props);
+    })();
+
+    var index = (function compileIndexTemplate() {
+      var template = _.template(grunt.file.read('./index.template.html'));
+
+      var props = {
+        footer: footer
+      };
+
+      return template(props);
+    })();
+
+    grunt.file.write('build/index.html', index);
+  });
+
   grunt.registerTask('test', ['jasmine_node']);
-  grunt.registerTask('default', ['browserify:dev', 'watch']);
-  grunt.registerTask('package', ['browserify:production', 'test']);
+  grunt.registerTask('default', ['env:dev', 'copy:assets', 'packageIndexHtml', 'browserify:dev', 'watch']);
+  grunt.registerTask('package', ['env:prod', 'copy:assets', 'packageIndexHtml', 'browserify:production', 'test']);
 };
