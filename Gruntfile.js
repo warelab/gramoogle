@@ -1,5 +1,7 @@
 'use strict';
 
+var _ = require('lodash');
+
 var pkg = require('./package.json');
 
 module.exports = function (grunt) {
@@ -13,6 +15,17 @@ module.exports = function (grunt) {
   };
 
   grunt.initConfig({
+    env: {
+      dev: {
+        NODE_ENV : 'development',
+        isDev : true
+      },
+      prod: {
+        NODE_ENV : 'production',
+        isDev : false
+      }
+    },
+
     flow: {
       options: {
         style: 'color'
@@ -30,7 +43,7 @@ module.exports = function (grunt) {
             ['babelify']
           ]
         },
-        src: './index.js',
+        src: './scripts/gramoogle.js',
         dest: 'build/bundle.js'
       },
       production: {
@@ -52,7 +65,14 @@ module.exports = function (grunt) {
     watch: {
       browserify: {
         files: ['scripts/**/*', 'styles/*.less'],
-        tasks: ['browserify:dev']
+        tasks: ['browserify:dev', 'packageIndexHtml'],
+        //options: {
+        //  livereload: 8080
+        //}
+      },
+      html: {
+        files: ['*.template.html'],
+        tasks: ['packageIndexHtml']
       }
     },
 
@@ -72,17 +92,49 @@ module.exports = function (grunt) {
         specNameMatcher: 'spec'
       },
       all: ['spec/']
+    },
+
+    copy: {
+      assets: {
+        files: [
+          {expand: true, cwd: 'assets/', src: ['**'], dest: 'build/assets/'}
+        ]
+      }
     }
   });
 
-  grunt.registerTask('buildIndexHtml', 'Build index.html for distribution.', function() {
-    console.log("Will copy <root>/index.html to build/index.html and maybe change it a bit.");
-    var indexHtml = grunt.file.read('./index.html');
-    console.log(indexHtml);
-    console.log(process.env);
+  grunt.registerTask('packageIndexHtml', 'Build index.html for distribution.', function () {
+
+    var footer = (function compileFooterTemplate() {
+      var template = _.template(grunt.file.read('./footer.template.html'));
+
+      var props = {
+        version: pkg.version,
+        travisJob: process.env.TRAVIS_JOB_ID,
+        branch: process.env.TRAVIS_BRANCH,
+        buildNumber: process.env.TRAVIS_BUILD_NUMBER,
+        user: process.env.USER,
+        date: new Date().toJSON().substring(0, 10),
+        isDev: process.env.isDev
+      };
+
+      return template(props);
+    })();
+
+    var index = (function compileIndexTemplate() {
+      var template = _.template(grunt.file.read('./index.template.html'));
+
+      var props = {
+        footer: footer
+      };
+
+      return template(props);
+    })();
+
+    grunt.file.write('build/index.html', index);
   });
 
   grunt.registerTask('test', ['jasmine_node']);
-  grunt.registerTask('default', ['browserify:dev', 'watch']);
-  grunt.registerTask('package', ['browserify:production', 'test']);
+  grunt.registerTask('default', ['env:dev', 'copy:assets', 'packageIndexHtml', 'browserify:dev', 'watch']);
+  grunt.registerTask('package', ['env:prod', 'copy:assets', 'packageIndexHtml', 'browserify:production', 'test']);
 };
