@@ -2,8 +2,6 @@
 
 var _ = require('lodash');
 
-var pkg = require('./package.json');
-
 module.exports = function (grunt) {
   require('jit-grunt')(grunt);
   require('matchdep').filterAll('grunt-*').forEach(grunt.loadNpmTasks);
@@ -109,10 +107,10 @@ module.exports = function (grunt) {
       var template = _.template(grunt.file.read('./footer.template.html'));
 
       var props = {
-        version: pkg.version,
         buildId: process.env.TRAVIS_BUILD_ID,
         buildNumber: process.env.TRAVIS_BUILD_NUMBER,
         branch: process.env.TRAVIS_BRANCH,
+        tag: process.env.TRAVIS_TAG,
         user: process.env.USER,
         date: new Date().toJSON().substring(0, 10),
         isDev: process.env.isDev

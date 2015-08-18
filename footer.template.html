@@ -18,10 +18,14 @@
                 <div class="well">
                     Build Info
                     <ul class="buildInfo">
-                      <% if(buildNumber) { %>
-                        <li>Version <a title="Release on github"
-                                       href="https://github.com/warelab/gramoogle/releases/tag/v<%= version %>"><%= version %></a>
+                      <% if(tag) { %>
+                        <li>Gramene Search UI
+                            <a title="Release on github"
+                               href="https://github.com/warelab/gramoogle/releases/tag/v<%= tag %>"><%= tag %></a>
                         </li>
+                      <% }
+
+                         if(buildNumber) { %>
                         <li>
                           <a href="https://travis-ci.org/warelab/gramoogle/builds/<%= buildId %>">Build #<%= buildNumber %></a>
                           on branch <a href="https://github.com/warelab/gramoogle/tree/<%= branch %>"><%= branch %></a>
