@@ -110,9 +110,9 @@ module.exports = function (grunt) {
 
       var props = {
         version: pkg.version,
-        travisJob: process.env.TRAVIS_JOB_ID,
-        branch: process.env.TRAVIS_BRANCH,
+        buildId: process.env.TRAVIS_BUILD_ID,
         buildNumber: process.env.TRAVIS_BUILD_NUMBER,
+        branch: process.env.TRAVIS_BRANCH,
         user: process.env.USER,
         date: new Date().toJSON().substring(0, 10),
         isDev: process.env.isDev
