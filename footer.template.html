@@ -18,24 +18,22 @@
                 <div class="well">
                     Build Info
                     <ul class="buildInfo">
-                      <% if(tag) { %>
                         <li>Gramene Search UI
-                            <a title="Release on github"
-                               href="https://github.com/warelab/gramoogle/releases/tag/v<%= tag %>"><%= tag %></a>
-                        </li>
-                      <% }
+                            <% if(tag) { %>
+                            <a title="Release available on github"
+                               href="https://github.com/warelab/gramoogle/releases/tag/<%= tag %>">Release <%= tag %></a>
+                            <% }
 
-                         if(buildNumber) { %>
-                        <li>
-                          <a href="https://travis-ci.org/warelab/gramoogle/builds/<%= buildId %>">Build #<%= buildNumber %></a>
-                          on branch <a href="https://github.com/warelab/gramoogle/tree/<%= branch %>"><%= branch %></a>
+                              if (buildNumber) { %>
+                            <a title="Built by Travis-CI"
+                               href="https://travis-ci.org/warelab/gramoogle/builds/<%= buildId %>">Build #<%= buildNumber %></a>
+                            <% } else if(isDev) { %>
+                            LOCAL DEVELOPMENT BUILD
+                            <% } else { %>
+                            LOCAL PACKAGED BUILD
+                            <% } %>
                         </li>
-                      <% } else if(isDev) { %>
-                        <li>LOCAL DEVELOPMENT BUILD</li>
-                      <% } else { %>
-                        <li>LOCAL PACKAGED BUILD</li>
-                      <% } %>
-                      <li>Built by <%= user %> on <%= date %></li>
+                      <li>Built on <%= date %></li>
                     </ul>
                 </div>
             </div>
