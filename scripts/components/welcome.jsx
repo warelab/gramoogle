@@ -43,10 +43,10 @@ var Welcome = React.createClass({
           Try typing into the box at the top of the screen!</strong>
           </p>
 
-        <h3>Features</h3>
+        <h3 className="hidden-xs">Features</h3>
 
-        <div className="features row">
-          <div className="feature col-md-4">
+        <div className="features row hidden-xs">
+          <div className="feature col-sm-4">
             <div className="well">
               <strong>Suggestions</strong>
               <p>Suggested terms are provided as you type:</p>
@@ -54,7 +54,7 @@ var Welcome = React.createClass({
             </div>
           </div>
 
-          <div className="feature col-md-4">
+          <div className="feature col-sm-4">
             <div className="well">
               <strong>Visualization</strong>
               <p>See the distribution of results across all genomes:</p>
@@ -62,7 +62,7 @@ var Welcome = React.createClass({
             </div>
           </div>
 
-          <div className="feature col-md-4">
+          <div className="feature col-sm-4">
             <div className="well">
               <strong>Gene view</strong>
               <p>Concise view of available information about a gene:</p>
