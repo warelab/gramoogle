@@ -52,6 +52,7 @@
     "jit-grunt": "^0.9.1",
     "less-plugin-autoprefix": "^1.4.1",
     "matchdep": "^0.3.0",
+    "moment": "^2.10.6",
     "node-lessify": "0.0.10",
     "uglifyify": "^3.0.1"
   },

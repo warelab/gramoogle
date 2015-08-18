@@ -1,6 +1,7 @@
 'use strict';
 
 var _ = require('lodash');
+var moment = require('moment');
 
 module.exports = function (grunt) {
   require('jit-grunt')(grunt);
@@ -112,7 +113,7 @@ module.exports = function (grunt) {
         branch: process.env.TRAVIS_BRANCH,
         tag: process.env.TRAVIS_TAG,
         user: process.env.USER,
-        date: new Date().toJSON(),
+        date: moment().format('MMMM Do YYYY [at] h:mm:ss a'),
         isDev: process.env.isDev
       };
 
