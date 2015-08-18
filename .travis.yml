@@ -11,14 +11,14 @@ after_success: if [ "$TRAVIS_REPO_SLUG" == "warelab/gramoogle" ] && ([ "$TRAVIS_
   == "master" ] ) && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo "Deploying build
   $TRAVIS_REPO_SLUG#$TRAVIS_BRANCH (tag $TRAVIS_TAG isPullReq $TRAVIS_PULL_REQUEST)
   to http://search.gramene.org (production)" && chmod 600 deploy/gramene_deploy_key2 && scp -r -i deploy/gramene_deploy_key2
-  build/* mulvaney@brie.cshl.edu:deploy/master && ssh -i deploy/gramene_deploy_key2
-  mulvaney@brie.cshl.edu "scp -i ~/.ssh/id_rsa_copy_to_gorgonzola -r deploy/master/*
+  build/* mulvaney@brie.cshl.edu:deploy/master/$TRAVIS_BUILD_NUMBER && ssh -i deploy/gramene_deploy_key2
+  mulvaney@brie.cshl.edu "scp -i ~/.ssh/id_rsa_copy_to_gorgonzola -r deploy/master/$TRAVIS_BUILD_NUMBER/*
   search.gramene.org:/usr/local/apache2/htdocs/gramene-search"; elif [ "$TRAVIS_REPO_SLUG"
   == "warelab/gramoogle" ] && [ "$TRAVIS_PULL_REQUEST"
   == "false" ]; then echo "Deploying build $TRAVIS_REPO_SLUG#$TRAVIS_BRANCH (tag $TRAVIS_TAG
   isPullReq $TRAVIS_PULL_REQUEST) to http://brie.cshl.edu/gramene-search-dev/$TRAVIS_BRANCH" && chmod 600 deploy/gramene_deploy_key2
-  && scp -r -i deploy/gramene_deploy_key2 build/* mulvaney@brie.cshl.edu:deploy/dev
-  && ssh -i deploy/gramene_deploy_key2 mulvaney@brie.cshl.edu "mkdir -p /usr/local/apache2/htdocs/gramene-search-dev/$TRAVIS_BRANCH && cp -pr deploy/dev/*
+  && scp -r -i deploy/gramene_deploy_key2 build/* mulvaney@brie.cshl.edu:deploy/$TRAVIS_BUILD_NUMBER
+  && ssh -i deploy/gramene_deploy_key2 mulvaney@brie.cshl.edu "mkdir -p /usr/local/apache2/htdocs/gramene-search-dev/$TRAVIS_BRANCH && cp -pr deploy/$TRAVIS_BUILD_NUMBER/*
   /usr/local/apache2/htdocs/gramene-search-dev/$TRAVIS_BRANCH"; else echo "Not deploying this build
   $TRAVIS_REPO_SLUG#$TRAVIS_BRANCH (tag $TRAVIS_TAG isPullReq $TRAVIS_PULL_REQUEST)";
   fi
