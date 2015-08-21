@@ -7,6 +7,7 @@ var _ = require('lodash');
 var Q = require('q');
 var QueryActions = require('../actions/queryActions');
 var search = require('../search/search');
+var persist = require('../search/persist');
 
 module.exports = Reflux.createStore({
   listenables: QueryActions,
@@ -25,10 +26,8 @@ module.exports = Reflux.createStore({
       }
     };
 
-    // TODO use react-router
-    if(window && window.location.hash) {
-      this.state.query = JSON.parse(decodeURI(window.location.hash.substring(1)));
-    }
+    // update query state from URL hash if it changes (e.g. back/fwd button press)
+    persist.init(this.overwriteQueryState);
 
     // make a copy of the query to keep with the results
     this.state.results.metadata.searchQuery = _.cloneDeep(this.state.query);
@@ -45,23 +44,28 @@ module.exports = Reflux.createStore({
     );
   },
 
-  getInitialState: function() {
+  getInitialState: function () {
     return this.state;
   },
 
-  setResultType: function (rtKey: string, params) {
+  overwriteQueryState: function (newQuery) {
+    this.state.query = newQuery;
+    this.search();
+  },
+
+  setResultType: function (rtKey:string, params) {
     console.log('setResultType', arguments);
     this.state.query.resultTypes[rtKey] = params;
     this.search();
   },
 
-  removeResultType: function (rtKey: string) {
+  removeResultType: function (rtKey:string) {
     console.log('removeResultType', arguments);
     delete this.state.query.resultTypes[rtKey];
     this.search();
   },
 
-  setFilter: function(filter) {
+  setFilter: function (filter) {
     console.log('setFilter', arguments);
     if (!this.state.query.filters.hasOwnProperty(filter.fq)) {
       this.state.query.filters[filter.fq] = filter;
@@ -69,28 +73,28 @@ module.exports = Reflux.createStore({
     }
   },
 
-  toggleFilter: function(filter) {
+  toggleFilter: function (filter) {
     console.log('toggleFilter', arguments);
     delete this.state.query.filters[filter.fq];
     if (filter.exclude) {
-      filter.exclude=false;
-      filter.fq = filter.fq.replace(/-/,'');
+      filter.exclude = false;
+      filter.fq = filter.fq.replace(/-/, '');
     }
     else {
-      filter.exclude=true;
-      filter.fq = '-'+filter.fq;
+      filter.exclude = true;
+      filter.fq = '-' + filter.fq;
     }
     this.state.query.filters[filter.fq] = filter;
     this.search();
   },
 
-  setAllFilters: function(filters) {
+  setAllFilters: function (filters) {
     console.log('setAllFilters', arguments);
     this.state.query.filters = filters;
     this.search();
   },
 
-  removeFilter: function(filter) {
+  removeFilter: function (filter) {
     console.log('removeFilter', arguments);
     if (this.state.query.filters.hasOwnProperty(filter.fq)) {
       delete this.state.query.filters[filter.fq];
@@ -98,14 +102,14 @@ module.exports = Reflux.createStore({
     }
   },
 
-  removeAllFilters: function() {
+  removeAllFilters: function () {
     console.log('removeAllFilters');
     this.setAllFilters({});
   },
-  
-  moreResults: function(howManyMore) {
+
+  moreResults: function (howManyMore) {
     var listRt = this.state.query.resultTypes.list;
-    if(listRt) {
+    if (listRt) {
       listRt.rows += howManyMore;
     }
     this.search();
@@ -114,15 +118,15 @@ module.exports = Reflux.createStore({
   searchComplete: function (results) {
     console.log('Got data: ', results);
 
-    window.location.hash = encodeURI(JSON.stringify(this.state.query));
+    // update the URL hash
+    persist.persistQuery(this.state.query);
 
-    // TODO: compare query state used for search with the current one
     this.state.results = results;
-
     this.trigger(this.state);
   },
 
   searchError: function (error) {
     console.error('Error updating results', error);
   }
-});
+})
+;
