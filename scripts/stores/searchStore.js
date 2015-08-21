@@ -26,9 +26,6 @@ module.exports = Reflux.createStore({
       }
     };
 
-    // update query state from URL hash if it changes (e.g. back/fwd button press)
-    persist.init(this.overwriteQueryState);
-
     // make a copy of the query to keep with the results
     this.state.results.metadata.searchQuery = _.cloneDeep(this.state.query);
 
@@ -42,6 +39,9 @@ module.exports = Reflux.createStore({
       this.searchError, // called on error
       200 // debounce time in ms
     );
+
+    // update query state from URL hash if it changes (e.g. back/fwd button press)
+    persist.init(this.overwriteQueryState);
   },
 
   getInitialState: function () {

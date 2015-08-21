@@ -14,9 +14,12 @@ This module is likely to be replaced if/when we refactor the codebase to use Rea
 var _ = require('lodash');
 
 var expectedHash = '#';
+var loc = window.location;
 
 function init(callback) {
-  window.onhashchange = handleHashChangeFactory(callback);
+  var hashChangeHandler = handleHashChangeFactory(callback);
+  window.onhashchange = hashChangeHandler;
+  hashChangeHandler();
 }
 
 function handleHashChangeFactory(callback) {
@@ -29,18 +32,20 @@ function handleHashChangeFactory(callback) {
 }
 
 function hashDidChange() {
-  var result = expectedHash !== window.location.hash;
-  console.log("Hash changed? ", result, expectedHash, window.location.hash);
+  var result = expectedHash !== loc.hash;
+  console.debug("Hash changed? ", result, expectedHash, loc.hash);
   return result;
 }
 
 function queryFromHash() {
-  return JSON.parse(decodeURI(window.location.hash.substring(1)));
+  return JSON.parse(decodeURI(loc.hash.substring(1)));
 }
 
 function queryToHash(query) {
   expectedHash = '#' + encodeURI(JSON.stringify(query));
-  window.location.hash = expectedHash;
+  if(loc.hash !== expectedHash) {
+    loc.hash = expectedHash;
+  }
 }
 
 module.exports = {
