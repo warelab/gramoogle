@@ -75,12 +75,12 @@ module.exports = function (grunt) {
       }
     },
 
-    jest: {
-      options: {
-        coverage: false,
-        config: './jest.config.json'
-      }
-    },
+    //jest: {
+    //  options: {
+    //    coverage: false,
+    //    config: './jest.config.json'
+    //  }
+    //},
 
     jasmine_node: {
       options: {
