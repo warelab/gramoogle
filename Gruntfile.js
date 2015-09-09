@@ -108,8 +108,8 @@ module.exports = function (grunt) {
       var template = _.template(grunt.file.read('./footer.template.html'));
 
       var props = {
-        buildId: process.env.TRAVIS_BUILD_ID,
-        buildNumber: process.env.TRAVIS_BUILD_NUMBER,
+        jobId: process.env.TRAVIS_JOB_ID,
+        jobNumber: process.env.TRAVIS_JOB_NUMBER,
         branch: process.env.TRAVIS_BRANCH,
         tag: process.env.TRAVIS_TAG,
         user: process.env.USER,
