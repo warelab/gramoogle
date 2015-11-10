@@ -24,9 +24,9 @@
                                href="https://github.com/warelab/gramoogle/releases/tag/<%= tag %>">Release <%= tag %></a>
                             <% }
 
-                              if (jobNumber) { %>
+                              if (buildNumber) { %>
                             <a title="Built by Travis-CI"
-                               href="https://travis-ci.org/warelab/gramoogle/jobs/<%= jobId %>">Build #<%= jobNumber %></a>
+                               href="https://travis-ci.org/warelab/gramoogle/builds/<%= buildId %>">Build #<%= buildNumber %></a>
                             <% } else if(isDev) { %>
                             LOCAL DEVELOPMENT BUILD
                             <% } else { %>

@@ -75,12 +75,12 @@ module.exports = function (grunt) {
       }
     },
 
-    //jest: {
-    //  options: {
-    //    coverage: false,
-    //    config: './jest.config.json'
-    //  }
-    //},
+    jest: {
+      options: {
+        coverage: false,
+        config: './jest.config.json'
+      }
+    },
 
     jasmine_node: {
       options: {
@@ -108,8 +108,8 @@ module.exports = function (grunt) {
       var template = _.template(grunt.file.read('./footer.template.html'));
 
       var props = {
-        jobId: process.env.TRAVIS_JOB_ID,
-        jobNumber: process.env.TRAVIS_JOB_NUMBER,
+        buildId: process.env.TRAVIS_BUILD_ID,
+        buildNumber: process.env.TRAVIS_BUILD_NUMBER,
         branch: process.env.TRAVIS_BRANCH,
         tag: process.env.TRAVIS_TAG,
         user: process.env.USER,
