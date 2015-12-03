@@ -22,7 +22,7 @@ module.exports = Reflux.createStore({
   },
 
   provideSuggestions: function (queryString) {
-    queryString = queryString.replace(/\s/g, '*');
+    //queryString = queryString.replace(/\s/g, '*');
     console.log('provideSuggestions', queryString);
     this.suggest(queryString);
   },
@@ -82,27 +82,31 @@ module.exports = Reflux.createStore({
       
       exact = {
         term: 'Exactly "' + queryString + '"',
-        fq: 'text:' + queryString,
-        label: 'Exactly "' + queryString + '"'
+        fq_field: 'text',
+        fq_value: queryString,
+        display_name: 'Exactly "' + queryString + '"'
       };
         
       beginsWith = {
         term: 'Starts with "' + queryString + '"',
-        fq: 'text:' + queryString + '*',
-        label: 'Starts with "' + queryString + '"'
+        fq_field: 'text',
+        fq_value: queryString + '*',
+        display_name: 'Starts with "' + queryString + '"'
       };
       
       textCategory = _.find(data, function(category) {
-        return category.label === 'Text search';
+        return category.label === 'Text';
       });
-      
-      _.remove(textCategory.suggestions, function(suggestion) {
-        return suggestion.label === queryString;
-      });
-      
-      // .splice mutates the existing array.
-      textCategory.suggestions.splice(0, 0, exact, beginsWith);
-      
+
+      if(textCategory) {
+        _.remove(textCategory.suggestions, function(suggestion) {
+          return suggestion.display_name === queryString;
+        });
+
+        // .splice mutates the existing array.
+        textCategory.suggestions.splice(0, 0, exact, beginsWith);
+      }
+
       return data;
     }.bind(this);
   },

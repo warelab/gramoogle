@@ -39,7 +39,7 @@ module.exports = function (grunt) {
           },
           transform: [
             ['node-lessify', lessifyOptions],
-            ['babelify']
+            ['babelify', {presets: ["es2015", "react"]}]
           ]
         },
         src: './scripts/gramoogle.js',

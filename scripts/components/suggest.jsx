@@ -13,26 +13,23 @@ var Term = React.createClass({
     suggestedTerm: React.PropTypes.object.isRequired
   },
   acceptSuggestion: function () {
-    var suggestedTerm = this.props.suggestedTerm;
+    var suggestedTerm = _.clone(this.props.suggestedTerm);
 
     console.log('user wants', suggestedTerm);
 
-    if (suggestedTerm.weight == 0) {
-      console.log('not adding filter for ' + suggestedTerm.term + ' because it will have no results');
+    if (suggestedTerm.num_genes == 0) {
+      console.log('not adding filter for ' + suggestedTerm.display_name + ' because it will have no results');
       return;
       // TODO maybe tell the user?
     }
 
-    // remove highlighting now.
-    suggestedTerm.term = suggestedTerm.term.replace(/<\/?em>/g, '');
-
-    // shorten the term
-    suggestedTerm.term = suggestedTerm.term.replace(/.*\|\s/, '');
-
     suggestedTerm.exclude = false; // so we can toggle between include/exclude
 
+    // TODO REMOVE THIS and rework searchStore.js and search.js to more gracefully handle this.
+    suggestedTerm.fq = suggestedTerm.fq_field + ':' + suggestedTerm.fq_value;
+
     // Notify the rest of the app
-    queryActions.setFilter(this.props.suggestedTerm);
+    queryActions.setFilter(suggestedTerm);
     queryActions.removeQueryString();
 
     // immediately hide the node. This is very un-react-like
@@ -44,10 +41,13 @@ var Term = React.createClass({
   },
   render: function () {
     var suggestion = this.props.suggestedTerm;
-    var className = 'term' + (suggestion.weight == 0 ? ' empty' : '');
+    var className = 'term' + (suggestion.num_genes == 0 ? ' empty' : '');
     return (
       <li className={className}>
-        <a onClick={this.acceptSuggestion} dangerouslySetInnerHTML={{__html:suggestion.term}}/>
+        <a onClick={this.acceptSuggestion}>
+          {suggestion.display_name}
+          <bs.Badge bsStyle="warning">{suggestion.num_genes}</bs.Badge>
+        </a>
       </li>
     );
   }
@@ -61,9 +61,8 @@ var SuggestCategory = React.createClass({
     var category, categorySuggestions, listClassName, result;
     category = this.props.category;
     categorySuggestions = category.suggestions.map(function (suggestedTerm) {
-      var key = suggestedTerm.category + '-' + suggestedTerm.term;
       return (
-        <Term key={key} suggestedTerm={suggestedTerm}/>
+        <Term key={suggestedTerm.id} suggestedTerm={suggestedTerm}/>
       );
     });
     listClassName = 'terms ' + category.className;

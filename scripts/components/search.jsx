@@ -29,7 +29,7 @@ var SearchFilter = React.createClass({
     return (
       <li className="search-filter">
         {term.category} | &nbsp;
-        <a className={thumb} onClick={this.toggleFilter}>{term.term}</a> &nbsp;
+        <a className={thumb} onClick={this.toggleFilter}>{term.display_name}</a> &nbsp;
         <a onClick={this.removeFilter}><bs.Glyphicon glyph='remove' /></a>
       </li>
     );
