@@ -27,11 +27,11 @@ module.exports = Reflux.createStore({
     this.suggest(queryString);
   },
 
-  setTaxonomy: function(visState) {
+  setTaxonomy: function (visState) {
     this.taxonomy = visState.taxonomy;
   },
 
-  setSearchState: function(searchState) {
+  setSearchState: function (searchState) {
     this.searchState = searchState;
   },
 
@@ -44,7 +44,7 @@ module.exports = Reflux.createStore({
     var cached = this.cache.get(queryString);
     var promise;
 
-    if(cached) {
+    if (cached) {
       console.log('got results for ' + queryString + ' from cache');
       promise = Q(_.cloneDeep(cached));
     }
@@ -66,110 +66,103 @@ module.exports = Reflux.createStore({
       .catch(this.suggestError);
   },
 
-  removeAcceptedSuggestions: function(data) {
+  removeAcceptedSuggestions: function (data) {
     var accepted = this.searchState.query.filters;
-    var result = _.forEach(data, function(category) {
-      category.suggestions = _.filter(category.suggestions, function(suggestion) {
+    var result = _.forEach(data, function (category) {
+      category.suggestions = _.filter(category.suggestions, function (suggestion) {
         return !accepted[suggestion.fq];
       });
     });
     return result;
   },
 
-  addQueryTermFactory: function(queryString) {
+  addQueryTermFactory: function addQueryTermFactory(queryString) {
+    const GENES_CATEGORY = 'Gene';
     return function addQueryTerm(data) {
       var exact, beginsWith, textCategory;
-      
+
       exact = {
+        category: GENES_CATEGORY,
         term: 'Exactly "' + queryString + '"',
         fq_field: 'text',
         fq_value: queryString,
-        display_name: 'Exactly "' + queryString + '"'
+        display_name: 'All genes that contain the word "' + queryString + '"'
       };
-        
+
       beginsWith = {
+        category: GENES_CATEGORY,
         term: 'Starts with "' + queryString + '"',
         fq_field: 'text',
         fq_value: queryString + '*',
-        display_name: 'Starts with "' + queryString + '"'
+        display_name: 'All genes that contain a word that starts with "' + queryString + '"'
       };
-      
-      textCategory = _.find(data, function(category) {
-        return category.label === 'Text';
+
+      textCategory = _.find(data, function (category) {
+        return category.label === GENES_CATEGORY;
       });
 
-      if(textCategory) {
-        _.remove(textCategory.suggestions, function(suggestion) {
-          return suggestion.display_name === queryString;
-        });
-
-        // .splice mutates the existing array.
-        textCategory.suggestions.splice(0, 0, exact, beginsWith);
+      if (textCategory) {
+        textCategory.suggestions.push(exact, beginsWith);
       }
 
       return data;
     }.bind(this);
   },
 
-  addCategoryClassNames: function(data) {
-    return _.map(data, function(category) {
+  addCategoryClassNames: function addCategoryClassNames(data) {
+    return _.map(data, function (category) {
       category.className = category.label.toLowerCase().replace(/\s/g, '-');
       return category;
     });
   },
 
-  findTopSuggestions: function(data) {
+  findTopSuggestions: function findTopSuggestions(data) {
+    var top5 = _.reduce(data, function lookInEachCategoryForBestSuggestions(top, category) {
+      var result, topPos, topLen, catPos, catLen;
 
-    function defaultScoreFunc(suggestion) {
-      return suggestion.weight || 1;
-    }
-    function goScoreFunc(suggestion) {
-      return -suggestion.weight;
-    }
-    var scoreFuncs = {
-      Taxonomy: function(suggestion) {
-        var defaultScore = defaultScoreFunc(suggestion),
-            taxonomy = this.taxonomy || visualizationStore.taxonomy;
+      // if there are no top suggestions, just take the first 5 from the category
+      if(_.isEmpty(top)) {
+        return _.take(category.suggestions, 5);
+      }
 
-        if(taxonomy) {
-          var taxon_id = +suggestion.id.substring(10);
-          var taxon = taxonomy.indices.id[taxon_id];
-          var isASpecies = !taxon.children || !taxon.children.length;
-          return defaultScore * (isASpecies ? 1000 : 1);
+      // we can check if nothing in this category can get into the top.
+      if(category.maxScore <= _.last(top).score) {
+        return top;
+      }
+
+      result = [];
+      topPos = catPos = 0;
+      topLen = top.length;
+      catLen = category.suggestions.length;
+
+      // while we don't have 5 and there are still suggestions available
+      while (result.length < 5 && (topLen > topPos || catLen > catPos)) {
+        var a, b;
+        a = top[topPos];
+        b = category.suggestions[catPos];
+
+        if(!b) {
+          throw new Error("Unexpected state in which no suggestions are available in a category!");
+        }
+
+        if (!a || b.score > a.score) {
+          result.push(b);
+          catPos++;
         }
         else {
-          return defaultScore;
+          result.push(a);
+          topPos++;
         }
-      }.bind(this),
-      'GO component': goScoreFunc,
-      'GO function': goScoreFunc,
-      'GO process': goScoreFunc
-    };
+      }
 
-    var top5 = _.chain(data)
-      .map(function(category) {
-        _.forEach(category.suggestions, function(suggestion) {
-          suggestion.category = category.label;
-          var scoreFunc = scoreFuncs[suggestion.category] || defaultScoreFunc;
-          suggestion.score = scoreFunc(suggestion);
+      return result;
+    }, []);
 
-        });
-        return category.suggestions;
-      })
-      .flatten()
-      .filter(function(suggestion) {
-        return suggestion.weight > 0;
-      })
-      .sortBy(function(suggestion) {
-        return -suggestion.score;
-      })
-      .take(5)
-      .value();
     data.unshift({label: 'Top', suggestions: top5});
     return data;
   },
 
-  suggestPromise: function(queryString) {
+  suggestPromise: function (queryString) {
     return searchInterface.suggest(queryString);
   },
 
