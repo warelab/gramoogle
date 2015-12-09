@@ -117,41 +117,35 @@ module.exports = Reflux.createStore({
   },
 
   findTopSuggestions: function findTopSuggestions(data) {
+    const NUM_TOP = 5;
     var top5 = _.reduce(data, function lookInEachCategoryForBestSuggestions(top, category) {
-      var result, topPos, topLen, catPos, catLen;
+      var result, arrA, arrB, a, b;
 
       // if there are no top suggestions, just take the first 5 from the category
-      if(_.isEmpty(top)) {
-        return _.take(category.suggestions, 5);
+      if (_.isEmpty(top)) {
+        return _.take(category.suggestions, NUM_TOP);
       }
 
       // we can check if nothing in this category can get into the top.
-      if(category.maxScore <= _.last(top).score) {
+      if (category.maxScore <= _.last(top).score) {
         return top;
       }
 
       result = [];
-      topPos = catPos = 0;
-      topLen = top.length;
-      catLen = category.suggestions.length;
+      arrA = top.slice();
+      arrB = category.suggestions.slice();
 
-      // while we don't have 5 and there are still suggestions available
-      while (result.length < 5 && (topLen > topPos || catLen > catPos)) {
-        var a, b;
-        a = top[topPos];
-        b = category.suggestions[catPos];
-
-        if(!b) {
-          throw new Error("Unexpected state in which no suggestions are available in a category!");
+      // while we don't have NUM_TOP and there are still suggestions available
+      while (result.length < NUM_TOP && (arrA.length || arrB.length)) {
+        a = arrA.shift(), b = arrB.shift();
+        if (!b) {
+          result.push(a);
         }
-
-        if (!a || b.score > a.score) {
+        else if (!a) {
           result.push(b);
-          catPos++;
         }
         else {
-          result.push(a);
-          topPos++;
+          result.push(b.score > a.score ? b : a);
         }
       }
 

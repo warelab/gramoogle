@@ -68,7 +68,7 @@ var SuggestCategory = React.createClass({
     listClassName = 'terms ' + category.className;
 
     return (
-      <li className="category">
+      <li key={category.label} className="category">
         <h3>{category.label}</h3>
         <ul className={listClassName}>
           {categorySuggestions}
