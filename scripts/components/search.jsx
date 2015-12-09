@@ -28,7 +28,7 @@ var SearchFilter = React.createClass({
     var thumb = term.exclude ? 'exclude' : 'include'
     return (
       <li className="search-filter">
-        {term.category} | &nbsp;
+        {term.category} |&nbsp;
         <a className={thumb} onClick={this.toggleFilter}>{term.display_name}</a> &nbsp;
         <a onClick={this.removeFilter}><bs.Glyphicon glyph='remove' /></a>
       </li>
@@ -111,7 +111,7 @@ var TextSearch = React.createClass({
     }
 
     var filters = _.map(search.query.filters, function(term, fq) {
-      var key = term.category + '-' + term.name;
+      var key = term.fq || term.category + '-' + term.display_name;
       return (
         <SearchFilter key={key} term={term} />
       )
