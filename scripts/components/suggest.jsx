@@ -55,11 +55,15 @@ var Term = React.createClass({
 
 var SuggestCategory = React.createClass({
   propTypes: {
+    hideLabel: React.PropTypes.bool,
     category: React.PropTypes.object.isRequired
   },
   render: function () {
-    var category, categorySuggestions, listClassName, result;
+    var category, categorySuggestions, listClassName, result, label;
     category = this.props.category;
+    if(!this.props.hideLabel) {
+      label = <h3>{category.label}</h3>
+    }
     categorySuggestions = category.suggestions.map(function (suggestedTerm) {
       return (
         <Term key={suggestedTerm.id} suggestedTerm={suggestedTerm}/>
@@ -69,7 +73,7 @@ var SuggestCategory = React.createClass({
 
     return (
       <li key={category.label} className="category">
-        <h3>{category.label}</h3>
+        {label}
         <ul className={listClassName}>
           {categorySuggestions}
         </ul>
@@ -86,9 +90,10 @@ var Suggest = React.createClass({
     queryString: React.PropTypes.string.isRequired
   },
   render: function () {
-    var suggestions = this.state.suggestions;
+    var suggestionCategories = this.state.suggestions;
 
-    if (!suggestions) {
+    // if suggestionCategories is undefined, we haven't got our response back from the server yet.
+    if (!suggestionCategories) {
       return (
         <bs.Panel className="suggestions">
           <p>Finding suggestions…</p>
@@ -96,7 +101,22 @@ var Suggest = React.createClass({
       );
     }
 
-    var suggestLayout = _(suggestions)
+    // if there is only one category, and it is flagged as "fullTextSearchOnly" (this is done in suggestStore#addQueryTerm)
+    // then we should warn the user that no real suggestions have been found and that they are probably SOL.
+    if(suggestionCategories.length === 1 && suggestionCategories[0].fullTextSearchOnly) {
+      return (
+        <bs.Panel className="suggestions">
+          <bs.Alert bsStyle="warning">
+            <strong>No suggestions found.</strong> You may still attempt a full text search, though it is unlikely to find any genes for you.
+          </bs.Alert>
+          <ul className="categories">
+            <SuggestCategory category={suggestionCategories[0]} hideLabel={true} />
+          </ul>
+        </bs.Panel>
+      )
+    }
+
+    var suggestLayout = _(suggestionCategories)
       .filter(function (category) {
         return !!category.suggestions.length;
       })

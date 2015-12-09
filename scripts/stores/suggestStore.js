@@ -50,7 +50,6 @@ module.exports = Reflux.createStore({
     }
     else {
       promise = this.suggestPromise(queryString)
-        .then(this.addQueryTermFactory(queryString))
         .then(this.addCategoryClassNames)
         .then(function addToCache(response) {
           this.cache.set(queryString, _.cloneDeep(response));
@@ -62,6 +61,7 @@ module.exports = Reflux.createStore({
     promise
       .then(this.removeAcceptedSuggestions)
       .then(this.findTopSuggestions)
+      .then(this.addQueryTermFactory(queryString))
       .then(this.suggestComplete)
       .catch(this.suggestError);
   },
@@ -101,9 +101,19 @@ module.exports = Reflux.createStore({
         return category.label === GENES_CATEGORY;
       });
 
-      if (textCategory) {
-        textCategory.suggestions.push(exact, beginsWith);
+      if (!textCategory) {
+        textCategory = {
+          label: 'Gene',
+          numFound: 0,
+          maxScore: 0,
+          suggestions: [],
+          fullTextSearchOnly: true
+        }
+
+        data.push(textCategory);
       }
+
+      textCategory.suggestions.push(exact, beginsWith);
 
       return data;
     }.bind(this);
@@ -118,41 +128,49 @@ module.exports = Reflux.createStore({
 
   findTopSuggestions: function findTopSuggestions(data) {
     const NUM_TOP = 5;
-    var top5 = _.reduce(data, function lookInEachCategoryForBestSuggestions(top, category) {
-      var result, arrA, arrB, a, b;
 
-      // if there are no top suggestions, just take the first 5 from the category
-      if (_.isEmpty(top)) {
-        return _.take(category.suggestions, NUM_TOP);
-      }
+    // only create a "top5" category if there is more than one category of suggestions returned.
+    // If only one is returned, the "top5" suggestions would simply be the first 5 of that category.
+    if(data.length > 1) {
+      var top5 = _.reduce(data, function lookInEachCategoryForBestSuggestions(top, category) {
+        var result, arrA, arrB, a, b;
 
-      // we can check if nothing in this category can get into the top.
-      if (category.maxScore <= _.last(top).score) {
-        return top;
-      }
-
-      result = [];
-      arrA = top.slice();
-      arrB = category.suggestions.slice();
-
-      // while we don't have NUM_TOP and there are still suggestions available
-      while (result.length < NUM_TOP && (arrA.length || arrB.length)) {
-        a = arrA.shift(), b = arrB.shift();
-        if (!b) {
-          result.push(a);
+        // if there are no top suggestions, just take the first 5 from the category
+        if (_.isEmpty(top)) {
+          return _.take(category.suggestions, NUM_TOP);
         }
-        else if (!a) {
-          result.push(b);
+
+        // we can check if nothing in this category can get into the top.
+        if (category.maxScore <= _.last(top).score) {
+          return top;
         }
-        else {
-          result.push(b.score > a.score ? b : a);
+
+        result = [];
+        arrA = top.slice();
+        arrB = category.suggestions.slice();
+
+        // while we don't have NUM_TOP and there are still suggestions available
+        while (result.length < NUM_TOP && (arrA.length || arrB.length)) {
+          a = arrA.shift(), b = arrB.shift();
+          if (!b) {
+            result.push(a);
+          }
+          else if (!a) {
+            result.push(b);
+          }
+          else {
+            result.push(b.score > a.score ? b : a);
+          }
         }
+
+        return result;
+      }, []);
+
+      if (top5.length) {
+        data.unshift({label: 'Top', suggestions: top5});
       }
+    }
 
-      return result;
-    }, []);
-
-    data.unshift({label: 'Top', suggestions: top5});
     return data;
   },
 
