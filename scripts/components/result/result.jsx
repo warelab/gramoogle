@@ -37,7 +37,7 @@ var Result = React.createClass({
 
     className = 'result';
     details = _.filter(detailsInventory, function(geneDetail) {
-      return geneDetail.test(gene);
+      return _.includes(gene.capabilities, geneDetail.capability);
     });
 
     if(this.state.expanded) {
