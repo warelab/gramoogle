@@ -22,16 +22,16 @@ module.exports = Reflux.createStore({
   },
 
   provideSuggestions: function (queryString) {
-    queryString = queryString.replace(/\s/g, '*');
+    //queryString = queryString.replace(/\s/g, '*');
     console.log('provideSuggestions', queryString);
     this.suggest(queryString);
   },
 
-  setTaxonomy: function(visState) {
+  setTaxonomy: function (visState) {
     this.taxonomy = visState.taxonomy;
   },
 
-  setSearchState: function(searchState) {
+  setSearchState: function (searchState) {
     this.searchState = searchState;
   },
 
@@ -44,13 +44,12 @@ module.exports = Reflux.createStore({
     var cached = this.cache.get(queryString);
     var promise;
 
-    if(cached) {
+    if (cached) {
       console.log('got results for ' + queryString + ' from cache');
       promise = Q(_.cloneDeep(cached));
     }
     else {
       promise = this.suggestPromise(queryString)
-        .then(this.addQueryTermFactory(queryString))
         .then(this.addCategoryClassNames)
         .then(function addToCache(response) {
           this.cache.set(queryString, _.cloneDeep(response));
@@ -62,110 +61,120 @@ module.exports = Reflux.createStore({
     promise
       .then(this.removeAcceptedSuggestions)
       .then(this.findTopSuggestions)
+      .then(this.addQueryTermFactory(queryString))
       .then(this.suggestComplete)
       .catch(this.suggestError);
   },
 
-  removeAcceptedSuggestions: function(data) {
+  removeAcceptedSuggestions: function (data) {
     var accepted = this.searchState.query.filters;
-    var result = _.forEach(data, function(category) {
-      category.suggestions = _.filter(category.suggestions, function(suggestion) {
+    var result = _.forEach(data, function (category) {
+      category.suggestions = _.filter(category.suggestions, function (suggestion) {
         return !accepted[suggestion.fq];
       });
     });
     return result;
   },
 
-  addQueryTermFactory: function(queryString) {
+  addQueryTermFactory: function addQueryTermFactory(queryString) {
+    const GENES_CATEGORY = 'Gene';
     return function addQueryTerm(data) {
       var exact, beginsWith, textCategory;
-      
+
       exact = {
+        category: GENES_CATEGORY,
         term: 'Exactly "' + queryString + '"',
-        fq: 'text:' + queryString,
-        label: 'Exactly "' + queryString + '"'
+        fq_field: 'text',
+        fq_value: queryString,
+        display_name: 'All genes that contain the word "' + queryString + '"'
       };
-        
+
       beginsWith = {
+        category: GENES_CATEGORY,
         term: 'Starts with "' + queryString + '"',
-        fq: 'text:' + queryString + '*',
-        label: 'Starts with "' + queryString + '"'
+        fq_field: 'text',
+        fq_value: queryString + '*',
+        display_name: 'All genes that contain a word that starts with "' + queryString + '"'
       };
-      
-      textCategory = _.find(data, function(category) {
-        return category.label === 'Text search';
+
+      textCategory = _.find(data, function (category) {
+        return category.label === GENES_CATEGORY;
       });
-      
-      _.remove(textCategory.suggestions, function(suggestion) {
-        return suggestion.label === queryString;
-      });
-      
-      // .splice mutates the existing array.
-      textCategory.suggestions.splice(0, 0, exact, beginsWith);
-      
+
+      if (!textCategory) {
+        textCategory = {
+          label: 'Gene',
+          numFound: 0,
+          maxScore: 0,
+          suggestions: [],
+          fullTextSearchOnly: true
+        }
+
+        data.push(textCategory);
+      }
+
+      textCategory.suggestions.push(exact, beginsWith);
+
       return data;
     }.bind(this);
   },
 
-  addCategoryClassNames: function(data) {
-    return _.map(data, function(category) {
+  addCategoryClassNames: function addCategoryClassNames(data) {
+    return _.map(data, function (category) {
       category.className = category.label.toLowerCase().replace(/\s/g, '-');
       return category;
     });
   },
 
-  findTopSuggestions: function(data) {
+  findTopSuggestions: function findTopSuggestions(data) {
+    const NUM_TOP = 5;
 
-    function defaultScoreFunc(suggestion) {
-      return suggestion.weight || 1;
-    }
-    function goScoreFunc(suggestion) {
-      return -suggestion.weight;
-    }
-    var scoreFuncs = {
-      Taxonomy: function(suggestion) {
-        var defaultScore = defaultScoreFunc(suggestion),
-            taxonomy = this.taxonomy || visualizationStore.taxonomy;
+    // only create a "top5" category if there is more than one category of suggestions returned.
+    // If only one is returned, the "top5" suggestions would simply be the first 5 of that category.
+    if(data.length > 1) {
+      var top5 = _.reduce(data, function lookInEachCategoryForBestSuggestions(top, category) {
+        var result, arrA, arrB, a, b;
 
-        if(taxonomy) {
-          var taxon_id = +suggestion.id.substring(10);
-          var taxon = taxonomy.indices.id[taxon_id];
-          var isASpecies = !taxon.children || !taxon.children.length;
-          return defaultScore * (isASpecies ? 1000 : 1);
+        // if there are no top suggestions, just take the first 5 from the category
+        if (_.isEmpty(top)) {
+          return _.take(category.suggestions, NUM_TOP);
         }
-        else {
-          return defaultScore;
+
+        // we can check if nothing in this category can get into the top.
+        if (category.maxScore <= _.last(top).score) {
+          return top;
         }
-      }.bind(this),
-      'GO component': goScoreFunc,
-      'GO function': goScoreFunc,
-      'GO process': goScoreFunc
-    };
 
-    var top5 = _.chain(data)
-      .map(function(category) {
-        _.forEach(category.suggestions, function(suggestion) {
-          suggestion.category = category.label;
-          var scoreFunc = scoreFuncs[suggestion.category] || defaultScoreFunc;
-          suggestion.score = scoreFunc(suggestion);
+        result = [];
+        arrA = top.slice();
+        arrB = category.suggestions.slice();
 
-        });
-        return category.suggestions;
-      })
-      .flatten()
-      .filter(function(suggestion) {
-        return suggestion.weight > 0;
-      })
-      .sortBy(function(suggestion) {
-        return -suggestion.score;
-      })
-      .take(5)
-      .value();
-    data.unshift({label: 'Top', suggestions: top5});
+        // while we don't have NUM_TOP and there are still suggestions available
+        while (result.length < NUM_TOP && (arrA.length || arrB.length)) {
+          a = arrA.shift(), b = arrB.shift();
+          if (!b) {
+            result.push(a);
+          }
+          else if (!a) {
+            result.push(b);
+          }
+          else {
+            result.push(b.score > a.score ? b : a);
+          }
+        }
+
+        return result;
+      }, []);
+
+      if (top5.length) {
+        data.unshift({label: 'Top', suggestions: top5});
+      }
+    }
+
     return data;
   },
 
-  suggestPromise: function(queryString) {
+  suggestPromise: function (queryString) {
     return searchInterface.suggest(queryString);
   },
 

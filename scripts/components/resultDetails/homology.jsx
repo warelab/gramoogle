@@ -18,7 +18,7 @@ var Homology = React.createClass({
       category: 'Gene Tree',
       fq:'grm_gene_tree:' + gt,
       id:'grm_gene_tree:' + gt,
-      term: 'Homolog of ' + this.props.gene.name
+      display_name: 'Homolog of ' + this.props.gene.name
     };
   },
 
