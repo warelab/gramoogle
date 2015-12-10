@@ -41,15 +41,15 @@ module.exports = Reflux.createStore({
     );
 
     // update query state from URL hash if it changes (e.g. back/fwd button press)
-    persist.init(this.overwriteQueryState);
+    persist.init(this.overwriteFilterState);
   },
 
   getInitialState: function () {
     return this.state;
   },
 
-  overwriteQueryState: function (newQuery) {
-    this.state.query = newQuery;
+  overwriteFilterState: function (newFilters) {
+    this.state.query.filters = newFilters;
     this.search();
   },
 
@@ -119,7 +119,7 @@ module.exports = Reflux.createStore({
     console.log('Got data: ', results);
 
     // update the URL hash
-    persist.persistQuery(this.state.query);
+    persist.persistFilters(this.state.query.filters);
 
     this.state.results = results;
     this.trigger(this.state);

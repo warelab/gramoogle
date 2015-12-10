@@ -13,7 +13,7 @@ This module is likely to be replaced if/when we refactor the codebase to use Rea
 
 var _ = require('lodash');
 
-var expectedHash = '#';
+var expectedHash = '';
 var loc = window.location;
 
 function init(callback) {
@@ -26,7 +26,7 @@ function handleHashChangeFactory(callback) {
   return function handleHashChange() {
     if (hashDidChange()) {
       console.log("Got updated query state from hash.");
-      callback(queryFromHash());
+      callback(filtersFromHash());
     }
   }
 }
@@ -37,18 +37,25 @@ function hashDidChange() {
   return result;
 }
 
-function queryFromHash() {
-  return JSON.parse(decodeURI(loc.hash.substring(1)));
+function filtersFromHash() {
+  var hashVal = loc.hash.substring(1);
+  return hashVal ? JSON.parse(decodeURI(hashVal)) : {};
 }
 
-function queryToHash(query) {
-  expectedHash = '#' + encodeURI(JSON.stringify(query));
+function filtersToHash(filters) {
+  expectedHash = _.isEmpty(filters) ? '' : '#' + encodeURI(JSON.stringify(trimFilters(filters)));
   if(loc.hash !== expectedHash) {
     loc.hash = expectedHash;
   }
 }
 
+function trimFilters(filters) {
+  return _.mapValues(filters, function trimProps(filter) {
+    return _.pick(filter, 'category', 'display_name', 'fq');
+  });
+}
+
 module.exports = {
   init: init,
-  persistQuery: queryToHash
+  persistFilters: filtersToHash
 };
