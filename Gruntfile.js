@@ -5,7 +5,6 @@ var moment = require('moment');
 
 module.exports = function (grunt) {
   require('jit-grunt')(grunt);
-  require('matchdep').filterAll('grunt-*').forEach(grunt.loadNpmTasks);
 
   var lessifyOptions = {
     plugins: [
@@ -39,7 +38,7 @@ module.exports = function (grunt) {
           },
           transform: [
             ['node-lessify', lessifyOptions],
-            ['babelify']
+            ['babelify', {presets: ["es2015", "react"]}]
           ]
         },
         src: './scripts/gramoogle.js',
@@ -49,7 +48,7 @@ module.exports = function (grunt) {
         options: {
           transform: [
             ['node-lessify', lessifyOptions],
-            ['babelify'],
+            ['babelify', {presets: ["es2015", "react"]}],
             ['uglifyify', {global: true}]
           ],
           browserifyOptions: {

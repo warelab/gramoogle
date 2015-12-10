@@ -93,7 +93,7 @@ module.exports = Reflux.createStore({
 
   possiblyInitBinnedGenomesAndTrigger: function() {
     if(!this.fieldName) {
-      taxonomy.removeBins();
+      this.taxonomy.removeBins();
       this.trigger({taxonomy: taxonomy});
     }
 
@@ -124,5 +124,5 @@ module.exports = Reflux.createStore({
 });
 
 function getFieldName(type, param) {
-  return type ? type + '_' + param + '_bin' : undefined;
+  return type ? type + '_' + param + '__bin' : undefined;
 }
