@@ -5,7 +5,6 @@ var moment = require('moment');
 
 module.exports = function (grunt) {
   require('jit-grunt')(grunt);
-  require('matchdep').filterAll('grunt-*').forEach(grunt.loadNpmTasks);
 
   var lessifyOptions = {
     plugins: [
@@ -39,7 +38,7 @@ module.exports = function (grunt) {
           },
           transform: [
             ['node-lessify', lessifyOptions],
-            ['babelify']
+            ['babelify', {presets: ["es2015", "react"]}]
           ]
         },
         src: './scripts/gramoogle.js',
@@ -49,7 +48,7 @@ module.exports = function (grunt) {
         options: {
           transform: [
             ['node-lessify', lessifyOptions],
-            ['babelify'],
+            ['babelify', {presets: ["es2015", "react"]}],
             ['uglifyify', {global: true}]
           ],
           browserifyOptions: {
@@ -75,12 +74,12 @@ module.exports = function (grunt) {
       }
     },
 
-    jest: {
-      options: {
-        coverage: false,
-        config: './jest.config.json'
-      }
-    },
+    //jest: {
+    //  options: {
+    //    coverage: false,
+    //    config: './jest.config.json'
+    //  }
+    //},
 
     jasmine_node: {
       options: {
@@ -108,8 +107,8 @@ module.exports = function (grunt) {
       var template = _.template(grunt.file.read('./footer.template.html'));
 
       var props = {
-        buildId: process.env.TRAVIS_BUILD_ID,
-        buildNumber: process.env.TRAVIS_BUILD_NUMBER,
+        jobId: process.env.TRAVIS_JOB_ID,
+        jobNumber: process.env.TRAVIS_JOB_NUMBER,
         branch: process.env.TRAVIS_BRANCH,
         tag: process.env.TRAVIS_TAG,
         user: process.env.USER,

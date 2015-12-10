@@ -4,33 +4,25 @@ module.exports = [
 
   {
     name: 'Gene Structure',
-    test: function(gene) {
-      return true;
-    },
+    capability: 'location',
     reactClass: require('./geneStructure.jsx')
   },
 
   {
     name: 'Homology',
-    test: function(gene) {
-      return !!gene.grm_gene_tree;
-    },
+    capability: 'homology',
     reactClass: require('./homology.jsx')
   },
 
   {
     name: 'Domains', // for display
-    test: function(gene) {
-      return gene.domainList || gene.domainRoots;
-    },
+    capability: 'domains',
     reactClass: require('./domains.jsx')
   },
 
   {
     name: 'Cross-references',
-    test: function(gene) {
-      return !!gene;
-    },
+    capability: 'xrefs',
     reactClass: require('./xrefs.jsx')
   }
 
