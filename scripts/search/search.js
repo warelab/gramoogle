@@ -64,7 +64,7 @@ module.exports = {
     // make a copy of the query state when we make the async call...
     var queryCopy = _.cloneDeep(search.query);
 
-    if (queryCopy.filters) {
+    if (!_.isEmpty(queryCopy.filters)) {
       queryCopy.filters = prepFilters(queryCopy.filters);
     }
 
