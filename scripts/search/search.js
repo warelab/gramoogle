@@ -13,7 +13,7 @@ function checkRequestedResultTypesArePresent(data: map): map {
   _.forIn(data.metadata.searchQuery.resultTypes,
     function (params, key) {
       if (!data[key]) {
-        console.error(key + ' not found in search results');
+        console.warn(key + ' not found in search results');
       }
     });
 
