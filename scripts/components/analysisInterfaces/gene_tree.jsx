@@ -8,12 +8,8 @@ var NeedsData = require('./../../mixins/NeedsDataMixin');
 
 var GeneTree = React.createClass({
   mixins: [
-    NeedsData.of(geneTreeField, geneTreeTaxonField),
-    Reflux.listenTo(detailsStore,"updateDetails")
+    NeedsData.of(geneTreeField, geneTreeTaxonField)
   ],
-  updateDetails: function(details) {
-    this.setState({details: details.genetrees});
-  },
   componentWillUpdate: function(newProps, newState) {
     var data = this.getNeededData(geneTreeField, newProps);
 

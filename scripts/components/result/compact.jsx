@@ -11,8 +11,9 @@ var lutStore = require('../../stores/lutStore');
 
 var CompactResult = React.createClass({
   propTypes: {
-    gene: React.PropTypes.object.isRequired,
-    details: React.PropTypes.array.isRequired
+    searchResult: React.PropTypes.object.isRequired,
+    details: React.PropTypes.array.isRequired,
+    geneDoc: React.PropTypes.object
   },
 
   mixins: [
@@ -26,33 +27,41 @@ var CompactResult = React.createClass({
     };
   },
 
-  detailClickHandlerFactory: function(geneDetail) {
+  detailClickHandlerFactory: function(geneDetail, isEnabled) {
     return function() {
-      // hide if already visible
-      if(this.state.visibleDetail && this.state.visibleDetail.name === geneDetail.name) {
-        this.setState(this.getInitialState());
-      }
-      else {
-        this.setState({ visibleDetail: geneDetail });
+      if(isEnabled) {
+        // hide if already visible
+        if (this.state.visibleDetail && this.state.visibleDetail.name === geneDetail.name) {
+          this.setState(this.getInitialState());
+        }
+        else {
+          this.setState({visibleDetail: geneDetail});
+        }
       }
     }.bind(this);
   },
 
   render: function() {
-    var gene, handlerFactory, detailLinks, visibleDetail;
+    var searchResult, geneDoc, linksEnabled, handlerFactory, detailLinks, visibleDetail;
 
-    gene = this.props.gene;
+    searchResult = this.props.searchResult;
+    geneDoc = this.props.geneDoc;
+    linksEnabled = !!geneDoc; // we should disable links if the gene doc isn't available yet.
     handlerFactory = this.detailClickHandlerFactory;
     detailLinks = _.map(this.props.details, function(geneDetail) {
-      var handler = handlerFactory(geneDetail),
-        isActive = this.state.visibleDetail &&
-          geneDetail.name === this.state.visibleDetail.name,
-        key = gene.id + '-' + geneDetail.name,
-        className = 'result-gene-detail-name' + (isActive ? ' active' : '');
+      var handler, isActive, key, liClass, linkClass;
+
+      handler = handlerFactory(geneDetail, linksEnabled);
+      isActive = this.state.visibleDetail &&
+          geneDetail.name === this.state.visibleDetail.name;
+      key = searchResult.id + '-' + geneDetail.name;
+      liClass = 'result-gene-detail-name' +
+          (isActive ? ' active' : '');
+      linkClass = linksEnabled ? '' : 'disabled';
 
       return (
-        <li key={key} className={className}>
-          <a onClick={handler}>{geneDetail.name}</a>
+        <li key={key} className={liClass}>
+          <a className={linkClass} onClick={handler}>{geneDetail.name}</a>
         </li>
       );
     }.bind(this));
@@ -60,7 +69,7 @@ var CompactResult = React.createClass({
     if(this.state.visibleDetail) {
       visibleDetail = (
         <div className="visible-detail">
-          {React.createElement(this.state.visibleDetail.reactClass, {gene: gene, expanded: false})}
+          {React.createElement(this.state.visibleDetail.reactClass, {gene: geneDoc, expanded: false})}
         </div>
       )
     }

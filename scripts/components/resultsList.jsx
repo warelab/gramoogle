@@ -1,13 +1,17 @@
 'use strict';
 
 var React = require('react');
+var Reflux = require('reflux');
 var bs = require('react-bootstrap');
 var resultTypes = require('gramene-search-client').resultTypes;
 var QueryActions = require('../actions/queryActions');
+var geneStore = require('../stores/geneStore');
+
 var Result = require('./result/result.jsx');
 
 
 var ResultsList = React.createClass({
+  mixins: [Reflux.connect(geneStore,"geneDocs")],
   getResultType: function() {
     return resultTypes.get(
       'list',
@@ -24,13 +28,14 @@ var ResultsList = React.createClass({
     QueryActions.moreResults(20);
   },
   render: function () {
-    var list, markup, more;
+    var list, markup, more, geneDocs;
 
+    geneDocs = this.state.geneDocs || {};
     list = this.props.results.list;
     if(list && list.length) {
-      var results = list.map(function(result) {
+      var searchResults = list.map(function(searchResult) {
         return (
-          <Result key={result.id} gene={result} />
+          <Result key={searchResult.id} searchResult={searchResult} geneDoc={geneDocs[searchResult.id]} />
         );
       });
 
@@ -47,7 +52,7 @@ var ResultsList = React.createClass({
       markup = (
         <div className="results-list-container">
           <ol className="results-list">
-            {results}
+            {searchResults}
           </ol>
           {more}
         </div>
