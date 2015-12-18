@@ -1,3 +1,6 @@
+@import 'colors';
+@import 'bootstrap-3.3.4/variables';
+
 .suggestions {
   .categories {
     &:extend(.list-unstyled);
@@ -25,6 +28,11 @@
             border-color: @gramene-darkgreen;
             background-color: @gramene-lightergreen;
             margin: @padding-xs-vertical;
+
+            .badge {
+              background-color: @gramene-mediumgreen;
+              margin-left: @padding-xs-horizontal;
+            }
           }
         }
         .term.empty {

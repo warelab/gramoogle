@@ -13,7 +13,7 @@ function checkRequestedResultTypesArePresent(data: map): map {
   _.forIn(data.metadata.searchQuery.resultTypes,
     function (params, key) {
       if (!data[key]) {
-        console.error(key + ' not found in search results');
+        console.warn(key + ' not found in search results');
       }
     });
 
@@ -64,7 +64,7 @@ module.exports = {
     // make a copy of the query state when we make the async call...
     var queryCopy = _.cloneDeep(search.query);
 
-    if (queryCopy.filters) {
+    if (!_.isEmpty(queryCopy.filters)) {
       queryCopy.filters = prepFilters(queryCopy.filters);
     }
 

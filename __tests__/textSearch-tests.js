@@ -4,7 +4,7 @@ jest.dontMock('../scripts/components/search.jsx');
 
 describe('TextSearch', function() {
   var React = require('react/addons');
-  var TextSearch = React.createFactory(require('../scripts/components/search.jsx'));
+  var TextSearch = React.createFactory(require('../scripts/components/search/search.jsx'));
   var TestUtils = React.addons.TestUtils;
 
   var searchActions = require('../scripts/actions/queryActions');
