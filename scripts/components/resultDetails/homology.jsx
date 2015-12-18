@@ -23,7 +23,7 @@ var Homology = React.createClass({
   },
 
   filter: function() {
-    queryActions.setFilter(this.createFilter());
+    queryActions.setAllFilters(this.createFilter());
   },
 
   render: function () {
