@@ -1,7 +1,7 @@
 'use strict';
 
 var React = require('react');
-var Search = require('./search.jsx');
+var Search = require('./search/search.jsx');
 var Analysis = require('./analysis.jsx');
 var QueryActions = require('../actions/queryActions');
 
