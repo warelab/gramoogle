@@ -15,21 +15,28 @@ var DallianceBrowser = React.createClass({
     return false;
   },
 
-  browser: function() {
-    var g = this.props.gene;
-    var span = g.end - g.start + 1;
-    var padding = Math.floor(.1*span);
+  biodallianceElementId: function() {
+    return this.props.gene._id + 'Browser';
+  },
 
-    var browser = new Dalliance(
+  browser: function() {
+    var g, start, end, span, padding, browser;
+    g = this.props.gene;
+    start = g.location.start;
+    end = g.location.end;
+    span = end - start + 1;
+    padding = Math.floor(.1 * span);
+
+    browser = new Dalliance(
       {
-        pageName: g.id + 'Browser',
-        chr: g.region,
-        viewStart: g.start-padding,
-        viewEnd: g.end+padding,
-        cookieKey: g.id + 'BrowserCookie',
+        pageName: this.biodallianceElementId(),
+        chr: g.location.region,
+        viewStart: start - padding,
+        viewEnd: end + padding,
+        cookieKey: g._id + 'BrowserCookie',
         
         coordSystem: {
-          speciesName: g.species,
+          speciesName: g.system_name,
           taxon: g.taxon_id,
           auth: 'Gramene',
           version: '3'
@@ -90,15 +97,16 @@ var DallianceBrowser = React.createClass({
 
     // TODO: USe CSS Substring matching to put little icon after link to ensembl
     // http://blog.teamtreehouse.com/css3-substring-matching-attribute-selectors
-    ensemblUrl = '//ensembl.gramene.org/' + gene.system_name + '/Gene/Summary?g=' + gene.id;
+    ensemblUrl = '//ensembl.gramene.org/' + gene.system_name + '/Gene/Summary?g=' + gene.biodallianceElementId;
     return (
       <bs.Row>
         <bs.Col xs={12} md={12}>
-          <div id={gene.id + 'Browser'}></div>
+          <div id={this.biodallianceElementId()}></div>
           <a className="biodalliance-link-to-ensembl" href={ensemblUrl}>Ensembl Gene view</a>
         </bs.Col>
       </bs.Row>
     );
   }
 });
+
 module.exports = DallianceBrowser;

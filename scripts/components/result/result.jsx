@@ -4,6 +4,9 @@ var React = require('react');
 var Reflux = require('reflux');
 var bs = require('react-bootstrap');
 var _ = require('lodash');
+
+var GeneActions = require('../../actions/geneActions');
+
 var detailsInventory = require('./../resultDetails/_inventory');
 var LutMixin = require('../../mixins/LutMixin');
 
@@ -14,7 +17,8 @@ var CompactResult = require('./compact.jsx');
 var Result = React.createClass({
   mixins: [LutMixin.lutFor('taxon')],
   propTypes: {
-    gene: React.PropTypes.object.isRequired
+    searchResult: React.PropTypes.object.isRequired, // SOLR search result
+    geneDoc: React.PropTypes.object // from Mongo
   },
 
   getInitialState: function() {
@@ -27,26 +31,38 @@ var Result = React.createClass({
     this.setState({expanded: !this.state.expanded});
   },
 
-  render: function () {
-    var gene, species, title, body, details, representativeGene, content, glyph, className;
+  requestGeneDoc: function() {
+    if(!this.props.geneDoc) {
+      GeneActions.needGeneDoc(this.props.searchResult.id);
+    }
+  },
 
-    gene = this.props.gene;
+  componentWillUnmount: function () {
+    GeneActions.noLongerNeedGeneDoc(this.props.searchResult.id);
+  },
+
+  render: function () {
+    var searchResult, geneDoc, species, title, body, details, representativeGene, content, glyph, className;
+
+    searchResult = this.props.searchResult;
+    geneDoc = this.props.geneDoc;
+
     if(this.state.luts.taxon) {
-      species = this.state.luts.taxon[gene.taxon_id];
+      species = this.state.luts.taxon[searchResult.taxon_id];
     }
 
     className = 'result';
     details = _.filter(detailsInventory, function(geneDetail) {
-      return _.includes(gene.capabilities, geneDetail.capability);
+      return _.includes(searchResult.capabilities, geneDetail.capability);
     });
 
     if(this.state.expanded) {
-      content = <ExpandedResult gene={gene} details={details} />;
+      content = <ExpandedResult geneDoc={geneDoc} details={details} />;
       glyph = 'menu-down';
       className += ' expanded';
     }
     else {
-      content = <CompactResult gene={gene} details={details} />;
+      content = <CompactResult searchResult={searchResult} geneDoc={geneDoc} details={details} />;
       glyph = 'menu-right';
     }
 
@@ -55,20 +71,20 @@ var Result = React.createClass({
         <a onClick={this.toggleExpanded}>
           <bs.Glyphicon glyph={glyph}/>
         </a>
-        <a onClick={this.toggleExpanded}>{gene.name}</a>
+        <a onClick={this.toggleExpanded}>{searchResult.name}</a>
         &nbsp;
         <small>{species}</small>
       </h3>
     );
 
-    body = <p className="gene-description">{gene.description}</p>;
+    body = <p className="gene-description">{searchResult.description}</p>;
 
-    if(gene.rep_id) {
-      representativeGene = <ClosestOrtholog gene={gene} />;
+    if(searchResult.rep_id) {
+      representativeGene = <ClosestOrtholog gene={searchResult} />;
     }
 
     return (
-      <li className={className}>
+      <li className={className} onMouseOver={this.requestGeneDoc}>
         {title}
         <bs.Row>
           <bs.Col xs={12} md={6}>

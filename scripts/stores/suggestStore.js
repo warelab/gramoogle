@@ -11,6 +11,8 @@ var visualizationStore = require('../stores/visualizationStore');
 var searchStore = require('../stores/searchStore');
 var constants = require('../config/constants');
 
+const QUERY_STRING_MISMATCH_ERROR = 'query string mismatch';
+
 module.exports = Reflux.createStore({
   init: function () {
     this.listenTo(QueryActions.setQueryString, this.provideSuggestions);
@@ -49,7 +51,11 @@ module.exports = Reflux.createStore({
       promise = Q(_.cloneDeep(cached));
     }
     else {
+      // we use this in checkResponseQueryString
+      this.mostRecentlyRequestedQueryString = queryString;
+
       promise = this.suggestPromise(queryString)
+        .then(this.checkResponseQueryString)
         .then(this.addCategoryClassNames)
         .then(function addToCache(response) {
           this.cache.set(queryString, _.cloneDeep(response));
@@ -64,6 +70,13 @@ module.exports = Reflux.createStore({
       .then(this.addQueryTermFactory(queryString))
       .then(this.suggestComplete)
       .catch(this.suggestError);
+  },
+
+  checkResponseQueryString: function(data) {
+    if(data.metadata.query != this.mostRecentlyRequestedQueryString) {
+      throw new Error(QUERY_STRING_MISMATCH_ERROR);
+    }
+    return data.categories;
   },
 
   removeAcceptedSuggestions: function (data) {
@@ -119,8 +132,8 @@ module.exports = Reflux.createStore({
     }.bind(this);
   },
 
-  addCategoryClassNames: function addCategoryClassNames(data) {
-    return _.map(data, function (category) {
+  addCategoryClassNames: function addCategoryClassNames(categories) {
+    return _.map(categories, function (category) {
       category.className = category.label.toLowerCase().replace(/\s/g, '-');
       return category;
     });
@@ -184,6 +197,11 @@ module.exports = Reflux.createStore({
   },
 
   suggestError: function (error) {
-    console.error('Error in suggest', error);
+    if(error.message === QUERY_STRING_MISMATCH_ERROR) {
+      console.warn("Suggest store got out-of-order suggestion response", error);
+    }
+    else {
+      console.error('Error in suggest', error);
+    }
   }
 });
