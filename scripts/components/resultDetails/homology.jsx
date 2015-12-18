@@ -3,8 +3,6 @@
 var React = require('react');
 var Reflux = require('reflux');
 var queryActions = require('../../actions/queryActions');
-var detailsActions = require('../../actions/detailsActions');
-var detailsStore = require('../../stores/detailsStore');
 
 var Homology = React.createClass({
 

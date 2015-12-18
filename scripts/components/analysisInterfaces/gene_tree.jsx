@@ -5,26 +5,14 @@ var geneTreeTaxonField = 'grm_gene_tree_root_taxon_id';
 var React = require('react');
 var Reflux = require('reflux');
 var NeedsData = require('./../../mixins/NeedsDataMixin');
-var DetailsActions = require('../../actions/detailsActions');
-var detailsStore = require('../../stores/detailsStore');
 
 var GeneTree = React.createClass({
   mixins: [
-    NeedsData.of(geneTreeField, geneTreeTaxonField),
-    Reflux.listenTo(detailsStore,"updateDetails")
+    NeedsData.of(geneTreeField, geneTreeTaxonField)
   ],
-  updateDetails: function(details) {
-    this.setState({details: details.genetrees});
-  },
   componentWillUpdate: function(newProps, newState) {
     var data = this.getNeededData(geneTreeField, newProps);
 
-    if(data && data.sorted && data.sorted.length === 1) {
-      DetailsActions.requireDetails('genetrees');
-    }
-    else {
-      DetailsActions.forsakeDetails('genetrees');
-    }
   },
   render: function() {
     var data = this.getNeededData(geneTreeField) || [];

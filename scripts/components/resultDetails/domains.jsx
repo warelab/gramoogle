@@ -4,8 +4,6 @@ var React = require('react');
 var Reflux = require('reflux');
 var bs = require('react-bootstrap');
 var queryActions = require('../../actions/queryActions');
-var detailsActions = require('../../actions/detailsActions');
-var detailsStore = require('../../stores/detailsStore');
 
 var Domains = React.createClass({
   //mixins: [Reflux.listenTo(detailsStore,"onStatusChange")],

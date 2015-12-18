@@ -77,7 +77,7 @@ var Xref = React.createClass({
 
 var Xrefs = React.createClass({
   componentWillMount: function() {
-    this.xrefs = _(this.props.gene)
+    this.xrefs = _(this.props.gene.xrefs)
     .pick(function(val, name) {
       return dbxrefs.isKnown(name);
     })
