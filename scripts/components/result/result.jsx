@@ -17,18 +17,21 @@ var CompactResult = require('./compact.jsx');
 var Result = React.createClass({
   mixins: [LutMixin.lutFor('taxon')],
   propTypes: {
+    expandedByDefault: React.PropTypes.bool,
     searchResult: React.PropTypes.object.isRequired, // SOLR search result
     geneDoc: React.PropTypes.object // from Mongo
   },
 
   getInitialState: function() {
     var state = this.getLutState();
-    state.expanded = false;
+    state.expanded = this.props.expandedByDefault;
     return state;
   },
 
   toggleExpanded: function() {
-    this.setState({expanded: !this.state.expanded});
+    if(!this.props.expandedByDefault) {
+      this.setState({expanded: !this.state.expanded});
+    }
   },
 
   requestGeneDoc: function() {
@@ -73,7 +76,7 @@ var Result = React.createClass({
         </a>
         <a onClick={this.toggleExpanded}>{searchResult.name}</a>
         &nbsp;
-        <small>{species}</small>
+        <small>{species} {searchResult.id}</small>
       </h3>
     );
 
