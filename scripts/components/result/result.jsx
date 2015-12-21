@@ -35,13 +35,16 @@ var Result = React.createClass({
   },
 
   requestGeneDoc: function() {
-    if(!this.props.geneDoc) {
+    if(!this.requestedGeneDoc) {
+      this.requestedGeneDoc = true;
       GeneActions.needGeneDoc(this.props.searchResult.id);
     }
   },
 
   componentWillUnmount: function () {
-    GeneActions.noLongerNeedGeneDoc(this.props.searchResult.id);
+    if(this.requestedGeneDoc) {
+      GeneActions.noLongerNeedGeneDoc(this.props.searchResult.id);
+    }
   },
 
   render: function () {
