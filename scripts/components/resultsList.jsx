@@ -33,7 +33,7 @@ var ResultsList = React.createClass({
 
     geneDocs = this.state.geneDocs || {};
     list = this.props.results.list;
-    singleResult = this.props.results.metadata.count === 1;
+    singleResult = list && list.length === 1;
     if(singleResult) {
       GeneActions.needGeneDoc(list[0].id);
     }
