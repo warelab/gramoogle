@@ -47,6 +47,12 @@ var Result = React.createClass({
     }
   },
 
+  componentWillReceiveProps: function(nextProps) {
+    if(!this.state.expanded && nextProps.expandedByDefault) {
+      this.setState({expanded: nextProps.expandedByDefault});
+    }
+  },
+
   render: function () {
     var searchResult, geneDoc, species, title, body, details, representativeGene, content, glyph, className;
 
