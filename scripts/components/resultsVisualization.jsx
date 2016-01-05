@@ -7,7 +7,6 @@ var VisualizationActions = require('../actions/visActions');
 var visualizationStore = require('../stores/visualizationStore');
 var _ = require('lodash');
 var Vis = require('gramene-search-vis').Vis;
-var RegionBrowser = require('./regionBrowser.jsx');
 
 var ResultsVisualization = React.createClass({
   mixins: [
@@ -60,15 +59,10 @@ var ResultsVisualization = React.createClass({
   },
 
   render: function () {
-    var taxonomy, summary, regionBrowser;
+    var taxonomy, summary;
 
     if (this.state.visData) {
       taxonomy = this.state.visData.taxonomy;
-      if (this.state.visData.browser)  {
-        regionBrowser = (
-          <RegionBrowser settings={this.state.visData.browser} />
-        )
-      }
       summary = (
         <div>
           <Vis
@@ -77,7 +71,6 @@ var ResultsVisualization = React.createClass({
             onSubtreeCollapse={this.handleSubtreeCollapse}
             onSubtreeExpand={this.handleSubtreeExpand}
             onTreeRootChange={this.handleTreeRootChange} />
-          {regionBrowser}
         </div>
       );
     }
