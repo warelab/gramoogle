@@ -1,3 +1,5 @@
+@import 'bootstrap-3.3.4/variables';
+
 .results {
   min-height: 50rem;
 }
@@ -94,6 +96,12 @@
 }
 
 .closest-ortholog {
+  margin-top: @line-height-computed; /* same as h3 in bootstrap */
+  padding: 0 @padding-base-horizontal; /* vertical padding from h and p elements */
   font-size: smaller;
   border: 1px solid @gramene-orange;
+
+  small {
+    margin-left: @padding-small-horizontal;
+  }
 }
