@@ -22,28 +22,22 @@ function checkRequestedResultTypesArePresent(data: map): map {
 
 function prepFilters(filters: map): map {
   var newFilters = {};
-  var fieldValues = {};
-  var suggestCategoryField = {};
+  var filterCategories = {};
   for (var fq in filters) {
     var fqMetadata = filters[fq];
+    var category = fqMetadata.category;
     if (fqMetadata.exclude) {
       newFilters[fq] = {};
     }
     else {
-      var fv = fq.split(':');
-      var field = fv[0];
-      var suggestCategory = fqMetadata.category;
-      var value = fv[1];
-      suggestCategoryField[suggestCategory] = field;
-      if (!fieldValues.hasOwnProperty(suggestCategory)) {
-        fieldValues[suggestCategory] = [];
+      if (!filterCategories.hasOwnProperty(category)) {
+        filterCategories[category] = [];
       }
-      fieldValues[suggestCategory].push(value);
+      filterCategories[category].push(fq);
     }
   }
-  for (var suggestCategory in fieldValues) {
-    var field = suggestCategoryField[suggestCategory];
-    newFilters[field+':'+'('+fieldValues[suggestCategory].join(' ')+')'] = {};
+  for (var category in filterCategories) {
+    newFilters['('+filterCategories[category].join(') OR (')+')'] = {};
   }
   console.log('prepFilters',filters,newFilters);
   return newFilters;
