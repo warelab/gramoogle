@@ -3,12 +3,16 @@
 var React = require('react');
 var ResultsList = require('./resultsList.jsx');
 var ResultsVisualization = require('./resultsVisualization.jsx');
+var mq = require('../config/mq');
 
 var bs = require('react-bootstrap');
 
 var Results = React.createClass({
   getInitialState: function () {
-    return {viz: true, list: true};
+    return {
+      viz: mq.isLargeScreen(),
+      list: true
+    };
   },
   toggleViz: function() {
     var newState = {
