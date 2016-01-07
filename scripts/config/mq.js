@@ -15,6 +15,6 @@ else {
 
 module.exports = {
   isLargeScreen: function() {
-    return !mq("(max-width: 768px) OR (max-device-width: 960px)");
+    return !mq("(max-device-width: 960px), (max-width: 768px)");
   }
 };
