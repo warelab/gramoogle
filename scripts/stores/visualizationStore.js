@@ -15,20 +15,20 @@ module.exports = Reflux.createStore({
     this.listenTo(searchStore, this.updateBinState);
     taxonomy.get().then(this.initBinsGeneratorAndSpeciesTree);
   },
-  
+
   onSelectRegion: function(bins) {
     var taxon_id = bins.start.taxon_id;
     var taxNode = this.taxonomy.indices.id[taxon_id];
-    this.trigger({
-      taxonomy: this.taxonomy,
-      browser: {
-        taxon_id: taxon_id,
-        region: bins.start.region,
-        start: bins.start.start,
-        end: bins.end.end,
-        species: taxNode.name,
-        system_name: taxNode.model.genome.system_name
-      }
+    var species = taxNode.name;
+    QueryActions.setFilter({
+      category: 'Region',
+      display_name: species + ' ' + bins.start.region + ':' + bins.start.start + '-' + bins.end.end,
+      exclude: false,
+      fq: 'taxon_id:' + taxon_id +
+      ' AND region:' + bins.start.region +
+      ' AND start:[0 TO ' + bins.end.end +
+      '] AND end:[' + bins.start.start +
+      ' TO *]'
     });
   },
 

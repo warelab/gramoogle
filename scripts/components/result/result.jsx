@@ -79,19 +79,20 @@ var Result = React.createClass({
 
     body = <p className="gene-description">{searchResult.description}</p>;
 
-    if(searchResult.rep_id) {
+    if(searchResult.closest_rep_id || (searchResult.model_rep_id && searchResult.model_rep_id !== searchResult.id)) {
       representativeGene = <ClosestOrtholog gene={searchResult} />;
     }
 
     return (
       <li className={className} onMouseOver={this.requestGeneDoc}>
-        {title}
+
         <bs.Row>
-          <bs.Col xs={12} md={6}>
+          <bs.Col xs={12} sm={6} md={8}>
+            {title}
             {body}
           </bs.Col>
 
-          <bs.Col xs={12} md={6}>
+          <bs.Col xs={12} sm={6} md={4}>
             {representativeGene}
           </bs.Col>
         </bs.Row>
