@@ -83,7 +83,7 @@ var ResultsVisualization = React.createClass({
     }
 
     return (
-      <div className="resultsVis">
+      <div className="resultsVis big-vis">
         {summary}
       </div>
     );
