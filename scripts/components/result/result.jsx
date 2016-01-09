@@ -5,7 +5,7 @@ var Reflux = require('reflux');
 var bs = require('react-bootstrap');
 var _ = require('lodash');
 
-var GeneActions = require('../../actions/geneActions');
+var DocActions = require('../../actions/docActions');
 
 var detailsInventory = require('./../resultDetails/_inventory');
 var LutMixin = require('../../mixins/LutMixin');
@@ -18,7 +18,8 @@ var Result = React.createClass({
   mixins: [LutMixin.lutFor('taxon')],
   propTypes: {
     searchResult: React.PropTypes.object.isRequired, // SOLR search result
-    geneDoc: React.PropTypes.object // from Mongo
+    geneDoc: React.PropTypes.object, // from Mongo
+    docs: React.PropTypes.object // all documents requested by the page.
   },
 
   getInitialState: function() {
@@ -33,19 +34,20 @@ var Result = React.createClass({
 
   requestGeneDoc: function() {
     if(!this.props.geneDoc) {
-      GeneActions.needGeneDoc(this.props.searchResult.id);
+      DocActions.needDocs('genes', this.props.searchResult.id);
     }
   },
 
   componentWillUnmount: function () {
-    GeneActions.noLongerNeedGeneDoc(this.props.searchResult.id);
+    DocActions.noLongerNeedDocs('genes', this.props.searchResult.id);
   },
 
   render: function () {
-    var searchResult, geneDoc, species, title, body, details, representativeGene, content, glyph, className;
+    var searchResult, geneDoc, docs, species, title, body, details, representativeGene, content, glyph, className;
 
     searchResult = this.props.searchResult;
     geneDoc = this.props.geneDoc;
+    docs = this.props.docs;
 
     if(this.state.luts.taxon) {
       species = this.state.luts.taxon[searchResult.taxon_id];
@@ -57,12 +59,12 @@ var Result = React.createClass({
     });
 
     if(this.state.expanded) {
-      content = <ExpandedResult geneDoc={geneDoc} details={details} />;
+      content = <ExpandedResult geneDoc={geneDoc} details={details} docs={docs} />;
       glyph = 'menu-down';
       className += ' expanded';
     }
     else {
-      content = <CompactResult searchResult={searchResult} geneDoc={geneDoc} details={details} />;
+      content = <CompactResult searchResult={searchResult} geneDoc={geneDoc} details={details} docs={docs} />;
       glyph = 'menu-right';
     }
 
