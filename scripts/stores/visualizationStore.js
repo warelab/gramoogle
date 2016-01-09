@@ -94,7 +94,7 @@ module.exports = Reflux.createStore({
   possiblyInitBinnedGenomesAndTrigger: function() {
     if(!this.fieldName) {
       this.taxonomy.removeBins();
-      this.trigger({taxonomy: taxonomy});
+      this.trigger({taxonomy: this.taxonomy});
     }
 
     else if (this.canInitBinnedGenomes()) {
