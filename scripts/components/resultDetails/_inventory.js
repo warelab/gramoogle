@@ -21,6 +21,12 @@ module.exports = [
   },
 
   {
+    name: 'Pathways', // for display
+    capability: 'pathways',
+    reactClass: require('./pathways.jsx')
+  },
+
+  {
     name: 'Cross-references',
     capability: 'xrefs',
     reactClass: require('./xrefs.jsx')
