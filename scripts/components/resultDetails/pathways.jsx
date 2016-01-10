@@ -6,6 +6,8 @@ var _ = require('lodash');
 var DocActions = require('../../actions/docActions');
 var docStore = require('../../stores/docStore');
 
+var ReactomeItem = require('./pathways/reactomeItem.jsx');
+
 var Pathways = React.createClass({
   propTypes: {
     gene: React.PropTypes.object.isRequired,
@@ -17,7 +19,16 @@ var Pathways = React.createClass({
   },
 
   componentWillMount: function() {
-    this.pathwayIds = _.get(this.props, 'gene.ancestors.pathways');
+    var ancestorIds, reactionIds;
+    ancestorIds = _.get(this.props, 'gene.ancestors.pathways');
+    reactionIds = _.get(this.props, 'gene.xrefs.pathways');
+
+    if(reactionIds.length != 1) {
+      console.error("Number of reactions is not 1");
+    }
+
+    this.pathwayIds = reactionIds.concat(ancestorIds);
+
     DocActions.needDocs('pathways', this.pathwayIds);
   },
 
@@ -25,19 +36,36 @@ var Pathways = React.createClass({
     DocActions.noLongerNeedDocs('pathways', this.pathwayIds);
   },
 
+  getReaction: function() {
+    var rxnId, rxn;
+    if(!this.reaction) {
+      rxnId = _.first(this.pathwayIds);
+      rxn = _.get(this.props.docs, ['pathways', rxnId]);
+      if(rxn) {
+        this.reaction = rxn;
+      }
+    }
+    return this.reaction;
+  },
+
   render: function () {
-    var stuff = _.get(this.props, 'docs.pathways');
-    if(stuff) {
-      stuff = _.map(stuff, function(p, id) {
-        return <li key={id}>{p}</li>;
-      });
+    var reactionData, currentNodeId, currentNode, els;
+    reactionData = this.getReaction();
+    if(reactionData) {
+      currentNodeId = reactionData._id;
+      els = [];
+      while(currentNodeId) {
+        currentNode = this.props.docs.pathways[currentNodeId];
+        els.push( <ReactomeItem reactomeItem={currentNode}/> );
+        currentNodeId = _.get(currentNode, 'parents[0]');
+      }
     }
     else {
-      stuff = <li>Nothing yet.</li>
+      els = <li>Nothing yet.</li>
     }
     return (
       <ul>
-        {stuff}
+        {els}
       </ul>
     );
   }
