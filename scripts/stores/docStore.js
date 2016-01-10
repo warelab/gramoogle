@@ -24,13 +24,13 @@ var DocStore = Reflux.createStore({
     }
     else {
       // only notify listeners if we have a new doc to add.
-      var shouldTrigger = ! _.every(indexedDocs, function(doc, id) {
+      var shouldTrigger = ! _.reduce(indexedDocs, function(should, doc, id) {
         var docAlreadyPresent = !!collection[id];
         if(!docAlreadyPresent) {
           collection[id] = doc;
         }
-        return docAlreadyPresent;
-      });
+        return should && docAlreadyPresent;
+      }, true);
 
       if(shouldTrigger) {
         this.trigger(this.docs);
