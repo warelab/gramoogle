@@ -30,7 +30,7 @@ function getClientPromise(collection) {
   return client[collection];
 }
 
-DocActions.needDocs.listen(function (collection, id) {
+DocActions.needDocs.listen(function (collection, id, postprocessFn) {
   var cacheKey, clientCall;
   cacheKey = [collection,id];
   console.log('DocActions.needDocs', collection, id);
@@ -65,9 +65,15 @@ DocActions.needDocs.listen(function (collection, id) {
         }
         return { collection: collection, docs: response.docs };
       })
-      .then(function addToCache(docs) {
-        docCache.set(cacheKey, docs);
-        return docs;
+      .then(function postprocessMaybe(result) {
+        if(postprocessFn) {
+          result.docs = postprocessFn(result.docs);
+        }
+        return result;
+      })
+      .then(function addToCache(result) {
+        docCache.set(cacheKey, result);
+        return result;
       });
   }
 

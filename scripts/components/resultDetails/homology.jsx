@@ -6,6 +6,8 @@ var queryActions = require('../../actions/queryActions');
 var DocActions = require('../../actions/docActions');
 var _ = require('lodash');
 
+var processGenetreeDoc = require('gramene-trees-client').genetree.tree;
+
 var QueryTerm = require('../result/queryTerm.jsx');
 
 function orthoParaList(homology, thisGeneId, type) {
@@ -34,7 +36,7 @@ var Homology = React.createClass({
     this.treeId = this.props.gene.grm_gene_tree;
 
     if(this.treeId) {
-      DocActions.needDocs('genetrees', this.treeId);
+      DocActions.needDocs('genetrees', this.treeId, processGenetreeDoc);
     }
 
     //this.genetree = this.props.docs.genetrees[this.props.gene.grm_gene_tree];
@@ -105,15 +107,19 @@ var Homology = React.createClass({
   },
 
   render: function () {
-    var tree;
+    var tree, geneCount;
     if(this.treeId) {
       tree = _.get(this.props, ['docs', 'genetrees', this.treeId]);
+    }
+
+    if(tree) {
+      geneCount = tree.geneCount;
     }
 
     var filters = [
       <QueryTerm key="all"
                  name="Show All Homologs"
-                 count={0}
+                 count={geneCount}
                  handleClick={this.filterAllHomologs} />
     ];
     if(this.orthologs) {
