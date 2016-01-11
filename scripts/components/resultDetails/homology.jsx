@@ -73,8 +73,12 @@ var Homology = React.createClass({
   },
 
   createOrthologFilters: function() {
-    var fq, idList, result;
-    fq = 'id:(' + this.orthologs.join(' ') + ')';
+    var fq, id, result;
+    id = this.props.gene._id;
+    fq = 'homology__ortholog_one2one:' + id +
+      ' OR homology__ortholog_one2many:' + id +
+      ' OR homology__ortholog_many2many:' + id +
+      ' OR id:' + id;
     result = {};
     result[fq] = {
       category: 'Gene Tree',
@@ -86,8 +90,10 @@ var Homology = React.createClass({
   },
 
   createParalogFilters: function() {
-    var fq, idList, result;
-    fq = 'id:(' + this.paralogs.join(' ') + ')';
+    var fq, id, result;
+    id = this.props.gene._id;
+    fq = 'homology__within_species_paralog:' + id +
+      ' OR id:' + id ;
     result = {};
     result[fq] = {
       category: 'Gene Tree',
