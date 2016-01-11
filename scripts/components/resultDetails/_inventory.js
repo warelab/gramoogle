@@ -15,7 +15,7 @@ module.exports = [
   },
 
   {
-    name: 'Domains', // for display
+    name: 'Transcript Features', // for display
     capability: 'domains',
     reactClass: require('./domains.jsx')
   },

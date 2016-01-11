@@ -3,48 +3,38 @@
 var React = require('react');
 var Reflux = require('reflux');
 var bs = require('react-bootstrap');
+var _ = require('lodash');
+
 var queryActions = require('../../actions/queryActions');
 
+var QueryTerm = require('../result/queryTerm.jsx');
+
 var Domains = React.createClass({
-  //mixins: [Reflux.listenTo(detailsStore,"onStatusChange")],
-
-  //onStatusChange: function(details) {
-  //  this.setState({
-  //    details: details.domains
-  //  });
-  //},
-
-  //getInitialState: function() {
-  //  return {};
-  //},
 
   propTypes: {
-    gene: React.PropTypes.object.isRequired
+    gene: React.PropTypes.object.isRequired,
+    docs: React.PropTypes.object
   },
 
-  //componentWillMount: function () {
-  //  detailsActions.requireDetails('domains');
-  //},
-  //
-  //componentWillUnmount: function () {
-  //  detailsActions.forsakeDetails('domains');
-  //},
-
   createFilter: function() {
-    var drList = this.props.gene.domainRoots.split(' ');
-    var qString;
-    if (drList.length === 1) {
-      qString = 'domainRoots:'+drList[0];
+    var drList = _.get(this.props, 'gene.canonical_translation.domain_roots');
+    if(drList) {
+      drList = drList.split(' ');
+
+      var qString;
+      if (drList.length === 1) {
+        qString = 'domain_roots:' + drList[0];
+      }
+      else {
+        qString = '{!surround}domain_roots:2w(' + drList.join(',') + ')';
+      }
+      return {
+        category: 'Domain Structure',
+        fq: qString,
+        id: qString,
+        display_name: 'Domain structure like ' + this.props.gene.name
+      }
     }
-    else {
-      qString = '{!surround}domainRoots:2w('+drList.join(',')+')';
-    }
-    return {
-      category: 'Domain Structure',
-      fq:qString,
-      id:qString,
-      term: 'Domain structure like ' + this.props.gene.name
-    };
   },
 
   filter: function() {
@@ -52,11 +42,11 @@ var Domains = React.createClass({
   },
   
   render: function () {
-    var gene = this.props.gene;
+    var translation = _.get(this.props, 'gene.canonical_translation');
     var filterLink;
-    if (gene.domainRoots) {
+    if (translation) {
       filterLink = (
-        <a onClick={this.filter}>Protein Domains</a>
+        <QueryTerm name="Same Domains" handleClick={this.filter} />
       );
     }
     return (
