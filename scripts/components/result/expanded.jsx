@@ -5,6 +5,7 @@ var React = require('react');
 var ExpandedResult = React.createClass({
   propTypes: {
     geneDoc: React.PropTypes.object,
+    docs: React.PropTypes.object, // all documents requested by the page.
     details: React.PropTypes.array.isRequired
   },
 
@@ -15,7 +16,7 @@ var ExpandedResult = React.createClass({
 
     if(geneDoc) {
       details = this.props.details.map(function (detail) {
-        var component = React.createElement(detail.reactClass, {gene: geneDoc, expanded: true}),
+        var component = React.createElement(detail.reactClass, {gene: geneDoc, docs: docs, expanded: true}),
           key = geneDoc._id + '-exp-' + detail.name;
         return (
           <div key={key} className="expanded-detail">

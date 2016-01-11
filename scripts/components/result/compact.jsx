@@ -13,7 +13,8 @@ var CompactResult = React.createClass({
   propTypes: {
     searchResult: React.PropTypes.object.isRequired,
     details: React.PropTypes.array.isRequired,
-    geneDoc: React.PropTypes.object
+    geneDoc: React.PropTypes.object,
+    docs: React.PropTypes.object // all documents requested by the page.
   },
 
   mixins: [
@@ -42,10 +43,11 @@ var CompactResult = React.createClass({
   },
 
   render: function() {
-    var searchResult, geneDoc, linksEnabled, handlerFactory, detailLinks, visibleDetail;
+    var searchResult, geneDoc, docs, linksEnabled, handlerFactory, detailLinks, visibleDetail;
 
     searchResult = this.props.searchResult;
     geneDoc = this.props.geneDoc;
+    docs = this.props.docs;
     linksEnabled = !!geneDoc; // we should disable links if the gene doc isn't available yet.
     handlerFactory = this.detailClickHandlerFactory;
     detailLinks = _.map(this.props.details, function(geneDetail) {
@@ -69,7 +71,7 @@ var CompactResult = React.createClass({
     if(this.state.visibleDetail) {
       visibleDetail = (
         <div className="visible-detail">
-          {React.createElement(this.state.visibleDetail.reactClass, {gene: geneDoc, expanded: false})}
+          {React.createElement(this.state.visibleDetail.reactClass, {gene: geneDoc, docs: docs, expanded: false})}
         </div>
       )
     }
