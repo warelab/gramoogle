@@ -12,14 +12,18 @@ var QueryTerm = require('../result/queryTerm.jsx');
 
 function orthoParaList(homology, thisGeneId, type) {
   if(homology) {
-    return _(homology)
+    var homologs = _(homology)
       .pick(function filterCategories(thing, name) {
         return name.indexOf(type) === 0;
       })
-      .push(thisGeneId)
       .values()
       .flatten()
       .value();
+
+    if( !_.isEmpty(homologs)) {
+      homologs.push(thisGeneId);
+      return homologs; // only return something if we have something. We're testing for truthiness later.
+    }
   }
 }
 
