@@ -117,7 +117,10 @@ var Homology = React.createClass({
   },
 
   render: function () {
-    var tree, geneCount;
+    var tree, gene, geneCount, ensemblGenetreeUrl;
+
+    gene = this.props.gene;
+
     if(this.treeId) {
       tree = _.get(this.props, ['docs', 'genetrees', this.treeId]);
     }
@@ -125,6 +128,8 @@ var Homology = React.createClass({
     if(tree) {
       geneCount = tree.geneCount;
     }
+
+    ensemblGenetreeUrl = '//ensembl.gramene.org/' + gene.system_name + '/Gene/Compara_Tree?g=' + gene._id;
 
     var filters = [
       <QueryTerm key="all"
@@ -147,7 +152,14 @@ var Homology = React.createClass({
 
     return (
       <div>
+        <h5>Change the query</h5>
         {filters}
+        <h5>Links</h5>
+        <ul>
+          <li>
+            <a href={ensemblGenetreeUrl}>Ensembl Gene Tree view</a>
+          </li>
+        </ul>
       </div>
     );
   }

@@ -42,15 +42,29 @@ var Domains = React.createClass({
   },
   
   render: function () {
-    var translation = _.get(this.props, 'gene.canonical_translation');
-    var filterLink;
+    var gene, transcriptId, translation, filterLink, ensemblDomainsUrl;
+    gene = this.props.gene;
+    translation = _.get(this.props, 'gene.canonical_translation');
+    transcriptId = _.get(this.props, 'gene.canonical_transcript.name');
+// http://ensembl.gramene.org/Arabidopsis_thaliana/Transcript/Domains?g=AT3G52430;r=3:19431371-19434403;t=AT3G52430.1
+    ensemblDomainsUrl = '//ensembl.gramene.org/' + gene.system_name + '/Transcript/Domains?g=' + gene._id + ';t=' + transcriptId;
+
     if (translation) {
       filterLink = (
         <QueryTerm name="Same Domains" handleClick={this.filter} />
       );
     }
     return (
-      <span>{filterLink}</span>
+      <div>
+        <h5>Change the query</h5>
+        <span>{filterLink}</span>
+        <h5>Links</h5>
+        <ul>
+          <li>
+            <a href={ensemblDomainsUrl}>Ensembl Transcript Domains view</a>
+          </li>
+        </ul>
+      </div>
     );
   }
 });

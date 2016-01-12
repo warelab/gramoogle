@@ -27,8 +27,9 @@ var Term = React.createClass({
 
     suggestedTerm.exclude = false; // so we can toggle between include/exclude
 
-    // TODO REMOVE THIS and rework searchStore.js and search.js to more gracefully handle this.
-    suggestedTerm.fq = suggestedTerm.fq_field + ':' + suggestedTerm.fq_value;
+    if(!suggestedTerm.fq) {
+      suggestedTerm.fq = suggestedTerm.fq_field + ':' + suggestedTerm.fq_value;
+    }
 
     // Notify the rest of the app
     queryActions.setFilter(suggestedTerm);
