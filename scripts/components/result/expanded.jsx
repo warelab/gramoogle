@@ -10,9 +10,10 @@ var ExpandedResult = React.createClass({
   },
 
   render: function() {
-    var geneDoc, details;
+    var geneDoc, docs, details;
 
     geneDoc = this.props.geneDoc;
+    docs = this.props.docs;
 
     if(geneDoc) {
       details = this.props.details.map(function (detail) {
