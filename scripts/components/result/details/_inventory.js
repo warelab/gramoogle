@@ -3,7 +3,7 @@
 module.exports = [
 
   {
-    name: 'Gene Structure',
+    name: 'Structure & Location',
     capability: 'location',
     reactClass: require('./geneStructure.jsx')
   },

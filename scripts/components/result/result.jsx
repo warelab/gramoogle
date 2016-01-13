@@ -7,7 +7,7 @@ var _ = require('lodash');
 
 var DocActions = require('../../actions/docActions');
 
-var detailsInventory = require('./../resultDetails/_inventory');
+var detailsInventory = require('./details/_inventory');
 var LutMixin = require('../../mixins/LutMixin');
 
 var ClosestOrtholog = require('./closestOrtholog.jsx');

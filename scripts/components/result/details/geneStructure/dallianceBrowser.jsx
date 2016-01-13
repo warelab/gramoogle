@@ -34,14 +34,14 @@ var DallianceBrowser = React.createClass({
         viewStart: start - padding,
         viewEnd: end + padding,
         cookieKey: g._id + 'BrowserCookie',
-        
+
         coordSystem: {
           speciesName: g.system_name,
           taxon: g.taxon_id,
           auth: 'Gramene',
           version: '3'
         },
-        
+
         sources: [
           {
             name: 'DNA',
@@ -91,27 +91,8 @@ var DallianceBrowser = React.createClass({
     this.cancel();
   },
   render: function () {
-    var gene, ensemblSummaryUrl;
-
-    gene = this.props.gene;
-
-    // TODO: USe CSS Substring matching to put little icon after link to ensembl
-    // http://blog.teamtreehouse.com/css3-substring-matching-attribute-selectors
-    ensemblSummaryUrl = '//ensembl.gramene.org/' + gene.system_name + '/Gene/Summary?g=' + gene._id;
     return (
-      <bs.Row>
-        <bs.Col xs={12} md={12}>
-          <div id={this.biodallianceElementId()}></div>
-        </bs.Col>
-        <bs.Col xs={12}>
-          <h5>Links</h5>
-          <ul>
-            <li>
-              <a href={ensemblSummaryUrl}>Ensembl Gene view</a>
-            </li>
-          </ul>
-        </bs.Col>
-      </bs.Row>
+      <div id={this.biodallianceElementId()}></div>
     );
   }
 });

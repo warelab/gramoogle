@@ -10,37 +10,56 @@ var QueryTerm = React.createClass({
     category: React.PropTypes.string,
     name: React.PropTypes.string.isRequired,
     count: React.PropTypes.number,
-    handleClick: React.PropTypes.func.isRequired
+    handleClick: React.PropTypes.func.isRequired,
+    questions: React.PropTypes.object
   },
-  getInitialState: function() {
-    return { hidden: false };
+  getInitialState: function () {
+    return {alreadySelected: false, showModal: false};
   },
-  applyFilter: function() {
-    this.props.handleClick();
-    this.setState({ hidden: true });
+  handleClick: function () {
+    if (this.props.questions) {
+      this.showModalDialog();
+    }
+    else {
+      this.applyFilter();
+    }
   },
-  render: function() {
-    var className, category, name, badge;
+  applyFilter: function (choice) {
+    this.props.handleClick(choice);
+    this.setState({alreadySelected: true});
+  },
+  showModalDialog: function () {
+    this.setState({showModal: true});
+  },
+  render: function () {
+    var className, category, name, badge, modal;
 
-    if(this.props.category) {
+    if (this.props.category) {
       category = this.props.category + ' | ';
     }
     name = this.props.name;
     className = "query-term";
 
-    if(this.state.hidden) {
-      className += " hidden";
+    if (this.state.alreadySelected) {
+      className += " already-selected";
     }
 
-    if(_.isNumber(this.props.count)) {
+    if (this.state.showModal) {
+      modal = '<p>This is a modal</p>';
+    }
+
+    if (_.isNumber(this.props.count)) {
       badge = <bs.Badge bsStyle="warning">{this.props.count}</bs.Badge>
     }
 
     return (
-      <div onClick={this.applyFilter} className={className}>
-        {category}
-        <a onClick={this.applyFilter}>{name}</a>
-        {badge}
+      <div className="query-term-outer">
+        <div onClick={this.handleClick} className={className}>
+          {category}
+          <a onClick={this.handleClick}>{name}</a>
+          {badge}
+        </div>
+        {modal}
       </div>
     );
   }

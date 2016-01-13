@@ -2,13 +2,13 @@
 
 var React = require('react');
 var Reflux = require('reflux');
-var queryActions = require('../../actions/queryActions');
-var DocActions = require('../../actions/docActions');
+var queryActions = require('../../../actions/queryActions');
+var DocActions = require('../../../actions/docActions');
 var _ = require('lodash');
 
 var processGenetreeDoc = require('gramene-trees-client').genetree.tree;
 
-var QueryTerm = require('../result/queryTerm.jsx');
+var QueryTerm = require('../queryTerm.jsx');
 
 function orthoParaList(homology, thisGeneId, type) {
   if(homology) {

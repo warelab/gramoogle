@@ -5,9 +5,9 @@ var Reflux = require('reflux');
 var bs = require('react-bootstrap');
 var _ = require('lodash');
 
-var queryActions = require('../../actions/queryActions');
+var queryActions = require('../../../actions/queryActions');
 
-var QueryTerm = require('../result/queryTerm.jsx');
+var QueryTerm = require('../queryTerm.jsx');
 
 var Domains = React.createClass({
 

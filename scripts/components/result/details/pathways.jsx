@@ -3,8 +3,8 @@
 var React = require('react');
 var Reflux = require('reflux');
 var _ = require('lodash');
-var DocActions = require('../../actions/docActions');
-var docStore = require('../../stores/docStore');
+var DocActions = require('../../../actions/docActions');
+var docStore = require('../../../stores/docStore');
 
 var ReactomeItem = require('./pathways/reactomeItem.jsx');
 
