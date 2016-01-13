@@ -33,8 +33,9 @@ var Result = React.createClass({
   },
 
   requestGeneDoc: function() {
-    if(!this.props.geneDoc) {
+    if(!this.props.geneDoc && !this.requestedGeneDoc) {
       DocActions.needDocs('genes', this.props.searchResult.id);
+      this.requestedGeneDoc = true;
     }
   },
 
