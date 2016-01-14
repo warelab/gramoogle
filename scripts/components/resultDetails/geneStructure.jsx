@@ -97,7 +97,7 @@ var DallianceBrowser = React.createClass({
 
     // TODO: USe CSS Substring matching to put little icon after link to ensembl
     // http://blog.teamtreehouse.com/css3-substring-matching-attribute-selectors
-    ensemblUrl = '//ensembl.gramene.org/' + gene.system_name + '/Gene/Summary?g=' + gene.biodallianceElementId;
+    ensemblUrl = '//ensembl.gramene.org/' + gene.system_name + '/Gene/Summary?g=' + gene._id;
     return (
       <bs.Row>
         <bs.Col xs={12} md={12}>

@@ -5,7 +5,7 @@ var Reflux = require('reflux');
 var _ = require('lodash');
 var LutMixin = require('../../mixins/LutMixin');
 
-var ClosestOtholog = React.createClass({
+var ClosestOrtholog = React.createClass({
   mixins: [LutMixin.lutFor('taxon')],
   propTypes: {
     gene: React.PropTypes.object.isRequired
@@ -16,9 +16,16 @@ var ClosestOtholog = React.createClass({
   render: function() {
     var gene, name, taxonId, desc, species;
     gene = this.props.gene;
-    name = gene.rep_name || gene.rep_id;
-    taxonId = gene.rep_taxon_id;
-    desc = gene.rep_desc;
+    if (gene.closest_rep_id) {
+      name = gene.closest_rep_name || gene.closest_rep_id;
+      taxonId = gene.closest_rep_taxon_id;
+      desc = gene.closest_rep_description;
+    }
+    else if (gene.model_rep_id) {
+      name = gene.model_rep_name || gene.model_rep_id;
+      taxonId = gene.model_rep_taxon_id;
+      desc = gene.model_rep_description;
+    }
     if(taxonId && this.state.luts.taxon) {
       species = this.state.luts.taxon[taxonId];
     }
@@ -34,4 +41,4 @@ var ClosestOtholog = React.createClass({
   }
 });
 
-module.exports = ClosestOtholog;
+module.exports = ClosestOrtholog;
