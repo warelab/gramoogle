@@ -10,9 +10,13 @@ var bs = require('react-bootstrap');
 var Results = React.createClass({
   getInitialState: function () {
     return {
-      viz: mq.isLargeScreen(),
+      viz: mq.isLargeScreen() && this.shouldShowVis(),
       list: true
     };
+  },
+  shouldShowVis: function(props) {
+    props = props || this.props;
+    return props.results.metadata.count > 1;
   },
   toggleViz: function() {
     var newState = {
@@ -25,6 +29,11 @@ var Results = React.createClass({
       list: !this.state.list
     };
     this.setState(newState);
+  },
+  componentWillReceiveProps: function(newProps) {
+    this.setState({
+      viz: mq.isLargeScreen() && this.shouldShowVis(newProps)
+    });
   },
   render: function () {
     var theViz, theList;
