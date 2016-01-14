@@ -2,16 +2,17 @@
 
 var React = require('react');
 var Reflux = require('reflux');
+var _ = require('lodash');
 var bs = require('react-bootstrap');
 var resultTypes = require('gramene-search-client').resultTypes;
 var QueryActions = require('../actions/queryActions');
-var geneStore = require('../stores/geneStore');
+var docStore = require('../stores/docStore');
 
 var Result = require('./result/result.jsx');
 
 
 var ResultsList = React.createClass({
-  mixins: [Reflux.connect(geneStore,"geneDocs")],
+  mixins: [Reflux.connect(docStore,"docs")],
   getResultType: function() {
     return resultTypes.get(
       'list',
@@ -28,14 +29,15 @@ var ResultsList = React.createClass({
     QueryActions.moreResults(20);
   },
   render: function () {
-    var list, markup, more, geneDocs;
+    var list, markup, more, geneDocs, docs;
 
-    geneDocs = this.state.geneDocs || {};
+    geneDocs = _.get(this.state, 'docs.genes') || {};
+    docs = this.state.docs;
     list = this.props.results.list;
     if(list && list.length) {
       var searchResults = list.map(function(searchResult) {
         return (
-          <Result key={searchResult.id} searchResult={searchResult} geneDoc={geneDocs[searchResult.id]} />
+          <Result key={searchResult.id} searchResult={searchResult} geneDoc={geneDocs[searchResult.id]} docs={docs} />
         );
       });
 
