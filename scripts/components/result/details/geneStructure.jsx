@@ -21,14 +21,15 @@ var GeneStructure = React.createClass({
     // TODO: USe CSS Substring matching to put little icon after link to ensembl
     // http://blog.teamtreehouse.com/css3-substring-matching-attribute-selectors
     ensemblSummaryUrl = '//ensembl.gramene.org/' + gene.system_name + '/Gene/Summary?g=' + gene._id;
+
     return (
       <div>
-        /* <DallianceBrowser gene={gene} expanded={this.props.expanded} /> */
+        <DallianceBrowser gene={gene} expanded={this.props.expanded} />
         <bs.Row>
-          <bs.Col xs={12} md={8}>
+          <bs.Col xs={12} md={4}>
             <Location gene={gene} />
           </bs.Col>
-          <bs.Col xs={12} md={4}>
+          <bs.Col xs={12} md={8}>
             <h5>Links</h5>
             <ul>
               <li>
