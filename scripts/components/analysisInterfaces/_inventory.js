@@ -4,7 +4,7 @@ module.exports = {
   Species: {
     name: 'Species', // for display
     field: 'species', // field in the tally result type
-    queryField: 'NCBITaxon_ancestors', // field used as a query parameter
+    queryField: 'taxonomy__ancestors', // field used as a query parameter
     reactClass: require('./species.jsx') // view component class
   },
   Homologs: {
