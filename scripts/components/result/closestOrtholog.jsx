@@ -16,16 +16,17 @@ var ClosestOrtholog = React.createClass({
   render: function() {
     var gene, name, taxonId, desc, species;
     gene = this.props.gene;
-    if (gene.closest_rep_id) {
-      name = gene.closest_rep_name || gene.closest_rep_id;
-      taxonId = gene.closest_rep_taxon_id;
-      desc = gene.closest_rep_description;
-    }
-    else if (gene.model_rep_id) {
+    if (gene.model_rep_id) {
       name = gene.model_rep_name || gene.model_rep_id;
       taxonId = gene.model_rep_taxon_id;
       desc = gene.model_rep_description;
     }
+    else if (gene.closest_rep_id) {
+      name = gene.closest_rep_name || gene.closest_rep_id;
+      taxonId = gene.closest_rep_taxon_id;
+      desc = gene.closest_rep_description;
+    }
+
     if(taxonId && this.state.luts.taxon) {
       species = this.state.luts.taxon[taxonId];
     }

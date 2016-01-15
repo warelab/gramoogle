@@ -6,7 +6,7 @@ var bs = require('react-bootstrap');
 var _ = require('lodash');
 var queryActions = require('../../actions/queryActions');
 //var visualizationStore = require('../stores/visualizationStore');
-var detailsInventory = require('./../resultDetails/_inventory');
+var detailsInventory = require('./details/_inventory');
 var lutStore = require('../../stores/lutStore');
 
 var CompactResult = React.createClass({

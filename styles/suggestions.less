@@ -1,5 +1,6 @@
 @import 'colors';
 @import 'bootstrap-3.3.4/variables';
+@import 'queryTerm.less';
 
 .suggestions {
   .categories {
@@ -22,17 +23,21 @@
           display: inline;
           padding: 0;
           a {
-            &:extend(.btn);
-            &:extend(.btn-default);
-            color: @gramene-darkgreen;
-            border-color: @gramene-darkgreen;
-            background-color: @gramene-lightergreen;
-            margin: @padding-xs-vertical;
-
+            &:extend(.query-term);
+            //&:extend(.btn-default);
+            //color: @gramene-darkgreen;
+            //border-color: @gramene-darkgreen;
+            //background-color: @gramene-lightergreen;
+            //margin: @padding-xs-vertical;
+            //
             .badge {
-              background-color: @gramene-mediumgreen;
-              margin-left: @padding-xs-horizontal;
+              &:extend(.query-term .badge);
             }
+
+            //.badge {
+            //  background-color: @gramene-mediumgreen;
+            //  margin-left: @padding-xs-horizontal;
+            //}
           }
         }
         .term.empty {
