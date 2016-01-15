@@ -65,7 +65,7 @@ var Welcome = React.createClass({
           <div className="feature col-sm-4">
             <div className="well">
               <strong>Gene view</strong>
-              <p>Concise view of available information about a gene:</p>
+              <p>Concise view of available data about a gene:</p>
               <img className="img-responsive" src="assets/images/welcome/gene_view.png" />
             </div>
           </div>
