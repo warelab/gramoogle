@@ -12,3 +12,23 @@
 a {
   cursor: pointer;
 }
+
+
+/* Padding required for body to compensate for fixed navbar height in various conditions */
+body {
+  padding-top: 51px;
+}
+
+body.has-filters {
+  padding-top: 85px;
+}
+
+@media only screen and (max-width: @screen-xs-max) {
+  body {
+    padding-top: 97px;
+  }
+
+  body.has-filters {
+    padding-top: 134px;
+  }
+}
