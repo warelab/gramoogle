@@ -7,7 +7,7 @@ var _ = require('lodash');
 
 var resultType = resultTypes.get('facet');
 
-const LOADING_MESSAGE = 'laoding…';
+const LOADING_MESSAGE = 'loading…';
 
 var Summary = React.createClass({
   propTypes: {
