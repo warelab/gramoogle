@@ -4,9 +4,17 @@ var _ = require('lodash');
 
 var mq;
 
+var mqs = {};
+
+const SMALL_SCREEN_Q = "(max-device-width: 960px), (max-width: 768px)";
+
 if(window && window.matchMedia && _.isFunction(window.matchMedia)) {
   mq = function mq(q) {
-    return window.matchMedia(q).matches;
+    var mm = mqs[q];
+    if(!mm) {
+      mm = mqs[q] = window.matchMedia(q);
+    }
+    return mm;
   }
 }
 else {
@@ -15,6 +23,6 @@ else {
 
 module.exports = {
   isLargeScreen: function() {
-    return !mq("(max-device-width: 960px), (max-width: 768px)");
+    return !mq(SMALL_SCREEN_Q).matches;
   }
 };
