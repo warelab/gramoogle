@@ -29,14 +29,14 @@ var ResultsVisualization = React.createClass({
 
   handleTreeRootChange: function (newRoot, oldRoot) {
     console.log("handleTaxonomyRootChange",newRoot,oldRoot);
-    // TODO: clobber other positive NCBITaxon_ancestors filters?
-    queryActions.removeFilter({fq: 'NCBITaxon_ancestors:'+oldRoot.model.id});
+    // TODO: clobber other positive taxonomy__ancestors filters?
+    queryActions.removeFilter({fq: 'taxonomy__ancestors:'+oldRoot.model.id});
     if (newRoot.id != "root/Eukaryota") {
       queryActions.setFilter({
-        fq: 'NCBITaxon_ancestors:'+newRoot.model.id,
+        fq: 'taxonomy__ancestors:'+newRoot.model.id,
         category: 'Taxonomy',
         exclude: false,
-        term: newRoot.model.name
+        display_name: newRoot.model.name
       });
     }
   },
@@ -44,17 +44,17 @@ var ResultsVisualization = React.createClass({
   handleSubtreeCollapse: function (taxonNode) {
     console.log("handleTaxonomySubtreeCollapse",taxonNode);
     queryActions.setFilter({
-      fq: '-NCBITaxon_ancestors:'+taxonNode.model.id,
+      fq: '-taxonomy__ancestors:'+taxonNode.model.id,
       category: 'Taxonomy',
       exclude: true,
-      term: taxonNode.model.name
+      display_name: taxonNode.model.name
     });
   },
 
   handleSubtreeExpand: function (taxonNode) {
     console.log("handleTaxonomySubtreeExpand",taxonNode);
     queryActions.removeFilter({
-      fq: '-NCBITaxon_ancestors:'+taxonNode.model.id,
+      fq: '-taxonomy__ancestors:'+taxonNode.model.id,
     });
   },
 
@@ -83,7 +83,7 @@ var ResultsVisualization = React.createClass({
     }
 
     return (
-      <div className="resultsVis">
+      <div className="results-vis big-vis">
         {summary}
       </div>
     );

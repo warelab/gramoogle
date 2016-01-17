@@ -45,7 +45,7 @@ var Header = React.createClass({
     }
 
     return (
-      <Navbar className="header" brand={logo}>
+      <Navbar className="header" brand={logo} fixedTop={true} >
         <Search search={search} onAnalysisButtonPress={this.toggleAnalysisVisibility}/>
           {analysis}
       </Navbar>

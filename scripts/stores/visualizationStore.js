@@ -20,15 +20,15 @@ module.exports = Reflux.createStore({
     var taxon_id = bins.start.taxon_id;
     var taxNode = this.taxonomy.indices.id[taxon_id];
     var species = taxNode.name;
+    var binField = this.taxonomy.binParams.method + '_' + this.taxonomy.binParams.param + '__bin';
+    var binRange = bins.start.region === 'UNANCHORED'
+      ? bins.start.region
+      : bins.start.region + ':' + bins.start.start + '-' + bins.end.end;
     QueryActions.setFilter({
       category: 'Region',
-      display_name: species + ' ' + bins.start.region + ':' + bins.start.start + '-' + bins.end.end,
+      display_name: species + ' ' + binRange,
       exclude: false,
-      fq: 'taxon_id:' + taxon_id +
-      ' AND region:' + bins.start.region +
-      ' AND start:[0 TO ' + bins.end.end +
-      '] AND end:[' + bins.start.start +
-      ' TO *]'
+      fq: binField+ ':[' + bins.start.idx + ' TO ' + bins.end.idx + ']'
     });
   },
 
@@ -94,7 +94,7 @@ module.exports = Reflux.createStore({
   possiblyInitBinnedGenomesAndTrigger: function() {
     if(!this.fieldName) {
       this.taxonomy.removeBins();
-      this.trigger({taxonomy: taxonomy});
+      this.trigger({taxonomy: this.taxonomy});
     }
 
     else if (this.canInitBinnedGenomes()) {

@@ -21,22 +21,26 @@ function checkRequestedResultTypesArePresent(data: map): map {
 }
 
 function prepFilters(filters: map): map {
-  var newFilters = {};
-  var filterCategories = {};
-  for (var fq in filters) {
-    var fqMetadata = filters[fq];
-    var category = fqMetadata.category;
-    if (fqMetadata.exclude) {
-      newFilters[fq] = {};
+  var newFilters, filterCategories, fq, newFq, fqMetadata, category;
+  newFilters = {};
+  filterCategories = {};
+  for (fq in filters) {
+    fqMetadata = filters[fq];
+    newFq = fq.replace(/,/g, '|');
+    category = fqMetadata.category;
+    if (fqMetadata.exclude || // we always AND queries where we exclude things
+      newFq.indexOf('{!surround}') === 0)  // surround queries cannot be wrapped in parens
+    {
+      newFilters[newFq] = {};
     }
     else {
       if (!filterCategories.hasOwnProperty(category)) {
         filterCategories[category] = [];
       }
-      filterCategories[category].push(fq);
+      filterCategories[category].push(newFq);
     }
   }
-  for (var category in filterCategories) {
+  for (category in filterCategories) {
     newFilters['('+filterCategories[category].join(') OR (')+')'] = {};
   }
   console.log('prepFilters',filters,newFilters);

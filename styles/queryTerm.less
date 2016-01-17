@@ -1,0 +1,23 @@
+.query-term {
+  &:extend(.btn);
+  &:extend(.btn-default);
+  color: @gramene-darkgreen;
+  border-color: @gramene-darkgreen;
+  background-color: @gramene-lightergreen;
+  margin: @padding-xs-vertical;
+
+  .badge {
+    background-color: @gramene-mediumgreen;
+    margin-left: @padding-xs-horizontal;
+  }
+}
+
+.query-term.already-selected {
+  background-color: @gray-lighter;
+  cursor:not-allowed;
+
+  a {
+    color: @gray-darker;
+    cursor:not-allowed;
+  }
+}

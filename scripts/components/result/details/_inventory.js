@@ -3,7 +3,7 @@
 module.exports = [
 
   {
-    name: 'Gene Structure',
+    name: 'Structure & Location',
     capability: 'location',
     reactClass: require('./geneStructure.jsx')
   },
@@ -15,9 +15,15 @@ module.exports = [
   },
 
   {
-    name: 'Domains', // for display
+    name: 'Transcript Features', // for display
     capability: 'domains',
     reactClass: require('./domains.jsx')
+  },
+
+  {
+    name: 'Pathways', // for display
+    capability: 'pathways',
+    reactClass: require('./pathways.jsx')
   },
 
   {

@@ -1,3 +1,5 @@
+@import 'bootstrap-3.3.4/variables';
+
 ul.search-box-nav {
   margin: 0.6rem 0;
 
@@ -20,6 +22,12 @@ ul.search-box-nav {
 
     .suggestions {
       width: calc(~'100% - @{grid-gutter-width}');
+    }
+  }
+
+  @media only screen and (max-width: @screen-xs-max) {
+    #stats-button {
+      display: none;
     }
   }
 

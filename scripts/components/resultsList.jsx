@@ -6,6 +6,7 @@ var _ = require('lodash');
 var bs = require('react-bootstrap');
 var resultTypes = require('gramene-search-client').resultTypes;
 var QueryActions = require('../actions/queryActions');
+var DocActions = require('../actions/docActions');
 var docStore = require('../stores/docStore');
 
 var Result = require('./result/result.jsx');
@@ -29,15 +30,23 @@ var ResultsList = React.createClass({
     QueryActions.moreResults(20);
   },
   render: function () {
-    var list, markup, more, geneDocs, docs;
+    var list, markup, more, geneDocs, docs, singleResult;
 
     geneDocs = _.get(this.state, 'docs.genes') || {};
     docs = this.state.docs;
     list = this.props.results.list;
+    singleResult = list && list.length === 1;
+    if(singleResult) {
+      DocActions.needDocs('genes', list[0].id);
+    }
     if(list && list.length) {
       var searchResults = list.map(function(searchResult) {
         return (
-          <Result key={searchResult.id} searchResult={searchResult} geneDoc={geneDocs[searchResult.id]} docs={docs} />
+          <Result key={searchResult.id}
+                  searchResult={searchResult}
+                  geneDoc={geneDocs[searchResult.id]}
+                  expandedByDefault={singleResult}
+                  docs={docs} />
         );
       });
 

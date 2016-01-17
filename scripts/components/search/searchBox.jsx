@@ -29,7 +29,7 @@ var SearchBox = React.createClass({
     );
 
     statsDropdown = (
-      <Button onClick={this.props.onStatsButtonPress} disabled={true}>
+      <Button id="stats-button" onClick={this.props.onStatsButtonPress} disabled={true}>
         Analysis <span className="caret"></span>
       </Button>
     );
