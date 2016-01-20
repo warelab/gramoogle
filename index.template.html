@@ -16,8 +16,18 @@
     </script>
 </head>
 <body>
+<!--[if !IE]><!-->
     <div id="content"></div>
     <%= footer %>
     <script src="bundle.js"></script>
+<!--<![endif]-->
+<!--[if IE]>
+    <h1>Unsupported browser</h1>
+    <p>Internet Explorer versions 9 and below are not supported.
+        Please upgrade to Internet Explorer 10 or above,
+        or the current version of Microsoft Edge, Google Chrome,
+        Apple Safari or Mozilla Firefox.</p>
+<![endif]-->
+
 </body>
 </html>
