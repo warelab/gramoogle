@@ -33,7 +33,7 @@ function handleHashChangeFactory(callback) {
 
 function hashDidChange() {
   var result = expectedHash !== loc.hash;
-  console.debug("Hash changed? ", result, expectedHash, loc.hash);
+  console.info("Hash changed? ", result, expectedHash, loc.hash);
   return result;
 }
 
