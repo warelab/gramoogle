@@ -39,6 +39,8 @@ var Term = React.createClass({
     // Immediately hide the node. We are not currently storing
     // state inside suggestStore because suggestions are ephemeral
     this.setState({hidden: true});
+
+    return false;
   },
   render: function () {
     var suggestion, className, idx;
