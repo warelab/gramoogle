@@ -37,7 +37,7 @@ var Suggest = React.createClass({
             <strong>No suggestions found.</strong> You may still attempt a full text search, though it is unlikely to find any genes for you.
           </bs.Alert>
           <ul className="categories">
-            <Category category={suggestionCategories[0]} hideLabel={true} />
+            <Category idx="2" category={suggestionCategories[0]} hideLabel={true} />
           </ul>
         </bs.Panel>
       )
@@ -47,9 +47,9 @@ var Suggest = React.createClass({
       .filter(function (category) {
         return !!category.suggestions.length;
       })
-      .map(function (category) {
+      .map(function (category, idx) {
         return (
-          <Category key={category.label} category={category}/>
+          <Category idx={idx} key={category.label} category={category}/>
         );
       })
       .value();

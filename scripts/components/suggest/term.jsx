@@ -9,7 +9,8 @@ var bs = require('react-bootstrap');
 
 var Term = React.createClass({
   propTypes: {
-    suggestedTerm: React.PropTypes.object.isRequired
+    suggestedTerm: React.PropTypes.object.isRequired,
+    idx: React.PropTypes.number.isRequired
   },
   getInitialState: function() {
     return { hidden: false };
@@ -40,13 +41,17 @@ var Term = React.createClass({
     this.setState({hidden: true});
   },
   render: function () {
-    var suggestion = this.props.suggestedTerm;
-    var className = 'term' +
+    var suggestion, className, idx;
+
+    suggestion = this.props.suggestedTerm;
+    className = 'term' +
       (suggestion.num_genes == 0 ? ' empty' : '') +
       (this.state.hidden ? ' hidden' : '');
+    idx = this.props.idx;
+
     return (
       <li className={className}>
-        <a onClick={this.acceptSuggestion}>
+        <a tabIndex={idx} onClick={this.acceptSuggestion} href="javascript:0">
           {suggestion.display_name}
           <bs.Badge bsStyle="warning">{suggestion.num_genes}</bs.Badge>
         </a>
