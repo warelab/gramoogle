@@ -18,8 +18,17 @@ var SearchBox = React.createClass({
     onQueryChange: React.PropTypes.func.isRequired,
     onStatsButtonPress: React.PropTypes.func.isRequired
   },
+  getInputNode: function() {
+    return this.refs.textInput.getInputDOMNode();
+  },
   clearSearchString: function() {
-    this.refs.textInput.getInputDOMNode().value = '';
+    this.getInputNode().value = '';
+  },
+  focus: function() {
+    this.getInputNode().focus();
+  },
+  componentDidMount: function() {
+    this.focus();
   },
   render: function() {
     var resultsCountStatement, statsDropdown;
@@ -36,6 +45,7 @@ var SearchBox = React.createClass({
     return (
       <Input type="search"
              ref="textInput"
+             tabIndex="1"
              placeholder="Search for genes…"
              standalone={true}
              addonAfter={resultsCountStatement}
