@@ -15,7 +15,10 @@ var Term = React.createClass({
   getInitialState: function() {
     return { hidden: false };
   },
-  acceptSuggestion: function () {
+  acceptSuggestion: function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+
     var suggestedTerm = _.clone(this.props.suggestedTerm);
 
     console.log('user wants', suggestedTerm);
