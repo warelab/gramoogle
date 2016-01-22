@@ -1,4 +1,5 @@
 @import 'bootstrap-3.3.4/variables';
+@import 'colors';
 
 .results {
   min-height: 50rem;
@@ -96,12 +97,36 @@
 }
 
 .closest-ortholog {
-  margin-top: @line-height-computed; /* same as h3 in bootstrap */
-  padding: 0 @padding-base-horizontal; /* vertical padding from h and p elements */
+  margin-top: @line-height-computed + @padding-small-vertical; /* same as h3 in bootstrap, plus extra for ::before element */
+  padding: 0 @padding-xs-horizontal; /* vertical padding from h and p elements */
+  float: right;
   font-size: smaller;
   border: 1px solid @gramene-orange;
 
   small {
-    margin-left: @padding-small-horizontal;
+    padding-left: @padding-xs-horizontal;
+  }
+
+  h4, p {
+    margin: @padding-base-vertical 0;
+  }
+}
+
+.closest-ortholog::before {
+  content: "Model Species Ortholog";
+  position: relative;
+  float: right;
+  margin-top: -10px;
+  border: solid 1px;
+
+  padding: 0 @padding-xs-horizontal;
+  margin-bottom: @padding-small-vertical;
+  background: @gramene-offwhite;
+  color: @gramene-orange;
+}
+
+@media only screen and (max-width: @screen-xs-max) {
+  .closest-ortholog {
+    display: none;
   }
 }
