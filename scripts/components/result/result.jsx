@@ -1,7 +1,6 @@
 'use strict';
 
 var React = require('react');
-var Reflux = require('reflux');
 var bs = require('react-bootstrap');
 var _ = require('lodash');
 
@@ -69,22 +68,19 @@ var Result = React.createClass({
     return (
       <li className={className} onMouseOver={this.requestGeneDoc}>
 
-        <bs.Row>
-          <bs.Col xs={12} sm={6} md={8}>
+        <div className="result-gene-summary">
+          <div className="result-gene-title-body">
             {title}
             {body}
-          </bs.Col>
-
-          <bs.Col xs={12} sm={6} md={4}>
-            {closestOrtholog}
-          </bs.Col>
-        </bs.Row>
+          </div>
+          {closestOrtholog}
+        </div>
         {details}
       </li>
     );
   },
 
-  getClassName: function() {
+  getClassName: function () {
     var classNames;
 
     classNames = ['result'];
@@ -102,10 +98,10 @@ var Result = React.createClass({
     glyph = this.state.expanded ? 'menu-down' : 'menu-right';
     taxonLut = _.get(this.state, 'luts.taxon');
     if (taxonLut) {
-      species = taxonLut[searchResult.taxon_id];
+      species = <span className="species-name">{taxonLut[searchResult.taxon_id]}</span>;
     }
-    if(searchResult.id !== searchResult.name) {
-      geneId = <span className="gene-id">searchResult.id</span>;
+    if (searchResult.id !== searchResult.name) {
+      geneId = <span className="gene-id">{searchResult.id}</span>;
     }
 
     return (
@@ -115,7 +111,7 @@ var Result = React.createClass({
         </a>
         <a onClick={this.toggleExpanded}>{searchResult.name}</a>
         &nbsp;
-        <small>{species} {geneId}</small>
+        <small>{geneId}{species}</small>
       </h3>
     );
   },
@@ -135,8 +131,8 @@ var Result = React.createClass({
     // 1. we are not in expanded mode (the homology details tab is thus visible, see point 2.)
     // 2. the homolgy details tab is not visible (it contains this information as well)
     // 3. we have data to show:-
-    //   a. either there's a closest ortholog (determined by traversing the gene tree until an id or description looks curated)
-    //   b. or there's a model ortholog (traverse tree to find an otholog in arabidopsis)
+    //   a. either there's a closest ortholog (determined by traversing the gene tree until an id or description looks
+    // curated) b. or there's a model ortholog (traverse tree to find an otholog in arabidopsis)
     showClosestOrtholog = !this.state.expanded && !this.state.homologyDetailsVisible &&
       (
         searchResult.closest_rep_id || (

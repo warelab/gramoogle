@@ -13,6 +13,11 @@
     .result {
       padding: @padding-base-vertical (@padding-base-horizontal - 1px);
 
+      /* closest-ortholog is the corresponding float: right; */
+      .result-gene-title-body {
+        float: left;
+      }
+
       .gene-name {
         .glyphicon {
           color: @gramene-orange;
@@ -20,59 +25,111 @@
         }
       }
 
+      /* gene-id and species name are used in result-gene-title-body and closest-ortholog */
+      .gene-id {
+        white-space: nowrap;
+      }
+
+      /* ensure there's a space between gene-id and species */
+      .species-name {
+        padding-left: @padding-xs-horizontal;
+      }
+
       .gene-description {
         padding-left: @padding-large-horizontal;
       }
 
-      .result-links {
-        &:extend(.list-inline all);
+      .closest-ortholog {
+        margin-top: @line-height-computed + @padding-small-vertical; /* same as h3 in bootstrap, plus extra for ::before element */
+        padding: 0 @padding-xs-horizontal; /* vertical padding from h and p elements */
+        float: right; /* .result-gene-title-body is the corresponding float: left; */
+        font-size: smaller;
+        border: 1px solid @gramene-orange;
+        width: fit-content;
 
-        padding-left: @padding-large-horizontal;
-        margin-left: 0;
+        > h4, > p {
+          margin: @padding-base-vertical 0;
+        }
 
-        .result-gene-detail-name {
+        /* clear the title (defined in the ::before block below) */
+        :first-child {
+          clear: right;
+        }
+      }
+
+      /* this is the "title" of the closest ortholog box */
+      .closest-ortholog::before {
+        content: "Model Species Ortholog";
+        position: relative;
+        float: right;
+        margin-top: -10px;
+        border: solid 1px;
+
+        padding: 0 @padding-xs-horizontal;
+        margin-bottom: @padding-xs-vertical;
+        background: @gramene-offwhite;
+        color: @gramene-orange;
+      }
+
+      @media only screen and (max-width: @screen-xs-max) {
+        .closest-ortholog {
+          display: none;
+        }
+      }
+
+      .result-content {
+        clear: both; /* result-gene-title-body and closest-ortholog are floating above this element */
+
+        .result-links {
+          &:extend(.list-inline all);
+
+          padding-left: @padding-large-horizontal;
+          margin-left: 0;
+
+          .result-gene-detail-name {
+            padding: @padding-base-vertical @padding-base-horizontal;
+          }
+
+          .result-gene-detail-name:hover {
+            background-color: @gramene-lightergreen;
+          }
+
+          .result-gene-detail-name.active {
+            background-color: @gramene-darkgreen;
+            > a {
+              color: @gramene-offwhite;
+            }
+          }
+        }
+
+        .visible-detail {
+          border: 1px solid @gramene-darkgreen;
+          margin-left: @padding-large-horizontal;
+          margin-right: @padding-large-horizontal;
           padding: @padding-base-vertical @padding-base-horizontal;
         }
 
-        .result-gene-detail-name:hover {
-          background-color: @gramene-lightergreen;
-        }
+        .expanded-details {
+          padding: @padding-large-vertical @padding-large-horizontal;
 
-        .result-gene-detail-name.active {
-          background-color: @gramene-darkgreen;
-          > a {
-            color: @gramene-offwhite;
+          .expanded-detail {
+            padding: @padding-large-vertical 0;
           }
         }
-      }
 
-      .visible-detail {
-        border: 1px solid @gramene-darkgreen;
-        margin-left: @padding-large-horizontal;
-        margin-right: @padding-large-horizontal;
-        padding: @padding-base-vertical @padding-base-horizontal;
-      }
+        .xrefs {
+          table-layout: fixed;
 
-      .expanded-details {
-        padding: @padding-large-vertical @padding-large-horizontal;
+          .xref-name-col {
+            width: 20%;
+          }
 
-        .expanded-detail {
-          padding: @padding-large-vertical 0;
-        }
-      }
+          .xref-value-col {
+            width: 80%;
 
-      .xrefs {
-        table-layout: fixed;
-
-        .xref-name-col {
-          width: 20%;
-        }
-
-        .xref-value-col {
-          width: 80%;
-
-          ol.xref-id-list {
-            &:extend(.list-unstyled all);
+            ol.xref-id-list {
+              &:extend(.list-unstyled all);
+            }
           }
         }
       }
@@ -94,51 +151,4 @@
   }
 
   padding-bottom: @padding-large-vertical;
-}
-
-.closest-ortholog {
-  margin-top: @line-height-computed + @padding-small-vertical; /* same as h3 in bootstrap, plus extra for ::before element */
-  padding: 0 @padding-xs-horizontal; /* vertical padding from h and p elements */
-  float: right;
-  font-size: smaller;
-  border: 1px solid @gramene-orange;
-  width: fit-content;
-
-  .gene-id {
-    white-space: nowrap;
-  }
-
-  /* ensure there's a space between gene-id and species */
-  .species {
-    padding-left: @padding-xs-horizontal;
-  }
-
-  > h4, > p {
-    margin: @padding-base-vertical 0;
-  }
-
-  /* clear the title (defined in the ::before block below) */
-  :first-child {
-    clear: right;
-  }
-}
-
-/* this is the "title" of the closest ortholog box */
-.closest-ortholog::before {
-  content: "Model Species Ortholog";
-  position: relative;
-  float: right;
-  margin-top: -10px;
-  border: solid 1px;
-
-  padding: 0 @padding-xs-horizontal;
-  margin-bottom: @padding-xs-vertical;
-  background: @gramene-offwhite;
-  color: @gramene-orange;
-}
-
-@media only screen and (max-width: @screen-xs-max) {
-  .closest-ortholog {
-    display: none;
-  }
 }

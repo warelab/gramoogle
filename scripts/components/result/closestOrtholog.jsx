@@ -35,7 +35,7 @@ var ClosestOrtholog = React.createClass({
       <div className="closest-ortholog">
         <h4>
           <span className="gene-id">{name}</span>
-          <small className="species">{species}</small>
+          <small className="species-name">{species}</small>
         </h4>
         <p>{desc}</p>
       </div>
