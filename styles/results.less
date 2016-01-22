@@ -19,11 +19,9 @@
         justify-content: space-between;
       }
 
-      /* closest-ortholog is the corresponding float: right; */
+      /* closest-ortholog is the other flexbox */
       .result-gene-title-body {
         flex: 1 1 auto;
-        //display: inline-block;
-        //float: left;
       }
 
       .gene-name {
@@ -53,6 +51,7 @@
         padding-left: @padding-large-horizontal;
       }
 
+      /* result-gene-title-body is the other flexbox'*/
       .closest-ortholog {
         flex: 1 1 auto;
         width: fit-content;
