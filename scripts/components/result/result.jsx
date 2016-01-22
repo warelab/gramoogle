@@ -23,26 +23,31 @@ var Result = React.createClass({
     docs: React.PropTypes.object // all documents requested by the page.
   },
 
-  getInitialState: function() {
+  getInitialState: function () {
     var state = this.getLutState();
     state.expanded = this.props.expandedByDefault;
+    state.homologyDetailsVisible = false;
     return state;
   },
 
-  toggleExpanded: function() {
-    if(!this.props.expandedByDefault) {
+  toggleExpanded: function () {
+    if (!this.props.expandedByDefault) {
       this.setState({expanded: !this.state.expanded});
     }
   },
 
-  componentWillReceiveProps: function(nextProps) {
-    if(!this.state.expanded && nextProps.expandedByDefault) {
+  checkIfHomologyDetailsAreVisible: function (selectedDetailName) {
+    this.setState({homologyDetailsVisible: (selectedDetailName === 'Homology')});
+  },
+
+  componentWillReceiveProps: function (nextProps) {
+    if (!this.state.expanded && nextProps.expandedByDefault) {
       this.setState({expanded: nextProps.expandedByDefault});
     }
   },
 
-  requestGeneDoc: function() {
-    if(!this.requestedGeneDoc) {
+  requestGeneDoc: function () {
+    if (!this.requestedGeneDoc) {
       this.requestedGeneDoc = true;
       DocActions.needDocs('genes', this.props.searchResult.id);
     }
@@ -53,28 +58,35 @@ var Result = React.createClass({
   },
 
   render: function () {
-    var searchResult, geneDoc, docs, species, title, body, details, representativeGene, content, glyph, className;
+    var searchResult, geneDoc, docs, species, title, body, details,
+      showClosestOrtholog, closestOrtholog, content, glyph, className;
 
     searchResult = this.props.searchResult;
     geneDoc = this.props.geneDoc;
     docs = this.props.docs;
 
-    if(this.state.luts.taxon) {
+    if (this.state.luts.taxon) {
       species = this.state.luts.taxon[searchResult.taxon_id];
     }
 
     className = 'result';
-    details = _.filter(detailsInventory, function(geneDetail) {
+    details = _.filter(detailsInventory, function (geneDetail) {
       return _.includes(searchResult.capabilities, geneDetail.capability);
     });
 
-    if(this.state.expanded) {
-      content = <ExpandedResult geneDoc={geneDoc} details={details} docs={docs} />;
+    if (this.state.expanded) {
+      content = <ExpandedResult geneDoc={geneDoc}
+                                details={details}
+                                docs={docs}/>;
       glyph = 'menu-down';
       className += ' expanded';
     }
     else {
-      content = <CompactResult searchResult={searchResult} geneDoc={geneDoc} details={details} docs={docs} />;
+      content = <CompactResult searchResult={searchResult}
+                               geneDoc={geneDoc}
+                               details={details}
+                               docs={docs}
+                               onDetailSelect={this.checkIfHomologyDetailsAreVisible}/>;
       glyph = 'menu-right';
     }
 
@@ -91,8 +103,16 @@ var Result = React.createClass({
 
     body = <p className="gene-description">{searchResult.description}</p>;
 
-    if(searchResult.closest_rep_id || (searchResult.model_rep_id && searchResult.model_rep_id !== searchResult.id)) {
-      representativeGene = <ClosestOrtholog gene={searchResult} />;
+    showClosestOrtholog = !this.state.expanded &&
+      !this.state.homologyDetailsVisible &&
+      (
+        searchResult.closest_rep_id || (
+          searchResult.model_rep_id &&
+          searchResult.model_rep_id !== searchResult.id
+        )
+      );
+    if (showClosestOrtholog) {
+      closestOrtholog = <ClosestOrtholog gene={searchResult}/>;
     }
 
     return (
@@ -105,7 +125,7 @@ var Result = React.createClass({
           </bs.Col>
 
           <bs.Col xs={12} sm={6} md={4}>
-            {representativeGene}
+            {closestOrtholog}
           </bs.Col>
         </bs.Row>
         {content}
