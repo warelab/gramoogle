@@ -102,16 +102,28 @@
   float: right;
   font-size: smaller;
   border: 1px solid @gramene-orange;
+  width: fit-content;
 
-  small {
+  .gene-id {
+    white-space: nowrap;
+  }
+
+  /* ensure there's a space between gene-id and species */
+  .species {
     padding-left: @padding-xs-horizontal;
   }
 
-  h4, p {
+  > h4, > p {
     margin: @padding-base-vertical 0;
+  }
+
+  /* clear the title (defined in the ::before block below) */
+  :first-child {
+    clear: right;
   }
 }
 
+/* this is the "title" of the closest ortholog box */
 .closest-ortholog::before {
   content: "Model Species Ortholog";
   position: relative;
@@ -120,7 +132,7 @@
   border: solid 1px;
 
   padding: 0 @padding-xs-horizontal;
-  margin-bottom: @padding-small-vertical;
+  margin-bottom: @padding-xs-vertical;
   background: @gramene-offwhite;
   color: @gramene-orange;
 }
