@@ -13,15 +13,29 @@
     .result {
       padding: @padding-base-vertical (@padding-base-horizontal - 1px);
 
+      .result-gene-summary {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-between;
+      }
+
       /* closest-ortholog is the corresponding float: right; */
       .result-gene-title-body {
-        float: left;
+        flex: 1 1 auto;
+        //display: inline-block;
+        //float: left;
       }
 
       .gene-name {
         .glyphicon {
           color: @gramene-orange;
           font-size: @padding-large-horizontal;
+        }
+      }
+
+      @media only screen and (min-width: @screen-sm-min) {
+        .gene-name {
+          white-space: nowrap;
         }
       }
 
@@ -40,13 +54,12 @@
       }
 
       .closest-ortholog {
+        flex: 1 1 auto;
+        width: fit-content;
+        font-size: smaller;
         margin-top: @line-height-computed + @padding-small-vertical; /* same as h3 in bootstrap, plus extra for ::before element */
         padding: 0 @padding-xs-horizontal; /* vertical padding from h and p elements */
-        float: right; /* .result-gene-title-body is the corresponding float: left; */
-        font-size: smaller;
         border: 1px solid @gramene-orange;
-        width: fit-content;
-
         > h4, > p {
           margin: @padding-base-vertical 0;
         }
