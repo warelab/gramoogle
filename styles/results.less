@@ -95,10 +95,14 @@
         .result-links {
           &:extend(.list-inline all);
 
+          display: flex;
+          justify-content: flex-start;
           padding-left: @padding-large-horizontal;
           margin-left: 0;
+          margin-top: @padding-small-vertical;
 
           .result-gene-detail-name {
+            flex: 0 1 auto;
             padding: @padding-base-vertical @padding-base-horizontal;
           }
 
@@ -114,10 +118,16 @@
           }
         }
 
+        /* On small screens, only show the first three gene details */
+        @media only screen and (max-width: @screen-xs-max) {
+          .result-links .result-gene-detail-name:nth-child(n+4) {
+            display: none;
+          }
+        }
+
         .visible-detail {
           border: 1px solid @gramene-darkgreen;
           margin-left: @padding-large-horizontal;
-          margin-right: @padding-large-horizontal;
           padding: @padding-base-vertical @padding-base-horizontal;
         }
 
