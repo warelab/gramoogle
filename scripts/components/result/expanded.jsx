@@ -31,12 +31,10 @@ var ExpandedResult = React.createClass({
       details = <p>Loading…</p>;
     }
     return (
-      <div className="expanded-details">
+      <div className="result-content expanded-details">
         {details}
       </div>
     );
-
-
   }
 });
 

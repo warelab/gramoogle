@@ -10,23 +10,6 @@ var processGenetreeDoc = require('gramene-trees-client').genetree.tree;
 
 var QueryTerm = require('../queryTerm.jsx');
 
-function orthoParaList(homology, thisGeneId, type) {
-  if(homology) {
-    var homologs = _(homology)
-      .pick(function filterCategories(thing, name) {
-        return name.indexOf(type) === 0;
-      })
-      .values()
-      .flatten()
-      .value();
-
-    if( !_.isEmpty(homologs)) {
-      homologs.push(thisGeneId);
-      return homologs; // only return something if we have something. We're testing for truthiness later.
-    }
-  }
-}
-
 var Homology = React.createClass({
 
   propTypes: {
@@ -34,36 +17,57 @@ var Homology = React.createClass({
     docs: React.PropTypes.object.isRequired
   },
 
-  componentWillMount: function() {
+  componentWillMount: function () {
     this.orthologs = this.orthologList();
     this.paralogs = this.paralogList();
     this.treeId = this.props.gene.grm_gene_tree;
 
-    if(this.treeId) {
+    if (this.treeId) {
       DocActions.needDocs('genetrees', this.treeId, processGenetreeDoc);
     }
 
     //this.genetree = this.props.docs.genetrees[this.props.gene.grm_gene_tree];
   },
 
-  componentWillUnmount: function() {
+  componentWillUnmount: function () {
     DocActions.noLongerNeedDocs('genetrees', this.treeId);
   },
 
-  orthologList: function() {
-    return orthoParaList(this.props.gene.homology, this.props.gene._id, 'ortholog');
+  orthologList: function () {
+    return this.orthoParaList('ortholog');
   },
 
-  paralogList: function() {
-    return orthoParaList(this.props.gene.homology, this.props.gene._id, 'within_species_paralog');
+  paralogList: function () {
+    return this.orthoParaList('within_species_paralog');
   },
 
-  createAllHomologsFilters: function() {
+  orthoParaList: function orthoParaList(type) {
+    var homology, thisGeneId;
+    homology = this.props.gene.homology;
+    thisGeneId = this.props.gene._id;
+
+    if (homology) {
+      var homologs = _(homology)
+        .pick(function filterCategories(thing, name) {
+          return name.indexOf(type) === 0;
+        })
+        .values()
+        .flatten()
+        .value();
+
+      if (!_.isEmpty(homologs)) {
+        homologs.push(thisGeneId);
+        return homologs; // only return something if we have something. We're testing for truthiness later.
+      }
+    }
+  },
+
+  createAllHomologsFilters: function () {
     var gt, fq, result;
     gt = this.props.gene.grm_gene_tree;
     fq = 'grm_gene_tree:' + gt;
     result = {};
-    result[fq] =  {
+    result[fq] = {
       category: 'Gene Tree',
       fq: fq,
       id: fq,
@@ -72,7 +76,7 @@ var Homology = React.createClass({
     return result;
   },
 
-  createOrthologFilters: function() {
+  createOrthologFilters: function () {
     var fq, id, result;
     id = this.props.gene._id;
     fq = 'homology__ortholog_one2one:' + id +
@@ -89,11 +93,11 @@ var Homology = React.createClass({
     return result;
   },
 
-  createParalogFilters: function() {
+  createParalogFilters: function () {
     var fq, id, result;
     id = this.props.gene._id;
     fq = 'homology__within_species_paralog:' + id +
-      ' OR id:' + id ;
+      ' OR id:' + id;
     result = {};
     result[fq] = {
       category: 'Gene Tree',
@@ -104,15 +108,15 @@ var Homology = React.createClass({
     return result;
   },
 
-  filterAllHomologs: function() {
+  filterAllHomologs: function () {
     queryActions.setAllFilters(this.createAllHomologsFilters());
   },
 
-  filterOrthologs: function() {
+  filterOrthologs: function () {
     queryActions.setAllFilters(this.createOrthologFilters());
   },
 
-  filterParalogs: function() {
+  filterParalogs: function () {
     queryActions.setAllFilters(this.createParalogFilters());
   },
 
@@ -121,11 +125,11 @@ var Homology = React.createClass({
 
     gene = this.props.gene;
 
-    if(this.treeId) {
+    if (this.treeId) {
       tree = _.get(this.props, ['docs', 'genetrees', this.treeId]);
     }
 
-    if(tree) {
+    if (tree) {
       geneCount = tree.geneCount;
     }
 
@@ -135,19 +139,19 @@ var Homology = React.createClass({
       <QueryTerm key="all"
                  name="Show All Homologs"
                  count={geneCount}
-                 handleClick={this.filterAllHomologs} />
+                 handleClick={this.filterAllHomologs}/>
     ];
-    if(this.orthologs) {
+    if (this.orthologs) {
       filters.push(<QueryTerm key="ortho"
                               name="Show Orthologs"
                               count={this.orthologs.length}
-                              handleClick={this.filterOrthologs} />)
+                              handleClick={this.filterOrthologs}/>)
     }
-    if(this.paralogs) {
+    if (this.paralogs) {
       filters.push(<QueryTerm key="para"
                               name="Show Paralogs"
                               count={this.paralogs.length}
-                              handleClick={this.filterParalogs} />)
+                              handleClick={this.filterParalogs}/>)
     }
 
     return (

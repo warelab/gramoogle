@@ -14,7 +14,8 @@ var CompactResult = React.createClass({
     searchResult: React.PropTypes.object.isRequired,
     details: React.PropTypes.array.isRequired,
     geneDoc: React.PropTypes.object,
-    docs: React.PropTypes.object // all documents requested by the page.
+    docs: React.PropTypes.object, // all documents requested by the page.
+    onDetailSelect: React.PropTypes.func.isRequired
   },
 
   mixins: [
@@ -34,9 +35,11 @@ var CompactResult = React.createClass({
         // hide if already visible
         if (this.state.visibleDetail && this.state.visibleDetail.name === geneDetail.name) {
           this.setState(this.getInitialState());
+          this.props.onDetailSelect();
         }
         else {
           this.setState({visibleDetail: geneDetail});
+          this.props.onDetailSelect(geneDetail.name);
         }
       }
     }.bind(this);
