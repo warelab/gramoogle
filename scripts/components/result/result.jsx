@@ -111,7 +111,7 @@ var Result = React.createClass({
           <span className="gene-name">{searchResult.name}</span>
         </a>
 
-        <small>{geneId}{species}</small>
+        <small className="gene-subtitle">{geneId}{species}</small>
       </h3>
     );
   },

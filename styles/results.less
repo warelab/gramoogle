@@ -25,15 +25,30 @@
       }
 
       .gene-title {
+        .gene-title-anchor, .species-name {
+          white-space: nowrap;
+        }
         .glyphicon {
           color: @gramene-orange;
           font-size: @padding-large-horizontal;
         }
-      }
 
-      @media only screen and (min-width: @screen-sm-min) {
-        .gene-title {
-          white-space: nowrap;
+        .gene-subtitle {
+          .gene-id {
+            padding-left: @padding-xs-horizontal;
+          }
+        }
+
+        @media only screen and (max-width: @screen-xs-max) {
+          .gene-subtitle {
+            .species-name, .gene-id {
+              display: block;
+              padding-left: @padding-large-horizontal;
+            }
+            .species-name {
+              padding-top: @padding-small-vertical;
+            }
+          }
         }
       }
 
