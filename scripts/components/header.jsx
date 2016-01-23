@@ -57,6 +57,19 @@ var Header = React.createClass({
   }
 });
 
+(function listenForWindowResize() {
+  var willUpdate = false;
+  if(!willUpdate && window && _.isFunction(window.addEventListener)) {
+    window.addEventListener('resize', function windowResizeListener(){
+      willUpdate = true;
+      setTimeout(function() {
+        updateBodyTopPadding();
+        willUpdate = false;
+      }, 50);
+    }, true);
+  }
+})();
+
 var prevNavHeight = 51;
 function updateBodyTopPadding() {
   var nav, body, navHeight;
