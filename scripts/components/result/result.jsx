@@ -105,12 +105,12 @@ var Result = React.createClass({
     }
 
     return (
-      <h3 className="gene-name">
-        <a onClick={this.toggleExpanded}>
+      <h3 className="gene-title">
+        <a className="gene-title-anchor" onClick={this.toggleExpanded}>
           <bs.Glyphicon glyph={glyph}/>
+          <span className="gene-name">{searchResult.name}</span>
         </a>
-        <a onClick={this.toggleExpanded}>{searchResult.name}</a>
-        &nbsp;
+
         <small>{geneId}{species}</small>
       </h3>
     );
