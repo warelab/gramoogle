@@ -1,6 +1,8 @@
 'use strict';
 
 var React = require('react');
+var _ = require('lodash');
+
 var Search = require('./search/search.jsx');
 var Analysis = require('./analysis.jsx');
 var QueryActions = require('../actions/queryActions');
@@ -44,13 +46,43 @@ var Header = React.createClass({
       analysis = <Analysis search={search}/>
     }
 
+    setTimeout(updateBodyTopPadding, 20);
+
     return (
-      <Navbar className="header" brand={logo} fixedTop={true} >
+      <Navbar id="search-header" className="header" brand={logo} fixedTop={true} >
         <Search search={search} onAnalysisButtonPress={this.toggleAnalysisVisibility}/>
           {analysis}
       </Navbar>
     );
   }
 });
+
+(function listenForWindowResize() {
+  var willUpdate = false;
+  if(!willUpdate && window && _.isFunction(window.addEventListener)) {
+    window.addEventListener('resize', function windowResizeListener(){
+      willUpdate = true;
+      setTimeout(function() {
+        updateBodyTopPadding();
+        willUpdate = false;
+      }, 50);
+    }, true);
+  }
+})();
+
+var prevNavHeight = 51;
+function updateBodyTopPadding() {
+  var nav, body, navHeight;
+  if(document && _.isFunction(document.querySelector)) {
+    nav = document.querySelector('#search-header');
+    navHeight = nav.offsetHeight;
+    body = document.querySelector('body');
+
+    if(navHeight != prevNavHeight && navHeight > 0) {
+      body.style['padding-top'] = navHeight + 'px';
+      prevNavHeight = navHeight;
+    }
+  }
+}
 
 module.exports = Header;
