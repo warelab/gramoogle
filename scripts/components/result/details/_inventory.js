@@ -3,13 +3,13 @@
 module.exports = [
 
   {
-    name: 'Genome',
+    name: 'Location',
     capability: 'location',
-    reactClass: require('./geneStructure.jsx')
+    reactClass: require('./location.jsx')
   },
 
   {
-    name: 'Transcript', // for display
+    name: 'Product', // for display
     capability: 'domains',
     reactClass: require('./domains.jsx')
   },
