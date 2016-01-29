@@ -129,11 +129,10 @@ var Result = React.createClass({
 
     // show closest ortholog prominently if:
     // 1. we are not in expanded mode (the homology details tab is thus visible, see point 2.)
-    // 2. the homolgy details tab is not visible (it contains this information as well)
-    // 3. we have data to show:-
+    // 2. we have data to show:-
     //   a. either there's a closest ortholog (determined by traversing the gene tree until an id or description looks
     // curated) b. or there's a model ortholog (traverse tree to find an otholog in arabidopsis)
-    showClosestOrtholog = !this.state.expanded && !this.state.homologyDetailsVisible &&
+    showClosestOrtholog = !this.state.expanded &&
       (
         searchResult.closest_rep_id || (
           searchResult.model_rep_id &&
@@ -142,8 +141,12 @@ var Result = React.createClass({
       );
 
     if (showClosestOrtholog) {
+
+      // we used to not add the closest ortholog to the DOM if the homology detail was visible.
+      // however, that could cause the height of the result to change. Instead we set visibility:hidden
+      // so that the renderer takes into account the height of the ortholog even if not shown.
       return (
-        <ClosestOrtholog gene={searchResult}/>
+        <ClosestOrtholog gene={searchResult} hidden={this.state.homologyDetailsVisible} />
       );
     }
   },

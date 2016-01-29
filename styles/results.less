@@ -16,12 +16,13 @@
       .result-gene-summary {
         display: flex;
         flex-flow: row nowrap;
-        justify-content: space-between;
+        justify-content: flex-start;
       }
 
       /* closest-ortholog is the other flexbox */
       .result-gene-title-body {
         flex: 1 1 auto;
+        width: 518px;
       }
 
       .gene-title {
@@ -69,10 +70,12 @@
       /* result-gene-title-body is the other flexbox'*/
       .closest-ortholog {
         flex: 1 1 auto;
-        width: fit-content;
+        //width: fit-content;
+        width: 250px;
         font-size: smaller;
         margin-top: @line-height-computed + @padding-small-vertical; /* same as h3 in bootstrap, plus extra for ::before element */
         padding: 0 @padding-xs-horizontal; /* vertical padding from h and p elements */
+        margin-left: @padding-xs-horizontal;
         border: 1px solid @gramene-orange;
         > h4, > p {
           margin: @padding-base-vertical 0;
@@ -84,16 +87,14 @@
         }
       }
 
-      /* this is the "title" of the closest ortholog box */
-      .closest-ortholog::before {
-        content: "Model Species Ortholog";
+      .closest-ortholog:hover::before {
+        content: "Model Species Homolog";
         position: relative;
         float: right;
-        margin-top: -10px;
+        margin-top: -13px;
         border: solid 1px;
 
         padding: 0 @padding-xs-horizontal;
-        margin-bottom: @padding-xs-vertical;
         background: @gramene-offwhite;
         color: @gramene-orange;
       }
@@ -143,6 +144,7 @@
         .visible-detail {
           border: 1px solid @gramene-darkgreen;
           margin-left: @padding-large-horizontal;
+          margin-bottom: @padding-large-vertical;
           padding: @padding-base-vertical @padding-base-horizontal;
         }
 
