@@ -53,8 +53,9 @@
 
       /* result-gene-title-body is the other flexbox'*/
       .closest-ortholog {
+        cursor: pointer;
         flex: 1 1 auto;
-        width: fit-content;
+        width: 250px;
         font-size: smaller;
         margin-top: @line-height-computed + @padding-small-vertical; /* same as h3 in bootstrap, plus extra for ::before element */
         padding: 0 @padding-xs-horizontal; /* vertical padding from h and p elements */
@@ -71,7 +72,7 @@
 
       /* this is the "title" of the closest ortholog box */
       .closest-ortholog::before {
-        content: "Model Species Ortholog";
+        content: "Model Species Homolog";
         position: relative;
         float: right;
         margin-top: -10px;
@@ -106,8 +107,8 @@
             padding: @padding-base-vertical @padding-base-horizontal;
           }
 
-          .result-gene-detail-name:hover {
-            background-color: @gramene-lightergreen;
+          .result-gene-detail-name:hover, .result-gene-detail-name.hover {
+            background-color: @gramene-lightgreen;
           }
 
           .result-gene-detail-name.active {

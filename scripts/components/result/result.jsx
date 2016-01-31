@@ -25,7 +25,8 @@ var Result = React.createClass({
   getInitialState: function () {
     var state = this.getLutState();
     state.expanded = this.props.expandedByDefault;
-    state.homologyDetailsVisible = false;
+    state.visibleDetail = undefined;
+    state.hoverDetail = undefined;
     return state;
   },
 
@@ -52,8 +53,23 @@ var Result = React.createClass({
     }
   },
 
-  checkIfHomologyDetailsAreVisible: function (selectedDetailName) {
-    this.setState({homologyDetailsVisible: (selectedDetailName === 'Homology')});
+  updateVisibleDetail: function (visibleDetail) {
+    this.setState({
+      visibleDetail: visibleDetail
+    });
+  },
+
+  hoverHomologyTab: function() {
+    this.setState({hoverDetail: 'homology'});
+  },
+
+  unhoverHomologyTab: function() {
+    this.setState({hoverDetail: undefined});
+  },
+
+  selectHomologyTab: function() {
+    var homologyTab = _.find(detailsInventory, {name: 'Homology'});
+    this.setState({visibleDetail: homologyTab});
   },
 
   render: function () {
@@ -111,7 +127,7 @@ var Result = React.createClass({
           <span className="gene-name">{searchResult.name}</span>
         </a>
 
-        <small>{geneId}{species}</small>
+        <small className="gene-subtitle">{geneId}{species}</small>
       </h3>
     );
   },
@@ -123,17 +139,18 @@ var Result = React.createClass({
   },
 
   renderClosestOrthologMaybe: function () {
-    var searchResult, showClosestOrtholog;
+    var searchResult, visibleDetail, showClosestOrtholog, homologyDetailsVisible;
 
     searchResult = this.props.searchResult;
+    visibleDetail = this.state.visibleDetail;
+    homologyDetailsVisible = _.get(visibleDetail, 'name') === 'Homology';
 
     // show closest ortholog prominently if:
     // 1. we are not in expanded mode (the homology details tab is thus visible, see point 2.)
-    // 2. the homolgy details tab is not visible (it contains this information as well)
-    // 3. we have data to show:-
+    // 2. we have data to show:-
     //   a. either there's a closest ortholog (determined by traversing the gene tree until an id or description looks
     // curated) b. or there's a model ortholog (traverse tree to find an otholog in arabidopsis)
-    showClosestOrtholog = !this.state.expanded && !this.state.homologyDetailsVisible &&
+    showClosestOrtholog = !this.state.expanded &&
       (
         searchResult.closest_rep_id || (
           searchResult.model_rep_id &&
@@ -142,8 +159,16 @@ var Result = React.createClass({
       );
 
     if (showClosestOrtholog) {
+
+      // we used to not add the closest ortholog to the DOM if the homology detail was visible.
+      // however, that could cause the height of the result to change. Instead we set visibility:hidden
+      // so that the renderer takes into account the height of the ortholog even if not shown.
       return (
-        <ClosestOrtholog gene={searchResult}/>
+        <ClosestOrtholog gene={searchResult}
+                         onMouseOver={this.hoverHomologyTab}
+                         onMouseOut={this.unhoverHomologyTab}
+                         onClick={this.selectHomologyTab}
+                         hidden={homologyDetailsVisible} />
       );
     }
   },
@@ -169,7 +194,9 @@ var Result = React.createClass({
                             geneDoc={geneDoc}
                             details={details}
                             docs={docs}
-                            onDetailSelect={this.checkIfHomologyDetailsAreVisible}/>;
+                            hoverDetail={this.state.hoverDetail}
+                            visibleDetail={this.state.visibleDetail}
+                            onDetailSelect={this.updateVisibleDetail}/>;
     }
   }
 });
