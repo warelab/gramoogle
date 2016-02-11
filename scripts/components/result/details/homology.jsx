@@ -146,10 +146,13 @@ var Homology = React.createClass({
   treeVis: function () {
     if (this.genetree && this.taxonomy) {
       return (
-        <TreeVis genetree={this.genetree}
-                 initialGeneOfInterest={this.props.gene}
-                 taxonomy={this.taxonomy}
-                 width={600}/>
+        <div className="gene-genetree">
+          <h5>Gene Tree</h5>
+          <TreeVis genetree={this.genetree}
+                   initialGeneOfInterest={this.props.gene}
+                   taxonomy={this.taxonomy}
+                   width={600}/>
+        </div>
       );
     }
   },
@@ -190,9 +193,9 @@ var Homology = React.createClass({
 
     return (
       <div>
+        {this.treeVis()}
         <h5>Change the query</h5>
         {filters}
-        {this.treeVis()}
         <h5>Links</h5>
         <ul>
           <li>
