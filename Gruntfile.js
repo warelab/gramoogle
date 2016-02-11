@@ -134,5 +134,5 @@ module.exports = function (grunt) {
 
   grunt.registerTask('test', ['jasmine_node']);
   grunt.registerTask('default', ['env:dev', 'copy:assets', 'packageIndexHtml', 'browserify:dev', 'watch']);
-  grunt.registerTask('package', ['env:prod', 'copy:assets', 'packageIndexHtml', 'browserify:dev', 'test']);
+  grunt.registerTask('package', ['env:prod', 'copy:assets', 'packageIndexHtml', 'browserify:production', 'test']);
 };
