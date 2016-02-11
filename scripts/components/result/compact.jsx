@@ -1,11 +1,8 @@
 'use strict';
 
 var React = require('react');
-var Reflux = require('reflux');
-var bs = require('react-bootstrap');
 var _ = require('lodash');
 var queryActions = require('../../actions/queryActions');
-var lutStore = require('../../stores/lutStore');
 
 var CompactResult = React.createClass({
   propTypes: {
@@ -16,16 +13,6 @@ var CompactResult = React.createClass({
     onDetailSelect: React.PropTypes.func.isRequired,
     hoverDetail: React.PropTypes.string,
     visibleDetail: React.PropTypes.object
-  },
-
-  mixins: [
-    Reflux.connect(lutStore, 'luts')
-  ],
-
-  getInitialState: function() {
-    return {
-      luts: lutStore.state
-    };
   },
 
   detailClickHandlerFactory: function(geneDetail, isEnabled) {

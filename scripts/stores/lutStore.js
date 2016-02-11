@@ -10,6 +10,7 @@ var LutStore = Reflux.createStore({
     this.state = {};
 
     taxonomyPromise.get().then(function addTaxonomyLut(taxonomy) {
+      this.state.taxonomy = taxonomy;
       this.state.taxon = _.mapValues(taxonomy.indices.id, 'model.name');
       this.notify();
     }.bind(this));

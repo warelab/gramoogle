@@ -2,8 +2,13 @@
 
 var React = require('react');
 var Reflux = require('reflux');
+
+var TreeVis = require('gramene-genetree-vis');
+
 var queryActions = require('../../../actions/queryActions');
 var DocActions = require('../../../actions/docActions');
+var lutStore = require('../../../stores/lutStore');
+
 var _ = require('lodash');
 
 var processGenetreeDoc = require('gramene-trees-client').genetree.tree;
@@ -17,6 +22,16 @@ var Homology = React.createClass({
     docs: React.PropTypes.object.isRequired
   },
 
+  mixins: [
+    Reflux.connect(lutStore, 'luts')
+  ],
+
+  getInitialState: function () {
+    return {
+      luts: lutStore.state
+    };
+  },
+
   componentWillMount: function () {
     this.orthologs = this.orthologList();
     this.paralogs = this.paralogList();
@@ -25,8 +40,16 @@ var Homology = React.createClass({
     if (this.treeId) {
       DocActions.needDocs('genetrees', this.treeId, processGenetreeDoc);
     }
-
+    //
     //this.genetree = this.props.docs.genetrees[this.props.gene.grm_gene_tree];
+  },
+
+  componentWillUpdate: function (newProps, newState) {
+    var genetreeId, genetree, taxonomy;
+
+    genetreeId = this.props.gene.grm_gene_tree;
+    this.genetree = _.get(newProps, ['docs', 'genetrees', genetreeId]);
+    this.taxonomy = _.get(newState, ['luts', 'taxonomy']);
   },
 
   componentWillUnmount: function () {
@@ -72,7 +95,7 @@ var Homology = React.createClass({
       fq: fq,
       id: fq,
       display_name: 'Homolog of ' + this.props.gene.name
-    }
+    };
     return result;
   },
 
@@ -120,6 +143,17 @@ var Homology = React.createClass({
     queryActions.setAllFilters(this.createParalogFilters());
   },
 
+  treeVis: function () {
+    if (this.genetree && this.taxonomy) {
+      return (
+        <TreeVis genetree={this.genetree}
+                 initialGeneOfInterest={this.props.gene}
+                 taxonomy={this.taxonomy}
+                 width={600}/>
+      );
+    }
+  },
+
   render: function () {
     var tree, gene, geneCount, ensemblGenetreeUrl;
 
@@ -158,6 +192,7 @@ var Homology = React.createClass({
       <div>
         <h5>Change the query</h5>
         {filters}
+        {this.treeVis()}
         <h5>Links</h5>
         <ul>
           <li>
