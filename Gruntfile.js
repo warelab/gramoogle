@@ -116,6 +116,9 @@ module.exports = function (grunt) {
         isDev: process.env.isDev
       };
 
+      props.defaultServer = (props.tag || props.branch === 'master') ? '"http://data.gramene.org/swagger"' : '"http://devdata.gramene.org/swagger"';
+      console.log("This build will use " + props.defaultServer + " as default web service server");
+
       return template(props);
     })();
 
