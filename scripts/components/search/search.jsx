@@ -70,7 +70,7 @@ var Search = React.createClass({
     }
 
     return (
-      <Nav right={true}
+      <Nav pullRight
            className="search-box-nav">
         <SearchBox ref="searchBox"
                    results={search.results}

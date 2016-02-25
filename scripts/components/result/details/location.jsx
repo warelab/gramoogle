@@ -83,7 +83,7 @@ var Location = React.createClass({
 
     return (
       <div>
-        <dl class="dl-horizontal">
+        <dl>
           <dt>Region</dt>
           <dd>{this.region.name}</dd>
           <dt>Position</dt>
