@@ -8,13 +8,14 @@ var LutMixin = require('../../mixins/LutMixin');
 var ClosestOrtholog = React.createClass({
   mixins: [LutMixin.lutFor('taxon')],
   propTypes: {
+    hidden: React.PropTypes.bool,
     gene: React.PropTypes.object.isRequired
   },
   getInitialState: function() {
     return this.getLutState();
   },
   render: function() {
-    var gene, name, taxonId, desc, species;
+    var gene, name, taxonId, desc, species, className;
     gene = this.props.gene;
     if (gene.model_rep_id) {
       name = gene.model_rep_name || gene.model_rep_id;
@@ -31,8 +32,13 @@ var ClosestOrtholog = React.createClass({
       species = this.state.luts.taxon[taxonId];
     }
 
+    className = 'closest-ortholog';
+    if(this.props.hidden) {
+      className += ' invisible';
+    }
+
     return (
-      <div className="closest-ortholog">
+      <div className={className}>
         <h4>
           <span className="gene-id">{name}</span>
           <small className="species-name">{species}</small>

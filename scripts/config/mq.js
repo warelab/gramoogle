@@ -6,7 +6,7 @@ var mq;
 
 var mqs = {};
 
-const SMALL_SCREEN_Q = "(max-device-width: 960px), (max-width: 768px)";
+const SMALL_SCREEN_Q = "(max-device-width: 767px), (max-width: 767px)";
 
 if(window && window.matchMedia && _.isFunction(window.matchMedia)) {
   mq = function mq(q) {
