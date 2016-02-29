@@ -97,6 +97,11 @@ module.exports = function (grunt) {
         files: [
           {expand: true, cwd: 'assets/', src: ['**'], dest: 'build/assets/'}
         ]
+      },
+      icons: {
+        files: [
+          {expand: true, cwd: 'icons/favicons', src: ['**'], dest: 'build/'}
+        ]
       }
     }
   });
@@ -136,6 +141,6 @@ module.exports = function (grunt) {
   });
 
   grunt.registerTask('test', ['jasmine_node']);
-  grunt.registerTask('default', ['env:dev', 'copy:assets', 'packageIndexHtml', 'browserify:dev', 'watch']);
-  grunt.registerTask('package', ['env:prod', 'copy:assets', 'packageIndexHtml', 'browserify:production', 'test']);
+  grunt.registerTask('default', ['env:dev', 'copy:assets', 'copy:icons', 'packageIndexHtml', 'browserify:dev', 'watch']);
+  grunt.registerTask('package', ['env:prod', 'copy:assets', 'copy:icons', 'packageIndexHtml', 'browserify:production', 'test']);
 };
