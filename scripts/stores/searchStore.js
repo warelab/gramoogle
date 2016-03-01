@@ -126,7 +126,7 @@ module.exports = Reflux.createStore({
   },
 
   searchError: function (error) {
-    console.error('Error updating results', error);
+    console.error('Error updating results', error.stack, error);
   }
 })
 ;
