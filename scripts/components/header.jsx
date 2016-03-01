@@ -8,13 +8,7 @@ var Analysis = require('./analysis.jsx');
 var QueryActions = require('../actions/queryActions');
 
 var bs = require('react-bootstrap');
-var Navbar = bs.Navbar,
-  NavItem = bs.NavItem,
-  Nav = bs.Nav,
-  MenuItem = bs.MenuItem,
-  Button = bs.Button,
-  Input = bs.Input,
-  Panel = bs.Panel;
+var Navbar = bs.Navbar;
 
 var Header = React.createClass({
   propTypes: {
@@ -49,9 +43,12 @@ var Header = React.createClass({
     setTimeout(updateBodyTopPadding, 20);
 
     return (
-      <Navbar id="search-header" className="header" brand={logo} fixedTop={true} >
+      <Navbar id="search-header" className="header" fixedTop={true}>
+        <Navbar.Header>
+          <Navbar.Brand>{logo}</Navbar.Brand>
+        </Navbar.Header>
         <Search search={search} onAnalysisButtonPress={this.toggleAnalysisVisibility}/>
-          {analysis}
+        {analysis}
       </Navbar>
     );
   }
@@ -75,10 +72,13 @@ function updateBodyTopPadding() {
   var nav, body, navHeight;
   if(document && _.isFunction(document.querySelector)) {
     nav = document.querySelector('#search-header');
+    if(!nav) {
+      return;
+    }
     navHeight = nav.offsetHeight;
     body = document.querySelector('body');
 
-    if(navHeight != prevNavHeight && navHeight > 0) {
+    if(_.isNumber(navHeight) && navHeight > 0 && navHeight != prevNavHeight) {
       body.style['padding-top'] = navHeight + 'px';
       prevNavHeight = navHeight;
     }

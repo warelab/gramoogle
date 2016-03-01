@@ -1,13 +1,8 @@
 'use strict';
 
 var React = require('react');
-var Reflux = require('reflux');
-var bs = require('react-bootstrap');
 var _ = require('lodash');
 var queryActions = require('../../actions/queryActions');
-//var visualizationStore = require('../stores/visualizationStore');
-var detailsInventory = require('./details/_inventory');
-var lutStore = require('../../stores/lutStore');
 
 var CompactResult = React.createClass({
   propTypes: {
@@ -15,38 +10,27 @@ var CompactResult = React.createClass({
     details: React.PropTypes.array.isRequired,
     geneDoc: React.PropTypes.object,
     docs: React.PropTypes.object, // all documents requested by the page.
-    onDetailSelect: React.PropTypes.func.isRequired
-  },
-
-  mixins: [
-    Reflux.connect(lutStore, 'luts')
-  ],
-
-  getInitialState: function() {
-    return {
-      visibleDetail: undefined,
-      luts: lutStore.state
-    };
+    onDetailSelect: React.PropTypes.func.isRequired,
+    hoverDetail: React.PropTypes.string,
+    visibleDetail: React.PropTypes.object
   },
 
   detailClickHandlerFactory: function(geneDetail, isEnabled) {
     return function() {
       if(isEnabled) {
         // hide if already visible
-        if (this.state.visibleDetail && this.state.visibleDetail.name === geneDetail.name) {
-          this.setState(this.getInitialState());
+        if (this.props.visibleDetail && this.props.visibleDetail.name === geneDetail.name) {
           this.props.onDetailSelect();
         }
         else {
-          this.setState({visibleDetail: geneDetail});
-          this.props.onDetailSelect(geneDetail.name);
+          this.props.onDetailSelect(geneDetail);
         }
       }
     }.bind(this);
   },
 
   render: function() {
-    var searchResult, geneDoc, docs, linksEnabled, handlerFactory, detailLinks, visibleDetail;
+    var searchResult, geneDoc, docs, linksEnabled, handlerFactory, detailLinks, visibleDetailElement, visibleDetailComponent;
 
     searchResult = this.props.searchResult;
     geneDoc = this.props.geneDoc;
@@ -54,14 +38,18 @@ var CompactResult = React.createClass({
     linksEnabled = !!geneDoc; // we should disable links if the gene doc isn't available yet.
     handlerFactory = this.detailClickHandlerFactory;
     detailLinks = _.map(this.props.details, function(geneDetail) {
-      var handler, isActive, key, liClass, linkClass;
+      var handler, isActive, key, liClass, linkClass, simulateHover;
 
       handler = handlerFactory(geneDetail, linksEnabled);
-      isActive = this.state.visibleDetail &&
-          geneDetail.name === this.state.visibleDetail.name;
+      isActive = this.props.visibleDetail &&
+          geneDetail.name === this.props.visibleDetail.name;
+      simulateHover = this.props.hoverDetail &&
+          this.props.hoverDetail === geneDetail.capability;
+
       key = searchResult.id + '-' + geneDetail.name;
       liClass = 'result-gene-detail-name' +
-          (isActive ? ' active' : '');
+          (isActive ? ' active' : '') +
+          (simulateHover ? ' hover' : '');
       linkClass = linksEnabled ? '' : 'disabled';
 
       return (
@@ -71,10 +59,11 @@ var CompactResult = React.createClass({
       );
     }.bind(this));
 
-    if(this.state.visibleDetail) {
-      visibleDetail = (
+    if(this.props.visibleDetail) {
+      visibleDetailComponent = this.props.visibleDetail.reactClass;
+      visibleDetailElement = (
         <div className="visible-detail">
-          {React.createElement(this.state.visibleDetail.reactClass, {gene: geneDoc, docs: docs, expanded: false})}
+          {React.createElement(visibleDetailComponent, {gene: geneDoc, docs: docs, expanded: false})}
         </div>
       )
     }
@@ -84,7 +73,7 @@ var CompactResult = React.createClass({
         <ul className="result-links">
           {detailLinks}
         </ul>
-        {visibleDetail}
+        {visibleDetailElement}
       </div>
     );
   }

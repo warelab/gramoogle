@@ -9,7 +9,10 @@ var ClosestOrtholog = React.createClass({
   mixins: [LutMixin.lutFor('taxon')],
   propTypes: {
     hidden: React.PropTypes.bool,
-    gene: React.PropTypes.object.isRequired
+    gene: React.PropTypes.object.isRequired,
+    onClick: React.PropTypes.func.isRequired,
+    onMouseOver: React.PropTypes.func.isRequired,
+    onMouseOut: React.PropTypes.func.isRequired
   },
   getInitialState: function() {
     return this.getLutState();
@@ -38,7 +41,10 @@ var ClosestOrtholog = React.createClass({
     }
 
     return (
-      <div className={className}>
+      <div className={className}
+           onClick={this.props.onClick}
+           onMouseOver={this.props.onMouseOver}
+           onMouseOut={this.props.onMouseOut}>
         <h4>
           <span className="gene-id">{name}</span>
           <small className="species-name">{species}</small>

@@ -25,7 +25,8 @@ var Result = React.createClass({
   getInitialState: function () {
     var state = this.getLutState();
     state.expanded = this.props.expandedByDefault;
-    state.homologyDetailsVisible = false;
+    state.visibleDetail = undefined;
+    state.hoverDetail = undefined;
     return state;
   },
 
@@ -52,8 +53,23 @@ var Result = React.createClass({
     }
   },
 
-  checkIfHomologyDetailsAreVisible: function (selectedDetailName) {
-    this.setState({homologyDetailsVisible: (selectedDetailName === 'Homology')});
+  updateVisibleDetail: function (visibleDetail) {
+    this.setState({
+      visibleDetail: visibleDetail
+    });
+  },
+
+  hoverHomologyTab: function() {
+    this.setState({hoverDetail: 'homology'});
+  },
+
+  unhoverHomologyTab: function() {
+    this.setState({hoverDetail: undefined});
+  },
+
+  selectHomologyTab: function() {
+    var homologyTab = _.find(detailsInventory, {name: 'Homology'});
+    this.setState({visibleDetail: homologyTab});
   },
 
   render: function () {
@@ -123,9 +139,11 @@ var Result = React.createClass({
   },
 
   renderClosestOrthologMaybe: function () {
-    var searchResult, showClosestOrtholog;
+    var searchResult, visibleDetail, showClosestOrtholog, homologyDetailsVisible;
 
     searchResult = this.props.searchResult;
+    visibleDetail = this.state.visibleDetail;
+    homologyDetailsVisible = _.get(visibleDetail, 'name') === 'Homology';
 
     // show closest ortholog prominently if:
     // 1. we are not in expanded mode (the homology details tab is thus visible, see point 2.)
@@ -146,7 +164,11 @@ var Result = React.createClass({
       // however, that could cause the height of the result to change. Instead we set visibility:hidden
       // so that the renderer takes into account the height of the ortholog even if not shown.
       return (
-        <ClosestOrtholog gene={searchResult} hidden={this.state.homologyDetailsVisible} />
+        <ClosestOrtholog gene={searchResult}
+                         onMouseOver={this.hoverHomologyTab}
+                         onMouseOut={this.unhoverHomologyTab}
+                         onClick={this.selectHomologyTab}
+                         hidden={homologyDetailsVisible} />
       );
     }
   },
@@ -172,7 +194,9 @@ var Result = React.createClass({
                             geneDoc={geneDoc}
                             details={details}
                             docs={docs}
-                            onDetailSelect={this.checkIfHomologyDetailsAreVisible}/>;
+                            hoverDetail={this.state.hoverDetail}
+                            visibleDetail={this.state.visibleDetail}
+                            onDetailSelect={this.updateVisibleDetail}/>;
     }
   }
 });

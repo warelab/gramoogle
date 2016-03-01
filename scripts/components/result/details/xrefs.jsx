@@ -98,8 +98,10 @@ var Xrefs = React.createClass({
     return (
       <bs.Table className="xrefs" condensed hover>
         <thead>
-          <th className="xref-name-col">Database</th>
-          <th className="xref-value-col">IDs and links</th>
+          <tr>
+            <th className="xref-name-col">Database</th>
+            <th className="xref-value-col">IDs and links</th>
+          </tr>
         </thead>
         <tbody>
           {this.xrefs}
