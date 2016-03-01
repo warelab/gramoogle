@@ -9,7 +9,7 @@ module.exports = [
   },
 
   {
-    name: 'Product', // for display
+    name: 'Transcript', // for display
     capability: 'domains',
     reactClass: require('./domains.jsx')
   },
