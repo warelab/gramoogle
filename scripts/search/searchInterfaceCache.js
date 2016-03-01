@@ -31,7 +31,7 @@ module.exports = {
     }
 
     // find result types with a cached result
-    query.cachedResultTypes = _.omit(query.resultTypes, function (rt) {
+    query.cachedResultTypes = _.omitBy(query.resultTypes, function (rt) {
       var key: Map = this.getRtKey(countKey, rt);
       var cachedData: Map = this.GrameneCache.get(key);
       if (cachedData) {
