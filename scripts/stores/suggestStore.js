@@ -95,6 +95,7 @@ module.exports = Reflux.createStore({
       var exact, beginsWith, textCategory;
 
       exact = {
+        id: 'exact',
         category: GENES_CATEGORY,
         term: 'Exactly "' + queryString + '"',
         fq: 'text:' + queryString + ' OR description:' + queryString,
@@ -102,6 +103,7 @@ module.exports = Reflux.createStore({
       };
 
       beginsWith = {
+        id: 'startsWith',
         category: GENES_CATEGORY,
         term: 'Starts with "' + queryString + '"',
         fq: 'text:' + queryString + '* OR description:' + queryString + '*',

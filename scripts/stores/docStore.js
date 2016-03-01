@@ -8,7 +8,7 @@ var DocActions = require('../actions/docActions');
 function index(docs) {
   var result;
   if(_.isArray(docs)) {
-    result = _.indexBy(docs, '_id');
+    result = _.keyBy(docs, '_id');
   }
   else if(docs._id) {
     result = {};
