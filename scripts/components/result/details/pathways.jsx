@@ -39,7 +39,7 @@ var Pathways = React.createClass({
   getReaction: function() {
     var rxnId, rxn;
     if(!this.reaction) {
-      rxnId = _.first(this.pathwayIds);
+      rxnId = _.head(this.pathwayIds);
       rxn = _.get(this.props.docs, ['pathways', rxnId]);
       if(rxn) {
         this.reaction = rxn;
