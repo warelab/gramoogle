@@ -3,6 +3,9 @@
   "version": "2.0.3",
   "description": "Gramene search interface",
   "main": "index.js",
+  "gramene": {
+    "dbRelease": 49
+  },
   "scripts": {
     "build": "grunt package",
     "start": "grunt",

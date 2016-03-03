@@ -3,6 +3,8 @@
 var _ = require('lodash');
 var moment = require('moment');
 
+var webserviceVersion = 'v' + require('./package.json').gramene.dbRelease;
+
 module.exports = function (grunt) {
   require('jit-grunt')(grunt);
 
@@ -109,6 +111,26 @@ module.exports = function (grunt) {
   grunt.registerTask('packageIndexHtml', 'Build index.html for distribution.', function () {
 
     var footer = (function compileFooterTemplate() {
+      function defaultServer() {
+        const PROD_SERVER = 'http://data.gramene.org/';
+        const DEV_SERVER = 'http://devdata.gramene.org/';
+        var defaultServer;
+
+        if(process.env.GRAMENE_SERVER) {
+          defaultServer = process.env.GRAMENE_SERVER;
+        }
+        else if(props.tag || props.branch === 'master') {
+          defaultServer = PROD_SERVER;
+        }
+        else {
+          defaultServer = DEV_SERVER;
+        }
+
+        defaultServer += webserviceVersion + '/swagger';
+
+        return defaultServer;
+      }
+
       var template = _.template(grunt.file.read('./footer.template.html'));
 
       var props = {
@@ -121,7 +143,7 @@ module.exports = function (grunt) {
         isDev: process.env.isDev
       };
 
-      props.defaultServer = (props.tag || props.branch === 'master') ? '"http://data.gramene.org/swagger"' : '"http://devdata.gramene.org/swagger"';
+      props.defaultServer = defaultServer();
       console.log("This build will use " + props.defaultServer + " as default web service server");
 
       return template(props);
