@@ -71,7 +71,7 @@ var Homology = React.createClass({
 
     if (homology) {
       var homologs = _(homology)
-        .pick(function filterCategories(thing, name) {
+        .pickBy(function filterCategories(thing, name) {
           return name.indexOf(type) === 0;
         })
         .values()
@@ -143,7 +143,7 @@ var Homology = React.createClass({
     queryActions.setAllFilters(this.createParalogFilters());
   },
 
-  treeVis: function () {
+  renderTreeVis: function () {
     if (this.genetree && this.taxonomy) {
       return (
         <div className="gene-genetree">
@@ -157,10 +157,8 @@ var Homology = React.createClass({
     }
   },
 
-  render: function () {
-    var tree, gene, geneCount, ensemblGenetreeUrl;
-
-    gene = this.props.gene;
+  renderFilters: function () {
+    var tree, geneCount, filters;
 
     if (this.treeId) {
       tree = _.get(this.props, ['docs', 'genetrees', this.treeId]);
@@ -170,9 +168,7 @@ var Homology = React.createClass({
       geneCount = tree.geneCount;
     }
 
-    ensemblGenetreeUrl = '//ensembl.gramene.org/' + gene.system_name + '/Gene/Compara_Tree?g=' + gene._id;
-
-    var filters = [
+    filters = [
       <QueryTerm key="all"
                  name="Show All Homologs"
                  count={geneCount}
@@ -193,9 +189,22 @@ var Homology = React.createClass({
 
     return (
       <div>
-        {this.treeVis()}
         <h5>Change the query</h5>
-        {filters}
+        <ul>
+          {filters}
+        </ul>
+      </div>
+    );
+  },
+
+  renderLinks: function () {
+    var gene, ensemblGenetreeUrl;
+
+    gene = this.props.gene;
+    ensemblGenetreeUrl = '//ensembl.gramene.org/' + gene.system_name + '/Gene/Compara_Tree?g=' + gene._id;
+
+    return (
+      <div>
         <h5>Links</h5>
         <ul>
           <li>
@@ -203,7 +212,18 @@ var Homology = React.createClass({
           </li>
         </ul>
       </div>
+    )
+  },
+
+  render: function () {
+    return (
+      <div>
+        {this.renderTreeVis()}
+        {this.renderFilters()}
+        {this.renderLinks()}
+      </div>
     );
   }
 });
+
 module.exports = Homology;
