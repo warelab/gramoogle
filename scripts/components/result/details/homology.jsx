@@ -35,20 +35,15 @@ var Homology = React.createClass({
   componentWillMount: function () {
     this.orthologs = this.orthologList();
     this.paralogs = this.paralogList();
-    this.treeId = this.props.gene.grm_gene_tree;
+    this.treeId = _.get(this.props.gene, 'homology.gene_tree.id');
 
     if (this.treeId) {
       DocActions.needDocs('genetrees', this.treeId, processGenetreeDoc);
     }
-    //
-    //this.genetree = this.props.docs.genetrees[this.props.gene.grm_gene_tree];
   },
 
   componentWillUpdate: function (newProps, newState) {
-    var genetreeId, genetree, taxonomy;
-
-    genetreeId = this.props.gene.grm_gene_tree;
-    this.genetree = _.get(newProps, ['docs', 'genetrees', genetreeId]);
+    this.genetree = _.get(newProps, ['docs', 'genetrees', this.treeId]);
     this.taxonomy = _.get(newState, ['luts', 'taxonomy']);
   },
 
@@ -71,7 +66,7 @@ var Homology = React.createClass({
 
     if (homology) {
       var homologs = _(homology)
-        .pick(function filterCategories(thing, name) {
+        .pickBy(function filterCategories(thing, name) {
           return name.indexOf(type) === 0;
         })
         .values()
@@ -87,8 +82,8 @@ var Homology = React.createClass({
 
   createAllHomologsFilters: function () {
     var gt, fq, result;
-    gt = this.props.gene.grm_gene_tree;
-    fq = 'grm_gene_tree:' + gt;
+    gt = this.treeId;
+    fq = 'gene_tree:' + gt;
     result = {};
     result[fq] = {
       category: 'Gene Tree',
