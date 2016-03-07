@@ -17,7 +17,7 @@ var Domains = React.createClass({
   },
 
   createFilter: function() {
-    var drList = _.get(this.props, 'gene.canonical_translation.domain_roots');
+    var drList = _.get(this.props, 'gene.gene_structure.transcripts[0].translation.features.domain.roots');
     if(drList) {
       drList = drList.split(' ');
 
@@ -44,8 +44,8 @@ var Domains = React.createClass({
   render: function () {
     var gene, transcriptId, translation, filterLink, ensemblDomainsUrl;
     gene = this.props.gene;
-    translation = _.get(this.props, 'gene.canonical_translation');
-    transcriptId = _.get(this.props, 'gene.canonical_transcript.name');
+    translation = _.get(gene, 'gene_structure.transcripts[0]');
+    transcriptId = _.get(translation, 'id');
 // http://ensembl.gramene.org/Arabidopsis_thaliana/Transcript/Domains?g=AT3G52430;r=3:19431371-19434403;t=AT3G52430.1
     ensemblDomainsUrl = '//ensembl.gramene.org/' + gene.system_name + '/Transcript/Domains?g=' + gene._id + ';t=' + transcriptId;
 
