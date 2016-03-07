@@ -4,7 +4,7 @@
   "description": "Gramene search interface",
   "main": "index.js",
   "gramene": {
-    "dbRelease": 49
+    "dbRelease": 50
   },
   "scripts": {
     "build": "grunt package",
