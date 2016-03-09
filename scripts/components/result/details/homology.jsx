@@ -61,7 +61,7 @@ var Homology = React.createClass({
 
   orthoParaList: function orthoParaList(type) {
     var homology, thisGeneId;
-    homology = this.props.gene.homology;
+    homology = _.get(this.props.gene, 'homology.homologous_genes');
     thisGeneId = this.props.gene._id;
 
     if (homology) {

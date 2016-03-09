@@ -19,11 +19,14 @@ var Pathways = React.createClass({
   },
 
   componentWillMount: function() {
-    var ancestorIds, reactionIds;
-    ancestorIds = _.get(this.props, 'gene.ancestors.pathways');
-    reactionIds = _.get(this.props, 'gene.xrefs.pathways');
+    var pathways;
+    pathways = _.get(this.props, 'gene.annotations.pathways');
 
-    if(reactionIds.length != 1) {
+    if(!pathways) {
+      throw new Error("No pathway annotation present for " + _.get(this.props, 'gene._id'));
+    }
+
+    if(pathways.entries.length != 1) {
       console.error("Number of reactions is not 1");
     }
 
