@@ -3,7 +3,7 @@
 var React = require('react');
 var axios = require('axios');
 
-var urlTemplate = 'http://plantreactome.gramene.org/ReactomeRESTfulAPI/RESTfulWS/highlightPathwayDiagram/%pathwayId%/PNG';
+var urlTemplate = 'http://plantreactomedev.oicr.on.ca/ReactomeRESTfulAPI/RESTfulWS/highlightPathwayDiagram/%pathwayId%/PNG';
 
 var ReactomeImg = React.createClass({
   propTypes: {
