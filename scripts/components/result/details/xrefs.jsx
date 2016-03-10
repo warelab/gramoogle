@@ -78,12 +78,13 @@ var Xref = React.createClass({
 var Xrefs = React.createClass({
   componentWillMount: function() {
     this.xrefs = _(this.props.gene.xrefs)
-    .pick(function(val, name) {
+    .keyBy('db')
+    .pickBy(function(val, name) {
       return dbxrefs.isKnown(name);
     })
     .map(function(val, name) {
       var xref = dbxrefs.fetch(name);
-      return {url: xref.url, label: xref.label, val: val};
+      return {url: xref.url, label: xref.label, val: val.ids};
     })
     .groupBy('label')
     .map(function(members, displayName) {
