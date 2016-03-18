@@ -4223,6 +4223,11 @@
       "from": "ripemd160@>=1.0.0 <2.0.0",
       "resolved": "https://registry.npmjs.org/ripemd160/-/ripemd160-1.0.1.tgz"
     },
+    "sax": {
+      "version": "1.1.6",
+      "from": "sax@>=0.6.0",
+      "resolved": "https://registry.npmjs.org/sax/-/sax-1.1.6.tgz"
+    },
     "seek-bzip": {
       "version": "1.0.5",
       "from": "seek-bzip@>=1.0.3 <2.0.0",
@@ -5026,6 +5031,16 @@
       "version": "1.0.1",
       "from": "wrappy@>=1.0.0 <2.0.0",
       "resolved": "https://registry.npmjs.org/wrappy/-/wrappy-1.0.1.tgz"
+    },
+    "xml2js": {
+      "version": "0.4.16",
+      "from": "xml2js@latest",
+      "resolved": "https://registry.npmjs.org/xml2js/-/xml2js-0.4.16.tgz"
+    },
+    "xmlbuilder": {
+      "version": "4.2.1",
+      "from": "xmlbuilder@>=4.1.0 <5.0.0",
+      "resolved": "https://registry.npmjs.org/xmlbuilder/-/xmlbuilder-4.2.1.tgz"
     },
     "xtend": {
       "version": "4.0.1",
