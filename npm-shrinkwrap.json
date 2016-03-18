@@ -1877,8 +1877,8 @@
       "resolved": "https://registry.npmjs.org/gramene-dbxrefs/-/gramene-dbxrefs-3.0.1.tgz"
     },
     "gramene-genetree-vis": {
-      "version": "1.1.2",
-      "from": "gramene-genetree-vis@>=1.1.2 <2.0.0",
+      "version": "1.1.3",
+      "from": "gramene-genetree-vis@1.1.3",
       "dependencies": {
         "amdefine": {
           "version": "1.0.0",
