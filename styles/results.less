@@ -10,6 +10,7 @@
 
   .results-list {
     &:extend(.list-unstyled all);
+
     .result {
       padding: @padding-base-vertical (@padding-base-horizontal - 1px);
 
@@ -147,6 +148,8 @@
           margin-left: @padding-large-horizontal;
           margin-bottom: @padding-large-vertical;
           padding: @padding-base-vertical @padding-base-horizontal;
+
+          @import 'result-details';
         }
 
         .expanded-details {
