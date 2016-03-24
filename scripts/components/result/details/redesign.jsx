@@ -2,32 +2,59 @@ var React = require('react');
 var bs = require('react-bootstrap');
 var _ = require('lodash');
 
-import { Detail, Title, Description, Content, Explore, Links } from './generic/detail.jsx';
+import {Detail, Title, Description, Content, Explore, Links}
+  from "./generic/detail.jsx";
 
-var Redesign = React.createClass({
+export default class Redesign extends React.Component {
 
-  propTypes: {
-    gene: React.PropTypes.object.isRequired,
-    expanded: React.PropTypes.bool
-  },
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
 
-  render: function () {    
+  handleSelection(selection) {
+    this.setState({ selection: selection });
+  }
+
+  explorations() {
+    return [
+      {label: 'Search thingy', filter: {}},
+      {label: 'Another search', filter: {}}
+    ];
+  }
+
+  links() {
+    return [
+      {label: 'Ensembl', url: 'http://ensembl.gramene.org/'}
+    ]
+  }
+
+  content() {
+    return (
+      <ul>
+        <li>This</li>
+        <li>Is</li>
+        <li>Content</li>
+      </ul>
+    );
+  }
+
+  render() {
     return (
       <Detail>
         <Title>Gene location</Title>
         <Description>Foo bar baz</Description>
         <Content>
-          <ul>
-            <li>This</li>
-            <li>Is</li>
-            <li>Content</li>
-          </ul>
+          {this.content()}
         </Content>
-        <Explore />
-        <Links />
+        <Explore explorations={this.explorations()} />
+        <Links links={this.links()} />
       </Detail>
     );
   }
-});
+}
 
-module.exports = Redesign;
+Redesign.propTypes = {
+  gene: React.PropTypes.object.isRequired,
+  expanded: React.PropTypes.bool
+};

@@ -1,11 +1,13 @@
 'use strict';
 
+import Redesign from './redesign.jsx';
+
 module.exports = [
 
   {
     name: 'Redesign',
     capability: 'location',
-    reactClass: require('./redesign.jsx')
+    reactClass: Redesign
   },
 
   //
