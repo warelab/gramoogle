@@ -1,6 +1,7 @@
-var React = require('react');
-var bs = require('react-bootstrap');
-var _ = require('lodash');
+import React from 'react';
+import _ from 'lodash';
+import { Col } from 'react-bootstrap';
+import DallianceBrowser from './location/dallianceBrowser.jsx';
 
 import {Detail, Title, Description, Content, Explore, Links}
   from "./generic/detail.jsx";
@@ -9,11 +10,42 @@ export default class Redesign extends React.Component {
 
   constructor(props) {
     super(props);
+    this.initRegion();
     this.state = {};
+  }
+
+  initRegion() {
+    var region, isChromosome, regionType, regionName;
+    region = _.get(this.props, 'gene.location.region');
+    if (region) {
+      isChromosome = /^\d+$/.test(region);
+      if (isChromosome) {
+        regionType = 'chromosome';
+        regionName = 'Chromosome ' + region;
+      }
+      else {
+        regionType = 'scaffold';
+        regionName = region;
+      }
+      this.region = {
+        isChromsome: isChromosome,
+        name: regionName,
+        type: regionType
+      };
+    }
   }
 
   handleSelection(selection) {
     this.setState({ selection: selection });
+  }
+
+  location() {
+    var location = this.props.gene.location;
+    return (
+      <span className="location">
+        <span className="region">{this.region.name}</span>:<span className="start">{location.start}</span>-<span className="end">{location.end}</span>
+      </span>
+    );
   }
 
   explorations() {
@@ -29,23 +61,23 @@ export default class Redesign extends React.Component {
     ]
   }
 
-  content() {
+  biodalliance() {
     return (
-      <ul>
-        <li>This</li>
-        <li>Is</li>
-        <li>Content</li>
-      </ul>
+      <DallianceBrowser {...this.props} />
     );
   }
 
   render() {
     return (
       <Detail>
-        <Title>Gene location</Title>
-        <Description>Foo bar baz</Description>
+        <Title>{this.location()}</Title>
         <Content>
-          {this.content()}
+          <Col xs={12} sm={9}>
+            {this.biodalliance()}
+          </Col>
+          <Col xs={12} sm={3}>
+            Config
+          </Col>
         </Content>
         <Explore explorations={this.explorations()} />
         <Links links={this.links()} />
