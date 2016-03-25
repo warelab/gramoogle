@@ -1,25 +1,19 @@
 'use strict';
 
-var React = require('react');
-var Dalliance = require('gramene-dalliance').browser;
-var bs = require('react-bootstrap');
+import React from "react";
+import {browser as Dalliance} from "gramene-dalliance";
 
-var DallianceBrowser = React.createClass({
+export default class DallianceBrowser extends React.Component {
 
-  propTypes: {
-    gene: React.PropTypes.object.isRequired,
-    expanded: React.PropTypes.bool
-  },
-
-  shouldComponentUpdate: function() {
+  shouldComponentUpdate() {
     return false;
-  },
+  }
 
-  biodallianceElementId: function() {
+  biodallianceElementId() {
     return this.props.gene._id + 'Browser';
-  },
+  }
 
-  browser: function() {
+  browser() {
     var g, start, end, span, padding, browser;
     g = this.props.gene;
     start = g.location.start;
@@ -54,7 +48,7 @@ var DallianceBrowser = React.createClass({
             uri: 'http://data.gramene.org/ensembl',
             tier_type: 'ensembl',
             species: g.system_name,
-            type: ['gene','transcript','exon','cds']
+            type: ['gene', 'transcript', 'exon', 'cds']
           }
         ],
         disablePoweredBy: true,
@@ -74,27 +68,34 @@ var DallianceBrowser = React.createClass({
         noHelp: true
       }
     );
-  },
-  cancel: function() {
-    if(typeof this.timeoutID == "number") {
+  }
+
+  cancel() {
+    if (typeof this.timeoutID == "number") {
       window.clearTimeout(this.timeoutID);
       delete this.timeoutID;
     }
-  },
-  componentDidMount: function () {
+  }
+
+  componentDidMount() {
     // this.browser();
     this.cancel();
     var self = this;
-    this.timeoutID = window.setTimeout(function() {self.browser();}, 200);
-  },
-  componentWillUnmount: function () {
+    this.timeoutID = window.setTimeout(function () {self.browser();}, 200);
+  }
+
+  componentWillUnmount() {
     this.cancel();
-  },
-  render: function () {
+  }
+
+  render() {
     return (
       <div id={this.biodallianceElementId()}></div>
     );
   }
-});
+}
 
-module.exports = DallianceBrowser;
+DallianceBrowser.propTypes = {
+  gene: React.PropTypes.object.isRequired,
+  expanded: React.PropTypes.bool
+};

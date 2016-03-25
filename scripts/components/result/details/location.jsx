@@ -105,25 +105,7 @@ var Location = React.createClass({
         </dl>
       </div>
     );
-    //return (
-    //  <div>
-    //    <DallianceBrowser gene={gene} expanded={this.props.expanded} />
-    //    <bs.Row>
-    //      <bs.Col xs={12} md={4}>
-    //        <Location gene={gene} />
-    //      </bs.Col>
-    //      <bs.Col xs={12} md={8}>
-    //        <h5>Links</h5>
-    //        <ul>
-    //          <li>
-    //            <a href={ensemblSummaryUrl}>Ensembl Gene view</a>
-    //          </li>
-    //        </ul>
-    //      </bs.Col>
-    //    </bs.Row>
-    //  </div>
-    //);
-  }
+   }
 });
 
 module.exports = Location;
