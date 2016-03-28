@@ -56,8 +56,8 @@ var Header = React.createClass({
 
 (function listenForWindowResize() {
   var willUpdate = false;
-  if(!willUpdate && window && _.isFunction(window.addEventListener)) {
-    window.addEventListener('resize', function windowResizeListener(){
+  if(!willUpdate && global && _.isFunction(global.addEventListener)) {
+    global.addEventListener('resize', function windowResizeListener(){
       willUpdate = true;
       setTimeout(function() {
         updateBodyTopPadding();
