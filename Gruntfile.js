@@ -17,12 +17,12 @@ module.exports = function (grunt) {
   grunt.initConfig({
     env: {
       dev: {
-        NODE_ENV : 'development',
-        isDev : true
+        NODE_ENV: 'development',
+        isDev: true
       },
       prod: {
-        NODE_ENV : 'production',
-        isDev : false
+        NODE_ENV: 'production',
+        isDev: false
       }
     },
 
@@ -31,6 +31,23 @@ module.exports = function (grunt) {
         style: 'color'
       }
     },
+
+    // babel: {
+    //   options: {
+    //     presets: ['es2015', 'react']
+    //   },
+    //   forGrunt: {
+    //     files: [
+    //       {
+    //         expand: true,
+    //         cwd: 'scripts/',
+    //         src: ['**/*.js', '**/*.jsx'],
+    //         dest: 'grunt/'
+    //       }
+    //     ]
+    //
+    //   }
+    // },
 
     browserify: {
       dev: {
@@ -116,10 +133,10 @@ module.exports = function (grunt) {
         const DEV_SERVER = 'http://devdata.gramene.org/';
         var defaultServer;
 
-        if(process.env.GRAMENE_SERVER) {
+        if (process.env.GRAMENE_SERVER) {
           defaultServer = process.env.GRAMENE_SERVER;
         }
-        else if(props.tag || props.branch === 'master') {
+        else if (props.tag || props.branch === 'master') {
           defaultServer = PROD_SERVER;
         }
         else {
@@ -151,9 +168,12 @@ module.exports = function (grunt) {
 
     var index = (function compileIndexTemplate() {
       var template = _.template(grunt.file.read('./index.template.html'));
+      var ReactDOMServer = require('react-dom/server');
+      var content = require('./source/babel.js');
 
       var props = {
-        footer: footer
+        footer: footer,
+        content: content
       };
 
       return template(props);
@@ -161,8 +181,8 @@ module.exports = function (grunt) {
 
     grunt.file.write('build/index.html', index);
   });
-
+  grunt.registerTask('generateStaticFiles', ['copy:assets', 'copy:icons', /*'babel:forGrunt',*/ 'packageIndexHtml']);
   grunt.registerTask('test', ['jasmine_node']);
-  grunt.registerTask('default', ['env:dev', 'copy:assets', 'copy:icons', 'packageIndexHtml', 'browserify:dev', 'watch']);
-  grunt.registerTask('package', ['env:prod', 'copy:assets', 'copy:icons', 'packageIndexHtml', 'browserify:production', 'test']);
+  grunt.registerTask('default', ['env:dev', 'generateStaticFiles', 'browserify:dev', 'watch']);
+  grunt.registerTask('package', ['env:prod', 'generateStaticFiles', 'browserify:production', 'test']);
 };

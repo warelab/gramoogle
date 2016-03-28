@@ -67,7 +67,7 @@ var DallianceBrowser = React.createClass({
   },
   cancel: function() {
     if(typeof this.timeoutID == "number") {
-      window.clearTimeout(this.timeoutID);
+      global.clearTimeout(this.timeoutID);
       delete this.timeoutID;
     }
   },
@@ -75,13 +75,13 @@ var DallianceBrowser = React.createClass({
     // this.browser();
     this.cancel();
     var self = this;
-    this.timeoutID = window.setTimeout(function() {self.browser();}, 20);
+    this.timeoutID = global.setTimeout(function() {self.browser();}, 20);
   },
   componentDidUpdate: function () {
     // this.browser();
     this.cancel();
     var self = this;
-    this.timeoutID = window.setTimeout(function() {self.browser();}, 20);
+    this.timeoutID = global.setTimeout(function() {self.browser();}, 20);
   },
   componentWillUnmount: function () {
     this.cancel();
