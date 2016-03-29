@@ -2,6 +2,7 @@
 
 var _ = require('lodash');
 var moment = require('moment');
+var fs = require('fs');
 
 var webserviceVersion = 'v' + require('./package.json').gramene.dbRelease;
 
@@ -23,6 +24,12 @@ module.exports = function (grunt) {
     flow: {
       options: {
         style: 'color'
+      }
+    },
+
+    exec: {
+      generateStaticApp: {
+        cmd: 'node scripts/babel.js'
       }
     },
 
@@ -81,7 +88,7 @@ module.exports = function (grunt) {
     watch: {
       browserify: {
         files: ['scripts/**/*'],
-        tasks: ['browserify:dev', 'packageIndexHtml']
+        tasks: ['browserify:dev', 'generateStaticFiles']
       },
       html: {
         files: ['*.template.html'],
@@ -119,7 +126,6 @@ module.exports = function (grunt) {
   });
 
   grunt.registerTask('packageIndexHtml', 'Build index.html for distribution.', function () {
-
     var footer = (function compileFooterTemplate() {
       function defaultServer() {
         const PROD_SERVER = 'http://data.gramene.org/';
@@ -161,9 +167,7 @@ module.exports = function (grunt) {
 
     var index = (function compileIndexTemplate() {
       var template = _.template(grunt.file.read('./index.template.html'));
-      // var ReactDOMServer = require('react-dom/server');
-      // var content = require('./scripts/babel.js');
-      var content = '';
+      var content = grunt.file.read('./app.html.fragment');
 
       var props = {
         footer: footer,
@@ -175,7 +179,7 @@ module.exports = function (grunt) {
 
     grunt.file.write('build/index.html', index);
   });
-  grunt.registerTask('generateStaticFiles', ['copy:assets', 'copy:icons', 'packageIndexHtml']);
+  grunt.registerTask('generateStaticFiles', ['copy:assets', 'copy:icons', 'exec:generateStaticApp', 'packageIndexHtml']);
   grunt.registerTask('test', ['jasmine_node']);
   grunt.registerTask('default', ['env:dev', 'generateStaticFiles', 'less:dev', 'browserify:dev', 'watch']);
   grunt.registerTask('package', ['env:prod', 'generateStaticFiles', 'less:production', 'browserify:production', 'test']);
