@@ -8,12 +8,6 @@ var webserviceVersion = 'v' + require('./package.json').gramene.dbRelease;
 module.exports = function (grunt) {
   require('jit-grunt')(grunt);
 
-  var lessifyOptions = {
-    plugins: [
-      new (require('less-plugin-autoprefix'))({browsers: ["last 2 versions"]})
-    ]
-  };
-
   grunt.initConfig({
     env: {
       dev: {
@@ -32,22 +26,29 @@ module.exports = function (grunt) {
       }
     },
 
-    // babel: {
-    //   options: {
-    //     presets: ['es2015', 'react']
-    //   },
-    //   forGrunt: {
-    //     files: [
-    //       {
-    //         expand: true,
-    //         cwd: 'scripts/',
-    //         src: ['**/*.js', '**/*.jsx'],
-    //         dest: 'grunt/'
-    //       }
-    //     ]
-    //
-    //   }
-    // },
+    less: {
+      dev: {
+        options: {
+          plugins: [
+            new (require('less-plugin-autoprefix'))({browsers: ["last 2 versions"]})
+          ]
+        },
+        files: {
+          "build/style.css": "styles/main.less"
+        }
+      },
+      production: {
+        options: {
+          plugins: [
+            new (require('less-plugin-autoprefix'))({browsers: ["last 2 versions"]}),
+            new (require('less-plugin-clean-css'))()
+          ]
+        },
+        files: {
+          "build/style.css": "styles/main.less"
+        }
+      }
+    },
 
     browserify: {
       dev: {
@@ -56,7 +57,6 @@ module.exports = function (grunt) {
             debug: true
           },
           transform: [
-            ['node-lessify', lessifyOptions],
             ['babelify', {presets: ["es2015", "react"]}]
           ]
         },
@@ -66,7 +66,6 @@ module.exports = function (grunt) {
       production: {
         options: {
           transform: [
-            ['node-lessify', lessifyOptions],
             ['babelify', {presets: ["es2015", "react"]}],
             ['uglifyify', {global: true}]
           ],
@@ -81,24 +80,18 @@ module.exports = function (grunt) {
 
     watch: {
       browserify: {
-        files: ['scripts/**/*', 'styles/*.less'],
-        tasks: ['browserify:dev', 'packageIndexHtml'],
-        //options: {
-        //  livereload: 8080
-        //}
+        files: ['scripts/**/*'],
+        tasks: ['browserify:dev', 'packageIndexHtml']
       },
       html: {
         files: ['*.template.html'],
         tasks: ['packageIndexHtml']
+      },
+      styles: {
+        files: ['styles/*.less'],
+        tasks: ['less:dev']
       }
     },
-
-    //jest: {
-    //  options: {
-    //    coverage: false,
-    //    config: './jest.config.json'
-    //  }
-    //},
 
     jasmine_node: {
       options: {
@@ -168,8 +161,9 @@ module.exports = function (grunt) {
 
     var index = (function compileIndexTemplate() {
       var template = _.template(grunt.file.read('./index.template.html'));
-      var ReactDOMServer = require('react-dom/server');
-      var content = require('./source/babel.js');
+      // var ReactDOMServer = require('react-dom/server');
+      // var content = require('./scripts/babel.js');
+      var content = '';
 
       var props = {
         footer: footer,
@@ -181,8 +175,8 @@ module.exports = function (grunt) {
 
     grunt.file.write('build/index.html', index);
   });
-  grunt.registerTask('generateStaticFiles', ['copy:assets', 'copy:icons', /*'babel:forGrunt',*/ 'packageIndexHtml']);
+  grunt.registerTask('generateStaticFiles', ['copy:assets', 'copy:icons', 'packageIndexHtml']);
   grunt.registerTask('test', ['jasmine_node']);
-  grunt.registerTask('default', ['env:dev', 'generateStaticFiles', 'browserify:dev', 'watch']);
-  grunt.registerTask('package', ['env:prod', 'generateStaticFiles', 'browserify:production', 'test']);
+  grunt.registerTask('default', ['env:dev', 'generateStaticFiles', 'less:dev', 'browserify:dev', 'watch']);
+  grunt.registerTask('package', ['env:prod', 'generateStaticFiles', 'less:production', 'browserify:production', 'test']);
 };
