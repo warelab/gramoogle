@@ -70,7 +70,7 @@ var Header = React.createClass({
 var prevNavHeight = 51;
 function updateBodyTopPadding() {
   var nav, body, navHeight;
-  if(document && _.isFunction(document.querySelector)) {
+  if(global.document && _.isFunction(document.querySelector)) {
     nav = document.querySelector('#search-header');
     if(!nav) {
       return;
