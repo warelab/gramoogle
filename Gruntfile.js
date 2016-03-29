@@ -147,7 +147,7 @@ module.exports = function (grunt) {
         return defaultServer;
       }
 
-      var template = _.template(grunt.file.read('./footer.template.html'));
+      var template = _.template(grunt.file.read('./static/footer.template.html'));
 
       var props = {
         jobId: process.env.TRAVIS_JOB_ID,
@@ -166,12 +166,14 @@ module.exports = function (grunt) {
     })();
 
     var index = (function compileIndexTemplate() {
-      var template = _.template(grunt.file.read('./index.template.html'));
-      var content = grunt.file.read('./app.html.fragment');
+      var template = _.template(grunt.file.read('./static/index.template.html'));
+      var content = grunt.file.read('./static/app.html.fragment');
+      var loadingMessage = grunt.file.read('./static/loading-message.html.fragment');
 
       var props = {
         footer: footer,
-        content: content
+        content: content,
+        loadingMessage: loadingMessage
       };
 
       return template(props);

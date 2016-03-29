@@ -1,0 +1,30 @@
+<div id="loading-message" style="display: none;" class="suggestions panel panel-default">
+    <div class="panel-body">
+        <div class="alert alert-warning">
+            <strong>Loading…</strong> Gramene Search is initializing.
+        </div>
+    </div>
+</div>
+<script>
+    (function () {
+        var searchBox = document.querySelector('#search-box');
+        var msgEl = document.querySelector('#loading-message');
+
+        function showLoadingMessage() {
+            var parentNode = searchBox.parentNode.parentNode;
+            if (msgEl && parentNode) {
+                msgEl.style.removeProperty('display');
+                parentNode.appendChild(msgEl);
+            }
+        }
+
+        function hideLoadingMessage() {
+            msgEl.parentNode.removeChild(msgEl);
+            searchBox.removeEventListener('input', showLoadingMessage);
+        }
+
+        searchBox.addEventListener('input', showLoadingMessage);
+        window.onload = hideLoadingMessage;
+        searchBox.focus();
+    })();
+</script>
