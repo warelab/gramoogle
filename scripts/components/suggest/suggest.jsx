@@ -23,7 +23,9 @@ var Suggest = React.createClass({
     if (!suggestionCategories) {
       return (
         <bs.Panel className="suggestions">
-          <p>Finding suggestions…</p>
+          <bs.Alert bsStyle="info">
+            Finding suggestions…
+          </bs.Alert>
         </bs.Panel>
       );
     }

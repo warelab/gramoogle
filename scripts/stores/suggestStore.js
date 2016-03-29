@@ -18,6 +18,7 @@ module.exports = Reflux.createStore({
     this.listenTo(QueryActions.setQueryString, this.provideSuggestions);
     this.listenTo(visualizationStore, this.setTaxonomy);
     this.listenTo(searchStore, this.setSearchState);
+    this.setSearchState(searchStore.state);
     this.cache = GrameneCache.init(100);
 
     this.suggest = _.debounce(this.suggestNoDebounce, constants.suggest.debounce);
