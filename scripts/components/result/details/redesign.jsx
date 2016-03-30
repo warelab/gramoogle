@@ -50,14 +50,17 @@ export default class Redesign extends React.Component {
 
   explorations() {
     return [
-      {label: 'Search thingy', filter: {}},
-      {label: 'Another search', filter: {}}
+      {name: 'Genes on same chr', handleClick: ()=>0},
+      {name: 'All within 100kb', handleClick: ()=>0}
     ];
   }
 
   links() {
     return [
-      {label: 'Ensembl', url: 'http://ensembl.gramene.org/'}
+      {name: 'Ensembl Gene', url: 'http://ensembl.gramene.org/'},
+      {name: 'Ensembl Location', url: 'http://ensembl.gramene.org/'},
+      {name: 'Phytozome', url: 'http://ensembl.gramene.org/'},
+      {name: 'Araport', url: 'http://ensembl.gramene.org/'}
     ]
   }
 
