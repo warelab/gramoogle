@@ -6,7 +6,7 @@ export class Detail extends React.Component {
   render() {
     var subComponents = keyBy(this.props.children, 'type.name');
     return (
-``      <Grid fluid className="detail">
+      <Grid fluid className="detail">
         <Row className="intro">
           {subComponents.Title}
           {subComponents.Description}
