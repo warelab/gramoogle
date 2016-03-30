@@ -11,10 +11,13 @@
         var msgEl = document.querySelector('#loading-message');
 
         function showLoadingMessage() {
-            var parentNode = searchBox.parentNode.parentNode;
-            if (msgEl && parentNode) {
-                msgEl.style.removeProperty('display');
-                parentNode.appendChild(msgEl);
+            var parentNode;
+            if(searchBox.value) {
+                parentNode = searchBox.parentNode.parentNode;
+                if (msgEl && parentNode) {
+                    msgEl.style.removeProperty('display');
+                    parentNode.appendChild(msgEl);
+                }
             }
         }
 
