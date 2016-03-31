@@ -2,8 +2,8 @@ import React from "react";
 
 export default class Links extends React.Component {
   renderLinks() {
-    return this.props.links.map((link) =>
-      <li>
+    return this.props.links.map((link, idx) =>
+      <li key={idx}>
         <a className="external-link" href={link.url}>{link.name}</a>
       </li>
     )

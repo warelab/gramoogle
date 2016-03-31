@@ -4,8 +4,8 @@ import QueryTerm from "../../queryTerm.jsx";
 export default class Explore extends React.Component {
   renderExplorations() {
     return this.props.explorations.map(
-      (exploration) =>
-        <li>
+      (exploration, idx) =>
+        <li key={idx}>
           <QueryTerm {...exploration} />
         </li>
     );
