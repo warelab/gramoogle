@@ -57,8 +57,7 @@ export default class Redesign extends React.Component {
 
   links() {
     return [
-      {name: 'Ensembl Gene', url: 'http://ensembl.gramene.org/'},
-      {name: 'Ensembl Location', url: 'http://ensembl.gramene.org/'},
+      {name: 'Gramene Ensembl', url: 'http://ensembl.gramene.org/'},
       {name: 'Phytozome', url: 'http://ensembl.gramene.org/'},
       {name: 'Araport', url: 'http://ensembl.gramene.org/'}
     ]
