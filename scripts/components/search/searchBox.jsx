@@ -28,6 +28,10 @@ var SearchBox = React.createClass({
     this.getInputNode().focus();
   },
   componentDidMount: function() {
+    var val = this.getInputNode().value;
+    if(val !== '') {
+      this.props.onQueryChange({target: {value: val}});
+    }
     this.focus();
   },
   render: function() {
@@ -44,6 +48,7 @@ var SearchBox = React.createClass({
     );
     return (
       <Input type="search"
+             id="search-box"
              ref="textInput"
              tabIndex="1"
              placeholder="Search for genes…"
