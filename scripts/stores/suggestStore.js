@@ -98,7 +98,7 @@ module.exports = Reflux.createStore({
         id: 'exact',
         category: GENES_CATEGORY,
         term: 'Exactly "' + queryString + '"',
-        fq: 'text:' + queryString + ' OR description:' + queryString,
+        fq: 'text:' + queryString,
         display_name: 'All genes that contain the word "' + queryString + '"'
       };
 
@@ -106,7 +106,7 @@ module.exports = Reflux.createStore({
         id: 'startsWith',
         category: GENES_CATEGORY,
         term: 'Starts with "' + queryString + '"',
-        fq: 'text:' + queryString + '* OR description:' + queryString + '*',
+        fq: 'text:' + queryString + '*',
         display_name: 'All genes that contain a word that starts with "' + queryString + '"'
       };
 
