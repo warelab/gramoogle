@@ -6,7 +6,6 @@
 
 # compiled output
 /dist
-/grunt
 /build
 
 # dependencies
