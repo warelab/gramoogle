@@ -114,7 +114,18 @@ module.exports = function (grunt) {
     copy: {
       assets: {
         files: [
-          {expand: true, cwd: 'assets/', src: ['**'], dest: 'build/assets/'}
+          {expand: true, cwd: 'assets/', src: ['**'], dest: 'build/assets/'},
+          {
+            expand: true,
+            cwd: 'node_modules/gramene-dalliance', 
+            src: [
+              'css/*-scoped.css',
+              'css/font-awesome.min.css',
+              'img/*',
+              'fonts/*'
+            ],
+            dest: 'build/assets/gramene-dalliance/'
+          }
         ]
       },
       icons: {

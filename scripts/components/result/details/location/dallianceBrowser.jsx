@@ -21,13 +21,14 @@ export default class DallianceBrowser extends React.Component {
     span = end - start + 1;
     padding = Math.floor(.1 * span);
 
-    browser = new Dalliance(
+    this.browser = browser = new Dalliance(
       {
         pageName: this.biodallianceElementId(),
         chr: g.location.region,
         viewStart: start - padding,
         viewEnd: end + padding,
         cookieKey: g._id + 'BrowserCookie',
+        prefix: 'assets/gramene-dalliance/',
 
         coordSystem: {
           speciesName: g.system_name,
@@ -58,16 +59,19 @@ export default class DallianceBrowser extends React.Component {
         noPersistView: true,
         maxWorkers: 2,
         noTitle: true,
-        noLocationField: !this.props.expanded,
-        noLeapButtons: !this.props.expanded,
-        noZoomSlider: !this.props.expanded,
-        noTrackAdder: !this.props.expanded,
+        noLocationField: true, //!this.props.expanded,
+        noLeapButtons: true, //!this.props.expanded,
+        noZoomSlider: false, //!this.props.expanded,
+        noTrackAdder: true, //!this.props.expanded,
         noTrackEditor: true,
         noExport: true,
-        noOptions: !this.props.expanded,
-        noHelp: true
+        noOptions: true , // !this.props.expanded,
+        noHelp: true,
+        maxViewWidth: 1000000
       }
     );
+    
+    browser.addViewListener(this.props.onViewChange);
   }
 
   cancel() {
@@ -97,5 +101,6 @@ export default class DallianceBrowser extends React.Component {
 
 DallianceBrowser.propTypes = {
   gene: React.PropTypes.object.isRequired,
-  expanded: React.PropTypes.bool
+  expanded: React.PropTypes.bool,
+  onViewChange: React.PropTypes.func.isRequired
 };
