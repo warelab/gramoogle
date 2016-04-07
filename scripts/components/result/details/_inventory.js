@@ -3,9 +3,15 @@
 module.exports = [
 
   {
-    name: 'Structure & Location',
+    name: 'Location',
     capability: 'location',
-    reactClass: require('./geneStructure.jsx')
+    reactClass: require('./location.jsx')
+  },
+
+  {
+    name: 'Transcript', // for display
+    capability: 'domains',
+    reactClass: require('./domains.jsx')
   },
 
   {
@@ -15,19 +21,13 @@ module.exports = [
   },
 
   {
-    name: 'Transcript Features', // for display
-    capability: 'domains',
-    reactClass: require('./domains.jsx')
-  },
-
-  {
     name: 'Pathways', // for display
     capability: 'pathways',
     reactClass: require('./pathways.jsx')
   },
 
   {
-    name: 'Cross-references',
+    name: 'X-refs',
     capability: 'xrefs',
     reactClass: require('./xrefs.jsx')
   }

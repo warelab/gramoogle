@@ -6,20 +6,7 @@ var Header = require('./header.jsx');
 var Results = require('./results.jsx');
 var Welcome = require('./welcome.jsx');
 var searchStore = require('../stores/searchStore');
-var QueryActions = require('../actions/queryActions');
 var _ = require('lodash');
-
-var Footer = React.createClass({
-  render: function () {
-    return (
-      <div className="footer">
-        <div className="container">
-          <p>I am the footer</p>
-        </div>
-      </div>
-    )
-  }
-});
 
 var App = React.createClass({
 

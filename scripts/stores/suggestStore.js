@@ -18,6 +18,7 @@ module.exports = Reflux.createStore({
     this.listenTo(QueryActions.setQueryString, this.provideSuggestions);
     this.listenTo(visualizationStore, this.setTaxonomy);
     this.listenTo(searchStore, this.setSearchState);
+    this.setSearchState(searchStore.state);
     this.cache = GrameneCache.init(100);
 
     this.suggest = _.debounce(this.suggestNoDebounce, constants.suggest.debounce);
@@ -95,16 +96,18 @@ module.exports = Reflux.createStore({
       var exact, beginsWith, textCategory;
 
       exact = {
+        id: 'exact',
         category: GENES_CATEGORY,
         term: 'Exactly "' + queryString + '"',
-        fq: 'text:' + queryString + ' OR description:' + queryString,
+        fq: 'text:' + queryString,
         display_name: 'All genes that contain the word "' + queryString + '"'
       };
 
       beginsWith = {
+        id: 'startsWith',
         category: GENES_CATEGORY,
         term: 'Starts with "' + queryString + '"',
-        fq: 'text:' + queryString + '* OR description:' + queryString + '*',
+        fq: 'text:' + queryString + '*',
         display_name: 'All genes that contain a word that starts with "' + queryString + '"'
       };
 

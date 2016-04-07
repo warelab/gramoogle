@@ -6,13 +6,13 @@ var mq;
 
 var mqs = {};
 
-const SMALL_SCREEN_Q = "(max-device-width: 960px), (max-width: 768px)";
+const SMALL_SCREEN_Q = "(max-device-width: 767px), (max-width: 767px)";
 
-if(window && window.matchMedia && _.isFunction(window.matchMedia)) {
+if(global && global.matchMedia && _.isFunction(global.matchMedia)) {
   mq = function mq(q) {
     var mm = mqs[q];
     if(!mm) {
-      mm = mqs[q] = window.matchMedia(q);
+      mm = mqs[q] = global.matchMedia(q);
     }
     return mm;
   }

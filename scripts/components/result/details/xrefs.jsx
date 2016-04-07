@@ -78,12 +78,13 @@ var Xref = React.createClass({
 var Xrefs = React.createClass({
   componentWillMount: function() {
     this.xrefs = _(this.props.gene.xrefs)
-    .pick(function(val, name) {
+    .keyBy('db')
+    .pickBy(function(val, name) {
       return dbxrefs.isKnown(name);
     })
     .map(function(val, name) {
       var xref = dbxrefs.fetch(name);
-      return {url: xref.url, label: xref.label, val: val};
+      return {url: xref.url, label: xref.label, val: val.ids};
     })
     .groupBy('label')
     .map(function(members, displayName) {
@@ -98,8 +99,10 @@ var Xrefs = React.createClass({
     return (
       <bs.Table className="xrefs" condensed hover>
         <thead>
-          <th className="xref-name-col">Database</th>
-          <th className="xref-value-col">IDs and links</th>
+          <tr>
+            <th className="xref-name-col">Database</th>
+            <th className="xref-value-col">IDs and links</th>
+          </tr>
         </thead>
         <tbody>
           {this.xrefs}

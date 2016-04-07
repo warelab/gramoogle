@@ -8,7 +8,7 @@ var exampleQueries = [
   {
     displayText: "What are the homologs of Arabidopsis thaliana's " +
                  "PAD4 gene in the Oryzeae?",
-    filters: {"grm_gene_tree:EPlGT00140000001539":{"category":"Gene Tree","fq":"grm_gene_tree:EPlGT00140000001539","id":"grm_gene_tree:EPlGT00140000001539","display_name":"Homolog of PAD4"},"taxonomy__ancestors:147380":{"weight":594548,"fq":"taxonomy__ancestors:147380","display_name":"Oryzeae","id":"taxon_id:147380","category":"Taxonomy","score":594548,"exclude":false}}
+    filters: {"gene_tree:EPlGT00140000001539":{"category":"Gene Tree","fq":"gene_tree:EPlGT00140000001539","id":"gene_tree:EPlGT00140000001539","display_name":"Homolog of PAD4"},"taxonomy__ancestors:147380":{"weight":594548,"fq":"taxonomy__ancestors:147380","display_name":"Oryzeae","id":"taxon_id:147380","category":"Taxonomy","score":594548,"exclude":false}}
   },
   {
     displayText: "What cytosolic genes in A. thaliana and Z. mays " +

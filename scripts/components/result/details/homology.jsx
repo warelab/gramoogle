@@ -2,30 +2,18 @@
 
 var React = require('react');
 var Reflux = require('reflux');
+
+var TreeVis = require('gramene-genetree-vis');
+
 var queryActions = require('../../../actions/queryActions');
 var DocActions = require('../../../actions/docActions');
+var lutStore = require('../../../stores/lutStore');
+
 var _ = require('lodash');
 
 var processGenetreeDoc = require('gramene-trees-client').genetree.tree;
 
 var QueryTerm = require('../queryTerm.jsx');
-
-function orthoParaList(homology, thisGeneId, type) {
-  if(homology) {
-    var homologs = _(homology)
-      .pick(function filterCategories(thing, name) {
-        return name.indexOf(type) === 0;
-      })
-      .values()
-      .flatten()
-      .value();
-
-    if( !_.isEmpty(homologs)) {
-      homologs.push(thisGeneId);
-      return homologs; // only return something if we have something. We're testing for truthiness later.
-    }
-  }
-}
 
 var Homology = React.createClass({
 
@@ -34,45 +22,79 @@ var Homology = React.createClass({
     docs: React.PropTypes.object.isRequired
   },
 
-  componentWillMount: function() {
-    this.orthologs = this.orthologList();
-    this.paralogs = this.paralogList();
-    this.treeId = this.props.gene.grm_gene_tree;
+  mixins: [
+    Reflux.connect(lutStore, 'luts')
+  ],
 
-    if(this.treeId) {
-      DocActions.needDocs('genetrees', this.treeId, processGenetreeDoc);
-    }
-
-    //this.genetree = this.props.docs.genetrees[this.props.gene.grm_gene_tree];
+  getInitialState: function () {
+    return {
+      luts: lutStore.state
+    };
   },
 
-  componentWillUnmount: function() {
+  componentWillMount: function () {
+    this.orthologs = this.orthologList();
+    this.paralogs = this.paralogList();
+    this.treeId = _.get(this.props.gene, 'homology.gene_tree.id');
+
+    if (this.treeId) {
+      DocActions.needDocs('genetrees', this.treeId, processGenetreeDoc);
+    }
+  },
+
+  componentWillUpdate: function (newProps, newState) {
+    this.genetree = _.get(newProps, ['docs', 'genetrees', this.treeId]);
+    this.taxonomy = _.get(newState, ['luts', 'taxonomy']);
+  },
+
+  componentWillUnmount: function () {
     DocActions.noLongerNeedDocs('genetrees', this.treeId);
   },
 
-  orthologList: function() {
-    return orthoParaList(this.props.gene.homology, this.props.gene._id, 'ortholog');
+  orthologList: function () {
+    return this.orthoParaList('ortholog');
   },
 
-  paralogList: function() {
-    return orthoParaList(this.props.gene.homology, this.props.gene._id, 'within_species_paralog');
+  paralogList: function () {
+    return this.orthoParaList('within_species_paralog');
   },
 
-  createAllHomologsFilters: function() {
+  orthoParaList: function orthoParaList(type) {
+    var homology, thisGeneId;
+    homology = _.get(this.props.gene, 'homology.homologous_genes');
+    thisGeneId = this.props.gene._id;
+
+    if (homology) {
+      var homologs = _(homology)
+        .pickBy(function filterCategories(thing, name) {
+          return name.indexOf(type) === 0;
+        })
+        .values()
+        .flatten()
+        .value();
+
+      if (!_.isEmpty(homologs)) {
+        homologs.push(thisGeneId);
+        return homologs; // only return something if we have something. We're testing for truthiness later.
+      }
+    }
+  },
+
+  createAllHomologsFilters: function () {
     var gt, fq, result;
-    gt = this.props.gene.grm_gene_tree;
-    fq = 'grm_gene_tree:' + gt;
+    gt = this.treeId;
+    fq = 'gene_tree:' + gt;
     result = {};
-    result[fq] =  {
+    result[fq] = {
       category: 'Gene Tree',
       fq: fq,
       id: fq,
       display_name: 'Homolog of ' + this.props.gene.name
-    }
+    };
     return result;
   },
 
-  createOrthologFilters: function() {
+  createOrthologFilters: function () {
     var fq, id, result;
     id = this.props.gene._id;
     fq = 'homology__ortholog_one2one:' + id +
@@ -89,11 +111,11 @@ var Homology = React.createClass({
     return result;
   },
 
-  createParalogFilters: function() {
+  createParalogFilters: function () {
     var fq, id, result;
     id = this.props.gene._id;
     fq = 'homology__within_species_paralog:' + id +
-      ' OR id:' + id ;
+      ' OR id:' + id;
     result = {};
     result[fq] = {
       category: 'Gene Tree',
@@ -104,56 +126,80 @@ var Homology = React.createClass({
     return result;
   },
 
-  filterAllHomologs: function() {
+  filterAllHomologs: function () {
     queryActions.setAllFilters(this.createAllHomologsFilters());
   },
 
-  filterOrthologs: function() {
+  filterOrthologs: function () {
     queryActions.setAllFilters(this.createOrthologFilters());
   },
 
-  filterParalogs: function() {
+  filterParalogs: function () {
     queryActions.setAllFilters(this.createParalogFilters());
   },
 
-  render: function () {
-    var tree, gene, geneCount, ensemblGenetreeUrl;
+  renderTreeVis: function () {
+    if (this.genetree && this.taxonomy) {
+      return (
+        <div className="gene-genetree">
+          <h5>Gene Tree</h5>
+          <TreeVis genetree={this.genetree}
+                   initialGeneOfInterest={this.props.gene}
+                   taxonomy={this.taxonomy}
+                   width={600}/>
+        </div>
+      );
+    }
+  },
 
-    gene = this.props.gene;
+  renderFilters: function () {
+    var tree, geneCount, filters;
 
-    if(this.treeId) {
+    if (this.treeId) {
       tree = _.get(this.props, ['docs', 'genetrees', this.treeId]);
     }
 
-    if(tree) {
+    if (tree) {
       geneCount = tree.geneCount;
     }
 
-    ensemblGenetreeUrl = '//ensembl.gramene.org/' + gene.system_name + '/Gene/Compara_Tree?g=' + gene._id;
-
-    var filters = [
+    filters = [
       <QueryTerm key="all"
                  name="Show All Homologs"
                  count={geneCount}
-                 handleClick={this.filterAllHomologs} />
+                 handleClick={this.filterAllHomologs}/>
     ];
-    if(this.orthologs) {
+    if (this.orthologs) {
       filters.push(<QueryTerm key="ortho"
                               name="Show Orthologs"
                               count={this.orthologs.length}
-                              handleClick={this.filterOrthologs} />)
+                              handleClick={this.filterOrthologs}/>)
     }
-    if(this.paralogs) {
+    if (this.paralogs) {
       filters.push(<QueryTerm key="para"
                               name="Show Paralogs"
                               count={this.paralogs.length}
-                              handleClick={this.filterParalogs} />)
+                              handleClick={this.filterParalogs}/>)
     }
 
     return (
       <div>
         <h5>Change the query</h5>
-        {filters}
+        <ul>
+          {filters}
+        </ul>
+      </div>
+    );
+  },
+
+  renderLinks: function () {
+    var gene, ensemblGenetreeUrl;
+
+    gene = this.props.gene;
+    ensemblGenetreeUrl = '//ensembl.gramene.org/' + gene.system_name + '/Gene/Compara_Tree?g=' + gene._id;
+
+    return (
+      <div>
         <h5>Links</h5>
         <ul>
           <li>
@@ -161,7 +207,18 @@ var Homology = React.createClass({
           </li>
         </ul>
       </div>
+    )
+  },
+
+  render: function () {
+    return (
+      <div>
+        {this.renderTreeVis()}
+        {this.renderFilters()}
+        {this.renderLinks()}
+      </div>
     );
   }
 });
+
 module.exports = Homology;

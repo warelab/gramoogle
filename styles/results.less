@@ -1,4 +1,5 @@
 @import 'bootstrap-3.3.4/variables';
+@import 'colors';
 
 .results {
   min-height: 50rem;
@@ -12,66 +13,163 @@
     .result {
       padding: @padding-base-vertical (@padding-base-horizontal - 1px);
 
-      .gene-name {
+      .result-gene-summary {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: flex-start;
+      }
+
+      /* closest-ortholog is the other flexbox */
+      .result-gene-title-body {
+        flex: 1 1 auto;
+        width: 518px;
+      }
+
+      .gene-title {
+        .gene-title-anchor, .species-name {
+          white-space: nowrap;
+        }
         .glyphicon {
           color: @gramene-orange;
           font-size: @padding-large-horizontal;
         }
+
+        .gene-subtitle {
+          .gene-id {
+            padding-left: @padding-xs-horizontal;
+          }
+        }
+
+        @media only screen and (max-width: @screen-xs-max) {
+          .gene-subtitle {
+            .species-name, .gene-id {
+              display: block;
+              padding-left: @padding-large-horizontal;
+            }
+            .species-name {
+              padding-top: @padding-small-vertical;
+            }
+          }
+        }
+      }
+
+      /* gene-id and species name are used in result-gene-title-body and closest-ortholog */
+      .gene-id {
+        white-space: nowrap;
+      }
+
+      /* ensure there's a space between gene-id and species */
+      .species-name {
+        padding-left: @padding-xs-horizontal;
       }
 
       .gene-description {
         padding-left: @padding-large-horizontal;
       }
 
-      .result-links {
-        &:extend(.list-inline all);
+      /* result-gene-title-body is the other flexbox'*/
+      .closest-ortholog {
+        cursor: pointer;
+        flex: 1 1 auto;
+        width: 250px;
+        font-size: smaller;
+        margin-top: @line-height-computed + @padding-small-vertical; /* same as h3 in bootstrap, plus extra for ::before element */
+        padding: 0 @padding-xs-horizontal; /* vertical padding from h and p elements */
+        margin-left: @padding-xs-horizontal;
+        border: 1px solid @gramene-orange;
+        > h4, > p {
+          margin: @padding-base-vertical 0;
+        }
 
-        padding-left: @padding-large-horizontal;
-        margin-left: 0;
+        /* clear the title (defined in the ::before block below) */
+        :first-child {
+          clear: right;
+        }
+      }
 
-        .result-gene-detail-name {
+      /* this is the "title" of the closest ortholog box */
+      .closest-ortholog::before {
+        content: "Model Species Homolog";
+        position: relative;
+        float: right;
+        margin-top: -13px;
+        border: solid 1px;
+
+        padding: 0 @padding-xs-horizontal;
+        background: @gramene-offwhite;
+        color: @gramene-orange;
+      }
+
+      @media only screen and (max-width: @screen-xs-max) {
+        .closest-ortholog {
+          display: none;
+        }
+      }
+
+      .result-content {
+        clear: both; /* result-gene-title-body and closest-ortholog are floating above this element */
+
+        .result-links {
+          &:extend(.list-inline all);
+
+          display: flex;
+          justify-content: flex-start;
+          padding-left: @padding-large-horizontal;
+          margin-left: 0;
+          margin-top: @padding-small-vertical;
+
+          .result-gene-detail-name {
+            flex: 0 1 auto;
+            padding: @padding-base-vertical @padding-base-horizontal;
+          }
+
+          .result-gene-detail-name:hover, .result-gene-detail-name.hover {
+            background-color: @gramene-lightgreen;
+          }
+
+          .result-gene-detail-name.active {
+            background-color: @gramene-darkgreen;
+            > a {
+              color: @gramene-offwhite;
+            }
+          }
+        }
+
+        /* On small screens, only show the first three gene details */
+        @media only screen and (max-width: @screen-xs-max) {
+          .result-links .result-gene-detail-name:nth-child(n+4) {
+            display: none;
+          }
+        }
+
+        .visible-detail {
+          border: 1px solid @gramene-darkgreen;
+          margin-left: @padding-large-horizontal;
+          margin-bottom: @padding-large-vertical;
           padding: @padding-base-vertical @padding-base-horizontal;
         }
 
-        .result-gene-detail-name:hover {
-          background-color: @gramene-lightergreen;
-        }
+        .expanded-details {
+          padding: @padding-large-vertical @padding-large-horizontal;
 
-        .result-gene-detail-name.active {
-          background-color: @gramene-darkgreen;
-          > a {
-            color: @gramene-offwhite;
+          .expanded-detail {
+            padding: @padding-large-vertical 0;
           }
         }
-      }
 
-      .visible-detail {
-        border: 1px solid @gramene-darkgreen;
-        margin-left: @padding-large-horizontal;
-        margin-right: @padding-large-horizontal;
-        padding: @padding-base-vertical @padding-base-horizontal;
-      }
+        .xrefs {
+          table-layout: fixed;
 
-      .expanded-details {
-        padding: @padding-large-vertical @padding-large-horizontal;
+          .xref-name-col {
+            width: 20%;
+          }
 
-        .expanded-detail {
-          padding: @padding-large-vertical 0;
-        }
-      }
+          .xref-value-col {
+            width: 80%;
 
-      .xrefs {
-        table-layout: fixed;
-
-        .xref-name-col {
-          width: 20%;
-        }
-
-        .xref-value-col {
-          width: 80%;
-
-          ol.xref-id-list {
-            &:extend(.list-unstyled all);
+            ol.xref-id-list {
+              &:extend(.list-unstyled all);
+            }
           }
         }
       }
@@ -82,7 +180,7 @@
       background-color: @gramene-lightergreen;
       margin-top: @padding-large-vertical;
       padding: @padding-large-vertical @padding-small-horizontal;
-      .gene-name {
+      .gene-title {
         margin-top: @padding-base-vertical - 1px;
       }
     }
@@ -93,15 +191,4 @@
   }
 
   padding-bottom: @padding-large-vertical;
-}
-
-.closest-ortholog {
-  margin-top: @line-height-computed; /* same as h3 in bootstrap */
-  padding: 0 @padding-base-horizontal; /* vertical padding from h and p elements */
-  font-size: smaller;
-  border: 1px solid @gramene-orange;
-
-  small {
-    margin-left: @padding-small-horizontal;
-  }
 }

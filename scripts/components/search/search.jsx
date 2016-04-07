@@ -12,9 +12,6 @@ var Suggest = require('../suggest/suggest.jsx');
 var SearchBox = require('./searchBox.jsx');
 var Filters = require('./filters.jsx');
 
-var ensureBodyHasClass = require('../../config/dom').ensureBodyHasClass;
-var ensureBodyLacksClass = require('../../config/dom').ensureBodyLacksClass;
-
 var Search = React.createClass({
   mixins: [Reflux.ListenerMixin],
   propTypes: {
@@ -67,17 +64,13 @@ var Search = React.createClass({
     }
 
     if(_.size(search.query.filters)) {
-      ensureBodyHasClass('has-filters');
       filters = (
         <Filters filters={search.query.filters} />
       );
     }
-    else {
-      ensureBodyLacksClass('has-filters');
-    }
 
     return (
-      <Nav right={true}
+      <Nav pullRight
            className="search-box-nav">
         <SearchBox ref="searchBox"
                    results={search.results}

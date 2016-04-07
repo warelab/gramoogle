@@ -14,11 +14,11 @@ This module is likely to be replaced if/when we refactor the codebase to use Rea
 var _ = require('lodash');
 
 var expectedHash = '';
-var loc = window.location;
+var loc = global.location || {hash: expectedHash};
 
 function init(callback) {
   var hashChangeHandler = handleHashChangeFactory(callback);
-  window.onhashchange = hashChangeHandler;
+  global.onhashchange = hashChangeHandler;
   hashChangeHandler();
 }
 
@@ -38,7 +38,7 @@ function hashDidChange() {
 }
 
 function filtersFromHash() {
-  var hashVal = loc.hash.substring(1);
+  var hashVal = loc.hash ? loc.hash.substring(1) : '';
   return hashVal ? JSON.parse(decodeURI(hashVal)) : {};
 }
 

@@ -19,15 +19,20 @@ var Pathways = React.createClass({
   },
 
   componentWillMount: function() {
-    var ancestorIds, reactionIds;
-    ancestorIds = _.get(this.props, 'gene.ancestors.pathways');
-    reactionIds = _.get(this.props, 'gene.xrefs.pathways');
+    var pathways, reactionId, ancestorIds;
+    pathways = _.get(this.props, 'gene.annotations.pathways');
+    if(!pathways) {
+      throw new Error("No pathway annotation present for " + _.get(this.props, 'gene._id'));
+    }
 
-    if(reactionIds.length != 1) {
+    ancestorIds = pathways.ancestors || [];
+
+    if(_.get(pathways, 'entries.length') != 1) {
       console.error("Number of reactions is not 1");
     }
 
-    this.pathwayIds = reactionIds.concat(ancestorIds);
+    reactionId = _.get(pathways, 'entries[0].id');
+    this.pathwayIds = [+reactionId].concat(ancestorIds);
 
     DocActions.needDocs('pathways', this.pathwayIds);
   },
@@ -39,7 +44,7 @@ var Pathways = React.createClass({
   getReaction: function() {
     var rxnId, rxn;
     if(!this.reaction) {
-      rxnId = _.first(this.pathwayIds);
+      rxnId = _.head(this.pathwayIds);
       rxn = _.get(this.props.docs, ['pathways', rxnId]);
       if(rxn) {
         this.reaction = rxn;
@@ -56,7 +61,7 @@ var Pathways = React.createClass({
       els = [];
       while(currentNodeId) {
         currentNode = this.props.docs.pathways[currentNodeId];
-        els.push( <ReactomeItem reactomeItem={currentNode}/> );
+        els.push( <ReactomeItem key={currentNodeId} reactomeItem={currentNode}/> );
         currentNodeId = _.get(currentNode, 'parents[0]');
       }
     }

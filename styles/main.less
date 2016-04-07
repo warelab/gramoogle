@@ -8,27 +8,22 @@
 @import 'welcome';
 @import 'footer';
 @import 'queryTerm';
+@import '../node_modules/gramene-genetree-vis/styles/tree';
 
 a {
   cursor: pointer;
 }
 
-
-/* Padding required for body to compensate for fixed navbar height in various conditions */
+/* Initial padding required for body to compensate for fixed navbar height. It is the
+   height of the navbar in pixels. This is overridden at runtime if the height of the
+   navbar changes. */
 body {
   padding-top: 51px;
-}
-
-body.has-filters {
-  padding-top: 85px;
+  background-color: @gramene-offwhite;
 }
 
 @media only screen and (max-width: @screen-xs-max) {
   body {
     padding-top: 97px;
-  }
-
-  body.has-filters {
-    padding-top: 134px;
   }
 }
