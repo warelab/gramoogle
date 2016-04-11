@@ -1,28 +1,50 @@
-'use strict';
+import React from "react";
+import getProp from "lodash/get";
+import isEqual from "lodash/isEqual";
+import {Col} from "react-bootstrap";
+import Browser from "./location/browser.jsx";
+import QueryActions from "../../../actions/queryActions";
+import {Detail, Title, Description, Content, Explore, Links} from "./generic/detail.jsx";
 
-var React = require('react');
-var bs = require('react-bootstrap');
-var _ = require('lodash');
+export default class Location extends React.Component {
 
-var QueryTerm = require('../queryTerm.jsx');
-var QueryActions = require('../../../actions/queryActions');
+  constructor(props) {
+    super(props);
+    this.initRegion();
+    this.state = {
+      visibleRange: this.initVisibleRange(props)
+    };
+    // this.handleViewChange = _.debounce(this._undebounced_handleViewChange, 50).bind(this);
+  }
+  
+  initVisibleRange(props) {
+    var location, span, padding, result;
+    props = props || this.props;
+    location = getProp(props, 'gene.location');
+    if(!location) {
+      throw new Error(`Could not find the location of the gene in props.`);
+    }
 
-var DallianceBrowser = require('./location/dallianceBrowser.jsx');
-//var Location = require('./location/location.jsx');
+    span = location.end - location.start + 1;
+    padding = Math.floor(.1 * span);
+    
+    result = {
+      chr: location.region,
+      start: location.start - padding,
+      end: location.end + padding
+    };
 
-var Location = React.createClass({
+    result.displayName = `${result.chr}:${result.start}-${result.end}`;
 
-  propTypes: {
-    gene: React.PropTypes.object.isRequired,
-    expanded: React.PropTypes.bool
-  },
+    return result;
+  }
 
-  componentWillMount: function() {
+  initRegion() {
     var region, isChromosome, regionType, regionName;
-    region = _.get(this.props, 'gene.location.region');
-    if(region) {
+    region = getProp(this.props, 'gene.location.region');
+    if (region) {
       isChromosome = /^\d+$/.test(region);
-      if(isChromosome) {
+      if (isChromosome) {
         regionType = 'chromosome';
         regionName = 'Chromosome ' + region;
       }
@@ -36,76 +58,127 @@ var Location = React.createClass({
         type: regionType
       };
     }
-  },
+  }
 
-  handleClickFactory: function(within) {
-    return function() {
-      var location, geneName, filter, min, max, name, fq;
-      location = this.props.gene.location;
-      geneName = this.props.gene.name;
+  // handleSelection(selection) {
+  //   this.setState({ selection: selection });
+  // }
 
-      fq = 'map:' + location.map + ' AND ' +
-        'region:' + location.region;
+  handleViewChange(chr, start, end) {
+    // console.log('view changed:', arguments);
+    var visibleRange = {
+      chr: chr,
+      start: start,
+      end: end,
+      displayName: `${chr}:${start}-${end}`
+    };
 
-      if(within) {
-        min = location.start - (within * 1000); // convert kb to bases.
-        max = location.end + (within * 1000);
+    if(!isEqual(visibleRange, this.state.visibleRange)) {
+      this.setState({
+        visibleRange: visibleRange
+      });
+    }
+  }
 
-        fq += ' AND (end:[' + min + ' TO ' + location.start +
-          '] OR start:[' + location.end + ' TO ' + max + '])';
+  updateQuery(restrictToVisibleRange) {
+    var location, geneName, visibleRange, filter, filterDisplayName, fq;
+    location = this.props.gene.location;
+    geneName = this.props.gene.name;
 
-        name = "Within " + within + "kb of " + geneName;
-      } else {
-        name = "Shares " + this.region.type + " with " + geneName;
+    fq = `map:${location.map} AND region:${location.region}`;
+
+    if (restrictToVisibleRange) {
+      visibleRange = this.state.visibleRange;
+
+      fq += ` AND (start:[${visibleRange.start} TO ${visibleRange.end}]`
+        + ` OR end:[${visibleRange.start} TO ${visibleRange.end}])`;
+
+      filterDisplayName = visibleRange.displayName;
+    } else {
+      filterDisplayName = "Shares " + this.region.type + " with " + geneName;
+    }
+
+    console.log("User asked to filter by location");
+    filter = {
+      category: 'Location',
+      id: fq,
+      fq: fq,
+      display_name: filterDisplayName
+    };
+
+    QueryActions.removeAllFilters();
+    QueryActions.setFilter(filter);
+  }
+
+  explorations() {
+    var visible, result;
+    visible = this.state.visibleRange;
+    result = [
+      {
+        name: `All on ${this.region.name}`,
+        handleClick: ()=>this.updateQuery(false)
       }
+    ];
+    if (visible) {
+      result.push({
+        name: `All within ${getProp(visible, 'displayName')}`,
+        handleClick: ()=>this.updateQuery(true)
+      });
+    }
+    return result;
+  }
 
-      console.log("User asked to filter by location");
-      filter = {
-        category: 'Location',
-        id: fq,
-        fq: fq,
-        display_name: name
-      };
+  links() {
+    var gene = this.props.gene;
+    return [
+      {name: 'Gramene Ensembl', url: `//ensembl.gramene.org/${gene.system_name}/Gene/Summary?g=${gene._id}`},
+      {name: 'PhytoMine', url: `https://phytozome.jgi.doe.gov/phytomine/keywordSearchResults.do?searchTerm=${gene._id}&searchSubmit=Search`},
+      {name: 'Araport', url: `https://www.araport.org/search/thalemine/${gene._id}`}
+    ]
+  }
 
-      QueryActions.setFilter(filter);
-    }.bind(this);
-  },
-
-  render: function () {
-    var gene, location, ensemblSummaryUrl;
-
-    gene = this.props.gene;
-    location = gene.location;
-
-    // TODO: USe CSS Substring matching to put little icon after link to ensembl
-    // http://blog.teamtreehouse.com/css3-substring-matching-attribute-selectors
-    ensemblSummaryUrl = '//ensembl.gramene.org/' + gene.system_name + '/Gene/Summary?g=' + gene._id;
-
+  render() {
     return (
-      <div>
-        <dl>
-          <dt>Region</dt>
-          <dd>{this.region.name}</dd>
-          <dt>Position</dt>
-          <dd>{location.start} - {location.end}</dd>
-          <DallianceBrowser gene={gene} expanded={this.props.expanded} />
-          <dt>Filter</dt>
-          <dd>
-            <QueryTerm name={"All genes on same " + this.region.type} handleClick={this.handleClickFactory()} />
-            <QueryTerm name="Genes within 100kb" handleClick={this.handleClickFactory(100)} />
-          </dd>
-          <dt>Links</dt>
-          <dd>
-            <ul>
-              <li>
-                <a href={ensemblSummaryUrl}>Ensembl Gene view</a>
-              </li>
-            </ul>
-          </dd>
-        </dl>
-      </div>
+      <Detail>
+        <Title>Genome location: {this.renderGenePosition()}</Title>
+        <Description>Currently viewing: {this.renderLocation()}</Description>
+        <Content>
+          {this.renderBrowser()}
+        </Content>
+        <Explore explorations={this.explorations()}/>
+        <Links links={this.links()}/>
+      </Detail>
     );
-   }
-});
+  }
 
-module.exports = Location;
+  renderBrowser() {
+    return (
+      <Browser {...this.props} {...this.state} onViewChange={ this.handleViewChange.bind(this) }/>
+    );
+  }
+
+  renderGenePosition() {
+    var location = this.props.gene.location;
+    return (
+      <span className="location">
+        <span className="region">{this.region.name}</span>:<span className="start">{location.start}</span>-<span
+        className="end">{location.end}</span>
+      </span>
+    );
+  }
+
+  renderLocation() {
+    var location = this.state.visibleRange;
+    return (
+      <span className="location">
+        <span className="region">{location.chr}</span>:<span className="start">{location.start}</span>-<span
+        className="end">{location.end}</span>
+      </span>
+    );
+  }
+}
+
+Location.propTypes = {
+  gene: React.PropTypes.object.isRequired,
+  expanded: React.PropTypes.bool
+};

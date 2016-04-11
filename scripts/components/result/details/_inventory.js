@@ -1,13 +1,14 @@
 'use strict';
 
-import Redesign from './redesign.jsx';
+import Location from './location.jsx';
+import Homology from './homology.jsx';
 
 module.exports = [
 
   {
     name: 'Location',
     capability: 'location',
-    reactClass: Redesign
+    reactClass: Location
   },
 
   //
@@ -17,11 +18,11 @@ module.exports = [
   //   reactClass: require('./domains.jsx')
   // },
   //
-  // {
-  //   name: 'Homology',
-  //   capability: 'homology',
-  //   reactClass: require('./homology.jsx')
-  // },
+  {
+    name: 'Homology',
+    capability: 'homology',
+    reactClass: Homology
+  },
   //
   // {
   //   name: 'Pathways', // for display
