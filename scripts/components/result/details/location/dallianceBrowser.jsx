@@ -1,8 +1,10 @@
-'use strict';
-
 import React from "react";
 import isEqual from "lodash/isEqual";
 import {browser as Dalliance} from "gramene-dalliance";
+
+// calculate this once.
+const PREFIX = (global.location ? global.location.origin + global.location.pathname : '')
+  + 'assets/gramene-dalliance/';
 
 export default class DallianceBrowser extends React.Component {
 
@@ -38,7 +40,7 @@ export default class DallianceBrowser extends React.Component {
         viewStart: start,
         viewEnd: end,
         cookieKey: g._id + 'BrowserCookie',
-        prefix: 'assets/gramene-dalliance/',
+        prefix: PREFIX,
 
         coordSystem: {
           speciesName: g.system_name,

@@ -23,7 +23,7 @@
   "homepage": "https://github.com/warelab/gramoogle",
   "dependencies": {
     "gramene-client-cache": "1.0.0",
-    "gramene-dalliance": "0.13.0",
+    "gramene-dalliance": "^0.13.2",
     "gramene-dbxrefs": "3.0.1",
     "gramene-genetree-vis": "^2.0.0",
     "gramene-search-client": "^2.6.3",

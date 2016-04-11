@@ -127,7 +127,7 @@ module.exports = function (grunt) {
             dest: 'build/assets/gramene-dalliance/'
           },
           {
-            src: 'node_modules/gramene-dalliance/build/worker-all.js',
+            src: 'node_modules/gramene-dalliance/prebuilt/worker-all.js',
             dest: 'build/assets/gramene-dalliance/worker-all.js'
           }
         ]
