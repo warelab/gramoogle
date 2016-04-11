@@ -125,6 +125,10 @@ module.exports = function (grunt) {
               'fonts/*'
             ],
             dest: 'build/assets/gramene-dalliance/'
+          },
+          {
+            src: 'node_modules/gramene-dalliance/build/worker-all.js',
+            dest: 'build/assets/gramene-dalliance/worker-all.js'
           }
         ]
       },
