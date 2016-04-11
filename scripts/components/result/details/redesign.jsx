@@ -1,9 +1,10 @@
 import React from "react";
-import _ from "lodash";
+import getProp from "lodash/get";
+import isEqual from "lodash/isEqual";
 import {Col} from "react-bootstrap";
-import DallianceBrowser from "./location/dallianceBrowser.jsx";
+import Browser from "./location/browser.jsx";
 import QueryActions from "../../../actions/queryActions";
-import {Detail, Title, Content, Explore, Links} from "./generic/detail.jsx";
+import {Detail, Title, Description, Content, Explore, Links} from "./generic/detail.jsx";
 
 export default class Redesign extends React.Component {
 
@@ -11,18 +12,36 @@ export default class Redesign extends React.Component {
     super(props);
     this.initRegion();
     this.state = {
-      visibleRange: {
-        chr: props.gene.location.region,
-        start: props.gene.location.start,
-        end: props.gene.location.end
-      }
+      visibleRange: this.initVisibleRange(props)
     };
-    this.handleViewChange = _.debounce(this._undebounced_handleViewChange, 100).bind(this);
+    // this.handleViewChange = _.debounce(this._undebounced_handleViewChange, 50).bind(this);
+  }
+  
+  initVisibleRange(props) {
+    var location, span, padding, result;
+    props = props || this.props;
+    location = getProp(props, 'gene.location');
+    if(!location) {
+      throw new Error(`Could not find the location of the gene in props.`);
+    }
+
+    span = location.end - location.start + 1;
+    padding = Math.floor(.1 * span);
+    
+    result = {
+      chr: location.region,
+      start: location.start - padding,
+      end: location.end + padding
+    };
+
+    result.displayName = `${result.chr}:${result.start}-${result.end}`;
+
+    return result;
   }
 
   initRegion() {
     var region, isChromosome, regionType, regionName;
-    region = _.get(this.props, 'gene.location.region');
+    region = getProp(this.props, 'gene.location.region');
     if (region) {
       isChromosome = /^\d+$/.test(region);
       if (isChromosome) {
@@ -45,16 +64,20 @@ export default class Redesign extends React.Component {
   //   this.setState({ selection: selection });
   // }
 
-  _undebounced_handleViewChange(chr, start, end) {
-    console.log('view changed:', arguments);
-    this.setState({
-      visibleRange: {
-        chr: chr,
-        start: start,
-        end: end,
-        displayName: `${chr}:${start}-${end}`
-      }
-    });
+  handleViewChange(chr, start, end) {
+    // console.log('view changed:', arguments);
+    var visibleRange = {
+      chr: chr,
+      start: start,
+      end: end,
+      displayName: `${chr}:${start}-${end}`
+    };
+
+    if(!isEqual(visibleRange, this.state.visibleRange)) {
+      this.setState({
+        visibleRange: visibleRange
+      });
+    }
   }
 
   updateQuery(restrictToVisibleRange) {
@@ -98,7 +121,7 @@ export default class Redesign extends React.Component {
     ];
     if (visible) {
       result.push({
-        name: `All within ${_.get(visible, 'displayName')}`,
+        name: `All within ${getProp(visible, 'displayName')}`,
         handleClick: ()=>this.updateQuery(true)
       });
     }
@@ -106,24 +129,21 @@ export default class Redesign extends React.Component {
   }
 
   links() {
+    var gene = this.props.gene;
     return [
-      {name: 'Gramene Ensembl', url: 'http://ensembl.gramene.org/'},
-      {name: 'Phytozome', url: 'http://ensembl.gramene.org/'},
-      {name: 'Araport', url: 'http://ensembl.gramene.org/'}
+      {name: 'Gramene Ensembl', url: `//ensembl.gramene.org/${gene.system_name}/Gene/Summary?g=${gene._id}`},
+      {name: 'PhytoMine', url: `https://phytozome.jgi.doe.gov/phytomine/keywordSearchResults.do?searchTerm=${gene._id}&searchSubmit=Search`},
+      {name: 'Araport', url: `https://www.araport.org/search/thalemine/${gene._id}`}
     ]
   }
 
   render() {
     return (
       <Detail>
-        <Title>{this.renderLocation()}</Title>
+        <Title>Genome location: {this.renderGenePosition()}</Title>
+        <Description>Currently viewing: {this.renderLocation()}</Description>
         <Content>
-          <Col xs={12} sm={9}>
-            {this.renderBiodalliance()}
-          </Col>
-          <Col xs={12} sm={3}>
-            Config
-          </Col>
+          {this.renderBrowser()}
         </Content>
         <Explore explorations={this.explorations()}/>
         <Links links={this.links()}/>
@@ -131,17 +151,27 @@ export default class Redesign extends React.Component {
     );
   }
 
-  renderBiodalliance() {
+  renderBrowser() {
     return (
-      <DallianceBrowser {...this.props} onViewChange={ this.handleViewChange }/>
+      <Browser {...this.props} {...this.state} onViewChange={ this.handleViewChange.bind(this) }/>
     );
   }
 
-  renderLocation() {
+  renderGenePosition() {
     var location = this.props.gene.location;
     return (
       <span className="location">
         <span className="region">{this.region.name}</span>:<span className="start">{location.start}</span>-<span
+        className="end">{location.end}</span>
+      </span>
+    );
+  }
+
+  renderLocation() {
+    var location = this.state.visibleRange;
+    return (
+      <span className="location">
+        <span className="region">{location.chr}</span>:<span className="start">{location.start}</span>-<span
         className="end">{location.end}</span>
       </span>
     );

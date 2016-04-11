@@ -5,7 +5,7 @@ import Redesign from './redesign.jsx';
 module.exports = [
 
   {
-    name: 'Redesign',
+    name: 'Location',
     capability: 'location',
     reactClass: Redesign
   },

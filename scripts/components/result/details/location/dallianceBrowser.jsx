@@ -1,11 +1,22 @@
 'use strict';
 
 import React from "react";
+import isEqual from "lodash/isEqual";
 import {browser as Dalliance} from "gramene-dalliance";
 
 export default class DallianceBrowser extends React.Component {
 
-  shouldComponentUpdate() {
+  constructor(props) {
+    super(props);
+    this.initialVisibleRange = props.visibleRange;
+  }
+
+  shouldComponentUpdate(newProps) {
+    // should we reset the view to initial state?
+    if(isEqual(newProps.visibleRange, this.initialVisibleRange)) {
+      this.browser.setLocation(newProps.visibleRange.chr, newProps.visibleRange.start, newProps.visibleRange.end);
+    }
+
     return false;
   }
 
@@ -14,19 +25,18 @@ export default class DallianceBrowser extends React.Component {
   }
 
   browser() {
-    var g, start, end, span, padding, browser;
+    var g, view, start, end, browser;
     g = this.props.gene;
-    start = g.location.start;
-    end = g.location.end;
-    span = end - start + 1;
-    padding = Math.floor(.1 * span);
+    view = this.props.visibleRange;
+    start = view.start;
+    end = view.end;
 
     this.browser = browser = new Dalliance(
       {
         pageName: this.biodallianceElementId(),
         chr: g.location.region,
-        viewStart: start - padding,
-        viewEnd: end + padding,
+        viewStart: start,
+        viewEnd: end,
         cookieKey: g._id + 'BrowserCookie',
         prefix: 'assets/gramene-dalliance/',
 
@@ -101,6 +111,7 @@ export default class DallianceBrowser extends React.Component {
 
 DallianceBrowser.propTypes = {
   gene: React.PropTypes.object.isRequired,
+  visibleRange: React.PropTypes.object.isRequired,
   expanded: React.PropTypes.bool,
   onViewChange: React.PropTypes.func.isRequired
 };
