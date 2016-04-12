@@ -2,6 +2,7 @@
 
 import Location from './location.jsx';
 import Homology from './homology.jsx';
+import Xrefs from './xrefs.jsx';
 
 module.exports = [
 
@@ -30,10 +31,10 @@ module.exports = [
   //   reactClass: require('./pathways.jsx')
   // },
   //
-  // {
-  //   name: 'X-refs',
-  //   capability: 'xrefs',
-  //   reactClass: require('./xrefs.jsx')
-  // }
+  {
+    name: 'X-refs',
+    capability: 'xrefs',
+    reactClass: Xrefs
+  }
 
 ];

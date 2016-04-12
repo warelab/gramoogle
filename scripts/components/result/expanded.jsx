@@ -21,7 +21,6 @@ var ExpandedResult = React.createClass({
           key = geneDoc._id + '-exp-' + detail.name;
         return (
           <div key={key} className="expanded-detail">
-            <h4>{detail.name}</h4>
             {component}
           </div>
         );
@@ -31,8 +30,10 @@ var ExpandedResult = React.createClass({
       details = <p>Loading…</p>;
     }
     return (
-      <div className="result-content expanded-details">
-        {details}
+      <div className="result-content">
+        <div className="expanded-details">
+          {details}
+        </div>
       </div>
     );
   }
