@@ -27,16 +27,16 @@
     "gramene-dbxrefs": "3.0.1",
     "gramene-genetree-vis": "^2.0.0",
     "gramene-search-client": "^2.6.3",
-    "gramene-search-vis": "1.1.2",
-    "gramene-taxonomy-with-genomes": "^3.0.2",
+    "gramene-search-vis": "^2.0.0-beta1",
+    "gramene-taxonomy-with-genomes": "^3.0.4",
     "gramene-trees-client": "^2.4.3",
     "lodash": "^4.3.0",
     "normalize.less": "^1.0.0",
     "q": "^1.2.0",
-    "react": "0.14.7",
+    "react": "^15.0.1",
     "react-bootstrap": "0.28.3",
-    "react-dom": "0.14.7",
-    "reflux": "^0.2.5"
+    "react-dom": "^15.0.1",
+    "reflux": "^0.4.1"
   },
   "devDependencies": {
     "babel-jest": "^6.0.1",
