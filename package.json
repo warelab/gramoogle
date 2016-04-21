@@ -27,7 +27,7 @@
     "gramene-dbxrefs": "3.0.1",
     "gramene-genetree-vis": "^2.0.0",
     "gramene-search-client": "^2.6.3",
-    "gramene-search-vis": "^2.0.0-beta1c",
+    "gramene-search-vis": "2.0.0-beta1d",
     "gramene-taxonomy-with-genomes": "^3.0.4",
     "gramene-trees-client": "^2.4.3",
     "lodash": "^4.3.0",
