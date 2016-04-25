@@ -134,8 +134,7 @@ export default class Homology extends React.Component {
           <h5>Gene Tree</h5>
           <TreeVis genetree={this.genetree}
                    initialGeneOfInterest={this.props.gene}
-                   taxonomy={this.state.taxonomy}
-                   width={600}/>
+                   taxonomy={this.state.taxonomy} />
         </div>
       );
     }
@@ -194,7 +193,7 @@ export default class Homology extends React.Component {
       <Detail>
         <Title>Compara Gene Tree</Title>
         <Description>This phylogram shows the relationships between this genes and others similar to it, as determined
-          by <a target="_blank" href="http://ensembl.org/info/genome/compara/index.html">Ensembl Compara</a>.</Description>
+          by <a href="http://ensembl.org/info/genome/compara/index.html">Ensembl Compara</a>.</Description>
         <Content>{this.renderTreeVis()}</Content>
         <Explore explorations={this.explorations()}/>
         <Links links={this.links()}/>

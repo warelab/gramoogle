@@ -7,6 +7,7 @@ var VisualizationActions = require('../../actions/visActions');
 var visualizationStore = require('../../stores/visualizationStore');
 var _ = require('lodash');
 var Vis = require('gramene-search-vis').Vis;
+import Selection from './selection.jsx';
 
 var ResultsVisualization = React.createClass({
   mixins: [
@@ -25,7 +26,7 @@ var ResultsVisualization = React.createClass({
   handleSelection: function (selection) {
     this.setState({selection: selection});
   },
-  
+
   handleHighlight: function (highlight) {
     this.setState({highlight: highlight});
   },
@@ -37,11 +38,10 @@ var ResultsVisualization = React.createClass({
       taxonomy = this.state.visData.taxonomy;
       summary = (
         <div>
-          <Vis
-            taxonomy={taxonomy}
-            onSelection={this.handleSelection}
-            onHighlight={this.handleHighlight} />
-          
+          <Vis taxonomy={taxonomy}
+               onSelection={this.handleSelection}
+               onHighlight={this.handleHighlight}/>
+          {this.renderSelection()}
         </div>
       );
     }
@@ -58,7 +58,15 @@ var ResultsVisualization = React.createClass({
         {summary}
       </div>
     );
+  },
+
+  renderSelection() {
+    if (this.state.selection) {
+      return <Selection taxonomy={this.state.visData.taxonomy}
+                        selection={this.state.selection}/>
+    }
   }
+
 });
 
 module.exports = ResultsVisualization;

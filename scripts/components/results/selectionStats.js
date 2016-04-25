@@ -1,13 +1,14 @@
+import _ from 'lodash';
+
 export default function stats(selection, taxonomy) {
-  const selectedResults = selection.reduce((acc, bin)=>acc + bin.results.count);
-  const selectedGenes = selections.reduce((acc, bin)=>acc + bin.stats.count);
+  const selectedResults = _.reduce(selection, (acc, bin)=>acc + bin.results.count, 0);
   const totalResults = taxonomy.model.results.count;
   const selectedBins = Object.keys(selection).length;
 
   return {
-    totalResults: selectedResults,
-    selectedGenes: selectedGenes,
+    selectedGenes: selectedResults,
+    totalGeneResults: totalResults,
     numSelectedBins: selectedBins,
-    proportion: selectedResults / totalResults
+    proportionGenesSelected: selectedResults / totalResults
   }
 }
