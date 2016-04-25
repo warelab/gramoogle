@@ -60,13 +60,15 @@ module.exports = Reflux.createStore({
     this.possiblyInitBinnedGenomesAndTrigger();
 
     // notify that we would like this data please
-    QueryActions.setResultType(
-      this.fieldName,
-      resultTypes.get(
-        'distribution',
-        {'facet.field': this.fieldName}
-      )
-    );
+    if(this.fieldName) {
+      QueryActions.setResultType(
+        this.fieldName,
+        resultTypes.get(
+          'distribution',
+          {'facet.field': this.fieldName}
+        )
+      );
+    }
   },
 
   updateBinState: function (searchState) {
