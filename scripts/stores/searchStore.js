@@ -101,6 +101,11 @@ module.exports = Reflux.createStore({
       this.search();
     }
   },
+  
+  removeFilters: function (predicate) {
+    this.state.query.filters = _.omitBy(this.state.query.filters, predicate);
+    this.search();
+  },
 
   removeAllFilters: function () {
     console.log('removeAllFilters');
