@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/warelab/gramoogle",
   "dependencies": {
+    "axios": "^0.9.1",
     "gramene-client-cache": "1.0.0",
     "gramene-dalliance": "^0.13.2",
     "gramene-dbxrefs": "3.0.1",

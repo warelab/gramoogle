@@ -7,6 +7,7 @@ var DocActions = require('../../../actions/docActions');
 var docStore = require('../../../stores/docStore');
 
 var ReactomeItem = require('./pathways/reactomeItem.jsx');
+var ReactomeImg = require('./pathways/reactomeImg.jsx');
 
 var Pathways = React.createClass({
   propTypes: {
@@ -25,7 +26,12 @@ var Pathways = React.createClass({
       throw new Error("No pathway annotation present for " + _.get(this.props, 'gene._id'));
     }
 
-    ancestorIds = pathways.ancestors || [];
+    ancestorIds = pathways.ancestors;
+    if(!ancestorIds) {
+      throw new Error("Reactome ancestors are required because that's where the Pathway is");
+    }
+
+    this.pathwayId = _.head(ancestorIds);
 
     if(_.get(pathways, 'entries.length') != 1) {
       console.error("Number of reactions is not 1");
@@ -53,7 +59,7 @@ var Pathways = React.createClass({
     return this.reaction;
   },
 
-  render: function () {
+  renderHierarchy: function() {
     var reactionData, currentNodeId, currentNode, els;
     reactionData = this.getReaction();
     if(reactionData) {
@@ -68,10 +74,17 @@ var Pathways = React.createClass({
     else {
       els = <li>Nothing yet.</li>
     }
+    return els;
+  },
+
+  render: function () {
     return (
-      <ul>
-        {els}
-      </ul>
+      <div>
+        <ReactomeImg pathwayId={this.pathwayId} />
+        <ul>
+          {this.renderHierarchy()}
+        </ul>
+      </div>
     );
   }
 });
