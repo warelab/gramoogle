@@ -4,22 +4,23 @@ import { Grid, Row, Col } from 'react-bootstrap';
 
 export class Detail extends React.Component {
   render() {
-    var subComponents = keyBy(this.props.children, 'type.name');
+    var subComponents = keyBy(this.props.children, 'key');
+    console.log(subComponents, this.props.children);
     return (
       <Grid fluid className="detail">
         <Row className="intro">
-          {subComponents.Title}
-          {subComponents.Description}
+          {subComponents.title}
+          {subComponents.description}
         </Row>
         <Row className="content-wrapper">
-          {subComponents.Content}
+          {subComponents.content}
         </Row>
         <Row className="actions">
           <Col className="action-wrapper" xs={12} sm={4}>
-            {subComponents.Explore}
+            {subComponents.explore}
           </Col>
           <Col className="action-wrapper" xs={12} sm={8}>
-            {subComponents.Links}
+            {subComponents.links}
           </Col>
         </Row>
       </Grid>

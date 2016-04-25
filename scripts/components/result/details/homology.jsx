@@ -191,12 +191,12 @@ export default class Homology extends React.Component {
   render() {
     return (
       <Detail>
-        <Title>Compara Gene Tree</Title>
-        <Description>This phylogram shows the relationships between this genes and others similar to it, as determined
+        <Title key="title">Compara Gene Tree</Title>
+        <Description key="description">This phylogram shows the relationships between this genes and others similar to it, as determined
           by <a href="http://ensembl.org/info/genome/compara/index.html">Ensembl Compara</a>.</Description>
-        <Content>{this.renderTreeVis()}</Content>
-        <Explore explorations={this.explorations()}/>
-        <Links links={this.links()}/>
+        <Content key="content">{this.renderTreeVis()}</Content>
+        <Explore key="explore" explorations={this.explorations()}/>
+        <Links key="links" links={this.links()}/>
       </Detail>
     );
   }

@@ -6,9 +6,9 @@ import formatXrefsForGene from "./xrefs/formatXrefsForGene";
 const Xrefs = ({gene}) => {
   return (
     <Detail>
-      <Title>Cross-references</Title>
-      <Description>References to this gene in other databases:</Description>
-      <Content>
+      <Title key="title">Cross-references</Title>
+      <Description key="description">References to this gene in other databases:</Description>
+      <Content key="content">
         <Table className="xrefs" condensed hover>
           <thead>
           <tr>

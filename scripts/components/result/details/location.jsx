@@ -140,13 +140,13 @@ export default class Location extends React.Component {
   render() {
     return (
       <Detail>
-        <Title>Genome location: {this.renderGenePosition()}</Title>
-        <Description>Currently viewing: {this.renderLocation()}</Description>
-        <Content>
+        <Title key="title">Genome location: {this.renderGenePosition()}</Title>
+        <Description key="description">Currently viewing: {this.renderLocation()}</Description>
+        <Content key="content">
           {this.renderBrowser()}
         </Content>
-        <Explore explorations={this.explorations()}/>
-        <Links links={this.links()}/>
+        <Explore key="explore" explorations={this.explorations()}/>
+        <Links key="links" links={this.links()}/>
       </Detail>
     );
   }
