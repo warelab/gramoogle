@@ -53,33 +53,39 @@ var Result = React.createClass({
     }
   },
 
+  expand: function () {
+    if (!this.props.expandedByDefault) {
+      this.setState({expanded: true});
+    }
+  },
+
   updateVisibleDetail: function (visibleDetail) {
     this.setState({
       visibleDetail: visibleDetail
     });
   },
 
-  hoverHomologyTab: function() {
+  hoverHomologyTab: function () {
     this.setState({hoverDetail: 'homology'});
   },
 
-  unhoverHomologyTab: function() {
+  unhoverHomologyTab: function () {
     this.setState({hoverDetail: undefined});
   },
 
-  selectHomologyTab: function() {
+  selectHomologyTab: function () {
     var homologyTab = _.find(detailsInventory, {name: 'Homology'});
     this.setState({visibleDetail: homologyTab});
   },
 
   render: function () {
-    var className, title, body, details, closestOrtholog;
+    var className, title, body, details, metadata;
 
     className = this.getClassName();
     title = this.renderTitle();
     body = this.renderBody();
     details = this.renderResultDetails();
-    closestOrtholog = this.renderClosestOrthologMaybe();
+    metadata = this.renderSummary() || this.renderClosestOrthologMaybe();
 
     return (
       <li className={className} onMouseOver={this.requestGeneDoc}>
@@ -89,7 +95,7 @@ var Result = React.createClass({
             {title}
             {body}
           </div>
-          {closestOrtholog}
+          {metadata}
         </div>
         {details}
       </li>
@@ -126,8 +132,8 @@ var Result = React.createClass({
           <bs.Glyphicon glyph={glyph}/>
           <span className="gene-name">{searchResult.name}</span>
         </a>
-
-        <small className="gene-subtitle">{geneId}{species}</small>
+        <wbr/>
+        <small className="gene-subtitle">{geneId}<wbr/>{species}</small>
       </h3>
     );
   },
@@ -136,6 +142,34 @@ var Result = React.createClass({
     return (
       <p className="gene-description">{this.props.searchResult.description}</p>
     );
+  },
+
+  renderSummary: function () {
+    var summary, text, onClick;
+
+    summary = this.props.searchResult.summary;
+    onClick = function() {};
+
+    if (_.isEmpty(summary)) {
+      return;
+    }
+
+    if (this.state.expanded) {
+      text = summary;
+    }
+    else {
+      if(summary.length > 160) {
+        text = summary.substr(0, 150) + '…';
+        onClick = this.expand;
+      }
+    }
+
+    return (
+      <div className="gene-summary-tair" onClick={onClick}>
+        <p>{text}</p>
+      </div>
+    )
+
   },
 
   renderClosestOrthologMaybe: function () {
@@ -168,7 +202,7 @@ var Result = React.createClass({
                          onMouseOver={this.hoverHomologyTab}
                          onMouseOut={this.unhoverHomologyTab}
                          onClick={this.selectHomologyTab}
-                         hidden={homologyDetailsVisible} />
+                         hidden={homologyDetailsVisible}/>
       );
     }
   },
