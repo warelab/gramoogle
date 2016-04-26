@@ -133,7 +133,9 @@ var Result = React.createClass({
           <span className="gene-name">{searchResult.name}</span>
         </a>
         <wbr/>
-        <small className="gene-subtitle">{geneId}<wbr/>{species}</small>
+        <small className="gene-subtitle">{geneId}
+          <wbr/>
+          {species}</small>
       </h3>
     );
   },
@@ -148,20 +150,16 @@ var Result = React.createClass({
     var summary, text, onClick;
 
     summary = this.props.searchResult.summary;
-    onClick = function() {};
-
-    if (_.isEmpty(summary)) {
+    if (!summary) {
       return;
     }
 
-    if (this.state.expanded) {
-      text = summary;
-    }
-    else {
-      if(summary.length > 160) {
-        text = summary.substr(0, 150) + '…';
-        onClick = this.expand;
-      }
+    onClick = function () {};
+    text = summary;
+
+    if (!this.state.expanded && summary.length > 160) {
+      text = summary.substr(0, 150) + '…';
+      onClick = this.expand;
     }
 
     return (
@@ -169,7 +167,6 @@ var Result = React.createClass({
         <p>{text}</p>
       </div>
     )
-
   },
 
   renderClosestOrthologMaybe: function () {
