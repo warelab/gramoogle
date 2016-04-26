@@ -16,10 +16,10 @@ export class Detail extends React.Component {
           {subComponents.content}
         </Row>
         <Row className="actions">
-          <Col className="action-wrapper" xs={12} sm={4}>
+          <Col className="action-wrapper" xs={12} sm={5}>
             {subComponents.explore}
           </Col>
-          <Col className="action-wrapper" xs={12} sm={8}>
+          <Col className="action-wrapper" xs={12} sm={7}>
             {subComponents.links}
           </Col>
         </Row>
