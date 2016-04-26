@@ -35,17 +35,12 @@ var SearchBox = React.createClass({
     this.focus();
   },
   render: function() {
-    var resultsCountStatement, statsDropdown;
+    var resultsCountStatement;
 
     resultsCountStatement = (
       <Summary results={this.props.results} />
     );
 
-    statsDropdown = (
-      <Button id="stats-button" onClick={this.props.onStatsButtonPress} disabled={true}>
-        Analysis <span className="caret"></span>
-      </Button>
-    );
     return (
       <Input type="search"
              id="search-box"
@@ -55,7 +50,6 @@ var SearchBox = React.createClass({
              autoComplete="off"
              standalone={true}
              addonAfter={resultsCountStatement}
-             buttonAfter={statsDropdown}
              onChange={this.props.onQueryChange}
       />
     );
