@@ -52,6 +52,7 @@ var SearchBox = React.createClass({
              ref="textInput"
              tabIndex="1"
              placeholder="Search for genes…"
+             autoComplete="off"
              standalone={true}
              addonAfter={resultsCountStatement}
              buttonAfter={statsDropdown}
