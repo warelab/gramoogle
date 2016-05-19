@@ -23,6 +23,9 @@ module.exports = Reflux.createStore({
         list: [],
         metadata: {},
         tally: {}
+      },
+      global: {
+        taxa: {3702:1,4577:2} // taxon_id => taxonomy node
       }
     };
 

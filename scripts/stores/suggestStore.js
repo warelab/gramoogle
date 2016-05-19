@@ -189,7 +189,7 @@ module.exports = Reflux.createStore({
   },
 
   suggestPromise: function (queryString) {
-    return searchInterface.suggest(queryString);
+    return searchInterface.suggest(queryString, this.searchState.global.taxa);
   },
 
   suggestComplete: function (results) {
