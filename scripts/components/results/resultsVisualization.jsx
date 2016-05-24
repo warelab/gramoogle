@@ -2,19 +2,18 @@
 
 var React = require('react');
 var Reflux = require('reflux');
-var queryActions = require('../../actions/queryActions');
 var VisualizationActions = require('../../actions/visActions');
 var visualizationStore = require('../../stores/visualizationStore');
 var _ = require('lodash');
 var Vis = require('gramene-search-vis').Vis;
-import Selection from './selection.jsx';
+import Selections from './selection.jsx';
 
 var ResultsVisualization = React.createClass({
   mixins: [
     Reflux.connect(visualizationStore, 'visData')
   ],
   getInitialState: function () {
-    return {binWidth: 200, binType: 'fixed'};
+    return {binWidth: 1000, binType: 'fixed'};
   },
   componentWillMount: function () {
     VisualizationActions.setDistribution(this.state.binType, this.state.binWidth);
@@ -23,8 +22,8 @@ var ResultsVisualization = React.createClass({
     VisualizationActions.removeDistribution();
   },
 
-  handleSelection: function (selection) {
-    this.setState({selection: selection});
+  handleSelection: function (selections) {
+    this.setState({selections: selections});
   },
 
   handleHighlight: function (highlight) {
@@ -61,11 +60,11 @@ var ResultsVisualization = React.createClass({
   },
 
   renderSelection() {
-    if (this.state.selection) {
-      return <Selection taxonomy={this.state.visData.taxonomy}
-                        selection={this.state.selection}/>
+    if (this.state.selections && this.state.selections.length) {
+      return <Selections taxonomy={this.state.visData.taxonomy}
+                         selections={this.state.selections} />
     }
-  }
+  },
 
 });
 
