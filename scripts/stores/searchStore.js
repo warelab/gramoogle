@@ -6,11 +6,12 @@ var Reflux = require('reflux');
 var _ = require('lodash');
 var Q = require('q');
 var QueryActions = require('../actions/queryActions');
+import GoIActions from "../actions/genomesOfInterestActions";
 var search = require('../search/search');
 var persist = require('../search/persist');
 
 module.exports = Reflux.createStore({
-  listenables: QueryActions,
+  listenables: [QueryActions, GoIActions],
 
   init: function () {
     this.state = {
@@ -25,7 +26,8 @@ module.exports = Reflux.createStore({
         tally: {}
       },
       global: {
-        taxa: {3702:'ath',4577:'zm',39947:'o.sat', 15368: 'brachy', 3847: 'g.max'} // key is taxon_id, value should be entry in taxonomy object
+        taxa: {} // key is taxon_id, value should be entry in taxonomy object
+        // taxa: {3702:'ath',4577:'zm',39947:'o.sat', 15368: 'brachy', 3847: 'g.max'} // key is taxon_id, value should be entry in taxonomy object
       }
     };
 
@@ -120,6 +122,21 @@ module.exports = Reflux.createStore({
     if (listRt) {
       listRt.rows += howManyMore;
     }
+    this.search();
+  },
+
+  setTaxon: function(taxonId, isSelect) {
+    if(isSelect) {
+      this.state.global.taxa[taxonId] = true;
+    }
+    else {
+      delete this.state.global.taxa[taxonId];
+    }
+    this.search();
+  },
+
+  setTaxa: function(taxa) {
+    this.state.global.taxa = taxa;
     this.search();
   },
 
