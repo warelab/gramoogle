@@ -23,6 +23,9 @@ export default class Homology extends React.Component {
     this.unsubscribe = lutStore.listen((lutState) =>
       this.setState({taxonomy: lutState.taxonomy})
     );
+    this.unsubscribeFromSearchStore = searchStore.listen((searchState) =>
+      this.setState({genomesOfInterest: searchState.global.taxa})
+    );
 
     this.orthologs = this.orthologList();
     this.paralogs = this.paralogList();
@@ -35,6 +38,7 @@ export default class Homology extends React.Component {
 
   componentWillUnmount() {
     this.unsubscribe();
+    this.unsubscribeFromSearchStore();
     DocActions.noLongerNeedDocs('genetrees', this.treeId);
   }
 
