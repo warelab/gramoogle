@@ -1,7 +1,9 @@
 import _ from "lodash";
 import React from "react";
-import {Modal, Button, FormGroup, Checkbox, Badge} from "react-bootstrap";
+import {Modal, Button, FormGroup} from "react-bootstrap";
 import GoIActions from "../../actions/genomesOfInterestActions";
+
+import TaxonomyCheckbox from "./TaxonomyCheckbox.jsx";
 
 const TaxonomyModalPicker = ({taxa, close}) => {
   return (
@@ -12,7 +14,7 @@ const TaxonomyModalPicker = ({taxa, close}) => {
 
         <Modal.Body>
           <FormGroup>
-            {_.map(taxa, renderCheckboxComponent)}
+            {renderCheckboxes(taxa)}
           </FormGroup>
         </Modal.Body>
 
@@ -23,15 +25,10 @@ const TaxonomyModalPicker = ({taxa, close}) => {
   );
 };
 
-function renderCheckboxComponent({taxonId, isSelected, results, speciesName}) {
-  const changeHandler = () => GoIActions.setTaxon(taxonId, !isSelected);
-  return (
-      <Checkbox key={taxonId}
-                checked={isSelected}
-                onChange={changeHandler}>
-        {speciesName}
-      </Checkbox>
-  );
+function renderCheckboxes(taxa) {
+  return _.map(taxa, (taxonProps, idx) => <TaxonomyCheckbox key={idx} {...taxonProps} />);
+}
+  
   // return (
   //     <Checkbox key={taxonId}
   //               checked={isSelected}
@@ -40,7 +37,7 @@ function renderCheckboxComponent({taxonId, isSelected, results, speciesName}) {
   //       <Badge>{results}</Badge>
   //     </Checkbox>
   // )
-}
+
 
 export default TaxonomyModalPicker;
 
