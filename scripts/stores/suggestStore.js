@@ -5,7 +5,6 @@ var QueryActions = require('../actions/queryActions');
 var _ = require('lodash');
 var Q = require('q');
 var searchInterface = require('gramene-search-client').client;
-var SuggestActions = require('../actions/suggestActions');
 var GrameneCache = require('gramene-client-cache');
 var visualizationStore = require('../stores/visualizationStore');
 var searchStore = require('../stores/searchStore');

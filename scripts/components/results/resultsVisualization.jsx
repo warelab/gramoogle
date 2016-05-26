@@ -2,7 +2,6 @@
 
 const React = require('react');
 const Reflux = require('reflux');
-const queryActions = require('../../actions/queryActions');
 const VisualizationActions = require('../../actions/visActions');
 const visualizationStore = require('../../stores/visualizationStore');
 const _ = require('lodash');
@@ -14,7 +13,7 @@ var ResultsVisualization = React.createClass({
     Reflux.connect(visualizationStore, 'visData')
   ],
   getInitialState: function () {
-    return {binWidth: 200, binType: 'fixed'};
+    return {binWidth: 1000, binType: 'fixed'};
   },
   componentWillMount: function () {
     VisualizationActions.setDistribution(this.state.binType, this.state.binWidth);
@@ -23,8 +22,8 @@ var ResultsVisualization = React.createClass({
     VisualizationActions.removeDistribution();
   },
 
-  handleSelection: function (selection) {
-    this.setState({selection: selection});
+  handleSelection: function (selections) {
+    this.setState({selections: selections});
   },
 
   handleHighlight: function (highlight) {
@@ -32,7 +31,7 @@ var ResultsVisualization = React.createClass({
   },
 
   render: function () {
-    var taxonomy, summary;
+    var summary;
 
     if (this.state.visData) {
       summary = (
