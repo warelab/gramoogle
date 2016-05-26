@@ -15,8 +15,7 @@ var Results = React.createClass({
     };
   },
   shouldShowVis: function(props) {
-    props = props || this.props;
-    return props.results.metadata.count > 1;
+    return true;
   },
   toggleViz: function() {
     var newState = {

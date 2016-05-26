@@ -1,16 +1,15 @@
 import _ from "lodash";
 
-export default function stats(selection, taxonomy) {
-  const selectionData = getSelectionData(selection, taxonomy);
+export default function stats(selections, taxonomy) {
+  const selectionData = getSelectionData(selections, taxonomy);
   const totalGeneResults = taxonomy.model.results.count;
-  const binIdxn = selectionData.bins.map((bin)=>bin.idx);
-  const fq = `fixed_1000__bin:(${binIdxn.join(' ')})`;
+  const fq = fqFromSelections(selections);
 
   return {
     selectedGenes: selectionData.resultsCount,
     totalGeneResults,
     fq,
-    numSelectedBins: selectionData.bins.length,
+    numSelectedBins: selectionData.binsCount,
     proportionGenesSelected: selectionData.resultsCount / totalGeneResults
   }
 }
@@ -18,8 +17,15 @@ export default function stats(selection, taxonomy) {
 function getSelectionData(selection, taxonomy) {
   return _.reduce(selection, (countAcc, sel) => {
     const bins = taxonomy.getBins(sel.binFrom.idx, sel.binTo.idx);
-    countAcc.bins.push(...bins);
+    countAcc.binsCount += bins.length;
     countAcc.resultsCount += _.reduce(bins, (acc, bin) => acc + bin.results.count, 0);
     return countAcc;
-  }, {bins: [], resultsCount: 0});
+  }, {resultsCount: 0, binsCount: 0});
+}
+
+const selectionToSolrRange = (sel)=>`[${sel.binFrom.idx} TO ${sel.binTo.idx}]`;
+
+function fqFromSelections(selections) {
+  const rangeStrings = selections.map(selectionToSolrRange);
+  return `fixed_1000__bin:(${rangeStrings.join(' ')})`;
 }

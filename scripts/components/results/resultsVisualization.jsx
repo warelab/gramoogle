@@ -59,9 +59,9 @@ var ResultsVisualization = React.createClass({
   },
 
   renderSelection() {
-    if (this.state.selection) {
+    if (this.state.selections) {
       return <Selection {...this.state.visData}
-                        selection={this.state.selection}/>
+                        selections={this.state.selections}/>
     }
   }
 

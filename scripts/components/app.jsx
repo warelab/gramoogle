@@ -14,12 +14,16 @@ var App = React.createClass({
     Reflux.connect(searchStore, 'search')
   ], // this mixin binds the store (where search/filter/results state lives) to this.state.search
 
+  dontShowResults: function () {
+    // don't show the results if there are no user-specified filters 
+    return _.isEmpty(_.get(this.state.search, 'query.filters'));
+  },
+  
   render: function () {
     var search = this.state.search,
-      showResults = !!_.size(this.state.search.query.filters),
-      content = showResults ?
-        <Results results={search.results}/> :
-        <Welcome/>
+      content = this.dontShowResults() ?
+        <Welcome/> :
+        <Results results={search.results}/>
       ;
 
     return (

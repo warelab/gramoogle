@@ -70,7 +70,7 @@ var ResultsList = React.createClass({
       );
     }
     else {
-      markup = (<p></p>);
+      markup = (<p>No results.</p>);
     }
 
     return markup;
