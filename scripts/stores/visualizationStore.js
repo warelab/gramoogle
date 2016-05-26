@@ -73,6 +73,8 @@ module.exports = Reflux.createStore({
 
   updateBinState: function (searchState) {
     this.binnedResults = searchState.results[this.fieldName];
+    this.selectedTaxa = searchState.global.taxa;
+    
     if(this.binnedResults) {
       console.log('visStore received new results');
       this.possiblyTrigger();
@@ -119,7 +121,8 @@ module.exports = Reflux.createStore({
 
       console.log('visStore triggering');
       this.trigger({
-        taxonomy: this.taxonomy
+        taxonomy: this.taxonomy,
+        selectedTaxa: this.selectedTaxa
       });
     }
   }

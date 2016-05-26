@@ -1,7 +1,6 @@
 import _ from "lodash";
 import React from "react";
 import {Modal, Button, FormGroup} from "react-bootstrap";
-import GoIActions from "../../actions/genomesOfInterestActions";
 
 import TaxonomyCheckbox from "./TaxonomyCheckbox.jsx";
 

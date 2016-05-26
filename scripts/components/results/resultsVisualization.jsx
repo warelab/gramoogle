@@ -1,12 +1,12 @@
 'use strict';
 
-var React = require('react');
-var Reflux = require('reflux');
-var queryActions = require('../../actions/queryActions');
-var VisualizationActions = require('../../actions/visActions');
-var visualizationStore = require('../../stores/visualizationStore');
-var _ = require('lodash');
-var Vis = require('gramene-search-vis').Vis;
+const React = require('react');
+const Reflux = require('reflux');
+const queryActions = require('../../actions/queryActions');
+const VisualizationActions = require('../../actions/visActions');
+const visualizationStore = require('../../stores/visualizationStore');
+const _ = require('lodash');
+const Vis = require('gramene-search-vis').Vis;
 import Selection from './selection.jsx';
 
 var ResultsVisualization = React.createClass({
@@ -35,10 +35,9 @@ var ResultsVisualization = React.createClass({
     var taxonomy, summary;
 
     if (this.state.visData) {
-      taxonomy = this.state.visData.taxonomy;
       summary = (
         <div>
-          <Vis taxonomy={taxonomy}
+          <Vis {...this.state.visData}
                onSelection={this.handleSelection}
                onHighlight={this.handleHighlight}/>
           {this.renderSelection()}
@@ -62,7 +61,7 @@ var ResultsVisualization = React.createClass({
 
   renderSelection() {
     if (this.state.selection) {
-      return <Selection taxonomy={this.state.visData.taxonomy}
+      return <Selection {...this.state.visData}
                         selection={this.state.selection}/>
     }
   }
