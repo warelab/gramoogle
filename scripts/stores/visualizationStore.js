@@ -73,6 +73,8 @@ module.exports = Reflux.createStore({
 
   updateBinState: function (searchState) {
     this.binnedResults = searchState.results[this.fieldName];
+    this.selectedTaxa = searchState.global.taxa;
+
     if(this.binnedResults) {
       console.log('visStore received new results');
       this.possiblyTrigger();
@@ -96,7 +98,10 @@ module.exports = Reflux.createStore({
   possiblyInitBinnedGenomesAndTrigger: function() {
     if(!this.fieldName) {
       this.taxonomy.removeBins();
-      this.trigger({taxonomy: this.taxonomy});
+      this.trigger({
+        taxonomy: this.taxonomy,
+        selectedTaxa: this.selectedTaxa
+      });
     }
 
     else if (this.canInitBinnedGenomes()) {
@@ -119,7 +124,8 @@ module.exports = Reflux.createStore({
 
       console.log('visStore triggering');
       this.trigger({
-        taxonomy: this.taxonomy
+        taxonomy: this.taxonomy,
+        selectedTaxa: this.selectedTaxa
       });
     }
   }

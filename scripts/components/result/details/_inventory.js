@@ -25,11 +25,11 @@ module.exports = [
     reactClass: Homology
   },
   
-  {
-    name: 'Pathways', // for display
-    capability: 'pathways',
-    reactClass: require('./pathways.jsx')
-  },
+  // {
+  //   name: 'Pathways', // for display
+  //   capability: 'pathways',
+  //   reactClass: require('./pathways.jsx')
+  // },
 
   {
     name: 'X-refs',

@@ -4,6 +4,7 @@ import TreeVis from "gramene-genetree-vis";
 import queryActions from "../../../actions/queryActions";
 import DocActions from "../../../actions/docActions";
 import lutStore from "../../../stores/lutStore";
+import searchStore from "../../../stores/searchStore";
 import _ from "lodash";
 import treesClient from "gramene-trees-client";
 const processGenetreeDoc = treesClient.genetree.tree;
@@ -13,13 +14,17 @@ export default class Homology extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      taxonomy: _.get(lutStore, 'state.taxonomy')
+      taxonomy: _.get(lutStore, 'state.taxonomy'),
+      genomesOfInterest: _.get(searchStore, 'state.global.taxa')
     };
   }
 
   componentWillMount() {
     this.unsubscribe = lutStore.listen((lutState) =>
       this.setState({taxonomy: lutState.taxonomy})
+    );
+    this.unsubscribeFromSearchStore = searchStore.listen((searchState) =>
+      this.setState({genomesOfInterest: searchState.global.taxa})
     );
 
     this.orthologs = this.orthologList();
@@ -33,6 +38,7 @@ export default class Homology extends React.Component {
 
   componentWillUnmount() {
     this.unsubscribe();
+    this.unsubscribeFromSearchStore();
     DocActions.noLongerNeedDocs('genetrees', this.treeId);
   }
 
@@ -134,6 +140,7 @@ export default class Homology extends React.Component {
           <h5>Gene Tree</h5>
           <TreeVis genetree={this.genetree}
                    initialGeneOfInterest={this.props.gene}
+                   genomesOfInterest={this.state.genomesOfInterest}
                    taxonomy={this.state.taxonomy} />
         </div>
       );

@@ -9,23 +9,21 @@ import QueryTerm from '../result/queryTerm.jsx';
 
 import selectionStats from './selectionStats';
 
-const Selection = ({selection, taxonomy}) => {
-  const stats = selectionStats(selection, taxonomy);
-  const fq = `fixed_200__bin:(${Object.keys(selection).join(' ')})`;
+const Selections = ({selections, taxonomy}) => {
+  const stats = selectionStats(selections, taxonomy);
   
   const setFilter = () => {
-    QueryActions.removeFilters((f)=>f.category === 'Selection');
+    QueryActions.removeFilters((f)=>f.category === 'selections');
 
     QueryActions.setFilter({
-      category: 'Selection',
-      id: fq,
-      fq: fq,
+      category: 'selections',
+      id: stats.fq,
+      fq: stats.fq,
       display_name: `${stats.selectedGenes} Genes`
     });
   };
-  
+
   const formatProportion = (prop) => '(' + (_.isFinite(prop) ? numeral(prop).format('0.0%') : undefined) + ')';
-  
   const name = `${stats.selectedGenes} Genes`;
   return (
     <div>
@@ -34,7 +32,7 @@ const Selection = ({selection, taxonomy}) => {
           <tr>
             <th>Number of selected genes</th>
             <td>{stats.selectedGenes} {formatProportion(stats.proportionGenesSelected)}</td>
-            <td><QueryTerm category="Selection" 
+            <td><QueryTerm category="selections" 
                            count={stats.selectedGenes} 
                            handleClick={setFilter}
             /></td>
@@ -45,4 +43,4 @@ const Selection = ({selection, taxonomy}) => {
   )
 };
 
-export default Selection;
+export default Selections;

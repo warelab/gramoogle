@@ -1,12 +1,11 @@
 'use strict';
 
-var React = require('react');
-var Reflux = require('reflux');
-var queryActions = require('../../actions/queryActions');
-var VisualizationActions = require('../../actions/visActions');
-var visualizationStore = require('../../stores/visualizationStore');
-var _ = require('lodash');
-var Vis = require('gramene-search-vis').Vis;
+const React = require('react');
+const Reflux = require('reflux');
+const VisualizationActions = require('../../actions/visActions');
+const visualizationStore = require('../../stores/visualizationStore');
+const _ = require('lodash');
+const Vis = require('gramene-search-vis').Vis;
 import Selection from './selection.jsx';
 
 var ResultsVisualization = React.createClass({
@@ -14,7 +13,7 @@ var ResultsVisualization = React.createClass({
     Reflux.connect(visualizationStore, 'visData')
   ],
   getInitialState: function () {
-    return {binWidth: 200, binType: 'fixed'};
+    return {binWidth: 1000, binType: 'fixed'};
   },
   componentWillMount: function () {
     VisualizationActions.setDistribution(this.state.binType, this.state.binWidth);
@@ -23,8 +22,8 @@ var ResultsVisualization = React.createClass({
     VisualizationActions.removeDistribution();
   },
 
-  handleSelection: function (selection) {
-    this.setState({selection: selection});
+  handleSelection: function (selections) {
+    this.setState({selections: selections});
   },
 
   handleHighlight: function (highlight) {
@@ -32,13 +31,12 @@ var ResultsVisualization = React.createClass({
   },
 
   render: function () {
-    var taxonomy, summary;
+    var summary;
 
     if (this.state.visData) {
-      taxonomy = this.state.visData.taxonomy;
       summary = (
         <div>
-          <Vis taxonomy={taxonomy}
+          <Vis {...this.state.visData}
                onSelection={this.handleSelection}
                onHighlight={this.handleHighlight}/>
           {this.renderSelection()}
@@ -61,9 +59,9 @@ var ResultsVisualization = React.createClass({
   },
 
   renderSelection() {
-    if (this.state.selection) {
-      return <Selection taxonomy={this.state.visData.taxonomy}
-                        selection={this.state.selection}/>
+    if (this.state.selections) {
+      return <Selection {...this.state.visData}
+                        selections={this.state.selections}/>
     }
   }
 

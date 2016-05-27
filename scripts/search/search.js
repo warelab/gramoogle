@@ -12,7 +12,7 @@ var searchInterface = require('gramene-search-client').client;
 function checkRequestedResultTypesArePresent(data: map): map {
   _.forIn(data.metadata.searchQuery.resultTypes,
     function (params, key) {
-      if (!data[key]) {
+      if (_.isUndefined(data[key])) {
         console.warn(key + ' not found in search results');
       }
     });
@@ -62,9 +62,18 @@ module.exports = {
     // make a copy of the query state when we make the async call...
     var queryCopy = _.cloneDeep(search.query);
 
+    if (!_.isEmpty(search.global.taxa)) {
+      for(var taxon_id in search.global.taxa) {
+        queryCopy.filters['taxon_id:'+taxon_id] = {
+          category: "TaxaOfInterest"
+        }
+      }
+    }
+
     if (!_.isEmpty(queryCopy.filters)) {
       queryCopy.filters = prepFilters(queryCopy.filters);
     }
+
 
     console.log('performing search', queryCopy);
 
