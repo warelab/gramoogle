@@ -26,7 +26,7 @@
     "gramene-client-cache": "1.0.0",
     "gramene-dalliance": "^0.13.2",
     "gramene-dbxrefs": "3.0.1",
-    "gramene-genetree-vis": "3.0.4",
+    "gramene-genetree-vis": "3.0.5",
     "gramene-search-client": "^3.0.4",
     "gramene-search-vis": "^4.0.0",
     "gramene-taxonomy-with-genomes": "^3.0.4",

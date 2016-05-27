@@ -14,5 +14,5 @@ export function matchesNamedSpeciesSet(setName, selection) {
 }
 
 export function getNamedSpeciesSet(selection) {
-  return speciesSets[selection];
+  return _.clone(speciesSets[selection]);
 }
