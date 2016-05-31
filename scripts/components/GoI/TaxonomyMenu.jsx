@@ -36,7 +36,7 @@ export default class TaxonomyMenu extends React.Component {
 
   showAllIsSelected() {
     const numSelected = _.size(this.state.selectedTaxa);
-    return numSelected == 0 || numSelected == _.size(this.state.taxonomy.leafNodes());
+    return numSelected == 0 || (this.state.taxonomy && numSelected == _.size(this.state.taxonomy.leafNodes()));
   }
 
   customSpeciesSetSelected() {
