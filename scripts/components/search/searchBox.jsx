@@ -1,16 +1,13 @@
 'use strict';
 
 var React = require('react');
-var Reflux = require('reflux');
-var QueryActions = require('../../actions/queryActions');
 var _ = require('lodash');
 
 var Summary = require('./summary.jsx');
-var Suggest = require('../suggest/suggest.jsx');
 
-var bs = require('react-bootstrap');
-var Button = bs.Button,
-  Input = bs.Input;
+import TaxonomyMenu from '../GoI/TaxonomyMenu.jsx';
+
+import { InputGroup, FormControl, Dropdown, MenuItem } from 'react-bootstrap';
 
 var SearchBox = React.createClass({
   propTypes: {
@@ -19,7 +16,7 @@ var SearchBox = React.createClass({
     onStatsButtonPress: React.PropTypes.func.isRequired
   },
   getInputNode: function() {
-    return this.refs.textInput.getInputDOMNode();
+    return document.getElementById('search-box');
   },
   clearSearchString: function() {
     this.getInputNode().value = '';
@@ -35,29 +32,34 @@ var SearchBox = React.createClass({
     this.focus();
   },
   render: function() {
-    var resultsCountStatement, statsDropdown;
-
-    resultsCountStatement = (
-      <Summary results={this.props.results} />
-    );
-
-    statsDropdown = (
-      <Button id="stats-button" onClick={this.props.onStatsButtonPress} disabled={true}>
-        Analysis <span className="caret"></span>
-      </Button>
-    );
     return (
-      <Input type="search"
-             id="search-box"
-             ref="textInput"
-             tabIndex="1"
-             placeholder="Search for genes…"
-             standalone={true}
-             addonAfter={resultsCountStatement}
-             buttonAfter={statsDropdown}
-             onChange={this.props.onQueryChange}
-      />
+        <InputGroup>
+            <FormControl type="search"
+                    id="search-box"
+                    tabIndex="1"
+                    placeholder="Search for genes…"
+                    autoComplete="off"
+                    standalone={true}
+                    onChange={this.props.onQueryChange} />
+            <TaxonomyMenu>
+              <Summary results={this.props.results} />
+            </TaxonomyMenu>
+
+        </InputGroup>
     );
+
+    // return (
+    //   <Input type="search"
+    //          id="search-box"
+    //          ref="textInput"
+    //          tabIndex="1"
+    //          placeholder="Search for genes…"
+    //          autoComplete="off"
+    //          standalone={true}
+    //          buttonAfter={resultsCountStatement}
+    //          onChange={this.props.onQueryChange}
+    //   />
+    // );
   }
 });
 

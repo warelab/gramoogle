@@ -5,7 +5,6 @@ var QueryActions = require('../actions/queryActions');
 var _ = require('lodash');
 var Q = require('q');
 var searchInterface = require('gramene-search-client').client;
-var SuggestActions = require('../actions/suggestActions');
 var GrameneCache = require('gramene-client-cache');
 var visualizationStore = require('../stores/visualizationStore');
 var searchStore = require('../stores/searchStore');
@@ -44,7 +43,7 @@ module.exports = Reflux.createStore({
   suggestNoDebounce: function (queryString) {
     console.log('performing suggest', queryString);
 
-    var cached = this.cache.get(queryString);
+    var cached = this.cache.get([queryString,this.searchState.global]);
     var promise;
 
     if (cached) {
@@ -59,7 +58,7 @@ module.exports = Reflux.createStore({
         .then(this.checkResponseQueryString)
         .then(this.addCategoryClassNames)
         .then(function addToCache(response) {
-          this.cache.set(queryString, _.cloneDeep(response));
+          this.cache.set([queryString,this.searchState.global], _.cloneDeep(response));
           return response;
         }.bind(this));
       console.log('going to hit server for suggestions for ' + queryString);
@@ -189,7 +188,7 @@ module.exports = Reflux.createStore({
   },
 
   suggestPromise: function (queryString) {
-    return searchInterface.suggest(queryString);
+    return searchInterface.suggest(queryString, this.searchState.global.taxa);
   },
 
   suggestComplete: function (results) {

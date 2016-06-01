@@ -15,6 +15,7 @@ var QueryActions = Reflux.createActions([
   'setFilter',
   'setAllFilters',
   'removeFilter',
+  'removeFilters',
   'removeAllFilters',
   'toggleFilter',
 

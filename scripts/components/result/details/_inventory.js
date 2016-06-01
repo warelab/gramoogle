@@ -1,35 +1,40 @@
 'use strict';
 
+import Location from './location.jsx';
+import Homology from './homology.jsx';
+import Xrefs from './xrefs.jsx';
+
 module.exports = [
 
   {
     name: 'Location',
     capability: 'location',
-    reactClass: require('./location.jsx')
+    reactClass: Location
   },
 
-  {
-    name: 'Transcript', // for display
-    capability: 'domains',
-    reactClass: require('./domains.jsx')
-  },
-
+  //
+  // {
+  //   name: 'Transcript', // for display
+  //   capability: 'domains',
+  //   reactClass: require('./domains.jsx')
+  // },
+  //
   {
     name: 'Homology',
     capability: 'homology',
-    reactClass: require('./homology.jsx')
+    reactClass: Homology
   },
-
-  {
-    name: 'Pathways', // for display
-    capability: 'pathways',
-    reactClass: require('./pathways.jsx')
-  },
+  
+  // {
+  //   name: 'Pathways', // for display
+  //   capability: 'pathways',
+  //   reactClass: require('./pathways.jsx')
+  // },
 
   {
     name: 'X-refs',
     capability: 'xrefs',
-    reactClass: require('./xrefs.jsx')
+    reactClass: Xrefs
   }
 
 ];

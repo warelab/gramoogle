@@ -6,7 +6,7 @@ describe('Filters', function() {
   var React = require('react/addons');
   var searchStore = require('../scripts/stores/searchStore');
   var _ = require('lodash');
-  var Results = React.createFactory(require('../scripts/components/results'));
+  var Results = React.createFactory(require('../scripts/components/results/results'));
   var TestUtils = React.addons.TestUtils;
 
   var newResults = function() {

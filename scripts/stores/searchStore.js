@@ -6,11 +6,13 @@ var Reflux = require('reflux');
 var _ = require('lodash');
 var Q = require('q');
 var QueryActions = require('../actions/queryActions');
+import GoIActions from "../actions/genomesOfInterestActions";
+import {initUrlHashPersistence, persistState} from "../search/persist";
+import {trimFilters} from "../search/filterUtil";
 var search = require('../search/search');
-var persist = require('../search/persist');
 
 module.exports = Reflux.createStore({
-  listenables: QueryActions,
+  listenables: [QueryActions, GoIActions],
 
   init: function () {
     this.state = {
@@ -23,6 +25,11 @@ module.exports = Reflux.createStore({
         list: [],
         metadata: {},
         tally: {}
+      },
+      global: {
+        taxa: {} // key is taxon_id, value should be entry in taxonomy object
+        // taxa: {3702:'ath',4577:'zm',39947:'o.sat', 15368: 'brachy', 3847: 'g.max'} // key is taxon_id, value should
+        // be entry in taxonomy object
       }
     };
 
@@ -34,22 +41,24 @@ module.exports = Reflux.createStore({
     // it can get an up-to-date query object, functions to use for success and failure
     // and a debounce time in ms.
     this.search = search.debounced(
-      this.state, // state object so search can access current query state
-      this.searchComplete, // called when done
-      this.searchError, // called on error
-      200 // debounce time in ms
+        this.state, // state object so search can access current query state
+        this.searchComplete, // called when done
+        this.searchError, // called on error
+        200 // debounce time in ms
     );
 
     // update query state from URL hash if it changes (e.g. back/fwd button press)
-    persist.init(this.overwriteFilterState);
+    initUrlHashPersistence(this.overwriteFilterState);
   },
 
   getInitialState: function () {
     return this.state;
   },
 
-  overwriteFilterState: function (newFilters) {
-    this.state.query.filters = newFilters;
+  overwriteFilterState: function (updatedPersistedState) {
+    const {filters, taxa} = updatedPersistedState;
+    this.state.query.filters = filters || {};
+    this.state.global.taxa = taxa || {};
     this.search();
   },
 
@@ -102,6 +111,11 @@ module.exports = Reflux.createStore({
     }
   },
 
+  removeFilters: function (predicate) {
+    this.state.query.filters = _.omitBy(this.state.query.filters, predicate);
+    this.search();
+  },
+
   removeAllFilters: function () {
     console.log('removeAllFilters');
     this.setAllFilters({});
@@ -115,18 +129,48 @@ module.exports = Reflux.createStore({
     this.search();
   },
 
+  setTaxon: function (taxonId, isSelect) {
+    if (isSelect) {
+      this.state.global.taxa[taxonId] = true;
+    }
+    else {
+      delete this.state.global.taxa[taxonId];
+    }
+    this.search();
+  },
+
+  setTaxa: function (taxa) {
+    this.state.global.taxa = taxa;
+    this.search();
+  },
+
   searchComplete: function (results) {
     console.log('Got data: ', results);
 
-    // update the URL hash
-    persist.persistFilters(this.state.query.filters);
+    this.persistQueryState();
 
     this.state.results = results;
     this.trigger(this.state);
   },
 
+  persistQueryState: function() {
+    const newPersistState = {
+      filters: trimFilters(this.state.query.filters),
+      taxa: this.state.global.taxa
+    };
+
+    if (_.size(newPersistState.filters)
+        || _.size(newPersistState.taxa)) {
+      // update the URL hash
+      persistState(newPersistState);
+    }
+
+    else {
+      persistState({});
+    }
+  },
+
   searchError: function (error) {
     console.error('Error updating results', error.stack, error);
   }
-})
-;
+});

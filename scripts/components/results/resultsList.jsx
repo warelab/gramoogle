@@ -5,11 +5,11 @@ var Reflux = require('reflux');
 var _ = require('lodash');
 var bs = require('react-bootstrap');
 var resultTypes = require('gramene-search-client').resultTypes;
-var QueryActions = require('../actions/queryActions');
-var DocActions = require('../actions/docActions');
-var docStore = require('../stores/docStore');
+var QueryActions = require('../../actions/queryActions');
+var DocActions = require('../../actions/docActions');
+var docStore = require('../../stores/docStore');
 
-var Result = require('./result/result.jsx');
+var Result = require('./../result/result.jsx');
 
 
 var ResultsList = React.createClass({
@@ -70,7 +70,7 @@ var ResultsList = React.createClass({
       );
     }
     else {
-      markup = (<p></p>);
+      markup = (<p>No results.</p>);
     }
 
     return markup;

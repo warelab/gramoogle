@@ -3,20 +3,19 @@
 var React = require('react');
 var ResultsList = require('./resultsList.jsx');
 var ResultsVisualization = require('./resultsVisualization.jsx');
-var mq = require('../config/mq');
+var mq = require('../../config/mq');
 
 var bs = require('react-bootstrap');
 
 var Results = React.createClass({
   getInitialState: function () {
     return {
-      viz: mq.isLargeScreen() && this.shouldShowVis(),
+      viz: this.shouldShowVis(),
       list: true
     };
   },
   shouldShowVis: function(props) {
-    props = props || this.props;
-    return props.results.metadata.count > 1;
+    return true;
   },
   toggleViz: function() {
     var newState = {
@@ -32,7 +31,7 @@ var Results = React.createClass({
   },
   componentWillReceiveProps: function(newProps) {
     this.setState({
-      viz: mq.isLargeScreen() && this.shouldShowVis(newProps)
+      viz: this.shouldShowVis(newProps)
     });
   },
   render: function () {

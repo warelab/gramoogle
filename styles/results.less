@@ -1,8 +1,14 @@
 @import 'bootstrap-3.3.4/variables';
 @import 'colors';
 
+@import 'result-details';
+
 .results {
   min-height: 50rem;
+}
+
+.gramene-search-vis .genomes ul {
+  display: none !important;
 }
 
 .results-list-container {
@@ -10,6 +16,7 @@
 
   .results-list {
     &:extend(.list-unstyled all);
+
     .result {
       padding: @padding-base-vertical (@padding-base-horizontal - 1px);
 
@@ -22,7 +29,7 @@
       /* closest-ortholog is the other flexbox */
       .result-gene-title-body {
         flex: 1 1 auto;
-        width: 518px;
+        width: 1036px;
       }
 
       .gene-title {
@@ -68,10 +75,10 @@
       }
 
       /* result-gene-title-body is the other flexbox'*/
-      .closest-ortholog {
+      .closest-ortholog, .gene-summary-tair {
         cursor: pointer;
         flex: 1 1 auto;
-        width: 250px;
+        width: 500px;
         font-size: smaller;
         margin-top: @line-height-computed + @padding-small-vertical; /* same as h3 in bootstrap, plus extra for ::before element */
         padding: 0 @padding-xs-horizontal; /* vertical padding from h and p elements */
@@ -87,22 +94,44 @@
         }
       }
 
+      .closest-ortholog {
+        border: 1px dotted @gramene-orange;
+      }
+
+      .gene-summary-tair {
+        border: 1px dotted @gramene-darkgreen;
+      }
+
       /* this is the "title" of the closest ortholog box */
-      .closest-ortholog::before {
-        content: "Model Species Homolog";
+      .closest-ortholog::before,
+      .gene-summary-tair::before {
         position: relative;
         float: right;
         margin-top: -13px;
-        border: solid 1px;
+        border: dotted 1px;
 
         padding: 0 @padding-xs-horizontal;
         background: @gramene-offwhite;
+      }
+
+      .closest-ortholog::before {
+        content: "Model Species Homolog";
         color: @gramene-orange;
       }
 
+      /* this is the "title" of the closest ortholog box */
+      .gene-summary-tair::before {
+        content: "TAIR Curated Description";
+        color: @gramene-darkgreen;
+      }
+
       @media only screen and (max-width: @screen-xs-max) {
-        .closest-ortholog {
-          display: none;
+        .closest-ortholog, .gene-summary-tair {
+          margin-left: @padding-large-horizontal;
+          margin-top: 0;
+        }
+        .result-gene-summary {
+          flex-flow: row wrap;
         }
       }
 
@@ -182,6 +211,15 @@
       padding: @padding-large-vertical @padding-small-horizontal;
       .gene-title {
         margin-top: @padding-base-vertical - 1px;
+      }
+
+      .result-gene-summary {
+        flex-flow: row wrap;
+      }
+
+      .gene-summary-tair {
+        cursor: inherit;
+        margin-top: @padding-base-vertical;
       }
     }
   }

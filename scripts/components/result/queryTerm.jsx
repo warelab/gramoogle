@@ -8,7 +8,7 @@ var _ = require('lodash');
 var QueryTerm = React.createClass({
   propTypes: {
     category: React.PropTypes.string,
-    name: React.PropTypes.string.isRequired,
+    name: React.PropTypes.string,
     count: React.PropTypes.number,
     handleClick: React.PropTypes.func.isRequired,
     questions: React.PropTypes.object
@@ -40,9 +40,9 @@ var QueryTerm = React.createClass({
     name = this.props.name;
     className = "query-term";
 
-    if (this.state.alreadySelected) {
-      className += " already-selected";
-    }
+    // if (this.state.alreadySelected) {
+    //   className += " already-selected";
+    // }
 
     if (this.state.showModal) {
       modal = '<p>This is a modal</p>';
