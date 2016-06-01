@@ -6,7 +6,7 @@ import DocActions from "../../actions/docActions";
 import detailsInventory from "./details/_inventory";
 import LutMixin from "../../mixins/LutMixin";
 import ClosestOrtholog from "./closestOrtholog.jsx";
-import CompactResult from "./compact.jsx";
+import ResultDetailLink from "./ResultDetailLink.jsx";
 
 const Result = React.createClass({
   mixins: [LutMixin.lutFor('taxon')],
@@ -54,27 +54,23 @@ const Result = React.createClass({
   },
 
   render: function () {
-    var className, title, body, details, metadata;
-
-    className = this.getClassName();
-    title = this.renderTitle();
-    body = this.renderBody();
-    details = this.renderResultDetails();
-    metadata = this.renderSummary() || this.renderClosestOrthologMaybe();
-
     return (
-        <li className={className} onMouseOver={this.requestGeneDoc}>
+        <li className={this.getClassName()} onMouseOver={this.requestGeneDoc}>
 
           <div className="result-gene-summary">
             <div className="result-gene-title-body">
-                 {title}
-                 {body}
+                 {this.renderTitle()}
+                 {this.renderBody()}
             </div>
-               {metadata}
+               {this.renderMetadata()}
           </div>
-            {details}
+            {this.renderResultDetails()}
         </li>
     );
+  },
+
+  renderMetadata: function() {
+    return this.renderSummary() || this.renderClosestOrthologMaybe();
   },
 
   getClassName: function () {
@@ -171,24 +167,46 @@ const Result = React.createClass({
   },
 
   renderResultDetails: function () {
-    var geneDoc, docs, details, searchResult;
+    return (
+        <div className="result-content">
+          <ul className="result-links">
+              {this.renderDetailLinks()}
+          </ul>
+             {this.renderVisibleDetailElement()}
+        </div>
+    );
+  },
 
-    geneDoc = this.props.geneDoc;
-    docs = this.props.docs;
-    searchResult = this.props.searchResult;
+  renderVisibleDetailElement: function() {
+    if(this.state.visibleDetail) {
+      const visibleDetailComponent = this.state.visibleDetail.reactClass;
+      return (
+          <div className="visible-detail">
+               {React.createElement(visibleDetailComponent, {gene: this.props.geneDoc, docs: this.props.docs})}
+          </div>
+      )
+    }
+  },
 
-    details = _.filter(detailsInventory, function (geneDetail) {
+  renderDetailLinks: function() {
+    const linkProps = {
+      enabled: !!this.props.geneDoc,
+      visibleDetailName: _.get(this.state.visibleDetail, 'name'),
+      hoverDetailCapability: _.get(this.state.hoverDetail, 'capability'),
+      onDetailSelect: this.updateVisibleDetail
+    };
+
+    return _.map(this.getApplicableDetails(), (resultDetail, key) =>
+        <ResultDetailLink key={key}
+                          detail={resultDetail}
+                          {...linkProps} />);
+  },
+
+  getApplicableDetails: function() {
+    const searchResult = this.props.searchResult;
+    return _.filter(detailsInventory, function (geneDetail) {
       return _.includes(searchResult.capabilities, geneDetail.capability);
     });
-
-    return <CompactResult searchResult={searchResult}
-                          geneDoc={geneDoc}
-                          details={details}
-                          docs={docs}
-                          hoverDetail={this.state.hoverDetail}
-                          visibleDetail={this.state.visibleDetail}
-                          onDetailSelect={this.updateVisibleDetail}/>;
-
   }
 });
 
