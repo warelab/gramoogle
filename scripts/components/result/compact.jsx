@@ -53,7 +53,7 @@ var CompactResult = React.createClass({
       linkClass = linksEnabled ? '' : 'disabled';
 
       return (
-        <li key={key} className={liClass}>
+        <li key={key} onClick={handler} className={liClass}>
           <a className={linkClass} onClick={handler}>{geneDetail.name}</a>
         </li>
       );

@@ -1,15 +1,12 @@
 'use strict';
 
-import React from 'react';
-import _ from 'lodash';
-
-import DocActions from '../../actions/docActions';
-
-import detailsInventory from './details/_inventory';
-import LutMixin from '../../mixins/LutMixin';
-
-import ClosestOrtholog from './closestOrtholog.jsx';
-import CompactResult from './compact.jsx';
+import React from "react";
+import _ from "lodash";
+import DocActions from "../../actions/docActions";
+import detailsInventory from "./details/_inventory";
+import LutMixin from "../../mixins/LutMixin";
+import ClosestOrtholog from "./closestOrtholog.jsx";
+import CompactResult from "./compact.jsx";
 
 const Result = React.createClass({
   mixins: [LutMixin.lutFor('taxon')],
@@ -92,7 +89,7 @@ const Result = React.createClass({
   },
 
   renderTitle: function () {
-    var glyph, searchResult, species, taxonLut, geneId;
+    var searchResult, species, taxonLut, geneId;
 
     searchResult = this.props.searchResult;
     taxonLut = _.get(this.state, 'luts.taxon');
@@ -105,13 +102,10 @@ const Result = React.createClass({
 
     return (
         <h3 className="gene-title">
-          <a className="gene-title-anchor">
-            <span className="gene-name">{searchResult.name}</span>
-          </a>
+          <span className="gene-name">{searchResult.name} </span>
           <wbr/>
-          <small className="gene-subtitle">{geneId}
-            <wbr/>
-                 {species}</small>
+          <small className="gene-subtitle">{geneId} </small>
+          <small className="gene-species">{species}</small>
         </h3>
     );
   },
@@ -194,7 +188,7 @@ const Result = React.createClass({
                           hoverDetail={this.state.hoverDetail}
                           visibleDetail={this.state.visibleDetail}
                           onDetailSelect={this.updateVisibleDetail}/>;
-    
+
   }
 });
 
