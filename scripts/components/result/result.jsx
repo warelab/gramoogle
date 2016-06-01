@@ -1,22 +1,19 @@
 'use strict';
 
-var React = require('react');
-var bs = require('react-bootstrap');
-var _ = require('lodash');
+import React from 'react';
+import _ from 'lodash';
 
-var DocActions = require('../../actions/docActions');
+import DocActions from '../../actions/docActions';
 
-var detailsInventory = require('./details/_inventory');
-var LutMixin = require('../../mixins/LutMixin');
+import detailsInventory from './details/_inventory';
+import LutMixin from '../../mixins/LutMixin';
 
-var ClosestOrtholog = require('./closestOrtholog.jsx');
-var ExpandedResult = require('./expanded.jsx');
-var CompactResult = require('./compact.jsx');
+import ClosestOrtholog from './closestOrtholog.jsx';
+import CompactResult from './compact.jsx';
 
-var Result = React.createClass({
+const Result = React.createClass({
   mixins: [LutMixin.lutFor('taxon')],
   propTypes: {
-    expandedByDefault: React.PropTypes.bool,
     searchResult: React.PropTypes.object.isRequired, // SOLR search result
     geneDoc: React.PropTypes.object, // from Mongo
     docs: React.PropTypes.object // all documents requested by the page.
@@ -24,16 +21,9 @@ var Result = React.createClass({
 
   getInitialState: function () {
     var state = this.getLutState();
-    state.expanded = this.props.expandedByDefault;
     state.visibleDetail = undefined;
     state.hoverDetail = undefined;
     return state;
-  },
-
-  componentWillReceiveProps: function (nextProps) {
-    if (!this.state.expanded && nextProps.expandedByDefault) {
-      this.setState({expanded: nextProps.expandedByDefault});
-    }
   },
 
   componentWillUnmount: function () {
@@ -44,18 +34,6 @@ var Result = React.createClass({
     if (!this.requestedGeneDoc) {
       this.requestedGeneDoc = true;
       DocActions.needDocs('genes', this.props.searchResult.id);
-    }
-  },
-
-  toggleExpanded: function () {
-    if (!this.props.expandedByDefault) {
-      this.setState({expanded: !this.state.expanded});
-    }
-  },
-
-  expand: function () {
-    if (!this.props.expandedByDefault) {
-      this.setState({expanded: true});
     }
   },
 
@@ -88,17 +66,17 @@ var Result = React.createClass({
     metadata = this.renderSummary() || this.renderClosestOrthologMaybe();
 
     return (
-      <li className={className} onMouseOver={this.requestGeneDoc}>
+        <li className={className} onMouseOver={this.requestGeneDoc}>
 
-        <div className="result-gene-summary">
-          <div className="result-gene-title-body">
-            {title}
-            {body}
+          <div className="result-gene-summary">
+            <div className="result-gene-title-body">
+                 {title}
+                 {body}
+            </div>
+               {metadata}
           </div>
-          {metadata}
-        </div>
-        {details}
-      </li>
+            {details}
+        </li>
     );
   },
 
@@ -117,7 +95,6 @@ var Result = React.createClass({
     var glyph, searchResult, species, taxonLut, geneId;
 
     searchResult = this.props.searchResult;
-    glyph = this.state.expanded ? 'menu-down' : 'menu-right';
     taxonLut = _.get(this.state, 'luts.taxon');
     if (taxonLut) {
       species = <span className="species-name">{taxonLut[searchResult.taxon_id]}</span>;
@@ -127,22 +104,21 @@ var Result = React.createClass({
     }
 
     return (
-      <h3 className="gene-title">
-        <a className="gene-title-anchor" onClick={this.toggleExpanded}>
-          <bs.Glyphicon glyph={glyph}/>
-          <span className="gene-name">{searchResult.name}</span>
-        </a>
-        <wbr/>
-        <small className="gene-subtitle">{geneId}
+        <h3 className="gene-title">
+          <a className="gene-title-anchor">
+            <span className="gene-name">{searchResult.name}</span>
+          </a>
           <wbr/>
-          {species}</small>
-      </h3>
+          <small className="gene-subtitle">{geneId}
+            <wbr/>
+                 {species}</small>
+        </h3>
     );
   },
 
   renderBody: function () {
     return (
-      <p className="gene-description">{this.props.searchResult.description}</p>
+        <p className="gene-description">{this.props.searchResult.description}</p>
     );
   },
 
@@ -157,15 +133,14 @@ var Result = React.createClass({
     onClick = function () {};
     text = summary;
 
-    if (!this.state.expanded && summary.length > 160) {
+    if (summary.length > 160) {
       text = summary.substr(0, 150) + '…';
-      onClick = this.expand;
     }
 
     return (
-      <div className="gene-summary-tair" onClick={onClick}>
-        <p>{text}</p>
-      </div>
+        <div className="gene-summary-tair">
+          <p>{text}</p>
+        </div>
     )
   },
 
@@ -176,18 +151,15 @@ var Result = React.createClass({
     visibleDetail = this.state.visibleDetail;
     homologyDetailsVisible = _.get(visibleDetail, 'name') === 'Homology';
 
-    // show closest ortholog prominently if:
-    // 1. we are not in expanded mode (the homology details tab is thus visible, see point 2.)
-    // 2. we have data to show:-
+    // show closest ortholog prominently if we have data to show:-
     //   a. either there's a closest ortholog (determined by traversing the gene tree until an id or description looks
     // curated) b. or there's a model ortholog (traverse tree to find an otholog in arabidopsis)
-    showClosestOrtholog = !this.state.expanded &&
-      (
+    showClosestOrtholog = (
         searchResult.closest_rep_id || (
-          searchResult.model_rep_id &&
-          searchResult.model_rep_id !== searchResult.id
+            searchResult.model_rep_id &&
+            searchResult.model_rep_id !== searchResult.id
         )
-      );
+    );
 
     if (showClosestOrtholog) {
 
@@ -195,11 +167,11 @@ var Result = React.createClass({
       // however, that could cause the height of the result to change. Instead we set visibility:hidden
       // so that the renderer takes into account the height of the ortholog even if not shown.
       return (
-        <ClosestOrtholog gene={searchResult}
-                         onMouseOver={this.hoverHomologyTab}
-                         onMouseOut={this.unhoverHomologyTab}
-                         onClick={this.selectHomologyTab}
-                         hidden={homologyDetailsVisible}/>
+          <ClosestOrtholog gene={searchResult}
+                           onMouseOver={this.hoverHomologyTab}
+                           onMouseOut={this.unhoverHomologyTab}
+                           onClick={this.selectHomologyTab}
+                           hidden={homologyDetailsVisible}/>
       );
     }
   },
@@ -215,20 +187,14 @@ var Result = React.createClass({
       return _.includes(searchResult.capabilities, geneDetail.capability);
     });
 
-    if (this.state.expanded) {
-      return <ExpandedResult geneDoc={geneDoc}
-                             details={details}
-                             docs={docs}/>;
-    }
-    else {
-      return <CompactResult searchResult={searchResult}
-                            geneDoc={geneDoc}
-                            details={details}
-                            docs={docs}
-                            hoverDetail={this.state.hoverDetail}
-                            visibleDetail={this.state.visibleDetail}
-                            onDetailSelect={this.updateVisibleDetail}/>;
-    }
+    return <CompactResult searchResult={searchResult}
+                          geneDoc={geneDoc}
+                          details={details}
+                          docs={docs}
+                          hoverDetail={this.state.hoverDetail}
+                          visibleDetail={this.state.visibleDetail}
+                          onDetailSelect={this.updateVisibleDetail}/>;
+    
   }
 });
 
