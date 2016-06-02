@@ -16,7 +16,6 @@ var Search = React.createClass({
   mixins: [Reflux.ListenerMixin],
   propTypes: {
     search: React.PropTypes.object.isRequired,
-    onAnalysisButtonPress: React.PropTypes.func.isRequired
   },
   getInitialState: function() {
     return {
@@ -74,9 +73,8 @@ var Search = React.createClass({
            className="search-box-nav">
         <SearchBox ref="searchBox"
                    results={search.results}
-                   onQueryChange={this.handleQueryChange}
-                   onStatsButtonPress={this.props.onAnalysisButtonPress} />
-        {filters}
+                   onQueryChange={this.handleQueryChange} />
+         {filters}
         {suggestions}
       </Nav>
     );
