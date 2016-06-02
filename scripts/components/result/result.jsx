@@ -4,67 +4,61 @@ import React from "react";
 import _ from "lodash";
 import DocActions from "../../actions/docActions";
 import detailsInventory from "./details/_inventory";
-import LutMixin from "../../mixins/LutMixin";
 import ResultDetails from "./ResultDetails.jsx";
 import ResultBody from "./ResultBody.jsx";
 
-const Result = React.createClass({
-  mixins: [LutMixin.lutFor('taxon')],
-  propTypes: {
-    searchResult: React.PropTypes.object.isRequired, // SOLR search result
-    geneDoc: React.PropTypes.object, // from Mongo
-    docs: React.PropTypes.object // all documents requested by the page.
-  },
+export default class Result extends React.Component {
 
-  getInitialState: function () {
-    var state = this.getLutState();
-    state.visibleDetail = undefined;
-    state.hoverDetail = undefined;
-    return state;
-  },
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
 
-  componentWillUnmount: function () {
+  componentWillUnmount() {
     DocActions.noLongerNeedDocs('genes', this.props.searchResult.id);
-  },
+  }
 
-  requestGeneDoc: function () {
+  requestGeneDoc() {
     if (!this.requestedGeneDoc) {
       this.requestedGeneDoc = true;
-      DocActions.needDocs('genes', this.props.searchResult.id);
-    }
-  },
 
-  updateVisibleDetail: function (visibleDetail) {
+      DocActions.needDocs(
+          'genes',
+          this.props.searchResult.id
+      );
+    }
+  }
+
+  updateVisibleDetail(visibleDetail) {
     this.setState({
       visibleDetail: visibleDetail
     });
-  },
+  }
 
-  hoverHomologyTab: function () {
+  hoverHomologyTab() {
     this.setState({hoverDetail: 'homology'});
-  },
+  }
 
-  unhoverHomologyTab: function () {
+  unhoverHomologyTab() {
     this.setState({hoverDetail: undefined});
-  },
+  }
 
-  selectHomologyTab: function () {
+  selectHomologyTab() {
     var homologyTab = _.find(detailsInventory, {name: 'Homology'});
     this.setState({visibleDetail: homologyTab});
-  },
+  }
 
-  render: function () {
+  render() {
     return (
-        <li className={this.getClassName()} 
-            onMouseOver={this.requestGeneDoc}>
-          
+        <li className="result"
+            onMouseOver={this.requestGeneDoc.bind(this)}>
+
           <ResultBody searchResult={this.props.searchResult}
-                      speciesName={this.getSpeciesName()}
-                      hoverHomologyTab={this.hoverHomologyTab}
-                      unhoverHomologyTab={this.unhoverHomologyTab}
-                      selectHomologyTab={this.selectHomologyTab}
+                      hoverHomologyTab={this.hoverHomologyTab.bind(this)}
+                      unhoverHomologyTab={this.unhoverHomologyTab.bind(this)}
+                      selectHomologyTab={this.selectHomologyTab.bind(this)}
           />
-          
+
           <ResultDetails details={this.getApplicableDetails()}
                          visibleDetail={this.state.visibleDetail}
                          enabled={!!this.props.geneDoc}
@@ -72,37 +66,22 @@ const Result = React.createClass({
                          geneDoc={this.props.geneDoc}
                          docs={this.props.docs}
 
-                         onDetailSelect={this.updateVisibleDetail}
+                         onDetailSelect={this.updateVisibleDetail.bind(this)}
           />
         </li>
     );
-  },
+  }
 
-  getClassName: function () {
-    var classNames;
-
-    classNames = ['result'];
-    if (this.state.expanded) {
-      classNames.push('expanded');
-    }
-
-    return classNames.join(' ');
-  },
-
-  getSpeciesName: function() {
-    const taxonLut = _.get(this.state, 'luts.taxon');
-    const taxonId = _.get(this.props.searchResult, 'taxon_id');
-    if (taxonLut && taxonId) {
-      return taxonLut[taxonId];
-    }
-  },
-
-  getApplicableDetails: function () {
+  getApplicableDetails() {
     const searchResult = this.props.searchResult;
     return _.filter(detailsInventory, function (geneDetail) {
       return _.includes(searchResult.capabilities, geneDetail.capability);
     });
   }
-});
+}
 
-module.exports = Result;
+Result.propTypes = {
+  searchResult: React.PropTypes.object.isRequired, // SOLR search result
+  geneDoc: React.PropTypes.object, // from Mongo
+  docs: React.PropTypes.object // all documents requested by the page.
+};

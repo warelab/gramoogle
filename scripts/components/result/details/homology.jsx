@@ -3,7 +3,6 @@ import {Detail, Title, Description, Content, Explore, Links} from "./generic/det
 import TreeVis from "gramene-genetree-vis";
 import queryActions from "../../../actions/queryActions";
 import DocActions from "../../../actions/docActions";
-import lutStore from "../../../stores/lutStore";
 import searchStore from "../../../stores/searchStore";
 import _ from "lodash";
 import treesClient from "gramene-trees-client";
@@ -14,7 +13,7 @@ export default class Homology extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      taxonomy: _.get(lutStore, 'state.taxonomy'),
+      taxonomy: searchStore.taxonomy,
       genomesOfInterest: _.get(searchStore, 'state.global.taxa')
     };
   }
