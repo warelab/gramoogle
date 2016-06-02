@@ -59,7 +59,6 @@ const Result = React.createClass({
             onMouseOver={this.requestGeneDoc}>
           
           <ResultBody searchResult={this.props.searchResult}
-                      visibleDetail={this.state.visibleDetail}
                       speciesName={this.getSpeciesName()}
                       hoverHomologyTab={this.hoverHomologyTab}
                       unhoverHomologyTab={this.unhoverHomologyTab}

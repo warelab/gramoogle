@@ -79,6 +79,19 @@
 
       .gene-summary-tair {
         border: 1px dotted @gramene-darkgreen;
+
+        .rest {
+          display: none;
+        }
+      }
+
+      .gene-summary-tair:hover, .gene-summary-tair:focus {
+        .rest {
+          display: inline;
+        }
+        .ellipsis {
+          display: none;
+        }
       }
 
       /* this is the "title" of the closest ortholog box */

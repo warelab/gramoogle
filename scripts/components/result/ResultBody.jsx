@@ -1,15 +1,14 @@
-import React from 'react';
-
+import React from "react";
 import ClosestOrtholog from "./closestOrtholog.jsx";
 
 const ResultBody = (props) =>
-    <div className="result-gene-summary">
-      <div className="result-gene-title-body">
-           {renderTitle(props)}
-           {renderBody(props)}
-      </div>
-         {renderMetadata(props)}
-    </div>
+        <div className="result-gene-summary">
+          <div className="result-gene-title-body">
+               {renderTitle(props)}
+               {renderBody(props)}
+          </div>
+             {renderMetadata(props)}
+        </div>
     ;
 
 function renderMetadata(props) {
@@ -17,7 +16,7 @@ function renderMetadata(props) {
       || renderClosestOrtholog(props);
 }
 
-function renderTitle ({searchResult, speciesName}) {
+function renderTitle({searchResult, speciesName}) {
   let species, geneId;
 
   if (speciesName) {
@@ -37,42 +36,40 @@ function renderTitle ({searchResult, speciesName}) {
   );
 }
 
-function renderBody ({searchResult}) {
+function renderBody({searchResult}) {
   return (
       <p className="gene-description">{searchResult.description}</p>
   );
 }
 
-function renderTairSummary ({searchResult}) {
-  var summary, text, onClick;
-
-  summary = searchResult.summary;
-  if (!summary) {
-    return;
+function renderTairSummary({searchResult}) {
+  const summary = searchResult.summary;
+  if(summary) {
+    return (
+        <div className="gene-summary-tair">
+          {trimSummary(summary)}
+        </div>
+    )
   }
-
-  onClick = function () {};
-  text = summary;
-
-  if (summary.length > 160) {
-    text = summary.substr(0, 150) + '…';
-  }
-
-  return (
-      <div className="gene-summary-tair">
-        <p>{text}</p>
-      </div>
-  )
 }
 
-function renderClosestOrtholog ({
+function trimSummary(summary) {
+  if(summary.length > 160) {
+    const start = summary.substr(0, 150);
+    const rest = summary.substr(150);
+    return <p>{start}<span className="ellipsis">…</span><span className="rest">{rest}</span></p>
+  }
+  else {
+    return <p>summary</p>
+  }
+}
+
+function renderClosestOrtholog({
     searchResult,
-    visibleDetail,
     hoverHomologyTab,
     unhoverHomologyTab,
     selectHomologyTab
 }) {
-  const homologyDetailsVisible = _.get(visibleDetail, 'name') === 'Homology';
 
   if (shouldShowClosestOrtholog(searchResult)) {
 
@@ -83,8 +80,7 @@ function renderClosestOrtholog ({
         <ClosestOrtholog gene={searchResult}
                          onMouseOver={hoverHomologyTab}
                          onMouseOut={unhoverHomologyTab}
-                         onClick={selectHomologyTab}
-                         hidden={homologyDetailsVisible}/>
+                         onClick={selectHomologyTab}/>
     );
   }
 }
@@ -103,7 +99,6 @@ function shouldShowClosestOrtholog(searchResult) {
 
 ResultBody.propTypes = {
   searchResult: React.PropTypes.object.isRequired,
-  visibleDetail: React.PropTypes.object,
   speciesName: React.PropTypes.string,
 
   hoverHomologyTab: React.PropTypes.func.isRequired,
