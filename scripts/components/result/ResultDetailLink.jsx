@@ -1,14 +1,14 @@
 import React from "react";
+import _ from 'lodash';
 
 const ResultDetailLink = ({
     detail,
     enabled,
-    visibleDetailName,
+    visibleDetail,
     hoverDetailCapability,
     onDetailSelect
 }) => {
-
-  const isActive = detail.name === visibleDetailName;
+  const isActive = detail.name === _.get(visibleDetail, 'name');
   const simulateHover = hoverDetailCapability === detail.capability;
 
   const handler = () => {
@@ -37,7 +37,7 @@ const ResultDetailLink = ({
 ResultDetailLink.propTypes = {
   detail: React.PropTypes.object.isRequired,
   enabled: React.PropTypes.bool.isRequired,
-  visibleDetailName: React.PropTypes.string,
+  visibleDetail: React.PropTypes.object,
   hoverDetailCapability: React.PropTypes.string,
   onDetailSelect: React.PropTypes.func.isRequired
 };

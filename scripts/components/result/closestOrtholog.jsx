@@ -47,7 +47,7 @@ var ClosestOrtholog = React.createClass({
            onMouseOut={this.props.onMouseOut}>
         <h4>
           <span className="gene-id">{name}</span>
-          <small className="species-name">{species}</small>
+          <small className="species-name"> {species}</small>
         </h4>
         <p>{desc}</p>
       </div>
