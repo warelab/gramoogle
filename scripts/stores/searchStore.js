@@ -7,8 +7,9 @@ var _ = require('lodash');
 var QueryActions = require('../actions/queryActions');
 import TaxonomyActions from '../actions/taxonomyActions';
 import GoIActions from "../actions/genomesOfInterestActions";
+import {initUrlHashPersistence, persistState} from "../search/persist";
+import {trimFilters} from "../search/filterUtil";
 var search = require('../search/search');
-var persist = require('../search/persist');
 
 module.exports = Reflux.createStore({
   listenables: [QueryActions, GoIActions, TaxonomyActions],
@@ -47,7 +48,7 @@ module.exports = Reflux.createStore({
     );
 
     // update query state from URL hash if it changes (e.g. back/fwd button press)
-    persist.init(this.overwriteFilterState);
+    initUrlHashPersistence(this.overwriteFilterState);
   },
 
   // This is a lookup table, so don't perform a search when it is called.
@@ -59,8 +60,10 @@ module.exports = Reflux.createStore({
     return this.state;
   },
 
-  overwriteFilterState: function (newFilters) {
-    this.state.query.filters = newFilters;
+  overwriteFilterState: function (updatedPersistedState) {
+    const {filters, taxa} = updatedPersistedState;
+    this.state.query.filters = filters || {};
+    this.state.global.taxa = taxa || {};
     this.search();
   },
 
@@ -150,8 +153,7 @@ module.exports = Reflux.createStore({
     console.log('Got data: ', results);
     this.addSpeciesNamesToResults(results);
 
-    // update the URL hash
-    persist.persistFilters(this.state.query.filters);
+    this.persistQueryState();
 
     this.state.results = results;
     this.trigger(this.state);
@@ -183,6 +185,23 @@ module.exports = Reflux.createStore({
         addSpeciesName(result, 'closest_rep_taxon_id');
         addSpeciesName(result, 'model_rep_taxon_id');
       })
+    }
+  },
+
+  persistQueryState: function() {
+    const newPersistState = {
+      filters: trimFilters(this.state.query.filters),
+      taxa: this.state.global.taxa
+    };
+
+    if (_.size(newPersistState.filters)
+        || _.size(newPersistState.taxa)) {
+      // update the URL hash
+      persistState(newPersistState);
+    }
+
+    else {
+      persistState({});
     }
   },
 
