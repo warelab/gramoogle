@@ -4,7 +4,6 @@ var React = require('react');
 var _ = require('lodash');
 
 var Search = require('./search/search.jsx');
-var Analysis = require('./analysis.jsx');
 var QueryActions = require('../actions/queryActions');
 
 var bs = require('react-bootstrap');
@@ -13,17 +12,6 @@ var Navbar = bs.Navbar;
 var Header = React.createClass({
   propTypes: {
     search: React.PropTypes.object
-  },
-  getInitialState: function() {
-    return {
-      analysisVisible: false
-    };
-  },
-  toggleAnalysisVisibility: function() {
-    var newState = {
-      analysisVisible: !this.state.analysisVisible
-    };
-    this.setState(newState);
   },
   removeAllFilters: function() {
     QueryActions.removeAllFilters();
@@ -35,11 +23,6 @@ var Header = React.createClass({
       <a className="logo-link" onClick={this.removeAllFilters}><div className="logo"></div></a>
     );
 
-    var analysis;
-    if(this.state.analysisVisible) {
-      analysis = <Analysis search={search}/>
-    }
-
     setTimeout(updateBodyTopPadding, 20);
 
     return (
@@ -47,8 +30,7 @@ var Header = React.createClass({
         <Navbar.Header>
           <Navbar.Brand>{logo}</Navbar.Brand>
         </Navbar.Header>
-        <Search search={search} onAnalysisButtonPress={this.toggleAnalysisVisibility}/>
-        {analysis}
+        <Search search={search} />
       </Navbar>
     );
   }

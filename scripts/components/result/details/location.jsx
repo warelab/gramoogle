@@ -179,6 +179,5 @@ export default class Location extends React.Component {
 }
 
 Location.propTypes = {
-  gene: React.PropTypes.object.isRequired,
-  expanded: React.PropTypes.bool
+  gene: React.PropTypes.object.isRequired
 };
