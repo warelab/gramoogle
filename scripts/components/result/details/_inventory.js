@@ -4,7 +4,7 @@ import Location from './location.jsx';
 import Homology from './homology.jsx';
 import Xrefs from './xrefs.jsx';
 
-module.exports = [
+const inventory = [
 
   {
     name: 'Location',
@@ -38,3 +38,5 @@ module.exports = [
   }
 
 ];
+
+export default inventory;
