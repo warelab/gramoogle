@@ -1,7 +1,6 @@
 'use strict';
 
 var Reflux = require('reflux');
-var Q = require('q');
 var taxonomy = require('gramene-taxonomy-with-genomes');
 var VisualizationActions = require('../actions/visActions');
 var searchStore = require('./searchStore');

@@ -16,11 +16,11 @@ function renderMetadata(props) {
       || renderClosestOrtholog(props);
 }
 
-function renderTitle({searchResult, speciesName}) {
+function renderTitle({searchResult}) {
   let species, geneId;
 
-  if (speciesName) {
-    species = <span className="species-name">{speciesName}</span>;
+  if (searchResult.species_name) {
+    species = <span className="species-name">{searchResult.species_name}</span>;
   }
   if (searchResult.id !== searchResult.name) {
     geneId = <span className="gene-id">{searchResult.id}</span>;
