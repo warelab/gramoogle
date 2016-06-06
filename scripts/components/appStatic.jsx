@@ -17,7 +17,7 @@ It can be run with no network connectivity and the file is still generated.
 
 var React = require('react');
 var Header = require('./header.jsx');
-var Welcome = require('./welcome.jsx');
+import Welcome from './welcome.jsx';
 var _ = require('lodash');
 
 var App = React.createClass({
@@ -27,7 +27,7 @@ var App = React.createClass({
       <div className="app">
         <div className="container">
           <Header search={ {query:{}, results:{} } } />
-          <Welcome />
+          <Welcome context="compile" />
         </div>
       </div>
     );

@@ -9,10 +9,6 @@ var searchStore = require('../stores/searchStore');
 var _ = require('lodash');
 
 var App = React.createClass({
-  
-  propTypes: {
-    context: React.PropTypes.string
-  },
 
   mixins: [
     Reflux.connect(searchStore, 'search')
@@ -26,7 +22,7 @@ var App = React.createClass({
   render: function () {
     var search = this.state.search,
       content = this.dontShowResults() ?
-        <Welcome {...this.props} /> :
+        <Welcome context="client" /> :
         <Results results={search.results}/>
       ;
 
