@@ -1,7 +1,7 @@
 'use strict';
 
 var React = require('react');
-var ResultsList = require('./resultsList.jsx');
+import ResultsList from './resultsList.jsx';
 var ResultsVisualization = require('./resultsVisualization.jsx');
 var mq = require('../../config/mq');
 

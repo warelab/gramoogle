@@ -13,7 +13,6 @@ var SearchBox = React.createClass({
   propTypes: {
     results: React.PropTypes.object.isRequired,
     onQueryChange: React.PropTypes.func.isRequired,
-    onStatsButtonPress: React.PropTypes.func.isRequired
   },
   getInputNode: function() {
     return document.getElementById('search-box');
@@ -44,22 +43,8 @@ var SearchBox = React.createClass({
             <TaxonomyMenu>
               <Summary results={this.props.results} />
             </TaxonomyMenu>
-
         </InputGroup>
     );
-
-    // return (
-    //   <Input type="search"
-    //          id="search-box"
-    //          ref="textInput"
-    //          tabIndex="1"
-    //          placeholder="Search for genes…"
-    //          autoComplete="off"
-    //          standalone={true}
-    //          buttonAfter={resultsCountStatement}
-    //          onChange={this.props.onQueryChange}
-    //   />
-    // );
   }
 });
 

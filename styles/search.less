@@ -24,20 +24,24 @@ ul.search-box-nav {
     .suggestions {
       width: calc(~'100% - @{grid-gutter-width}');
     }
-  }
 
-  @media only screen and (max-width: @screen-xs-max) {
-    #stats-button {
-      display: none;
+    @media (min-width: @screen-sm-min) {
+      width: calc(~'100% - (@{logo-width} + @{padding-base-horizontal})');
+      padding-right: @grid-gutter-width;
+
+      .suggestions {
+        width: calc(~'@{container-sm} - (@{logo-width} + @{padding-base-horizontal} + @{grid-gutter-width} - 2px)');
+      }
     }
-  }
-
-  @media only screen and (min-width: @screen-sm-min) {
-    width: calc(~'100% - (@{logo-width} + @{padding-base-horizontal})');
-    padding-right: @grid-gutter-width;
-
-    .suggestions {
-      width: calc(~'100% - (@{logo-width} + @{padding-base-horizontal} + @{grid-gutter-width} - 2px)');
+    @media (min-width: @screen-md-min) {
+      .suggestions {
+        width: calc(~'@{container-md} - (@{logo-width} + @{padding-base-horizontal} + @{grid-gutter-width} - 2px)');
+      }
+    }
+    @media (min-width: @screen-lg-min) {
+      .suggestions {
+        width: calc(~'@{container-lg} - (@{logo-width} + @{padding-base-horizontal} + @{grid-gutter-width} - 2px)');
+      }
     }
   }
 

@@ -36,7 +36,7 @@ export default class TaxonomyMenu extends React.Component {
 
   showAllIsSelected() {
     const numSelected = _.size(this.state.selectedTaxa);
-    return numSelected == 0 || numSelected == _.size(this.state.taxonomy.leafNodes());
+    return numSelected == 0 || (this.state.taxonomy && numSelected == _.size(this.state.taxonomy.leafNodes()));
   }
 
   customSpeciesSetSelected() {
@@ -106,10 +106,10 @@ export default class TaxonomyMenu extends React.Component {
             {this.props.children}
           </Dropdown.Toggle>
           <Dropdown.Menu onSelect={this.handleSelection.bind(this)}>
-            <MenuItem eventKey="default"
-                      active={this.defaultIsSelected()}>
-              Gramene Default Species
-            </MenuItem>
+            {/*<MenuItem eventKey="default"*/}
+                      {/*active={this.defaultIsSelected()}>*/}
+              {/*Gramene Default Species*/}
+            {/*</MenuItem>*/}
             <MenuItem eventKey="all"
                       active={this.showAllIsSelected()}>
               Show All Species

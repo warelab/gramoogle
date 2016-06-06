@@ -11,51 +11,49 @@ It could be refactored to "persistStore", and listen for "PersistAction"
 This module is likely to be replaced if/when we refactor the codebase to use React Router.
 */
 
-var _ = require('lodash');
+import _ from 'lodash';
 
-var expectedHash = '';
-var loc = global.location || {hash: expectedHash};
+let expectedSerializedState = '';
+const loc = global.location || {hash: expectedSerializedState};
+const localStore = global.localStorage || {};
 
-function init(callback) {
+export function initUrlHashPersistence(callback) {
   var hashChangeHandler = handleHashChangeFactory(callback);
+  possiblyCopyStateFromLocalStorage();
   global.onhashchange = hashChangeHandler;
   hashChangeHandler();
+}
+
+/* copy query state from local storage if a hash is not present on the url */
+function possiblyCopyStateFromLocalStorage() {
+  if(localStore.persist && !loc.hash) {
+    loc.hash = localStore.persist;
+  }
 }
 
 function handleHashChangeFactory(callback) {
   return function handleHashChange() {
     if (hashDidChange()) {
       console.log("Got updated query state from hash.");
-      callback(filtersFromHash());
+      callback(stateFromHash());
     }
   }
 }
 
 function hashDidChange() {
-  var result = expectedHash !== loc.hash;
-  console.info("Hash changed? ", result, expectedHash, loc.hash);
+  var result = ('#' + expectedSerializedState) !== loc.hash;
+  console.info("Hash changed? ", result, expectedSerializedState, loc.hash);
   return result;
 }
 
-function filtersFromHash() {
+function stateFromHash() {
   var hashVal = loc.hash ? loc.hash.substring(1) : '';
   return hashVal ? JSON.parse(decodeURI(hashVal)) : {};
 }
 
-function filtersToHash(filters) {
-  expectedHash = _.isEmpty(filters) ? '' : '#' + encodeURI(JSON.stringify(trimFilters(filters)));
-  if(loc.hash !== expectedHash) {
-    loc.hash = expectedHash;
+export function persistState(state) {
+  expectedSerializedState = _.isEmpty(state) ? '' : '#' + encodeURI(JSON.stringify(state));
+  if(loc.hash !== expectedSerializedState) {
+    loc.hash = localStore.persist = expectedSerializedState;
   }
 }
-
-function trimFilters(filters) {
-  return _.mapValues(filters, function trimProps(filter) {
-    return _.pick(filter, 'category', 'display_name', 'fq');
-  });
-}
-
-module.exports = {
-  init: init,
-  persistFilters: filtersToHash
-};
