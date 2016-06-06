@@ -4,11 +4,15 @@ var React = require('react');
 var Reflux = require('reflux');
 var Header = require('./header.jsx');
 var Results = require('./results/results.jsx');
-var Welcome = require('./welcome.jsx');
+import Welcome from './welcome.jsx';
 var searchStore = require('../stores/searchStore');
 var _ = require('lodash');
 
 var App = React.createClass({
+  
+  propTypes: {
+    context: React.PropTypes.string
+  },
 
   mixins: [
     Reflux.connect(searchStore, 'search')
@@ -22,7 +26,7 @@ var App = React.createClass({
   render: function () {
     var search = this.state.search,
       content = this.dontShowResults() ?
-        <Welcome/> :
+        <Welcome {...this.props} /> :
         <Results results={search.results}/>
       ;
 

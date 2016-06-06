@@ -16,4 +16,4 @@ var ReactDOMServer = require('react-dom/server');
 
 var App = React.createFactory(require('./components/appStatic.jsx'));
 
-fs.writeFileSync('static/app.html.fragment', ReactDOMServer.renderToString(new App()));
+fs.writeFileSync('static/app.html.fragment', ReactDOMServer.renderToString(new App({context: 'compile'})));

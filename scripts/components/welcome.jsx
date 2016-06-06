@@ -2,7 +2,6 @@ import _ from "lodash";
 import React from "react";
 import QueryActions from "../actions/queryActions";
 import WelcomeStore from "../stores/welcomeStore";
-import WelcomeActions from "../actions/welcomeActions";
 
 const exampleQueries = [
   {
@@ -93,12 +92,13 @@ const exampleQueries = [
 export default class Welcome extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {};
   }
 
   componentWillMount() {
     console.log("Will refresh blog feed");
-    if(this.props.stage === 'client') {
-      WelcomeActions.refreshBlogFeed();
+    if (this.props.context === 'client') {
+      // WelcomeActions.refreshBlogFeed();
       this.unsubscribe = WelcomeStore.listen(
           (posts) => this.setState({posts: posts})
       );
@@ -106,7 +106,7 @@ export default class Welcome extends React.Component {
   }
 
   componentWillUnmount() {
-    if(this.unsubscribe) this.unsubscribe();
+    if (this.unsubscribe) this.unsubscribe();
   }
 
   render() {
@@ -195,4 +195,8 @@ export default class Welcome extends React.Component {
         </div>
     );
   }
+};
+
+Welcome.propTypes = {
+  context: React.PropTypes.string
 };
