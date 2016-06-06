@@ -3,12 +3,59 @@
 ul.search-box-nav {
   margin: 0.6rem 0;
 
-  .input-group-addon {
-    padding: @padding-xs-vertical @padding-small-horizontal;
+  .input-group-btn {
+    //padding: @padding-xs-vertical @padding-small-horizontal;
+    height: @input-height-base;
+    max-height: @input-height-base;
+    min-height: @input-height-base;
   }
 
-  .results-summary strong {
-    color: @gramene-warmgreen;
+  .results-summary {
+    display: inline-block;
+
+    strong {
+      color: @gramene-warmgreen;
+    }
+  }
+
+  @media (max-width: 400px) {
+    @_border-width: 1px;
+    @_vertical_padding: 2px;
+    @_count-height: (@input-height-base - 2 * @_border-width - 2 * @_vertical_padding) / 2;
+    @_count-font-size: @_count-height * 1/1.4;
+
+    .caret {
+      margin-bottom: @padding-base-vertical;
+    }
+
+    #genomes-of-interest-dropdown {
+      border-width: @_border-width;
+      max-height: @input-height-base;
+
+      padding-top: @_vertical_padding;
+      padding-bottom: @_vertical_padding;
+    }
+
+    .dropdown-menu {
+      left: inherit;
+      right: 0;
+    }
+
+    .results-summary {
+      .gene-count, .genomes-count {
+        font-size: @_count-font-size;
+        height: @_count-height;
+        display: block;
+      }
+      .join {
+        display: none;
+      }
+    }
+
+    .results-summary + span {
+      line-height: 1.0;
+      font-size: 2 * @_count-height;
+    }
   }
 
   .suggestions {
@@ -27,7 +74,7 @@ ul.search-box-nav {
 
     @media (min-width: @screen-sm-min) {
       width: calc(~'100% - (@{logo-width} + @{padding-base-horizontal})');
-      padding-right: @grid-gutter-width;
+      //padding-right: @grid-gutter-width;
 
       .suggestions {
         width: calc(~'@{container-sm} - (@{logo-width} + @{padding-base-horizontal} + @{grid-gutter-width} - 2px)');
