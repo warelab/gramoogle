@@ -49,7 +49,7 @@ var Header = React.createClass({
   }
 })();
 
-var prevNavHeight = 51;
+var prevNavHeight = 50;
 function updateBodyTopPadding() {
   var nav, body, navHeight;
   if(global.document && _.isFunction(document.querySelector)) {
@@ -57,7 +57,7 @@ function updateBodyTopPadding() {
     if(!nav) {
       return;
     }
-    navHeight = nav.offsetHeight;
+    navHeight = nav.offsetHeight - 1;
     body = document.querySelector('body');
 
     if(_.isNumber(navHeight) && navHeight > 0 && navHeight != prevNavHeight) {

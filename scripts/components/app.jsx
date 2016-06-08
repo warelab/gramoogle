@@ -4,7 +4,7 @@ var React = require('react');
 var Reflux = require('reflux');
 var Header = require('./header.jsx');
 var Results = require('./results/results.jsx');
-import Welcome from './welcome.jsx';
+import Welcome from './welcome/Welcome.jsx';
 var searchStore = require('../stores/searchStore');
 var _ = require('lodash');
 
@@ -18,7 +18,7 @@ var App = React.createClass({
     // don't show the results if there are no user-specified filters 
     return _.isEmpty(_.get(this.state.search, 'query.filters'));
   },
-  
+
   render: function () {
     var search = this.state.search,
       content = this.dontShowResults() ?
@@ -28,10 +28,8 @@ var App = React.createClass({
 
     return (
       <div className="app">
-        <div className="container">
-          <Header search={search}/>
-          {content}
-        </div>
+        <Header search={search}/>
+        {content}
       </div>
     );
   }

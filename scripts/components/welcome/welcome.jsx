@@ -3,6 +3,8 @@ import React from "react";
 import QueryActions from "../actions/queryActions";
 import WelcomeStore from "../stores/welcomeStore";
 
+import defaultPosts from "../../static/blogFeed.json";
+
 const exampleQueries = [
   {
     displayText: "What are the homologs of Arabidopsis thaliana's " +
@@ -92,13 +94,14 @@ const exampleQueries = [
 export default class Welcome extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      posts: defaultPosts
+    };
   }
 
   componentWillMount() {
     console.log("Will refresh blog feed");
     if (this.props.context === 'client') {
-      // WelcomeActions.refreshBlogFeed();
       this.unsubscribe = WelcomeStore.listen(
           (posts) => this.setState({posts: posts})
       );
