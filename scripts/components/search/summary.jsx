@@ -26,9 +26,11 @@ var Summary = React.createClass({
     species = messageIfNotNumber(results, 'taxon_id.count', LOADING_MESSAGE);
 
     return (
-    <span className="results-summary">
-      <strong>{genes}</strong> genes in <strong>{species}</strong> genomes
-    </span>
+    <div className="results-summary">
+      <span className="gene-count"><strong>{genes}</strong> genes</span>
+      <span className="join"> in </span>
+      <span className="genomes-count"><strong>{species}</strong> genomes</span>
+    </div>
     );
   }
 });
