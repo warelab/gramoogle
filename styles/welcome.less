@@ -64,6 +64,10 @@ a.gramene-tool.list-group-item:focus {
 }
 
 .intro {
+  @media (max-width: @screen-xs-max) {
+    display: none;
+  }
   margin-top: @line-height-computed;
   background-color: lighten(@gramene-orange, 25%);
 }
+
