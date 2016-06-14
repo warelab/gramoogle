@@ -18,6 +18,11 @@ ul.search-box-nav {
     }
   }
 
+  .search-help-popover {
+    top: @input-height-base;
+    max-width: 100%;
+  }
+
   @media (max-width: 400px) {
     @_border-width: 1px;
     @_vertical_padding: 2px;
@@ -61,6 +66,12 @@ ul.search-box-nav {
   .suggestions {
     position: absolute;
     z-index: 5;
+
+    .panel-body {
+      height: 100%;
+      max-height: calc(~'100vh - 100px');
+      overflow-y: scroll;
+    }
   }
 
   @media only screen {
@@ -76,17 +87,17 @@ ul.search-box-nav {
       width: calc(~'100% - (@{logo-width} + @{padding-base-horizontal})');
 
       .suggestions {
-        width: calc(~'@{container-sm} - (@{logo-width} + @{padding-base-horizontal} + @{grid-gutter-width} - 2px)');
+        width: calc(~'@{container-sm} - (@{logo-width} + @{padding-base-horizontal} + @{grid-gutter-width})');
       }
     }
     @media (min-width: @screen-md-min) {
       .suggestions {
-        width: calc(~'@{container-md} - (@{logo-width} + @{padding-base-horizontal} + @{grid-gutter-width} - 2px)');
+        width: calc(~'@{container-md} - (@{logo-width} + @{padding-base-horizontal} + @{grid-gutter-width})');
       }
     }
     @media (min-width: @screen-lg-min) {
       .suggestions {
-        width: calc(~'@{container-lg} - (@{logo-width} + @{padding-base-horizontal} + @{grid-gutter-width} - 2px)');
+        width: calc(~'@{container-lg} - (@{logo-width} + @{padding-base-horizontal} + @{grid-gutter-width})');
       }
     }
   }

@@ -4,25 +4,29 @@ var React = require('react');
 var Reflux = require('reflux');
 var _ = require('lodash');
 
-var Nav = require('react-bootstrap').Nav;
+import {Nav} from "react-bootstrap";
+import SearchBox from "./searchBox.jsx";
+import SearchHelpPopover from "../welcome/SearchHelpPopover.jsx";
 
 var QueryActions = require('../../actions/queryActions');
 
 var Suggest = require('../suggest/suggest.jsx');
-var SearchBox = require('./searchBox.jsx');
 var Filters = require('./filters.jsx');
+
 
 var Search = React.createClass({
   mixins: [Reflux.ListenerMixin],
   propTypes: {
     search: React.PropTypes.object.isRequired,
   },
-  getInitialState: function() {
+  getInitialState: function () {
     return {
-      suggestionsVisible: false
+      suggestionsVisible: false,
+      shouldShowTooltipIfWeGainFocus: true,
+      isFocused: false
     };
   },
-  componentDidMount: function() {
+  componentDidMount: function () {
     // listen directly to an action method.
 
     // Why?
@@ -35,49 +39,80 @@ var Search = React.createClass({
     // removed (e.g. when a suggestion is picked)
     this.listenTo(QueryActions.removeQueryString, this.clearInputString);
   },
-  handleQueryChange: function(e) {
+  handleQueryChange: function (e) {
     var queryString = e.target.value;
 
     QueryActions.setQueryString(queryString);
 
     // For now, show typeahead if query string is not empty
     this.setState({
-      suggestionsVisible: !!queryString.length
+      suggestionsVisible: !!queryString.length,
+      shouldShowTooltipIfWeGainFocus: false
     });
   },
-  clearInputString: function() {
+  handleFocus: function () {
+    this.setState({isFocused: true})
+  },
+  handleClick: function () {
+    // if we are already focused and the user clicks, show the tooltip
+    if (this.state.isFocused) {
+      this.setState({
+        shouldShowTooltipIfWeGainFocus: true
+      });
+    }
+  },
+  handleBlur: function () {
+    this.setState({isFocused: false})
+  },
+  clearInputString: function () {
     this.refs.searchBox.clearSearchString();
     this.setState({
       suggestionsVisible: false
     });
   },
-  render: function(){
-    var suggestions,
-      filters,
-      search = this.props.search;
-
-    if(this.state.suggestionsVisible) {
-      suggestions = (
-        <Suggest queryString={this.props.search.query.q}/>
-      );
-    }
-
-    if(_.size(search.query.filters)) {
-      filters = (
-        <Filters filters={search.query.filters} />
-      );
-    }
+  render: function () {
+    var search = this.props.search;
 
     return (
-      <Nav pullRight
-           className="search-box-nav">
-        <SearchBox ref="searchBox"
-                   results={search.results}
-                   onQueryChange={this.handleQueryChange} />
-         {filters}
-        {suggestions}
-      </Nav>
+        <Nav pullRight
+             className="search-box-nav"
+             onFocus={this.handleFocus}
+             onBlur={this.handleBlur}
+             onClick={this.handleClick}>
+          <SearchBox ref="searchBox"
+                     results={search.results}
+                     onQueryChange={this.handleQueryChange}>
+
+            {this.renderPopover()}
+          </SearchBox>
+
+          {this.renderFilters()}
+          {this.renderSuggestions()}
+        </Nav>
     );
+  },
+  renderSuggestions: function () {
+    if (this.state.suggestionsVisible) {
+      return <Suggest queryString={this.props.search.query.q}/>;
+    }
+  },
+  shouldShowFilters: function () {
+    return _.size(this.props.search.query.filters);
+  },
+  renderFilters: function () {
+    if (this.shouldShowFilters()) {
+      return <Filters filters={this.props.search.query.filters}/>;
+    }
+  },
+  renderPopover: function () {
+    if (this.state.isFocused
+        && this.state.shouldShowTooltipIfWeGainFocus
+        && !(this.shouldShowFilters() || this.state.suggestionsVisible)) {
+    // if(1) {
+      return (
+          <SearchHelpPopover />
+      );
+    }
   }
 });
 

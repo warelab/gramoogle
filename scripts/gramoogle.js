@@ -1,5 +1,3 @@
-'use strict';
-
 // import the styles (using lessify)
 // require('../styles/main.less');
 
@@ -12,8 +10,12 @@ import ReactDOM from 'react-dom';
 import TaxonomyActions from './actions/taxonomyActions';
 import WelcomeActions from './actions/welcomeActions';
 
+import App from './components/app.jsx';
+
 TaxonomyActions.getTaxonomy();
 WelcomeActions.refreshBlogFeed();
-const App = React.createFactory(require('./components/app.jsx'));
 
-ReactDOM.render(new App({context: 'client'}), document.getElementById('content'));
+const AppFactory = React.createFactory(App);
+const app = new AppFactory({context: 'client'});
+
+ReactDOM.render(app, document.getElementById('content'));

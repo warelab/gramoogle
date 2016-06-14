@@ -1,25 +1,37 @@
 'use strict';
 
-var React = require('react');
-var Reflux = require('reflux');
-var Header = require('./header.jsx');
-var Results = require('./results/results.jsx');
+import React from 'react';
+import Header from './header.jsx';
+import Results from './results/results.jsx';
 import Welcome from './welcome/Welcome.jsx';
-var searchStore = require('../stores/searchStore');
-var _ = require('lodash');
+import searchStore from '../stores/searchStore';
+import _ from 'lodash';
 
-var App = React.createClass({
+export default class App extends React.Component {
 
-  mixins: [
-    Reflux.connect(searchStore, 'search')
-  ], // this mixin binds the store (where search/filter/results state lives) to this.state.search
+  constructor(props) {
+    super(props);
+    this.state = {
+      search: searchStore.state
+    };
+  }
 
-  dontShowResults: function () {
+  componentWillMount() {
+    this.unsubscribeFromSearchStore = searchStore.listen((searchState) =>
+        this.setState({search: searchState})
+    );
+  }
+
+  componentWillUnmount() {
+    this.unsubscribeFromSearchStore();
+  }
+  
+  dontShowResults() {
     // don't show the results if there are no user-specified filters 
     return _.isEmpty(_.get(this.state.search, 'query.filters'));
-  },
+  }
 
-  render: function () {
+  render() {
     var search = this.state.search,
       content = this.dontShowResults() ?
         <Welcome context="client" /> :
@@ -33,6 +45,6 @@ var App = React.createClass({
       </div>
     );
   }
-});
+};
 
 module.exports = App;

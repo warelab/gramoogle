@@ -15,21 +15,14 @@
  (That does not mean that this isn't a bit of a hack.)
  */
 
-var React = require('react');
-var Header = require('./header.jsx');
+import React from 'react';
+import Header from './header.jsx';
 import Welcome from "./welcome/Welcome.jsx";
-var _ = require('lodash');
 
-var App = React.createClass({
-
-  render: function () {
-    return (
+const App = () =>
       <div className="app">
         <Header search={ {query: {}, results: {}} }/>
         <Welcome context="compile"/>
-      </div>
-    );
-  }
-});
+      </div>;
 
-module.exports = App;
+export default App;

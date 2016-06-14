@@ -11,7 +11,7 @@ var Navbar = bs.Navbar;
 
 var Header = React.createClass({
   propTypes: {
-    search: React.PropTypes.object
+    search: React.PropTypes.object.isRequired
   },
   removeAllFilters: function() {
     QueryActions.removeAllFilters();

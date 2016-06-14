@@ -1,51 +1,54 @@
-'use strict';
+import React from "react";
+import Summary from "./summary.jsx";
+import TaxonomyMenu from "../GoI/TaxonomyMenu.jsx";
+import {InputGroup, FormControl} from "react-bootstrap";
 
-var React = require('react');
-var _ = require('lodash');
+export default class SearchBox extends React.Component {
 
-var Summary = require('./summary.jsx');
-
-import TaxonomyMenu from '../GoI/TaxonomyMenu.jsx';
-
-import { InputGroup, FormControl, Dropdown, MenuItem } from 'react-bootstrap';
-
-var SearchBox = React.createClass({
-  propTypes: {
-    results: React.PropTypes.object.isRequired,
-    onQueryChange: React.PropTypes.func.isRequired,
-  },
-  getInputNode: function() {
+  getInputNode() {
     return document.getElementById('search-box');
-  },
-  clearSearchString: function() {
+  }
+
+  clearSearchString() {
     this.getInputNode().value = '';
-  },
-  focus: function() {
+  }
+
+  focus() {
     this.getInputNode().focus();
-  },
-  componentDidMount: function() {
-    var val = this.getInputNode().value;
-    if(val !== '') {
+  }
+
+  value() {
+    return this.getInputNode().value;
+  }
+
+  componentDidMount() {
+    const val = this.value();
+    if (val !== '') {
       this.props.onQueryChange({target: {value: val}});
     }
     this.focus();
-  },
-  render: function() {
+  }
+
+  render() {
     return (
         <InputGroup>
-            <FormControl type="search"
-                    id="search-box"
-                    tabIndex="1"
-                    placeholder="Search for genes…"
-                    autoComplete="off"
-                    standalone={true}
-                    onChange={this.props.onQueryChange} />
-            <TaxonomyMenu>
-              <Summary results={this.props.results} />
-            </TaxonomyMenu>
+          <FormControl type="search"
+                       id="search-box"
+                       tabIndex="1"
+                       placeholder="Search for genes…"
+                       autoComplete="off"
+                       standalone={true}
+                       onChange={this.props.onQueryChange} />
+          <TaxonomyMenu>
+            <Summary results={this.props.results}/>
+          </TaxonomyMenu>
+          {this.props.children}
         </InputGroup>
     );
   }
-});
+};
 
-module.exports = SearchBox;
+SearchBox.propTypes = {
+  results: React.PropTypes.object.isRequired,
+  onQueryChange: React.PropTypes.func.isRequired,
+};
