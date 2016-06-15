@@ -30,6 +30,9 @@ module.exports = function (grunt) {
     exec: {
       generateStaticApp: {
         cmd: 'node scripts/babel.js'
+      },
+      blogFeed: {
+        cmd: 'node scripts/getBlogFeed.js'
       }
     },
 
@@ -198,15 +201,10 @@ module.exports = function (grunt) {
   });
   
   grunt.registerTask('currentNews', 'Get the latest news from RSS', function() {
-    var getBlogFeed = require('./scripts/welcome/getBlogFeed');
-    getBlogFeed().then((feed) => {
-      console.log("wrote feed json");
-      grunt.file.write('static/feed.json', feed)
-    });
-    console.log("fetching feed json");
+    
   });
   
-  grunt.registerTask('generateStaticFiles', ['copy:assets', 'copy:icons', 'exec:generateStaticApp', 'packageIndexHtml']);
+  grunt.registerTask('generateStaticFiles', ['exec:blogFeed', 'copy:assets', 'copy:icons', 'exec:generateStaticApp', 'packageIndexHtml']);
   grunt.registerTask('test', ['jasmine_node']);
   grunt.registerTask('default', ['env:dev', 'generateStaticFiles', 'less:dev', 'browserify:dev', 'watch']);
   grunt.registerTask('package', ['env:prod', 'generateStaticFiles', 'less:production', 'browserify:production', 'test']);
