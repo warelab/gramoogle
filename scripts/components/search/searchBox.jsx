@@ -35,7 +35,7 @@ export default class SearchBox extends React.Component {
           <FormControl type="search"
                        id="search-box"
                        tabIndex="1"
-                       placeholder="Search for genes…"
+                       placeholder="Search for genes, species, pathways, ontology terms, domains…"
                        autoComplete="off"
                        standalone={true}
                        onChange={this.props.onQueryChange} />
