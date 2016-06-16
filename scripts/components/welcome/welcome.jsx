@@ -1,13 +1,10 @@
 import React from "react";
 import WelcomeStore from "../../stores/welcomeStore";
+import WelcomeNavbar from "./Navbar.jsx";
 import Intro from "./Intro.jsx";
-import SearchInfo from "./SearchInfo.jsx";
-import Features from "./Features.jsx";
-import Examples from "./Examples.jsx";
-import Portals from "./Portals.jsx";
 import Posts from "./Posts.jsx";
-import Navbar from "./Navbar.jsx";
 import GrameneTools from "./GrameneTools.jsx";
+import {shouldShowIntro, setIntroVisibility} from "../../welcome/intro";
 
 import {Grid, Row, Col} from "react-bootstrap";
 
@@ -15,7 +12,8 @@ export default class Welcome extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      posts: require('../../../static/blogFeed.json')
+      posts: require('../../../static/blogFeed.json'),
+      showIntro: shouldShowIntro()
     };
   }
 
@@ -30,14 +28,23 @@ export default class Welcome extends React.Component {
   componentWillUnmount() {
     if (this.unsubscribe) this.unsubscribe();
   }
+  
+  hideIntro() {
+    this.setState({showIntro: false});
+    setIntroVisibility(false);
+  }
 
   render() {
     return (
         <div>
-          <Grid>
-            <Row className="welcome">
+          <Grid className="welcome">
+            <Row>
+              <Col sm={12}>
+                {this.renderIntro()}
+              </Col>
+            </Row>
+            <Row>
               <Col sm={9}>
-                <Intro />
                 <GrameneTools />
               </Col>
               <Col sm={3}>
@@ -45,8 +52,15 @@ export default class Welcome extends React.Component {
               </Col>
             </Row>
           </Grid>
+          <WelcomeNavbar />
         </div>
     );
+  }
+  
+  renderIntro() {
+    if(this.state.showIntro) {
+      return <Intro onClose={this.hideIntro.bind(this)} />;
+    }
   }
 };
 
