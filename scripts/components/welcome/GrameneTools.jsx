@@ -15,10 +15,11 @@ const GrameneTool = ({title, description, imgSrc, link}) =>
       </Media>
     </ListGroupItem>;
 
-function focusSearch() {
+function focusSearch(e) {
   const searchBox = document.querySelector('#search-box');
   if (searchBox) {
     searchBox.focus();
+    searchBox.click();
   }
 }
 

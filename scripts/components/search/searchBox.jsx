@@ -38,8 +38,9 @@ export default class SearchBox extends React.Component {
                        placeholder="Search for genes, species, pathways, ontology terms, domains…"
                        autoComplete="off"
                        standalone={true}
-                       onChange={this.props.onQueryChange} />
-          <TaxonomyMenu>
+                       onChange={this.props.onQueryChange}/>
+          <TaxonomyMenu toggleGenomesOfInterest={this.props.toggleGenomesOfInterest}
+                        showGenomesOfInterest={this.props.showGenomesOfInterest}>
             <Summary results={this.props.results}/>
           </TaxonomyMenu>
           {this.props.children}
@@ -51,4 +52,6 @@ export default class SearchBox extends React.Component {
 SearchBox.propTypes = {
   results: React.PropTypes.object.isRequired,
   onQueryChange: React.PropTypes.func.isRequired,
+  toggleGenomesOfInterest: React.PropTypes.func.isRequired,
+  showGenomesOfInterest: React.PropTypes.bool.isRequired
 };

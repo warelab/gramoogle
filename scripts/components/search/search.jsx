@@ -22,8 +22,8 @@ var Search = React.createClass({
   getInitialState: function () {
     return {
       suggestionsVisible: false,
-      shouldShowTooltipIfWeGainFocus: true,
-      isFocused: false
+      tooltipVisible: false,
+      genomesDropdownVisible: false
     };
   },
   componentDidMount: function () {
@@ -39,6 +39,11 @@ var Search = React.createClass({
     // removed (e.g. when a suggestion is picked)
     this.listenTo(QueryActions.removeQueryString, this.clearInputString);
   },
+  componentWillReceiveProps: function(newProps) {
+    this.setState({
+      tooltipVisible: this.shouldTooltipBeVisible(newProps)
+    });
+  },
   handleQueryChange: function (e) {
     var queryString = e.target.value;
 
@@ -47,27 +52,58 @@ var Search = React.createClass({
     // For now, show typeahead if query string is not empty
     this.setState({
       suggestionsVisible: !!queryString.length,
-      shouldShowTooltipIfWeGainFocus: false
+      tooltipVisible: false
     });
   },
+  searchBoxFocused: function () {
+    return document.activeElement
+        && document.activeElement.id === 'search-box'
+  },
+  shouldTooltipBeVisible: function(props = this.props, state = this.state) {
+    const decision = this.searchBoxFocused()
+        && state.tooltipVisible
+        && !(
+            this.shouldShowFilters(props)
+            || state.suggestionsVisible
+            || state.genomesDropdownVisible
+        );
+    console.log("Show popover?", this.state, this.shouldShowFilters(), decision)
+    return decision;
+  },
+  toggleTooltipVisibilityIfAppropriate: function(state = this.state) {
+    // we will toggle, unless we would be
+    // toggling to on state
+    // and suggestions are visible.
+    return !state.tooltipVisible
+        && !state.suggestionsVisible;
+  },
   handleFocus: function () {
-    this.setState({isFocused: true})
+    this.setState({
+      tooltipVisible: this.shouldTooltipBeVisible()
+    })
   },
   handleClick: function () {
-    // if we are already focused and the user clicks, show the tooltip
-    if (this.state.isFocused) {
-      this.setState({
-        shouldShowTooltipIfWeGainFocus: true
-      });
-    }
+    this.setState({
+      tooltipVisible: this.toggleTooltipVisibilityIfAppropriate()
+    });
   },
   handleBlur: function () {
-    this.setState({isFocused: false})
+    this.setState({
+      tooltipVisible: false
+    });
   },
   clearInputString: function () {
     this.refs.searchBox.clearSearchString();
     this.setState({
       suggestionsVisible: false
+    });
+  },
+  toggleGenomesDropdownVisibility: function (newState) {
+    console.log("Toggle genome visibility", newState);
+
+    this.setState({
+      genomesDropdownVisible: newState,
+      tooltipVisible: false
     });
   },
   render: function () {
@@ -81,13 +117,15 @@ var Search = React.createClass({
              onClick={this.handleClick}>
           <SearchBox ref="searchBox"
                      results={search.results}
-                     onQueryChange={this.handleQueryChange}>
+                     onQueryChange={this.handleQueryChange}
+                     toggleGenomesOfInterest={this.toggleGenomesDropdownVisibility}
+                     showGenomesOfInterest={this.state.genomesDropdownVisible}>
 
-            {this.renderPopover()}
+                     {this.renderPopover()}
           </SearchBox>
 
-          {this.renderFilters()}
-          {this.renderSuggestions()}
+             {this.renderFilters()}
+             {this.renderSuggestions()}
         </Nav>
     );
   },
@@ -96,8 +134,8 @@ var Search = React.createClass({
       return <Suggest queryString={this.props.search.query.q}/>;
     }
   },
-  shouldShowFilters: function () {
-    return _.size(this.props.search.query.filters);
+  shouldShowFilters: function (props = this.props) {
+    return _.size(props.search.query.filters);
   },
   renderFilters: function () {
     if (this.shouldShowFilters()) {
@@ -105,10 +143,8 @@ var Search = React.createClass({
     }
   },
   renderPopover: function () {
-    if (this.state.isFocused
-        && this.state.shouldShowTooltipIfWeGainFocus
-        && !(this.shouldShowFilters() || this.state.suggestionsVisible)) {
-    // if(1) {
+    if (this.state.tooltipVisible) {
+      // if(1) {
       return (
           <SearchHelpPopover />
       );

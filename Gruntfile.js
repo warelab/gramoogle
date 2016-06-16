@@ -187,11 +187,13 @@ module.exports = function (grunt) {
       var template = _.template(grunt.file.read('./static/index.template.html'));
       var content = grunt.file.read('./static/app.html.fragment');
       var loadingMessage = grunt.file.read('./static/loading-message.html.fragment');
+      var hideIntro = grunt.file.read('./static/hide-intro.html.fragment');
 
       var props = {
         footer: footer,
         content: content,
-        loadingMessage: loadingMessage
+        loadingMessage: loadingMessage,
+        hideIntro: hideIntro
       };
 
       return template(props);
