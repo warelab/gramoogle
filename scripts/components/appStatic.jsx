@@ -17,7 +17,7 @@
 
 import React from 'react';
 import Header from './header.jsx';
-import Welcome from "./welcome/welcome.jsx";
+import Welcome from "./welcome/WelcomePage.jsx";
 
 const App = () =>
       <div className="app">

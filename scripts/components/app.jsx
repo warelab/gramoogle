@@ -3,7 +3,7 @@
 import React from 'react';
 import Header from './header.jsx';
 import Results from './results/results.jsx';
-import Welcome from './welcome/welcome.jsx';
+import Welcome from './welcome/WelcomePage.jsx';
 import searchStore from '../stores/searchStore';
 import _ from 'lodash';
 
