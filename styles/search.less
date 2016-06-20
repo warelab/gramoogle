@@ -128,4 +128,14 @@ ul.search-box-nav {
   .search-filter:not(:last-child) {
     margin-right: @padding-xs-horizontal;
   }
+
+  #search-box {
+    transition: all 0.15s ease-in-out;
+  }
+
+  #search-box.highlight {
+    transform: scale(1.02, 1.08);
+    //border-width: 3px;
+    //padding: calc(@padding-base-vertical - 2px) calc(@padding-base-horizontal - 2px);
+  }
 }

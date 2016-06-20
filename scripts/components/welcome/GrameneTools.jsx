@@ -1,6 +1,7 @@
 import React from "react";
 import {ListGroup, ListGroupItem, Media} from "react-bootstrap";
 
+import WelcomeActions from "../../actions/welcomeActions";
 
 const GrameneTool = ({title, description, imgSrc, link}) =>
     <ListGroupItem {...link} className="gramene-tool">
@@ -16,11 +17,12 @@ const GrameneTool = ({title, description, imgSrc, link}) =>
     </ListGroupItem>;
 
 function focusSearch(e) {
-  const searchBox = document.querySelector('#search-box');
-  if (searchBox) {
-    searchBox.focus();
-    searchBox.click();
-  }
+  WelcomeActions.flashSearchBox();
+  // const searchBox = document.querySelector('#search-box');
+  // if (searchBox) {
+  //   searchBox.focus();
+  //   searchBox.click();
+  // }
 }
 
 const GrameneTools = () =>

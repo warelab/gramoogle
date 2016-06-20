@@ -3,7 +3,7 @@
 var React = require('react');
 var _ = require('lodash');
 
-var Search = require('./search/search.jsx');
+import Search from './search/search.jsx';
 var QueryActions = require('../actions/queryActions');
 
 var bs = require('react-bootstrap');
