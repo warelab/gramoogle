@@ -3,6 +3,30 @@
 @import 'queryTerm.less';
 
 .suggestions {
+
+  position: absolute;
+  z-index: 5;
+
+  .panel-body {
+    height: 100%;
+    overflow-y: scroll;
+  }
+
+  @media (min-width: @screen-sm-min) {
+    @top: @input-height-base + @padding-base-vertical + 2px;
+    top: @top;
+    .panel-body {
+      max-height: calc(~'100vh - @{top} - 4px');
+    }
+  }
+  @media (max-width: @screen-sm-min) {
+    @top: @input-height-base + @logo-height-px + 8px;
+    top: @top;
+    .panel-body {
+      max-height: calc(~'100vh - @{top} - 4px');
+    }
+  }
+
   .categories {
     &:extend(.list-unstyled);
 
@@ -45,7 +69,7 @@
             border-color: @gramene-mediumgreen;
             color: @gramene-mediumgreen;
             background-color: @gray-lighter;
-            cursor:not-allowed;
+            cursor: not-allowed;
           }
         }
       }

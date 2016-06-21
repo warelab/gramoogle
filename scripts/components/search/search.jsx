@@ -4,7 +4,6 @@ import React from "react";
 import _ from "lodash";
 import {Nav} from "react-bootstrap";
 import SearchBox from "./searchBox.jsx";
-import SearchHelpPopover from "../welcome/SearchHelpPopover.jsx";
 import QueryActions from "../../actions/queryActions";
 import Suggest from "../suggest/suggest.jsx";
 import Filters from "./filters.jsx";
@@ -15,17 +14,15 @@ export default class Search extends React.Component {
     super(props);
     this.state = {
       suggestionsVisible: false,
-      tooltipVisible: false,
+      helpVisible: false,
       genomesDropdownVisible: false
     };
 
     // bind event handlers to `this`
     _.bindAll(this, [
-      'handleFocus',
-      'handleBlur',
-      'handleClick',
       'handleQueryChange',
       'toggleGenomesDropdownVisibility',
+      'toggleHelpVisibility',
       'clearInputString'
     ]);
   }
@@ -44,64 +41,16 @@ export default class Search extends React.Component {
     QueryActions.removeQueryString.listen(this.clearInputString);
   }
 
-  componentWillReceiveProps(newProps) {
-    this.setState({
-      tooltipVisible: this.shouldTooltipBeVisible(newProps)
-    });
-  }
-
   handleQueryChange(e) {
-    var queryString = e.target.value;
+    const queryString = e.target.value;
+    const suggestionsVisible = !!queryString.length;
 
     QueryActions.setQueryString(queryString);
 
     // For now, show typeahead if query string is not empty
     this.setState({
-      suggestionsVisible: !!queryString.length,
-      tooltipVisible: false
-    });
-  }
-
-  searchBoxFocused() {
-    return document.activeElement
-        && document.activeElement.id === 'search-box'
-  }
-
-  shouldTooltipBeVisible(props = this.props, state = this.state) {
-    const decision = this.searchBoxFocused()
-        && state.tooltipVisible
-        && !(
-            this.shouldShowFilters(props)
-            || state.suggestionsVisible
-            || state.genomesDropdownVisible
-        );
-    console.log("Show popover?", this.state, this.shouldShowFilters(), decision)
-    return decision;
-  }
-
-  toggleTooltipVisibilityIfAppropriate(state = this.state) {
-    // we will toggle, unless we would be
-    // toggling to on state
-    // and suggestions are visible.
-    return !state.tooltipVisible
-        && !state.suggestionsVisible;
-  }
-
-  handleFocus() {
-    this.setState({
-      tooltipVisible: this.shouldTooltipBeVisible()
-    })
-  }
-
-  handleClick() {
-    this.setState({
-      tooltipVisible: this.toggleTooltipVisibilityIfAppropriate()
-    });
-  }
-
-  handleBlur() {
-    this.setState({
-      tooltipVisible: false
+      suggestionsVisible: suggestionsVisible,
+      helpVisible: this.state.helpVisible && !suggestionsVisible
     });
   }
 
@@ -116,8 +65,15 @@ export default class Search extends React.Component {
     console.log("Toggle genome visibility", newState);
 
     this.setState({
-      genomesDropdownVisible: newState,
-      tooltipVisible: false
+      genomesDropdownVisible: newState
+    });
+  }
+
+  toggleHelpVisibility(newState) {
+    console.log("Toggle help visibility", newState);
+
+    this.setState({
+      helpVisible: newState
     });
   }
 
@@ -126,17 +82,14 @@ export default class Search extends React.Component {
 
     return (
         <Nav pullRight
-             className="search-box-nav"
-             onFocus={this.handleFocus}
-             onBlur={this.handleBlur}
-             onClick={this.handleClick}>
+             className="search-box-nav">
           <SearchBox ref="searchBox"
                      results={search.results}
                      onQueryChange={this.handleQueryChange}
                      toggleGenomesOfInterest={this.toggleGenomesDropdownVisibility}
-                     showGenomesOfInterest={this.state.genomesDropdownVisible}>
-
-                     {this.renderPopover()}
+                     showGenomesOfInterest={this.state.genomesDropdownVisible}
+                     toggleHelp={this.toggleHelpVisibility}
+                     showHelp={this.state.helpVisible}>
           </SearchBox>
 
              {this.renderFilters()}
@@ -158,15 +111,6 @@ export default class Search extends React.Component {
   renderFilters() {
     if (this.shouldShowFilters()) {
       return <Filters filters={this.props.search.query.filters}/>;
-    }
-  }
-
-  renderPopover() {
-    if (this.state.tooltipVisible) {
-      // if(1) {
-      return (
-          <SearchHelpPopover />
-      );
     }
   }
 };

@@ -1,10 +1,9 @@
 import React from "react";
 import _ from "lodash";
-import {InputGroup, FormControl} from "react-bootstrap";
-
+import {InputGroup, FormControl, Button} from "react-bootstrap";
 import Summary from "./summary.jsx";
 import TaxonomyMenu from "../GoI/TaxonomyMenu.jsx";
-
+import HelpButton from "./HelpButton.jsx";
 import WelcomeActions from "../../actions/welcomeActions";
 
 export default class SearchBox extends React.Component {
@@ -18,8 +17,6 @@ export default class SearchBox extends React.Component {
   }
 
   componentWillMount() {
-    console.log(WelcomeActions.flashSearchBox);
-    console.log(WelcomeActions.flashSearchBox.completed);
     WelcomeActions.flashSearchBox.listen(this.flashStart);
     WelcomeActions.flashSearchBox.completed.listen(this.flashEnd);
   }
@@ -72,10 +69,14 @@ export default class SearchBox extends React.Component {
                        autoComplete="off"
                        standalone={true}
                        onChange={this.props.onQueryChange}/>
-          <TaxonomyMenu toggleGenomesOfInterest={this.props.toggleGenomesOfInterest}
-                        showGenomesOfInterest={this.props.showGenomesOfInterest}>
-            <Summary results={this.props.results}/>
-          </TaxonomyMenu>
+          <InputGroup.Button>
+            <HelpButton toggleHelp={this.props.toggleHelp}
+                        showHelp={this.props.showHelp} />
+            <TaxonomyMenu toggleGenomesOfInterest={this.props.toggleGenomesOfInterest}
+                          showGenomesOfInterest={this.props.showGenomesOfInterest}>
+              <Summary results={this.props.results}/>
+            </TaxonomyMenu>
+          </InputGroup.Button>
           {this.props.children}
         </InputGroup>
     );
@@ -86,5 +87,7 @@ SearchBox.propTypes = {
   results: React.PropTypes.object.isRequired,
   onQueryChange: React.PropTypes.func.isRequired,
   toggleGenomesOfInterest: React.PropTypes.func.isRequired,
-  showGenomesOfInterest: React.PropTypes.bool.isRequired
+  showGenomesOfInterest: React.PropTypes.bool.isRequired,
+  toggleHelp: React.PropTypes.func.isRequired,
+  showHelp: React.PropTypes.bool.isRequired
 };

@@ -1,5 +1,9 @@
 @import 'bootstrap-3.3.4/variables';
 
+@search-help-button-width: 39px;
+@genomes-of-interest-dropdown-width-sm: 240px;
+@genomes-of-interest-dropdown-width-xs: 120px;
+
 ul.search-box-nav {
   margin: 0.6rem 0;
 
@@ -18,12 +22,15 @@ ul.search-box-nav {
     }
   }
 
-  .search-help-popover {
-    top: @input-height-base;
-    max-width: 100%;
+  #genomes-of-interest-dropdown {
+    width: @genomes-of-interest-dropdown-width-sm;
   }
 
-  @media (max-width: 400px) {
+  #genomes-of-interest-dropdown + .dropdown-menu {
+    width: 100%;
+  }
+
+  @media (max-width: @screen-xs-min) {
     @_border-width: 1px;
     @_vertical_padding: 2px;
     @_count-height: (@input-height-base - 2 * @_border-width - 2 * @_vertical_padding) / 2;
@@ -34,6 +41,7 @@ ul.search-box-nav {
     }
 
     #genomes-of-interest-dropdown {
+      width: @genomes-of-interest-dropdown-width-xs;
       border-width: @_border-width;
       max-height: @input-height-base;
 
@@ -41,9 +49,10 @@ ul.search-box-nav {
       padding-bottom: @_vertical_padding;
     }
 
-    .dropdown-menu {
+    #genomes-of-interest-dropdown + .dropdown-menu {
       left: inherit;
       right: 0;
+      width: auto;
     }
 
     .results-summary {
@@ -63,15 +72,18 @@ ul.search-box-nav {
     }
   }
 
-  .suggestions {
-    position: absolute;
-    z-index: 5;
+  .search-help-button {
+    width: @search-help-button-width;
 
-    .panel-body {
-      height: 100%;
-      max-height: calc(~'100vh - 100px');
-      overflow-y: scroll;
+    .glyphicon {
+      top: 2px;
     }
+  }
+
+  .search-help-popover {
+    padding: @padding-base-horizontal;
+    white-space: normal;
+    top: @input-height-base;
   }
 
   @media only screen {
@@ -83,21 +95,46 @@ ul.search-box-nav {
       width: calc(~'100% - @{grid-gutter-width}');
     }
 
+    .search-help-popover {
+      width: calc(~'100vw - @{grid-gutter-width}');
+      left: calc(~'@{genomes-of-interest-dropdown-width-xs} + @{search-help-button-width} + @{grid-gutter-width} - 100vw');
+    }
+
+    @media (min-width: @screen-xs-min) {
+      .search-help-popover {
+        left: calc(~'@{genomes-of-interest-dropdown-width-sm} + @{search-help-button-width} + @{grid-gutter-width} - 100vw');
+      }
+    }
+
     @media (min-width: @screen-sm-min) {
       width: calc(~'100% - (@{logo-width} + @{padding-base-horizontal})');
+      @panel-width: calc(~'@{container-sm} - (@{logo-width} + @{padding-base-horizontal} + @{grid-gutter-width})');
 
-      .suggestions {
-        width: calc(~'@{container-sm} - (@{logo-width} + @{padding-base-horizontal} + @{grid-gutter-width})');
+      .suggestions, .search-help-popover {
+        width: @panel-width;
+      }
+      .search-help-popover {
+        left: calc(~'@{genomes-of-interest-dropdown-width-sm} + @{search-help-button-width} + @{logo-width} + @{padding-base-horizontal} + @{grid-gutter-width} - @{container-sm}');
       }
     }
     @media (min-width: @screen-md-min) {
-      .suggestions {
-        width: calc(~'@{container-md} - (@{logo-width} + @{padding-base-horizontal} + @{grid-gutter-width})');
+      @panel-width: calc(~'@{container-md} - (@{logo-width} + @{padding-base-horizontal} + @{grid-gutter-width})');
+
+      .suggestions, .search-help-popover {
+        width: @panel-width;
+      }
+      .search-help-popover {
+        left: calc(~'@{genomes-of-interest-dropdown-width-sm} + @{search-help-button-width} + @{logo-width} + @{padding-base-horizontal} + @{grid-gutter-width} - @{container-md}');
       }
     }
     @media (min-width: @screen-lg-min) {
-      .suggestions {
-        width: calc(~'@{container-lg} - (@{logo-width} + @{padding-base-horizontal} + @{grid-gutter-width})');
+      @panel-width: calc(~'@{container-lg} - (@{logo-width} + @{padding-base-horizontal} + @{grid-gutter-width})');
+
+      .suggestions, .search-help-popover {
+        width: @panel-width;
+      }
+      .search-help-popover {
+        left: calc(~'@{genomes-of-interest-dropdown-width-sm} + @{search-help-button-width} + @{logo-width} + @{padding-base-horizontal} + @{grid-gutter-width} - @{container-lg}');
       }
     }
   }

@@ -102,7 +102,6 @@ export default class TaxonomyMenu extends React.Component {
 
     return (
         <Dropdown id="genomes-of-interest-dropdown"
-                  className="input-group-btn"
                   onClick={(e)=>e.stopPropagation()}
                   onToggle={this.props.toggleGenomesOfInterest}
                   open={this.props.showGenomesOfInterest}>
