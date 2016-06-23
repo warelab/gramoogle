@@ -11,7 +11,9 @@ export default class SummaryCount extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    if(this.value(newProps) !== this.value()) {
+    const curVal = this.value();
+    const newVal = this.value(newProps);
+    if(!_.isUndefined(curVal) && curVal !== newVal) {
       this.setState({newData: true});
       setTimeout(()=>this.setState({newData: false}), 500);
     }
