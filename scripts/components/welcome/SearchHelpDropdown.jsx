@@ -1,5 +1,5 @@
 import React from "react";
-import {Dropdown, Alert} from "react-bootstrap";
+import {Alert} from "react-bootstrap";
 import Features from "./Features.jsx";
 import Examples from "./Examples.jsx";
 
@@ -9,14 +9,14 @@ export default class SearchHelpDropdown extends React.Component {
   }
   render() {
     return (
-        <Dropdown.Menu className="search-help-popover">
+        <div>
           <Alert bsStyle="info">
             Type to search! Try typing a gene identifier,
             ontology term, pathway, or functional domain
           </Alert>
           <Features/>
           <Examples/>
-        </Dropdown.Menu>
+        </div>
     );
   }
 }

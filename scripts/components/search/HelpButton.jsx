@@ -12,8 +12,10 @@ export default class HelpButton extends React.Component {
         <Dropdown id="search-help-button"
                   onToggle={this.props.toggleHelp}
                   open={this.props.showHelp}>
-          <Dropdown.Toggle noCaret><Glyphicon glyph="question-sign" /></Dropdown.Toggle>
-          <SearchHelpDropdown bsRole="menu" />
+          <Dropdown.Toggle noCaret><Glyphicon glyph="question-sign"/></Dropdown.Toggle>
+          <Dropdown.Menu className="search-help-popover">
+            <SearchHelpDropdown/>
+          </Dropdown.Menu>
         </Dropdown>
     );
   }
