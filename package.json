@@ -39,8 +39,8 @@
     "react-bootstrap": "^0.29.4",
     "react-dom": "^15.0.1",
     "reflux": "^0.4.1",
-    "xml2js": "^0.4.16",
-    "rss-parser": "latest"
+    "rss-parser": "latest",
+    "xml2js": "^0.4.16"
   },
   "devDependencies": {
     "babel-jest": "^6.0.1",

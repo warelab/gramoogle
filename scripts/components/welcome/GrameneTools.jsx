@@ -17,7 +17,7 @@ const GrameneTool = ({title, description, imgSrc, link}) =>
     </ListGroupItem>;
 
 function focusSearch(e) {
-  WelcomeActions.flashSearchBox();
+  WelcomeActions.flashSearchBox(250);
   // const searchBox = document.querySelector('#search-box');
   // if (searchBox) {
   //   searchBox.focus();

@@ -18,7 +18,14 @@ ul.search-box-nav {
     display: inline-block;
 
     strong {
+      display: inline-block;
+      transition: all 0.15s ease-in-out;
       color: @gramene-warmgreen;
+    }
+
+    strong.updated-value {
+      transform: scale(1.25);
+      color: @gramene-darkgreen;
     }
   }
 
@@ -171,7 +178,8 @@ ul.search-box-nav {
   }
 
   #search-box.highlight {
-    transform: scale(1.02, 1.08);
+    transform: scale(1.04, 1.08);
+    background-color: @gramene-yellow;
     //border-width: 3px;
     //padding: calc(@padding-base-vertical - 2px) calc(@padding-base-horizontal - 2px);
   }
