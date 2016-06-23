@@ -15,9 +15,14 @@ export default class SearchHelpDropdown extends React.Component {
             ontology term, pathway, or functional domain
           </Alert>
           <Features/>
-          <Examples/>
+          <Examples {...this.props} />
         </div>
     );
   }
 }
+
+SearchHelpDropdown.propTypes = {
+  onSelect: React.PropTypes.func.isRequired
+};
+
 export default SearchHelpDropdown;

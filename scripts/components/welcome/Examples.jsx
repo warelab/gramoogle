@@ -87,21 +87,26 @@ const exampleQueries = [
   }
 ];
 
-const exampleToLi = (egQ, idx) => {
+const exampleToLi = onSelect => (egQ, idx) => {
   var resetFilters = function () {
     QueryActions.setAllFilters(egQ.filters);
+    onSelect();
   };
   return (
       <li key={idx}><a onClick={resetFilters}>{egQ.displayText}</a></li>
   );
 };
 
-const Examples = () => <div>
+const Examples = ({onSelect}) => <div>
   <h3>For Example</h3>
   <p>You can use to ask sophisticated questions
     about the genes across all of our databases
     concerning crop and model plant genomes:</p>
-  <ul>{exampleQueries.map(exampleToLi)}</ul>
+  <ul>{exampleQueries.map(exampleToLi(onSelect))}</ul>
 </div>;
+
+Examples.propTypes = {
+  onSelect: React.PropTypes.func.isRequired
+};
 
 export default Examples;
