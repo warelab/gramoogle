@@ -75,6 +75,8 @@ export default class Search extends React.Component {
     this.setState({
       helpVisible: newState
     });
+
+    this.refs.searchBox.focus();
   }
 
   render() {
