@@ -62,16 +62,12 @@ export default class Search extends React.Component {
   }
 
   toggleGenomesDropdownVisibility(newState) {
-    console.log("Toggle genome visibility", newState);
-
     this.setState({
       genomesDropdownVisible: newState
     });
   }
 
   toggleHelpVisibility(newState) {
-    console.log("Toggle help visibility", newState);
-
     this.setState({
       helpVisible: newState
     });
