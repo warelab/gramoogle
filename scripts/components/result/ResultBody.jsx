@@ -60,7 +60,7 @@ function trimSummary(summary) {
     return <p>{start}<span className="ellipsis">…</span><span className="rest">{rest}</span></p>
   }
   else {
-    return <p>summary</p>
+    return <p>{summary}</p>
   }
 }
 
