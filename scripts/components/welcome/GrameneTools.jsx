@@ -41,6 +41,10 @@ const GrameneTools = () =>
                      description="Browse metabolic & regulatory pathways"
                      link={{href: "http://plantreactome.gramene.org/"}}
                      imgSrc="assets/images/welcome/pathways.png"/>
+        <GrameneTool title="Plant Expression ATLAS"
+                     description="Browse plant expression results at EBI ATLAS"
+                     link={{href: "https://www.ebi.ac.uk/gxa/plant/experiments"}}
+                     imgSrc="assets/images/welcome/ExpressionAtlas.png"/>
         <GrameneTool title="BLAST"
                      description="Query our genomes with a DNA or protein sequence of interest"
                      link={{href: "http://ensembl.gramene.org/Tools/Blast?db=core"}}
@@ -52,11 +56,11 @@ const GrameneTools = () =>
         <GrameneTool title="Bulk Downloads"
                      description="FTP download of our data"
                      link={{href: "http://gramene.org/ftp-download"}}
-                     imgSrc="assets/images/welcome/genomes.png"/>
+                     imgSrc="assets/images/welcome/download.jpg"/>
         <GrameneTool title="Archive"
                      description="Legacy tools and data"
                      link={{href: "http://gramene.org/archive"}}
-                     imgSrc="assets/images/welcome/genomes.png"/>
+                     imgSrc="assets/images/welcome/archive.jpg"/>
       </ListGroup>
     </div>;
 export default GrameneTools;
