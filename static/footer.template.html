@@ -1,4 +1,14 @@
- <div class="footer">
+<nav class="submenu navbar navbar-default">
+    <div class="container">
+        <ul class="nav navbar-nav">
+            <li><a href="//gramene.org/release-notes">Release Notes (v50)</a></li>
+            <li><a href="//gramene.org/contact">Contact</a></li>
+            <li><a href="//gramene.org/about-gramene">About</a></li>
+            <li><a href="//gramene.org/cite">Cite</a></li>
+        </ul>
+    </div>
+</nav>
+<div class="footer">
     <div class="container">
         <div class="row">
             <div class="col-md-8 col-sm-12">
@@ -21,27 +31,29 @@
                         <li>Gramene Search UI
                             <% if(tag) { %>
                             <a title="Release available on github"
-                               href="https://github.com/warelab/gramoogle/releases/tag/<%= tag %>">Release <%= tag %></a>
+                               href="https://github.com/warelab/gramoogle/releases/tag/<%= tag %>">Release <%= tag
+                                %></a>
                             <% }
 
-                              if (jobNumber) { %>
+                            if (jobNumber) { %>
                             <a title="Built by Travis-CI"
-                               href="https://travis-ci.org/warelab/gramoogle/jobs/<%= jobId %>">Build #<%= jobNumber %></a>
+                               href="https://travis-ci.org/warelab/gramoogle/jobs/<%= jobId %>">Build #<%= jobNumber
+                                %></a>
                             <% } else if(isDev) { %>
                             LOCAL DEVELOPMENT BUILD
                             <% } else { %>
                             LOCAL PACKAGED BUILD
                             <% } %>
                         </li>
-                      <li>Built on <%= date %></li>
+                        <li>Built on <%= date %></li>
                     </ul>
                 </div>
             </div>
         </div>
     </div>
-     <script>
-         window.gramene = {
-             defaultServer: "<%= defaultServer %>"
-         };
-     </script>
+    <script>
+        window.gramene = {
+            defaultServer: "<%= defaultServer %>"
+        };
+    </script>
 </div>
