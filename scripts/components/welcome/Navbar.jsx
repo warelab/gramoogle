@@ -6,13 +6,9 @@ import {Navbar, Nav, NavItem} from "react-bootstrap";
 const WelcomeNavbar = () => <Navbar className="submenu">
   <Nav>
     <NavItem href="//gramene.org/release-notes">Release Notes (v50)</NavItem>
-    <NavItem href="//gramene.org/collaborators">Collaborators</NavItem>
     <NavItem href="//gramene.org/contact">Contact</NavItem>
     <NavItem href="//gramene.org/about-gramene">About</NavItem>
-    <NavItem href="//gramene.org/archive">Archive</NavItem>
     <NavItem href="//gramene.org/cite">Cite</NavItem>
-    <NavItem href="https://www.youtube.com/channel/UCMtmq20XMccsNUaACuqQJ-w">Link</NavItem>
-    <NavItem href="//gramene.org/outreach">Outreach</NavItem>
   </Nav>
 </Navbar>;
 
