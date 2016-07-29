@@ -31,10 +31,10 @@ const GrameneTools = () =>
       <ListGroup>
         <GrameneTool title="Gramene Search"
                      description="Find and explore all data in Gramene database"
-                     link={{onClick: focusSearch, href: 'javascript:(function noop(){})()'}}
+                     link={{onClick: focusSearch, href: 'javascript:void(0)'}}
                      imgSrc="assets/images/gramene_leaves.svg"/>
         <GrameneTool title="Genome Browser"
-                     description="We share the Ensembl infrastructure published by the EBI"
+                     description="Thirty-nine genomes, with annotations, variation and comparative tools"
                      link={{href: "http://ensembl.gramene.org/genome_browser/index.html"}}
                      imgSrc="assets/images/welcome/genomes.png"/>
         <GrameneTool title="Plant Reactome"
@@ -46,11 +46,15 @@ const GrameneTools = () =>
                      link={{href: "https://www.ebi.ac.uk/gxa/plant/experiments"}}
                      imgSrc="assets/images/welcome/ExpressionAtlas.png"/>
         <GrameneTool title="BLAST"
-                     description="Query our genomes with a DNA or protein sequence of interest"
+                     description="Query our genomes with a DNA or protein sequence"
                      link={{href: "http://ensembl.gramene.org/Tools/Blast?db=core"}}
                      imgSrc="assets/images/welcome/BLAST.png"/>
         <GrameneTool title="BioMart"
                      description="An advanced query interface"
+                     link={{href: "http://www.gramene.org/biomart/martview"}}
+                     imgSrc="assets/images/welcome/mart.png"/>
+        <GrameneTool title="Outreach and Training"
+                     description="Educational resources and webinars"
                      link={{href: "http://www.gramene.org/biomart/martview"}}
                      imgSrc="assets/images/welcome/mart.png"/>
         <GrameneTool title="Bulk Downloads"
@@ -58,7 +62,7 @@ const GrameneTools = () =>
                      link={{href: "http://gramene.org/ftp-download"}}
                      imgSrc="assets/images/welcome/download.jpg"/>
         <GrameneTool title="Archive"
-                     description="Legacy tools and data"
+                     description="Legacy tools and data (markers, Cyc pathways, etc)"
                      link={{href: "http://gramene.org/archive"}}
                      imgSrc="assets/images/welcome/archive.jpg"/>
       </ListGroup>
