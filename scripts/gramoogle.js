@@ -6,7 +6,7 @@ import ReactDOM from 'react-dom';
 
 // Instantiate searchStore now so it's ready
 // to listen to taxonomyActions.getTaxonomy
-// import './stores/searchStore';
+import './stores/searchStore';
 import TaxonomyActions from './actions/taxonomyActions';
 import WelcomeActions from './actions/welcomeActions';
 
