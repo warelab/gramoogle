@@ -3,7 +3,7 @@
 var React = require('react');
 var _ = require('lodash');
 
-var Search = require('./search/search.jsx');
+import Search from './search/search.jsx';
 var QueryActions = require('../actions/queryActions');
 
 var bs = require('react-bootstrap');
@@ -11,7 +11,7 @@ var Navbar = bs.Navbar;
 
 var Header = React.createClass({
   propTypes: {
-    search: React.PropTypes.object
+    search: React.PropTypes.object.isRequired
   },
   removeAllFilters: function() {
     QueryActions.removeAllFilters();
@@ -49,7 +49,7 @@ var Header = React.createClass({
   }
 })();
 
-var prevNavHeight = 51;
+var prevNavHeight = 50;
 function updateBodyTopPadding() {
   var nav, body, navHeight;
   if(global.document && _.isFunction(document.querySelector)) {
@@ -57,7 +57,7 @@ function updateBodyTopPadding() {
     if(!nav) {
       return;
     }
-    navHeight = nav.offsetHeight;
+    navHeight = nav.offsetHeight - 1;
     body = document.querySelector('body');
 
     if(_.isNumber(navHeight) && navHeight > 0 && navHeight != prevNavHeight) {

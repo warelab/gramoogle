@@ -44,7 +44,7 @@ var Results = React.createClass({
     }
 
     return (
-      <section className="results">
+      <section className="results container">
         <div>
           {theViz}
           {theList}

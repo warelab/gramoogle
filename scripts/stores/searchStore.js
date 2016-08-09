@@ -67,13 +67,13 @@ module.exports = Reflux.createStore({
     this.search();
   },
 
-  setResultType: function (rtKey:string, params) {
+  setResultType: function (rtKey, params) {
     console.log('setResultType', arguments);
     this.state.query.resultTypes[rtKey] = params;
     this.search();
   },
 
-  removeResultType: function (rtKey:string) {
+  removeResultType: function (rtKey) {
     console.log('removeResultType', arguments);
     delete this.state.query.resultTypes[rtKey];
     this.search();
@@ -159,7 +159,7 @@ module.exports = Reflux.createStore({
     this.trigger(this.state);
   },
 
-  getSpeciesName(taxonId) {
+  getSpeciesName: function(taxonId) {
     if(this.taxonIdToSpeciesName) {
       return this.taxonIdToSpeciesName[taxonId];
     }

@@ -5,9 +5,10 @@ var QueryActions = require('../../actions/queryActions');
 var resultTypes = require('gramene-search-client').resultTypes;
 var _ = require('lodash');
 
-var resultType = resultTypes.get('facet');
+import SummaryCount from "./SummaryCount.jsx";
+import Spinner from "../Spinner.jsx";
 
-const LOADING_MESSAGE = 'loading…';
+var resultType = resultTypes.get('facet');
 
 var Summary = React.createClass({
   propTypes: {
@@ -19,23 +20,28 @@ var Summary = React.createClass({
   componentWillUnmount: function () {
     QueryActions.removeResultType('taxon_id');
   },
-  render: function(){
-    var results, genes, species;
+  render: function () {
+    var results;
     results = this.props.results;
-    genes = messageIfNotNumber(results, 'metadata.count', LOADING_MESSAGE);
-    species = messageIfNotNumber(results, 'taxon_id.count', LOADING_MESSAGE);
+
+    // this only happens when the page is statically rendered during compile.
+    if (_.size(results) === 0) {
+      return (
+          <div className="results-summary">
+            <span>Initializing</span>
+            <Spinner />
+          </div>
+      )
+    }
 
     return (
-    <span className="results-summary">
-      <strong>{genes}</strong> genes in <strong>{species}</strong> genomes
-    </span>
+        <div className="results-summary">
+          <span className="gene-count"><SummaryCount results={results} path="metadata.count"/> genes</span>
+          <span className="join"> in </span>
+          <span className="genomes-count"><SummaryCount results={results} path="taxon_id.count"/> genomes</span>
+        </div>
     );
   }
 });
-
-function messageIfNotNumber(results, path, message) {
-  var number = _.get(results, path);
-  return _.isNumber(number) ? number : message;
-}
 
 module.exports = Summary;

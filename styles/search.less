@@ -1,19 +1,96 @@
 @import 'bootstrap-3.3.4/variables';
 
+@search-help-button-width: 39px;
+@genomes-of-interest-dropdown-width-sm: 240px;
+@genomes-of-interest-dropdown-width-xs: 120px;
+
 ul.search-box-nav {
   margin: 0.6rem 0;
 
-  .input-group-addon {
-    padding: @padding-xs-vertical @padding-small-horizontal;
+  .input-group-btn {
+    //padding: @padding-xs-vertical @padding-small-horizontal;
+    height: @input-height-base;
+    max-height: @input-height-base;
+    min-height: @input-height-base;
   }
 
-  .results-summary strong {
-    color: @gramene-warmgreen;
+  .results-summary {
+    display: inline-block;
+
+    strong {
+      display: inline-block;
+      transition: all 0.15s ease-in-out;
+      color: @gramene-warmgreen;
+    }
+
+    strong.updated-value {
+      transform: scale(1.25);
+      color: @gramene-darkgreen;
+    }
   }
 
-  .suggestions {
-    position: absolute;
-    z-index: 5;
+  #genomes-of-interest-dropdown {
+    width: @genomes-of-interest-dropdown-width-sm;
+  }
+
+  #genomes-of-interest-dropdown + .dropdown-menu {
+    width: 100%;
+  }
+
+  @media (max-width: @screen-xs-min) {
+    @_border-width: 1px;
+    @_vertical_padding: 2px;
+    @_count-height: (@input-height-base - 2 * @_border-width - 2 * @_vertical_padding) / 2;
+    @_count-font-size: @_count-height * 1/1.4;
+
+    .caret {
+      margin-bottom: @padding-base-vertical;
+    }
+
+    #genomes-of-interest-dropdown {
+      width: @genomes-of-interest-dropdown-width-xs;
+      border-width: @_border-width;
+      max-height: @input-height-base;
+
+      padding-top: @_vertical_padding;
+      padding-bottom: @_vertical_padding;
+    }
+
+    #genomes-of-interest-dropdown + .dropdown-menu {
+      left: inherit;
+      right: 0;
+      width: auto;
+    }
+
+    .results-summary {
+      .gene-count, .genomes-count {
+        font-size: @_count-font-size;
+        height: @_count-height;
+        display: block;
+      }
+      .join {
+        display: none;
+      }
+    }
+
+    .results-summary + span {
+      line-height: 1.0;
+      font-size: 2 * @_count-height;
+    }
+  }
+
+  .search-help-button {
+    width: @search-help-button-width;
+
+    .glyphicon {
+      top: 2px;
+    }
+  }
+
+  .search-help-popover {
+    padding: @padding-base-horizontal;
+    white-space: normal;
+    top: @input-height-base;
   }
 
   @media only screen {
@@ -25,22 +102,46 @@ ul.search-box-nav {
       width: calc(~'100% - @{grid-gutter-width}');
     }
 
+    .search-help-popover {
+      width: calc(~'100vw - @{grid-gutter-width}');
+      left: calc(~'@{genomes-of-interest-dropdown-width-xs} + @{search-help-button-width} + @{grid-gutter-width} - 100vw');
+    }
+
+    @media (min-width: @screen-xs-min) {
+      .search-help-popover {
+        left: calc(~'@{genomes-of-interest-dropdown-width-sm} + @{search-help-button-width} + @{grid-gutter-width} - 100vw');
+      }
+    }
+
     @media (min-width: @screen-sm-min) {
       width: calc(~'100% - (@{logo-width} + @{padding-base-horizontal})');
-      padding-right: @grid-gutter-width;
+      @panel-width: calc(~'@{container-sm} - (@{logo-width} + @{padding-base-horizontal} + @{grid-gutter-width})');
 
-      .suggestions {
-        width: calc(~'@{container-sm} - (@{logo-width} + @{padding-base-horizontal} + @{grid-gutter-width} - 2px)');
+      .suggestions, .search-help-popover {
+        width: @panel-width;
+      }
+      .search-help-popover {
+        left: calc(~'@{genomes-of-interest-dropdown-width-sm} + @{search-help-button-width} + @{logo-width} + @{padding-base-horizontal} + @{grid-gutter-width} - @{container-sm}');
       }
     }
     @media (min-width: @screen-md-min) {
-      .suggestions {
-        width: calc(~'@{container-md} - (@{logo-width} + @{padding-base-horizontal} + @{grid-gutter-width} - 2px)');
+      @panel-width: calc(~'@{container-md} - (@{logo-width} + @{padding-base-horizontal} + @{grid-gutter-width})');
+
+      .suggestions, .search-help-popover {
+        width: @panel-width;
+      }
+      .search-help-popover {
+        left: calc(~'@{genomes-of-interest-dropdown-width-sm} + @{search-help-button-width} + @{logo-width} + @{padding-base-horizontal} + @{grid-gutter-width} - @{container-md}');
       }
     }
     @media (min-width: @screen-lg-min) {
-      .suggestions {
-        width: calc(~'@{container-lg} - (@{logo-width} + @{padding-base-horizontal} + @{grid-gutter-width} - 2px)');
+      @panel-width: calc(~'@{container-lg} - (@{logo-width} + @{padding-base-horizontal} + @{grid-gutter-width})');
+
+      .suggestions, .search-help-popover {
+        width: @panel-width;
+      }
+      .search-help-popover {
+        left: calc(~'@{genomes-of-interest-dropdown-width-sm} + @{search-help-button-width} + @{logo-width} + @{padding-base-horizontal} + @{grid-gutter-width} - @{container-lg}');
       }
     }
   }
@@ -70,5 +171,16 @@ ul.search-box-nav {
 
   .search-filter:not(:last-child) {
     margin-right: @padding-xs-horizontal;
+  }
+
+  #search-box {
+    transition: all 0.15s ease-in-out;
+  }
+
+  #search-box.highlight {
+    transform: scale(1.04, 1.08);
+    background-color: @gramene-yellow;
+    //border-width: 3px;
+    //padding: calc(@padding-base-vertical - 2px) calc(@padding-base-horizontal - 2px);
   }
 }

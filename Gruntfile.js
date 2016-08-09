@@ -30,6 +30,9 @@ module.exports = function (grunt) {
     exec: {
       generateStaticApp: {
         cmd: 'node scripts/babel.js'
+      },
+      blogFeed: {
+        cmd: 'node scripts/getBlogFeed.js'
       }
     },
 
@@ -184,11 +187,13 @@ module.exports = function (grunt) {
       var template = _.template(grunt.file.read('./static/index.template.html'));
       var content = grunt.file.read('./static/app.html.fragment');
       var loadingMessage = grunt.file.read('./static/loading-message.html.fragment');
+      var hideIntro = grunt.file.read('./static/hide-intro.html.fragment');
 
       var props = {
         footer: footer,
         content: content,
-        loadingMessage: loadingMessage
+        loadingMessage: loadingMessage,
+        hideIntro: hideIntro
       };
 
       return template(props);
@@ -196,7 +201,12 @@ module.exports = function (grunt) {
 
     grunt.file.write('build/index.html', index);
   });
-  grunt.registerTask('generateStaticFiles', ['copy:assets', 'copy:icons', 'exec:generateStaticApp', 'packageIndexHtml']);
+  
+  grunt.registerTask('currentNews', 'Get the latest news from RSS', function() {
+    
+  });
+  
+  grunt.registerTask('generateStaticFiles', ['exec:blogFeed', 'copy:assets', 'copy:icons', 'exec:generateStaticApp', 'packageIndexHtml']);
   grunt.registerTask('test', ['jasmine_node']);
   grunt.registerTask('default', ['env:dev', 'generateStaticFiles', 'less:dev', 'browserify:dev', 'watch']);
   grunt.registerTask('package', ['env:prod', 'generateStaticFiles', 'less:production', 'browserify:production', 'test']);
