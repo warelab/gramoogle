@@ -1,6 +1,5 @@
 import React from "react";
 import WelcomeStore from "../../stores/welcomeStore";
-import WelcomeNavbar from "./Navbar.jsx";
 import Intro from "./Intro.jsx";
 import Posts from "./Posts.jsx";
 import GrameneTools from "./GrameneTools.jsx";
@@ -52,7 +51,6 @@ export default class Welcome extends React.Component {
               </Col>
             </Row>
           </Grid>
-          <WelcomeNavbar />
         </div>
     );
   }
