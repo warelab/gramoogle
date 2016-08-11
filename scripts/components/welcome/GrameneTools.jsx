@@ -34,11 +34,11 @@ const GrameneTools = () =>
                      link={{onClick: focusSearch, href: 'javascript:void(0)'}}
                      imgSrc="assets/images/gramene_leaves.svg"/>
         <GrameneTool title="Genome Browser"
-                     description="Thirty-nine genomes, with annotations, variation and comparative tools"
+                     description="Browse genomes, with annotations, variation and comparative tools"
                      link={{href: "http://ensembl.gramene.org/genome_browser/index.html"}}
                      imgSrc="assets/images/welcome/genomes.png"/>
         <GrameneTool title="Plant Reactome"
-                     description="Browse metabolic & regulatory pathways"
+                     description="Browse and analyze metabolic and regulatory pathways"
                      link={{href: "http://plantreactome.gramene.org/"}}
                      imgSrc="assets/images/welcome/pathways.png"/>
         <GrameneTool title="Plant Expression ATLAS"
@@ -49,8 +49,8 @@ const GrameneTools = () =>
                      description="Query our genomes with a DNA or protein sequence"
                      link={{href: "http://ensembl.gramene.org/Tools/Blast?db=core"}}
                      imgSrc="assets/images/welcome/BLAST.png"/>
-        <GrameneTool title="BioMart"
-                     description="An advanced query interface"
+        <GrameneTool title="Gramene Mart"
+                     description="An advanced query interface powered by BioMart"
                      link={{href: "http://www.gramene.org/biomart/martview"}}
                      imgSrc="assets/images/welcome/mart.png"/>
         <GrameneTool title="Outreach and Training"
