@@ -190,24 +190,18 @@ module.exports = function (grunt) {
       var content = grunt.file.read('./static/app.html.fragment');
       var loadingMessage = grunt.file.read('./static/loading-message.html.fragment');
       var hideIntro = grunt.file.read('./static/hide-intro.html.fragment');
-      var resetLocalStorage = grunt.file.read('./static/reset-local-storage.html.fragment');
 
       var props = {
         footer: footer,
         content: content,
         loadingMessage: loadingMessage,
-        hideIntro: hideIntro,
-        resetLocalStorage: resetLocalStorage
+        hideIntro: hideIntro
       };
 
       return template(props);
     })();
 
     grunt.file.write('build/index.html', index);
-  });
-  
-  grunt.registerTask('currentNews', 'Get the latest news from RSS', function() {
-    
   });
   
   grunt.registerTask('generateStaticFiles', ['exec:blogFeed', 'copy:assets', 'copy:icons', 'exec:generateStaticApp', 'packageIndexHtml']);

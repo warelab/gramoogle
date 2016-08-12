@@ -1,12 +1,9 @@
-import queryString from 'query-string';
+import _ from "lodash";
 
 export default function getQueryStringFromURLParams() {
-  if(global.location) {
-    const params = queryString.parse(global.location.search);
-    const query = params.query || params.q;
-    if(query) {
-      return query;
-    }
+  const params = _.get(global.gramene, 'searchParams');
+  if (params) {
+    return params.query || params.q || '';
   }
   return '';
 }

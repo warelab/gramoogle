@@ -58,9 +58,40 @@
             </div>
         </div>
     </div>
-    <script>
-        window.gramene = {
-            defaultServer: "<%= defaultServer %>"
-        };
-    </script>
 </div>
+<script>
+    function clearLocalStorage() {
+        localStorage.clear();
+        window.location.href = window.location.protocol + "//" + window.location.host + window.location.pathname;
+        window.location.reload();
+    }
+
+    // get all search params into an object that we will store globally
+    // adapted from http://stackoverflow.com/a/1404074
+    var searchParams = (function() {
+        var str = window.location.search;
+        var objURL = {};
+
+        str.replace(
+                new RegExp( "([^?=&]+)(=([^&]*))?", "g" ),
+                function( $0, $1, $2, $3 ){
+                    objURL[ $1 ] = $3;
+                }
+        );
+        return objURL;
+    })();
+
+    window.gramene = {
+        defaultServer: searchParams.server || "<%= defaultServer %>",
+        searchParams: searchParams
+    };
+
+    // update the URL so that the search component only specifies the data server
+    if (history.pushState) {
+        var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+        if(searchParams.server) {
+            newurl += '?server=' + searchParams.server;
+        }
+        window.history.pushState({path:newurl},'',newurl);
+    }
+</script>
