@@ -56,7 +56,7 @@ const GrameneTools = () =>
         <GrameneTool title="Outreach and Training"
                      description="Educational resources and webinars"
                      link={{href: "http://gramene.org/outreach"}}
-                     imgSrc="assets/images/welcome/mart.png"/>
+                     imgSrc="assets/images/welcome/noun_553934.png"/>
         <GrameneTool title="Bulk Downloads"
                      description="FTP download of our data"
                      link={{href: "http://gramene.org/ftp-download"}}
