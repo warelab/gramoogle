@@ -1,7 +1,8 @@
 <nav class="submenu navbar navbar-default">
     <div class="container">
         <ul class="nav navbar-nav">
-            <li><a href="//gramene.org/release-notes-<%= grameneRelease %>">Release Notes (v<%= grameneRelease %>)</a></li>
+            <li><a href="//gramene.org/release-notes-<%= grameneRelease %>">Release Notes (v<%= grameneRelease %>)</a>
+            </li>
             <li><a href="//gramene.org/contact">Contact</a></li>
             <li><a href="//gramene.org/about-gramene">About</a></li>
             <li><a href="//gramene.org/cite">Cite</a></li>
@@ -25,8 +26,8 @@
                 </p>
             </div>
             <div class="col-md-4 col-sm-12">
-                <div class="well">
-                    Build Info
+                <div class="tech-info well">
+                    <h5>Application Info</h5>
                     <ul class="buildInfo">
                         <li>Data Release <%= grameneRelease %></li>
                         <li>Gramene Search UI
@@ -48,6 +49,11 @@
                         </li>
                         <li>Built on <%= date %></li>
                     </ul>
+                    <h5>Actions</h5>
+                    <button class="btn btn-xs btn-danger"
+                            onclick="clearLocalStorage()">
+                        Reset Gramene Search
+                    </button>
                 </div>
             </div>
         </div>

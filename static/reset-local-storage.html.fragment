@@ -1,0 +1,7 @@
+<script>
+    function clearLocalStorage() {
+        window.location.hash = '';
+        localStorage.clear();
+        window.location.reload();
+    }
+</script>
