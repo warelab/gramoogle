@@ -1,7 +1,6 @@
 <script>
     function clearLocalStorage() {
-        window.location.hash = '';
         localStorage.clear();
-        window.location.reload();
+        window.location.href = window.location.protocol + "//" + window.location.host + window.location.pathname;
     }
 </script>
