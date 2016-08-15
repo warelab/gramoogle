@@ -6,12 +6,12 @@ import WelcomeActions from "../../actions/welcomeActions";
 const GrameneTool = ({title, description, imgSrc, link}) =>
     <ListGroupItem {...link} className="gramene-tool col-md-6">
       <Media>
-        <Media.Left>
-          <img width="64" src={imgSrc}/>
+        <Media.Left className="media-middle">
+          <img src={imgSrc}/>
         </Media.Left>
-        <Media.Body>
+        <Media.Body className="media-middle gramene-tool-text">
           <Media.Heading>{title}</Media.Heading>
-          <p>{description}</p>
+          <p className="gramene-tool-desc">{description}</p>
         </Media.Body>
       </Media>
     </ListGroupItem>;
@@ -52,7 +52,7 @@ const GrameneTools = () =>
         <GrameneTool title="Gramene Mart"
                      description="An advanced query interface powered by BioMart"
                      link={{href: "http://www.gramene.org/biomart/martview"}}
-                     imgSrc="assets/images/welcome/mart.png"/>
+                     imgSrc="assets/images/welcome/Biomart250.png"/>
         <GrameneTool title="Outreach and Training"
                      description="Educational resources and webinars"
                      link={{href: "http://gramene.org/outreach"}}
