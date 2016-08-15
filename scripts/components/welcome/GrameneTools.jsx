@@ -60,7 +60,7 @@ const GrameneTools = () =>
         <GrameneTool title="Bulk Downloads"
                      description="FTP download of our data"
                      link={{href: "http://gramene.org/ftp-download"}}
-                     imgSrc="assets/images/welcome/download.jpg"/>
+                     imgSrc="assets/images/welcome/download.png"/>
         <GrameneTool title="Archive"
                      description="Legacy tools and data (markers, Cyc pathways, etc)"
                      link={{href: "http://gramene.org/archive"}}
