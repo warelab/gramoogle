@@ -28,7 +28,6 @@ function focusSearch() {
 
 const GrameneTools = () =>
     <div className="tools-wrapper">
-      <h2>Gramene Portals</h2>
       <ListGroup className="row">
         <GrameneTool title="Gramene Search"
                      description="Find and explore all data in Gramene database"
