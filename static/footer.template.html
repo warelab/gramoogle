@@ -1,10 +1,28 @@
 <nav class="submenu navbar navbar-default">
     <div class="container">
-        <ul class="nav navbar-nav">
-            <li><a href="//gramene.org/release-notes-<%= grameneRelease %>">Release Notes (v<%= grameneRelease %>)</a></li>
+        <ul class="nav navbar-nav navbar-left">
+            <li><a href="//gramene.org/release-notes-<%= grameneRelease %>">Release Notes (v<%= grameneRelease %>)</a>
+            </li>
             <li><a href="//gramene.org/contact">Contact</a></li>
             <li><a href="//gramene.org/about-gramene">About</a></li>
             <li><a href="//gramene.org/cite">Cite</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right social">
+            <li>
+                <div class="fb-like"
+                     data-href="https://facebook.com/Gramene"
+                     data-layout="button_count"
+                     data-action="like"
+                     data-show-faces="false">
+                </div>
+            </li>
+            <li>
+                <a href="https://twitter.com/GrameneDatabase"
+                   class="twitter-follow-button"
+                   data-show-count="true">
+                    Follow @Gramene
+                </a>
+            </li>
         </ul>
     </div>
 </nav>
