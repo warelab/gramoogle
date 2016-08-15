@@ -41,8 +41,7 @@ export default class Search extends React.Component {
     QueryActions.removeQueryString.listen(this.clearInputString);
   }
 
-  handleQueryChange(e) {
-    const queryString = e.target.value;
+  handleQueryChange(queryString) {
     const suggestionsVisible = !!queryString.length;
 
     QueryActions.setQueryString(queryString);

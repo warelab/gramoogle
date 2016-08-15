@@ -204,10 +204,6 @@ module.exports = function (grunt) {
     grunt.file.write('build/index.html', index);
   });
   
-  grunt.registerTask('currentNews', 'Get the latest news from RSS', function() {
-    
-  });
-  
   grunt.registerTask('generateStaticFiles', ['exec:blogFeed', 'copy:assets', 'copy:icons', 'exec:generateStaticApp', 'packageIndexHtml']);
   grunt.registerTask('test', ['jasmine_node']);
   grunt.registerTask('default', ['env:dev', 'generateStaticFiles', 'less:dev', 'browserify:dev', 'watch']);
