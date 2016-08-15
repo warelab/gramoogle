@@ -1,28 +1,29 @@
 import React from "react";
-import {ListGroup, ListGroupItem, Media} from "react-bootstrap";
-
+import {ListGroup, ListGroupItem, Media, Glyphicon} from "react-bootstrap";
 import WelcomeActions from "../../actions/welcomeActions";
 
-const GrameneTool = ({title, description, imgSrc, link}) =>
-    <ListGroupItem {...link} className="gramene-tool col-md-6">
-      <Media>
-        <Media.Left className="media-middle">
-          <img src={imgSrc}/>
-        </Media.Left>
-        <Media.Body className="media-middle gramene-tool-text">
-          <Media.Heading>{title}</Media.Heading>
-          <p className="gramene-tool-desc">{description}</p>
-        </Media.Body>
-      </Media>
-    </ListGroupItem>;
+const GrameneTool = ({title, description, imgSrc, link, isExternal}) => {
+  let external;
+  if(isExternal) {
+    external = <small title="This link opens a page from an external site"> <Glyphicon glyph="new-window" /></small>;
+  }
+  return (
+      <ListGroupItem {...link} className="gramene-tool col-md-6">
+        <Media>
+          <Media.Left className="media-middle">
+            <img src={imgSrc}/>
+          </Media.Left>
+          <Media.Body className="media-middle gramene-tool-text">
+            <Media.Heading>{title}{external}</Media.Heading>
+            <p className="gramene-tool-desc">{description}</p>
+          </Media.Body>
+        </Media>
+      </ListGroupItem>
+  );
+};
 
-function focusSearch(e) {
+function focusSearch() {
   WelcomeActions.flashSearchBox(250);
-  // const searchBox = document.querySelector('#search-box');
-  // if (searchBox) {
-  //   searchBox.focus();
-  //   searchBox.click();
-  // }
 }
 
 const GrameneTools = () =>
@@ -44,7 +45,8 @@ const GrameneTools = () =>
         <GrameneTool title="Plant Expression ATLAS"
                      description="Browse plant expression results at EBI ATLAS"
                      link={{href: "https://www.ebi.ac.uk/gxa/plant/experiments"}}
-                     imgSrc="assets/images/welcome/ExpressionAtlas.png"/>
+                     imgSrc="assets/images/welcome/ExpressionAtlas.png"
+                     isExternal={true} />
         <GrameneTool title="BLAST"
                      description="Query our genomes with a DNA or protein sequence"
                      link={{href: "http://ensembl.gramene.org/Tools/Blast?db=core"}}
