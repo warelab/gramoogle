@@ -7,7 +7,7 @@ const GrameneTool = ({title, description, imgSrc, link}) =>
     <ListGroupItem {...link} className="gramene-tool col-md-6">
       <Media>
         <Media.Left>
-          <img width="42" src={imgSrc}/>
+          <img width="64" src={imgSrc}/>
         </Media.Left>
         <Media.Body>
           <Media.Heading>{title}</Media.Heading>
