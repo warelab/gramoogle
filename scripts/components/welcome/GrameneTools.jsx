@@ -4,7 +4,7 @@ import {ListGroup, ListGroupItem, Media} from "react-bootstrap";
 import WelcomeActions from "../../actions/welcomeActions";
 
 const GrameneTool = ({title, description, imgSrc, link}) =>
-    <ListGroupItem {...link} className="gramene-tool">
+    <ListGroupItem {...link} className="gramene-tool col-md-6">
       <Media>
         <Media.Left>
           <img width="42" src={imgSrc}/>
@@ -28,7 +28,7 @@ function focusSearch(e) {
 const GrameneTools = () =>
     <div className="tools-wrapper">
       <h2>Gramene Portals</h2>
-      <ListGroup>
+      <ListGroup className="row">
         <GrameneTool title="Gramene Search"
                      description="Find and explore all data in Gramene database"
                      link={{onClick: focusSearch, href: 'javascript:void(0)'}}
