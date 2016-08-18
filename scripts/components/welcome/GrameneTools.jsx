@@ -28,14 +28,14 @@ function focusSearch() {
 
 const GrameneTools = () =>
     <div className="tools-wrapper">
-      <h2>Gramene Portals</h2>
+      <h3>Gramene Portals</h3>
       <ListGroup className="row">
         <GrameneTool title="Gramene Search"
                      description="Find and explore all data in Gramene database"
                      link={{onClick: focusSearch, href: 'javascript:void(0)'}}
                      imgSrc="assets/images/gramene_leaves.svg"/>
         <GrameneTool title="Genome Browser"
-                     description="Browse genomes, with annotations, variation and comparative tools"
+                     description="Browse genomes with annotations, variation and comparative tools"
                      link={{href: "http://ensembl.gramene.org/genome_browser/index.html"}}
                      imgSrc="assets/images/welcome/genomes.png"/>
         <GrameneTool title="Plant Reactome"
