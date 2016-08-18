@@ -43,7 +43,7 @@ export default class Posts extends React.Component {
     }
 
     return (
-      <div>
+      <div className="posts-wrapper">
         <h3>Latest News</h3>
         <ul className="posts list-unstyled">
           {this.props.posts.map(

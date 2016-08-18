@@ -4,7 +4,8 @@ var _ = require('lodash');
 var moment = require('moment');
 var fs = require('fs');
 
-var webserviceVersion = 'v' + require('./package.json').gramene.dbRelease;
+var grameneRelease = require('./package.json').gramene.dbRelease;
+var webserviceVersion = 'v' + grameneRelease;
 
 module.exports = function (grunt) {
   require('jit-grunt')(grunt);
@@ -174,7 +175,8 @@ module.exports = function (grunt) {
         tag: process.env.TRAVIS_TAG,
         user: process.env.USER,
         date: moment().format('MMMM Do YYYY [at] h:mm:ss a'),
-        isDev: process.env.isDev
+        isDev: process.env.isDev,
+        grameneRelease: grameneRelease
       };
 
       props.defaultServer = defaultServer();
@@ -200,10 +202,6 @@ module.exports = function (grunt) {
     })();
 
     grunt.file.write('build/index.html', index);
-  });
-  
-  grunt.registerTask('currentNews', 'Get the latest news from RSS', function() {
-    
   });
   
   grunt.registerTask('generateStaticFiles', ['exec:blogFeed', 'copy:assets', 'copy:icons', 'exec:generateStaticApp', 'packageIndexHtml']);

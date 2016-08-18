@@ -1,19 +1,22 @@
 import React from "react";
 import _ from "lodash";
-import {InputGroup, FormControl, Button} from "react-bootstrap";
+import {InputGroup, FormControl} from "react-bootstrap";
 import Summary from "./summary.jsx";
 import TaxonomyMenu from "../GoI/TaxonomyMenu.jsx";
 import HelpButton from "./HelpButton.jsx";
 import WelcomeActions from "../../actions/welcomeActions";
+import getQueryStringFromURLParams from "../../search/getQueryStringFromURLParams";
 
 export default class SearchBox extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
+      queryString: getQueryStringFromURLParams(),
       emphasizeInput: false
     };
-    _.bindAll(this, ['flashStart', 'flashEnd']);
+
+    _.bindAll(this, ['flashStart', 'flashEnd', 'handleQueryStringChange']);
   }
 
   componentWillMount() {
@@ -34,8 +37,14 @@ export default class SearchBox extends React.Component {
     return document.getElementById('search-box');
   }
 
+  handleQueryStringChange(e) {
+    const queryString = e.target.value;
+    this.setState({queryString});
+    this.props.onQueryChange(queryString);
+  }
+
   clearSearchString() {
-    this.getInputNode().value = '';
+    this.setState({queryString: ''});
   }
 
   focus() {
@@ -49,7 +58,7 @@ export default class SearchBox extends React.Component {
   componentDidMount() {
     const val = this.value();
     if (val !== '') {
-      this.props.onQueryChange({target: {value: val}});
+      this.props.onQueryChange(val);
     }
     this.focus();
   }
@@ -64,14 +73,15 @@ export default class SearchBox extends React.Component {
           <FormControl className={this.className()}
                        type="search"
                        id="search-box"
+                       value={this.state.queryString}
                        tabIndex="1"
                        placeholder="Search for genes, species, pathways, ontology terms, domains…"
                        autoComplete="off"
                        standalone={true}
-                       onChange={this.props.onQueryChange}/>
+                       onChange={this.handleQueryStringChange}/>
           <InputGroup.Button>
             <HelpButton toggleHelp={this.props.toggleHelp}
-                        showHelp={this.props.showHelp} />
+                        showHelp={this.props.showHelp}/>
             <TaxonomyMenu toggleGenomesOfInterest={this.props.toggleGenomesOfInterest}
                           showGenomesOfInterest={this.props.showGenomesOfInterest}>
               <Summary results={this.props.results}/>

@@ -1,7 +1,37 @@
- <div class="footer">
+<nav class="submenu navbar navbar-default">
+    <div class="container">
+        <ul class="nav navbar-nav">
+            <li><a href="//gramene.org/release-notes-<%= grameneRelease %>">
+                Release Notes (v<%= grameneRelease %>)
+            </a></li>
+            <li><a href="//gramene.org/contact">Contact</a></li>
+            <li><a href="//gramene.org/about-gramene">About</a></li>
+            <li><a href="//gramene.org/cite">Cite</a></li>
+            <li><a href="//tools.gramene.org/feedback">Feedback</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right social">
+            <li>
+                <iframe src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2FGramene&amp;layout=button_count&amp;show_faces=false&amp;width=80&amp;font=arial&amp;height=20&amp;action=like&amp;colorscheme=light&amp;locale=en_US&amp;send=false&amp;share=false"
+                        scrolling="no"
+                        frameborder="0"
+                        style="border: none; overflow: hidden; width: 80px; height: 20px;"
+                        allowTransparency="true">
+                </iframe>
+            </li>
+            <li>
+                <a href="https://twitter.com/GrameneDatabase"
+                   class="twitter-follow-button"
+                   data-show-count="true">
+                    Follow @Gramene
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="footer">
     <div class="container">
         <div class="row">
-            <div class="col-md-8 col-sm-12">
+            <div class="col-sm-8 col-xs-12">
                 <p>Gramene is a collaborative effort among
                     <a href="http://www.cshl.edu">Cold Spring Harbor Laboratory</a>,
                     <a href="http://www.cgrb.oregonstate.edu">Oregon State University</a>, and
@@ -14,34 +44,73 @@
                     <a href="http://www.ars.usda.gov">USDA ARS</a>.
                 </p>
             </div>
-            <div class="col-md-4 col-sm-12">
-                <div class="well">
-                    Build Info
+            <div class="col-sm-4 col-xs-12">
+                <div class="tech-info well">
+                    <h5>Application Info</h5>
                     <ul class="buildInfo">
+                        <li>Data Release <%= grameneRelease %></li>
                         <li>Gramene Search UI
                             <% if(tag) { %>
                             <a title="Release available on github"
-                               href="https://github.com/warelab/gramoogle/releases/tag/<%= tag %>">Release <%= tag %></a>
+                               href="https://github.com/warelab/gramoogle/releases/tag/<%= tag %>">Release <%= tag
+                                %></a>
                             <% }
 
-                              if (jobNumber) { %>
+                            if (jobNumber) { %>
                             <a title="Built by Travis-CI"
-                               href="https://travis-ci.org/warelab/gramoogle/jobs/<%= jobId %>">Build #<%= jobNumber %></a>
+                               href="https://travis-ci.org/warelab/gramoogle/jobs/<%= jobId %>">Build #<%= jobNumber
+                                %></a>
                             <% } else if(isDev) { %>
                             LOCAL DEVELOPMENT BUILD
                             <% } else { %>
                             LOCAL PACKAGED BUILD
                             <% } %>
                         </li>
-                      <li>Built on <%= date %></li>
+                        <li>Built on <%= date %></li>
                     </ul>
+                    <h5>Actions</h5>
+                    <button class="btn btn-xs btn-danger"
+                            onclick="clearLocalStorage()">
+                        Reset Gramene Search
+                    </button>
                 </div>
             </div>
         </div>
     </div>
-     <script>
-         window.gramene = {
-             defaultServer: "<%= defaultServer %>"
-         };
-     </script>
 </div>
+<script>
+    function clearLocalStorage() {
+        localStorage.clear();
+        window.location.href = window.location.protocol + "//" + window.location.host + window.location.pathname;
+        window.location.reload();
+    }
+
+    // get all search params into an object that we will store globally
+    // adapted from http://stackoverflow.com/a/1404074
+    var searchParams = (function() {
+        var str = window.location.search;
+        var objURL = {};
+
+        str.replace(
+                new RegExp( "([^?=&]+)(=([^&]*))?", "g" ),
+                function( $0, $1, $2, $3 ){
+                    objURL[ $1 ] = $3;
+                }
+        );
+        return objURL;
+    })();
+
+    window.gramene = {
+        defaultServer: searchParams.server || "<%= defaultServer %>",
+        searchParams: searchParams
+    };
+
+    // update the URL so that the search component only specifies the data server
+    if (history.pushState) {
+        var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+        if(searchParams.server) {
+            newurl += '?server=' + searchParams.server;
+        }
+        window.history.pushState({path:newurl},'',newurl);
+    }
+</script>

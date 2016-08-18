@@ -9,8 +9,9 @@
     (function () {
         var searchBox = document.querySelector('#search-box');
         var msgEl = document.querySelector('#loading-message');
+        var q = gramene.searchParams['query'] || gramene.searchParams['q'] || '';
 
-        function showLoadingMessage() {
+        var showLoadingMessage = function() {
             var parentNode;
             if(searchBox.value) {
                 parentNode = searchBox.parentNode.parentNode;
@@ -19,11 +20,17 @@
                     parentNode.appendChild(msgEl);
                 }
             }
-        }
+        };
 
-        function hideLoadingMessage() {
+        var hideLoadingMessage = function() {
             msgEl.parentNode.removeChild(msgEl);
             searchBox.removeEventListener('input', showLoadingMessage);
+        };
+
+        if(q) {
+            searchBox.value = q;
+            searchBox.disabled = true;
+            showLoadingMessage();
         }
 
         searchBox.addEventListener('input', showLoadingMessage);

@@ -4,7 +4,7 @@
   "description": "Gramene search interface",
   "main": "index.js",
   "gramene": {
-    "dbRelease": 50
+    "dbRelease": 51
   },
   "scripts": {
     "build": "grunt package",
@@ -23,18 +23,20 @@
   "homepage": "https://github.com/warelab/gramoogle",
   "dependencies": {
     "axios": "^0.9.1",
+    "gramene-bins-client": "^2.2.9",
     "gramene-client-cache": "1.0.0",
     "gramene-dalliance": "^0.13.2",
     "gramene-dbxrefs": "3.0.1",
     "gramene-genetree-vis": "^3.0.7",
     "gramene-search-client": "^3.0.4",
     "gramene-search-vis": "^4.1.1",
-    "gramene-taxonomy-with-genomes": "^3.0.4",
+    "gramene-taxonomy-with-genomes": "^3.0.8",
     "gramene-trees-client": "^2.4.6",
     "lodash": "^4.3.0",
     "normalize.less": "^1.0.0",
     "numeral": "^1.5.3",
     "q": "^1.2.0",
+    "query-string": "^4.2.2",
     "react": "^15.0.1",
     "react-bootstrap": "^0.30.0",
     "react-dom": "^15.0.1",
