@@ -35,7 +35,13 @@
   }
 }
 
-@gramene-tool-height: 128px;
+.welcome {
+  /* disable subpixel antialiasing so transform animation looks OK in Safari */
+  /* http://stackoverflow.com/a/12820319 */
+  -webkit-transform: translateZ(0px);
+}
+
+@gramene-tool-height: 96px;
 @gramene-xs-tool-height: 64px;
 
 .tools-wrapper {
@@ -45,7 +51,7 @@
   }
 
   .gramene-tool:hover {
-    transform: scale(1.02);
+    transform: scale(1.02) translate3d(0, 0, 0);
   }
 
   .gramene-tool-desc {
