@@ -13,8 +13,9 @@ This module is likely to be replaced if/when we refactor the codebase to use Rea
 
 import _ from 'lodash';
 
-let expectedSerializedState = '';
-const loc = global.location || {hash: expectedSerializedState};
+let expectedSerializedHashState = '';
+let expectedSerializedLocalStorageState = '';
+const loc = global.location || {hash: expectedSerializedHashState};
 const localStore = global.localStorage || {};
 
 export function initUrlHashPersistence(callback) {
@@ -41,8 +42,8 @@ function handleHashChangeFactory(callback) {
 }
 
 function hashDidChange() {
-  var result = ('#' + expectedSerializedState) !== loc.hash;
-  console.info("Hash changed? ", result, expectedSerializedState, loc.hash);
+  var result = ('#' + expectedSerializedHashState) !== loc.hash;
+  console.info("Hash changed? ", result, expectedSerializedHashState, loc.hash);
   return result;
 }
 
@@ -52,8 +53,23 @@ function stateFromHash() {
 }
 
 export function persistState(state) {
-  expectedSerializedState = _.isEmpty(state) ? '' : '#' + encodeURI(JSON.stringify(state));
-  if(loc.hash !== expectedSerializedState) {
-    loc.hash = localStore.persist = expectedSerializedState;
+  persistToHash(state);
+  persistToLocalStorage(state);
+}
+
+function persistToHash(state) {
+  expectedSerializedHashState = _.isEmpty(state) ? '' : '#' + encodeURI(JSON.stringify(state));
+
+  if(loc.hash !== expectedSerializedHashState) {
+    loc.hash = expectedSerializedHashState;
+  }
+}
+
+function persistToLocalStorage(state) {
+  const genomes = _.pick(state, 'taxa');
+
+  expectedSerializedLocalStorageState = _.isEmpty(genomes) ? '' : '#' + JSON.stringify(genomes);
+  if(localStore.persist !== expectedSerializedLocalStorageState) {
+    localStore.persist = expectedSerializedLocalStorageState;
   }
 }

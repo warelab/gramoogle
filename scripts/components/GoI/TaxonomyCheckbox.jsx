@@ -1,6 +1,7 @@
 import React from 'react';
 import GoIActions from "../../actions/genomesOfInterestActions";
 import {Checkbox, Badge} from "react-bootstrap";
+import _ from "lodash";
 
 export default class TaxonomyCheckbox extends React.Component {
   constructor(props) {

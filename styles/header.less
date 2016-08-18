@@ -1,6 +1,7 @@
 @import 'colors';
 
 @logo-width: 14rem;
+@logo-height-px: 53px;
 
 .header {
   background-color: @gramene-lightgreen;
@@ -16,7 +17,7 @@
 
     .logo {
       width: @logo-width;
-      height: 100%;
+      height: @logo-height-px;
       // now that we inline the compiled CSS into the page, the URL path
       // is relative to the page, not the former build/style.css. So the path
       // no longer starts with a `../` and thus is flagged by Webstorm as

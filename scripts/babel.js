@@ -14,6 +14,6 @@ global.navigator = {userAgent: 'node'};
 var React = require('react');
 var ReactDOMServer = require('react-dom/server');
 
-var App = React.createFactory(require('./components/appStatic.jsx'));
+var App = React.createFactory(require('./components/appStatic.jsx').default);
 
-fs.writeFileSync('static/app.html.fragment', ReactDOMServer.renderToString(new App()));
+fs.writeFileSync('static/app.html.fragment', ReactDOMServer.renderToString(new App({context: 'compile'})));

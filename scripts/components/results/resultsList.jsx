@@ -1,79 +1,92 @@
 'use strict';
 
-var React = require('react');
-var Reflux = require('reflux');
-var _ = require('lodash');
-var bs = require('react-bootstrap');
-var resultTypes = require('gramene-search-client').resultTypes;
-var QueryActions = require('../../actions/queryActions');
-var DocActions = require('../../actions/docActions');
-var docStore = require('../../stores/docStore');
-
-var Result = require('./../result/result.jsx');
+import React from "react";
+import _ from "lodash";
+import {resultTypes} from "gramene-search-client";
+import QueryActions from "../../actions/queryActions";
+import docStore from "../../stores/docStore";
+import Result from "./../result/result.jsx";
 
 
-var ResultsList = React.createClass({
-  mixins: [Reflux.connect(docStore,"docs")],
-  getResultType: function() {
+export default class ResultsList extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  getResultType() {
     return resultTypes.get(
-      'list',
-      {rows: 10}
+        'list',
+        {rows: 10}
     );
-  },
-  componentWillMount: function () {
-    QueryActions.setResultType('list', this.getResultType());
-  },
-  componentWillUnmount: function () {
-    QueryActions.removeResultType('list');
-  },
-  moreResults: function() {
-    QueryActions.moreResults(20);
-  },
-  render: function () {
-    var list, markup, more, geneDocs, docs, singleResult;
+  }
 
-    geneDocs = _.get(this.state, 'docs.genes') || {};
-    docs = this.state.docs;
-    list = this.props.results.list;
-    singleResult = list && list.length === 1;
-    if(singleResult) {
-      DocActions.needDocs('genes', list[0].id);
+  componentWillMount() {
+    QueryActions.setResultType('list', this.getResultType());
+
+    this.unsubDocs = docStore.listen(
+        (docs) => this.setState({docs})
+    );
+  }
+
+  componentWillUnmount() {
+    QueryActions.removeResultType('list');
+
+    if (this.unsubDocs) {
+      this.unsubDocs();
     }
-    if(list && list.length) {
-      var searchResults = list.map(function(searchResult) {
+  }
+
+  moreResults() {
+    QueryActions.moreResults(20);
+  }
+
+  render() {
+    const docs = this.state.docs;
+    const geneDocs = _.get(docs, 'genes') || {};
+    const list = this.props.results.list;
+
+    if (list && list.length) {
+      var searchResults = list.map(function (searchResult) {
         return (
-          <Result key={searchResult.id}
-                  searchResult={searchResult}
-                  geneDoc={geneDocs[searchResult.id]}
-                  expandedByDefault={singleResult}
-                  docs={docs} />
+            <Result key={searchResult.id}
+                    searchResult={searchResult}
+                    geneDoc={geneDocs[searchResult.id]}
+                    docs={docs}/>
         );
       });
 
-      if (list.length < this.props.results.metadata.count) {
-        more = (
+      return (
+          <div className="results-list-container">
+            <ol className="results-list">
+                {searchResults}
+            </ol>
+               {this.moreButton()}
+          </div>
+      );
+    }
+    else {
+      return (
+          <p>No results.</p>
+      );
+    }
+  }
+
+  moreButton() {
+    const list = this.props.results.list;
+    const totalResults = this.props.results.metadata.count;
+    if (list.length < totalResults) {
+      return (
           <ul className="more-results">
             <li>
               <a onClick={this.moreResults}>More genes</a>
             </li>
           </ul>
-        );
-      }
-
-      markup = (
-        <div className="results-list-container">
-          <ol className="results-list">
-            {searchResults}
-          </ol>
-          {more}
-        </div>
       );
     }
-    else {
-      markup = (<p>No results.</p>);
-    }
-
-    return markup;
   }
-});
-module.exports = ResultsList;
+}
+
+ResultsList.propTypes = {
+  results: React.PropTypes.object.isRequired,
+};

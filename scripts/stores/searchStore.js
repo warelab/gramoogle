@@ -4,15 +4,15 @@
 
 var Reflux = require('reflux');
 var _ = require('lodash');
-var Q = require('q');
 var QueryActions = require('../actions/queryActions');
+import TaxonomyActions from '../actions/taxonomyActions';
 import GoIActions from "../actions/genomesOfInterestActions";
 import {initUrlHashPersistence, persistState} from "../search/persist";
 import {trimFilters} from "../search/filterUtil";
 var search = require('../search/search');
 
 module.exports = Reflux.createStore({
-  listenables: [QueryActions, GoIActions],
+  listenables: [QueryActions, GoIActions, TaxonomyActions],
 
   init: function () {
     this.state = {
@@ -51,6 +51,11 @@ module.exports = Reflux.createStore({
     initUrlHashPersistence(this.overwriteFilterState);
   },
 
+  // This is a lookup table, so don't perform a search when it is called.
+  getTaxonomyCompleted: function (payload) {
+    _.assign(this, payload);
+  },
+
   getInitialState: function () {
     return this.state;
   },
@@ -62,13 +67,13 @@ module.exports = Reflux.createStore({
     this.search();
   },
 
-  setResultType: function (rtKey:string, params) {
+  setResultType: function (rtKey, params) {
     console.log('setResultType', arguments);
     this.state.query.resultTypes[rtKey] = params;
     this.search();
   },
 
-  removeResultType: function (rtKey:string) {
+  removeResultType: function (rtKey) {
     console.log('removeResultType', arguments);
     delete this.state.query.resultTypes[rtKey];
     this.search();
@@ -146,11 +151,41 @@ module.exports = Reflux.createStore({
 
   searchComplete: function (results) {
     console.log('Got data: ', results);
+    this.addSpeciesNamesToResults(results);
 
     this.persistQueryState();
 
     this.state.results = results;
     this.trigger(this.state);
+  },
+
+  getSpeciesName: function(taxonId) {
+    if(this.taxonIdToSpeciesName) {
+      return this.taxonIdToSpeciesName[taxonId];
+    }
+  },
+
+  addSpeciesNamesToResults: function (results) {
+    if(results.list) {
+      // species name is not present in the results at this time.
+      // let's add it here.
+      const addSpeciesName = (result, taxonPropName) => {
+        if (!result) {
+          throw new Error("Result is null");
+        }
+        const species = this.getSpeciesName(result[taxonPropName]);
+        if (species) {
+          const newPropName = taxonPropName.replace('taxon_id', 'species_name');
+          result[newPropName] = species;
+        }
+      };
+
+      _.forEach(results.list, (result) => {
+        addSpeciesName(result, 'taxon_id');
+        addSpeciesName(result, 'closest_rep_taxon_id');
+        addSpeciesName(result, 'model_rep_taxon_id');
+      })
+    }
   },
 
   persistQueryState: function() {

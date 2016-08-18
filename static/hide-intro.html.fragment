@@ -1,0 +1,10 @@
+<script>
+    (function hideIntro() {
+        var introEl = document.querySelector('div.gramene-intro');
+        var hideIntro = window.localStorage.hideIntro;
+
+        if(introEl && hideIntro) {
+            introEl.parentNode.removeChild(introEl);
+        }
+    })();
+</script>
