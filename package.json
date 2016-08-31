@@ -1,6 +1,6 @@
 {
   "name": "gramoogle",
-  "version": "2.3.2",
+  "version": "2.3.3",
   "description": "Gramene search interface",
   "main": "index.js",
   "gramene": {
