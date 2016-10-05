@@ -19,12 +19,13 @@ export default class Homology extends React.Component {
   }
 
   componentWillMount() {
-    this.unsubscribeFromSearchStore = searchStore.listen((searchState) =>
-      this.setState({
-        genomesOfInterest: searchState.global.taxa,
-        taxonomy: searchState.taxonomy
-      })
-    );
+    this.unsubscribeFromSearchStore = searchStore.listen((searchState) => {
+      if (!_.isEqual(searchState.global.taxa, this.state.genomesOfInterest)) {
+        return this.setState({
+          genomesOfInterest: searchState.global.taxa,
+        })
+      }
+    });
 
     this.orthologs = this.orthologList();
     this.paralogs = this.paralogList();

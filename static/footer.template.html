@@ -111,6 +111,9 @@
         if(searchParams.server) {
             newurl += '?server=' + searchParams.server;
         }
+        if(window.location.hash) {
+            newurl += window.location.hash;
+        }
         window.history.pushState({path:newurl},'',newurl);
     }
 </script>
