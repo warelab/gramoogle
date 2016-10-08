@@ -24,5 +24,3 @@ export default class SearchHelpDropdown extends React.Component {
 SearchHelpDropdown.propTypes = {
   onSelect: React.PropTypes.func.isRequired
 };
-
-export default SearchHelpDropdown;
