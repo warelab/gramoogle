@@ -1,7 +1,8 @@
 import _ from 'lodash';
 
 export function trimFilters(filters) {
-  return _.mapValues(filters, function trimProps(filter) {
-    return _.pick(filter, 'category', 'display_name', 'fq');
-  });
+  return _.mapValues(
+      filters,
+      filter => _.pick(filter, 'category', 'display_name', 'fq', 'exclude')
+  );
 }

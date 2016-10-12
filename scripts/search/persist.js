@@ -43,6 +43,7 @@ function handleHashChangeFactory(callback) {
 
 function hashDidChange() {
   var result = ('#' + expectedSerializedHashState) !== loc.hash;
+  expectedSerializedHashState = expectedSerializedHashState || loc.hash.substr(1);
   console.info("Hash changed? ", result, expectedSerializedHashState, loc.hash);
   return result;
 }

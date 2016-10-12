@@ -1,5 +1,6 @@
 import React from 'react';
 import numeral from 'numeral';
+import _ from "lodash";
 
 import {Table} from 'react-bootstrap';
 
@@ -24,7 +25,7 @@ const Selections = ({selections, taxonomy}) => {
   };
 
   const formatProportion = (prop) => '(' + (_.isFinite(prop) ? numeral(prop).format('0.0%') : undefined) + ')';
-  const name = `${stats.selectedGenes} Genes`;
+
   return (
     <div>
       <Table>

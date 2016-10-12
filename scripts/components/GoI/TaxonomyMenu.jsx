@@ -64,7 +64,7 @@ export default class TaxonomyMenu extends React.Component {
         this.showAllSpecies();
         break;
       default:
-        this.showNamedSpeciesSet(selection);
+        this.showNamedSpeciesSet(selection); // this doesn't happen
     }
   }
 

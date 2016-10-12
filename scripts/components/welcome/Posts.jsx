@@ -59,5 +59,3 @@ export default class Posts extends React.Component {
 Posts.propTypes = {
   posts: React.PropTypes.array.isRequired
 };
-
-export default Posts;

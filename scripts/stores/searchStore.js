@@ -89,6 +89,7 @@ module.exports = Reflux.createStore({
 
   toggleFilter: function (filter) {
     console.log('toggleFilter', arguments);
+    filter = _.clone(filter);
     delete this.state.query.filters[filter.fq];
     if (filter.exclude) {
       filter.exclude = false;
