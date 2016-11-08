@@ -3,6 +3,7 @@
 import Location from './location.jsx';
 import Homology from './homology.jsx';
 import Xrefs from './xrefs.jsx';
+import Atlas from './expression.jsx';
 
 const inventory = [
 
@@ -35,6 +36,12 @@ const inventory = [
     name: 'X-refs',
     capability: 'xrefs',
     reactClass: Xrefs
+  },
+
+  {
+    name: 'Expression Atlas',
+    capability: 'location',
+    reactClass: Atlas
   }
 
 ];
