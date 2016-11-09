@@ -1,6 +1,5 @@
 import React from "react";
-import {Detail} from "./generic/detail.jsx";
-// import expressionAtlasHeatmapHighcharts from "";
+
 export default class Atlas extends React.Component {
 
   constructor(props) {
@@ -20,7 +19,7 @@ export default class Atlas extends React.Component {
 
   render() {
     return (
-        <div ref={(elem) => this.widget = elem}></div>
+        <div className='expressionAtlas' ref={(elem) => this.widget = elem}></div>
     );
   }
 }
