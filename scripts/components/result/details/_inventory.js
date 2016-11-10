@@ -40,7 +40,7 @@ const inventory = [
 
   {
     name: 'Expression Atlas',
-    capability: 'location',
+    capability: 'expression',
     reactClass: Atlas
   }
 
