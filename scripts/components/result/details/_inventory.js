@@ -21,7 +21,7 @@ const inventory = [
   // },
   //
   {
-    name: 'Expression Atlas',
+    name: 'Expression',
     capability: 'expression',
     reactClass: Atlas
   },
