@@ -202,6 +202,9 @@ module.exports = function (grunt) {
     })();
 
     grunt.file.write('build/index.html', index);
+
+    var atlas = grunt.file.read('./static/atlasWidget.template.html')
+    grunt.file.write('build/atlasWidget.html', atlas);
   });
   
   grunt.registerTask('generateStaticFiles', ['exec:blogFeed', 'copy:assets', 'copy:icons', 'exec:generateStaticApp', 'packageIndexHtml']);

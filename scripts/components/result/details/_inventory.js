@@ -21,6 +21,12 @@ const inventory = [
   // },
   //
   {
+    name: 'Expression Atlas',
+    capability: 'expression',
+    reactClass: Atlas
+  },
+
+  {
     name: 'Homology',
     capability: 'homology',
     reactClass: Homology
@@ -32,16 +38,11 @@ const inventory = [
   //   reactClass: require('./pathways.jsx')
   // },
 
+
   {
     name: 'X-refs',
     capability: 'xrefs',
     reactClass: Xrefs
-  },
-
-  {
-    name: 'Expression Atlas',
-    capability: 'expression',
-    reactClass: Atlas
   }
 
 ];
