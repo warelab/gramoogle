@@ -17,7 +17,7 @@ function renderMetadata(props) {
 }
 
 function renderTitle({searchResult}) {
-  let species, geneId;
+  let species, geneId, synonyms;
 
   if (searchResult.species_name) {
     species = <span className="species-name">{searchResult.species_name}</span>;
@@ -25,13 +25,16 @@ function renderTitle({searchResult}) {
   if (searchResult.id !== searchResult.name) {
     geneId = <span className="gene-id">{searchResult.id}</span>;
   }
-
+  if (searchResult.synonyms) {
+    synonyms = searchResult.synonyms.filter(syn => syn !== searchResult.description).join(' ');
+  }
   return (
       <h3 className="gene-title">
         <span className="gene-name">{searchResult.name} </span>
         <wbr/>
-        <small className="gene-subtitle">{geneId} </small>
-        <small className="gene-species">{species}</small>
+        <small className="gene-id">{geneId} </small>
+        <small className="gene-synonyms">{synonyms}</small>
+        <small className="gene-species"> {species}</small>
       </h3>
   );
 }
