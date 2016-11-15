@@ -3,6 +3,7 @@
 import Location from './location.jsx';
 import Homology from './homology.jsx';
 import Xrefs from './xrefs.jsx';
+import Atlas from './expression.jsx';
 
 const inventory = [
 
@@ -20,6 +21,12 @@ const inventory = [
   // },
   //
   {
+    name: 'Expression',
+    capability: 'expression',
+    reactClass: Atlas
+  },
+
+  {
     name: 'Homology',
     capability: 'homology',
     reactClass: Homology
@@ -30,6 +37,7 @@ const inventory = [
   //   capability: 'pathways',
   //   reactClass: require('./pathways.jsx')
   // },
+
 
   {
     name: 'X-refs',

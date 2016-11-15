@@ -73,6 +73,9 @@ export default class Result extends React.Component {
   }
 
   getApplicableDetails() {
+    if (this.props.searchResult.taxon_id === 29760) { // hard-coded exception for Vitis vinifera
+      this.props.searchResult.capabilities = _.filter(this.props.searchResult.capabilities, function(c) { return c !== 'expression'});
+    }
     const searchResult = this.props.searchResult;
     return _.filter(detailsInventory, function (geneDetail) {
       return _.includes(searchResult.capabilities, geneDetail.capability);

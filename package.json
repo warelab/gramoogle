@@ -1,10 +1,10 @@
 {
   "name": "gramoogle",
-  "version": "2.3.4",
+  "version": "2.4.1",
   "description": "Gramene search interface",
   "main": "index.js",
   "gramene": {
-    "dbRelease": 51
+    "dbRelease": 52
   },
   "scripts": {
     "build": "grunt package",
@@ -26,12 +26,12 @@
     "gramene-bins-client": "^2.2.9",
     "gramene-client-cache": "1.0.0",
     "gramene-dalliance": "^0.13.2",
-    "gramene-dbxrefs": "3.0.1",
-    "gramene-genetree-vis": "^3.1.4",
+    "gramene-dbxrefs": "^3.0.2",
+    "gramene-genetree-vis": "3.1.4",
     "gramene-search-client": "^3.0.4",
     "gramene-search-vis": "^4.1.2",
     "gramene-taxonomy-with-genomes": "^3.0.8",
-    "gramene-trees-client": "^2.4.6",
+    "gramene-trees-client": "2.4.7",
     "lodash": "^4.3.0",
     "normalize.less": "^1.0.0",
     "numeral": "^1.5.3",
