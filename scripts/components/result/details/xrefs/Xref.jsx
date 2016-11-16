@@ -30,7 +30,7 @@ export default class Xref extends React.Component {
 
       ellipsis = (
         <li key="showMore" className="showAll">
-          <a title={ellipsisTitle} onClick={this.toggleShowAll}>{ellipsisChar}</a>
+          <a title={ellipsisTitle} onClick={this.toggleShowAll.bind(this)}>{ellipsisChar}</a>
         </li>
       );
 

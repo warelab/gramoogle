@@ -26,7 +26,8 @@ function renderTitle({searchResult}) {
     geneId = <span className="gene-id">{searchResult.id}</span>;
   }
   if (searchResult.synonyms) {
-    synonyms = searchResult.synonyms.filter(syn => syn !== searchResult.description).join(' ');
+    // synonyms = searchResult.synonyms.filter(syn => syn !== searchResult.description).join(' ');
+    synonyms = searchResult.synonyms.filter(syn => /^GRMZM/.test(syn)).join(' ');
   }
   return (
       <h3 className="gene-title">
