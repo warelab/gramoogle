@@ -24,7 +24,20 @@ const maxLengthToShow = 3;
 export function initUrlHashPersistence(callback) {
   var hashChangeHandler = handleHashChangeFactory(callback);
   possiblyCopyStateFromLocalStorage();
+  possiblyHandleIdList();
   global.onhashchange = hashChangeHandler;
+  hashChangeHandler();
+}
+
+/* copy query state from local storage if a hash is not present on the url */
+function possiblyCopyStateFromLocalStorage() {
+  if(localStore.persist && !loc.hash) {
+    loc.hash = localStore.persist;
+  }
+}
+
+// if there is an idList query parameter, clear everything and create a filter
+function possiblyHandleIdList() {
   var idList = getidListFromURLParams();
   if (idList.length > 0) {
     var state = {filters: {}, taxa: {}};
@@ -38,16 +51,7 @@ export function initUrlHashPersistence(callback) {
     };
     loc.hash = '#' + encodeURI(JSON.stringify(state));
   }
-  hashChangeHandler();
 }
-
-/* copy query state from local storage if a hash is not present on the url */
-function possiblyCopyStateFromLocalStorage() {
-  if(localStore.persist && !loc.hash) {
-    loc.hash = localStore.persist;
-  }
-}
-
 function handleHashChangeFactory(callback) {
   return function handleHashChange() {
     if (hashDidChange()) {
