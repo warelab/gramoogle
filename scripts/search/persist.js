@@ -43,7 +43,7 @@ function possiblyHandleIdList() {
     var state = {filters: {}, taxa: {}};
     var fqString = 'id:(' + idList.join(' ') + ')';
     state.filters[fqString] = {
-      category: "ID",
+      category: "Gene",
       display_name: idList.length <= maxLengthToShow ? idList.join(', ')
         : idList.slice(0,maxLengthToShow).join(', ') + ' and ' + (idList.length - maxLengthToShow) + ' more',
       exclude: false,
