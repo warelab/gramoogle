@@ -12,15 +12,19 @@ This module is likely to be replaced if/when we refactor the codebase to use Rea
 */
 
 import _ from 'lodash';
+import getidListFromURLParams from './getidListFromURLParams';
 
 let expectedSerializedHashState = '';
 let expectedSerializedLocalStorageState = '';
 const loc = global.location || {hash: expectedSerializedHashState};
 const localStore = global.localStorage || {};
 
+const maxLengthToShow = 3;
+
 export function initUrlHashPersistence(callback) {
   var hashChangeHandler = handleHashChangeFactory(callback);
   possiblyCopyStateFromLocalStorage();
+  possiblyHandleIdList();
   global.onhashchange = hashChangeHandler;
   hashChangeHandler();
 }
@@ -32,6 +36,22 @@ function possiblyCopyStateFromLocalStorage() {
   }
 }
 
+// if there is an idList query parameter, clear everything and create a filter
+function possiblyHandleIdList() {
+  var idList = getidListFromURLParams();
+  if (idList.length > 0) {
+    var state = {filters: {}, taxa: {}};
+    var fqString = 'id:(' + idList.join(' ') + ')';
+    state.filters[fqString] = {
+      category: "Gene",
+      display_name: idList.length <= maxLengthToShow ? idList.join(', ')
+        : idList.slice(0,maxLengthToShow).join(', ') + ' and ' + (idList.length - maxLengthToShow) + ' more',
+      exclude: false,
+      fq: fqString
+    };
+    loc.hash = '#' + encodeURI(JSON.stringify(state));
+  }
+}
 function handleHashChangeFactory(callback) {
   return function handleHashChange() {
     if (hashDidChange()) {
