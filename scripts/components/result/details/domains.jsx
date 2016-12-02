@@ -31,7 +31,7 @@ var Domains = React.createClass({
       return {
         category: 'Domain Structure',
         fq: qString,
-        id: qString,
+        exclude: false,
         display_name: 'Domain structure like ' + this.props.gene.name
       }
     }

@@ -31,7 +31,7 @@ function prepFilters(filters: map): map {
     if (fqMetadata.exclude || // we always AND queries where we exclude things
       newFq.indexOf('{!surround}') === 0)  // surround queries cannot be wrapped in parens
     {
-      newFilters[newFq] = {};
+      newFilters[fq] = {};
     }
     else {
       if (!filterCategories.hasOwnProperty(category)) {
