@@ -4,7 +4,8 @@ var React = require('react');
 var _ = require('lodash');
 
 import Search from './search/search.jsx';
-var QueryActions = require('../actions/queryActions');
+import QueryActions from '../actions/queryActions';
+import DrupalActions from '../actions/drupalActions';
 
 var bs = require('react-bootstrap');
 var Navbar = bs.Navbar;
@@ -17,6 +18,7 @@ var Header = React.createClass({
   },
   removeAllFilters: function() {
     QueryActions.removeAllFilters();
+    DrupalActions.hidePage();
   },
   render: function() {
     var search = this.props.search;
