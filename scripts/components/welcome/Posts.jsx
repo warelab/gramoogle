@@ -46,7 +46,7 @@ export default class Posts extends React.Component {
       <div className="posts-wrapper">
         <h3>Latest News</h3>
         <ul className="posts list-unstyled">
-          {this.props.posts.map(
+          {this.props.feed.map(
               (post) => <li key={post.guid}><a onClick={(event) => this.show(post)}>{post.title}</a></li>)
           }
         </ul>
@@ -57,5 +57,5 @@ export default class Posts extends React.Component {
 }
 
 Posts.propTypes = {
-  posts: React.PropTypes.array.isRequired
+  feed: React.PropTypes.array.isRequired
 };

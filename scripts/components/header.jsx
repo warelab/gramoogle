@@ -8,6 +8,8 @@ var QueryActions = require('../actions/queryActions');
 
 var bs = require('react-bootstrap');
 var Navbar = bs.Navbar;
+var SplitButton = bs.SplitButton;
+var MenuItem = bs.MenuItem;
 
 var Header = React.createClass({
   propTypes: {
@@ -28,7 +30,9 @@ var Header = React.createClass({
     return (
       <Navbar id="search-header" className="header" fixedTop={true}>
         <Navbar.Header>
-          <Navbar.Brand>{logo}</Navbar.Brand>
+          <Navbar.Brand>
+            {logo}
+          </Navbar.Brand>
         </Navbar.Header>
         <Search search={search} />
       </Navbar>

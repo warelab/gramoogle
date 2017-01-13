@@ -5,7 +5,7 @@ require('babel-register')({
 });
 
 var fs = require('q-io/fs');
-var getBlogFeed = require('./welcome/getBlogFeed').default;
+var getBlogFeed = require('./welcome/getDrupalContent').getBlogFeed;
 var done;
 
 getBlogFeed()

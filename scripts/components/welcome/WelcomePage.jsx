@@ -1,5 +1,6 @@
 import React from "react";
-import WelcomeStore from "../../stores/welcomeStore";
+import DrupalStore from "../../stores/drupalStore";
+import DrupalActions from "../../actions/drupalActions";
 import Intro from "./Intro.jsx";
 import Posts from "./Posts.jsx";
 import GrameneTools from "./GrameneTools.jsx";
@@ -11,15 +12,15 @@ export default class Welcome extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      posts: require('../../../static/blogFeed.json'),
+      drupal: DrupalStore.state,
       showIntro: shouldShowIntro()
     };
   }
 
   componentWillMount() {
     if (this.props.context === 'client') {
-      this.unsubscribe = WelcomeStore.listen(
-          (posts) => this.setState({posts: posts})
+      this.unsubscribe = DrupalStore.listen(
+          (state) => this.setState({drupal: state})
       );
     }
   }
@@ -33,6 +34,18 @@ export default class Welcome extends React.Component {
     setIntroVisibility(false);
   }
 
+  bodyContent() {
+    if(this.state.drupal.page) {
+      return (
+        <pre onClick={DrupalActions.hidePage}>
+          {JSON.stringify(this.state.drupal.page, undefined, 2)}
+        </pre>);
+    }
+    else {
+      return <GrameneTools />;
+    }
+  }
+
   render() {
     return (
         <div>
@@ -44,10 +57,10 @@ export default class Welcome extends React.Component {
             </Row>
             <Row>
               <Col sm={9} className="tools-col">
-                <GrameneTools />
+                {this.bodyContent()}
               </Col>
               <Col sm={3} className="posts-col">
-                <Posts {...this.state}/>
+                <Posts feed={this.state.drupal.feed}/>
               </Col>
             </Row>
           </Grid>

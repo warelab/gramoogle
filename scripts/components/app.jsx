@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Header from './header.jsx';
+import Footer from './footer/Footer.jsx';
 import Results from './results/results.jsx';
 import Welcome from './welcome/WelcomePage.jsx';
 import searchStore from '../stores/searchStore';
@@ -42,6 +43,7 @@ export default class App extends React.Component {
       <div className="app">
         <Header search={search}/>
         {content}
+        <Footer />
       </div>
     );
   }

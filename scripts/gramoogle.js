@@ -8,12 +8,12 @@ import ReactDOM from 'react-dom';
 // to listen to taxonomyActions.getTaxonomy
 import './stores/searchStore';
 import TaxonomyActions from './actions/taxonomyActions';
-import WelcomeActions from './actions/welcomeActions';
+import DrupalActions from './actions/drupalActions';
 
 import App from './components/app.jsx';
 
 TaxonomyActions.getTaxonomy();
-WelcomeActions.refreshBlogFeed();
+DrupalActions.refreshBlogFeed();
 
 const AppFactory = React.createFactory(App);
 const app = new AppFactory({context: 'client'});
