@@ -1,6 +1,7 @@
 import React from "react";
 import {ListGroup, ListGroupItem, Media, Glyphicon} from "react-bootstrap";
 import WelcomeActions from "../../actions/welcomeActions";
+import DrupalActions from "../../actions/drupalActions";
 
 const GrameneTool = ({title, description, imgSrc, link, isExternal}) => {
   let external;
@@ -24,6 +25,13 @@ const GrameneTool = ({title, description, imgSrc, link, isExternal}) => {
 
 function focusSearch() {
   WelcomeActions.flashSearchBox(250);
+}
+
+function drupalLink(url) {
+  return {
+    onClick: () => DrupalActions.fetchDrupalPage(url),
+    href: "javascript:void()"
+  };
 }
 
 const GrameneTools = () =>
@@ -57,15 +65,15 @@ const GrameneTools = () =>
                      imgSrc="assets/images/welcome/Biomart250.png"/>
         <GrameneTool title="Outreach and Training"
                      description="Educational resources and webinars"
-                     link={{href: "http://gramene.org/outreach"}}
+                     link={drupalLink('http://www.gramene.org/rest/node/288.json')}
                      imgSrc="assets/images/welcome/noun_553934.png"/>
         <GrameneTool title="Bulk Downloads"
                      description="FTP download of our data"
-                     link={{href: "http://gramene.org/ftp-download"}}
+                     link={drupalLink('http://www.gramene.org/rest/node/297.json')}
                      imgSrc="assets/images/welcome/download.png"/>
         <GrameneTool title="Archive"
                      description="Legacy tools and data (markers, Cyc pathways, etc)"
-                     link={{href: "http://gramene.org/archive"}}
+                     link={drupalLink('http://www.gramene.org/rest/node/231.json')}
                      imgSrc="assets/images/welcome/archive.jpg"/>
       </ListGroup>
     </div>;

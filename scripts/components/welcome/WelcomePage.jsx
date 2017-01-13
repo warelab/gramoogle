@@ -1,6 +1,5 @@
 import React from "react";
 import DrupalStore from "../../stores/drupalStore";
-import DrupalActions from "../../actions/drupalActions";
 import Intro from "./Intro.jsx";
 import Posts from "./Posts.jsx";
 import GrameneTools from "./GrameneTools.jsx";
@@ -36,10 +35,12 @@ export default class Welcome extends React.Component {
 
   bodyContent() {
     if(this.state.drupal.page) {
+      const body = this.state.drupal.page.body.und[0].safe_value;
+      const title = this.state.drupal.page.title;
+      const content = `<div><h3>${title}</h3><div>${body}</div></div>`;
       return (
-        <pre onClick={DrupalActions.hidePage}>
-          {JSON.stringify(this.state.drupal.page, undefined, 2)}
-        </pre>);
+        <div dangerouslySetInnerHTML={{__html:content}}>
+        </div>);
     }
     else {
       return <GrameneTools />;
