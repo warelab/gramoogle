@@ -65,15 +65,15 @@ const GrameneTools = () =>
                      imgSrc="assets/images/welcome/Biomart250.png"/>
         <GrameneTool title="Outreach and Training"
                      description="Educational resources and webinars"
-                     link={drupalLink('http://www.gramene.org/rest/node/288.json')}
+                     link={drupalLink('http://data.gramene.org/drupal/outreach')}
                      imgSrc="assets/images/welcome/noun_553934.png"/>
         <GrameneTool title="Bulk Downloads"
                      description="FTP download of our data"
-                     link={drupalLink('http://www.gramene.org/rest/node/297.json')}
+                     link={drupalLink('http://data.gramene.org/drupal/ftp-download')}
                      imgSrc="assets/images/welcome/download.png"/>
         <GrameneTool title="Archive"
                      description="Legacy tools and data (markers, Cyc pathways, etc)"
-                     link={drupalLink('http://www.gramene.org/rest/node/231.json')}
+                     link={drupalLink('http://data.gramene.org/drupal/archive')}
                      imgSrc="assets/images/welcome/archive.jpg"/>
       </ListGroup>
     </div>;
