@@ -39,7 +39,7 @@ export default class Welcome extends React.Component {
 
   bodyContent() {
     if(this.state.drupal.page) {
-      if (this.history) this.history.push(this.state.drupal.path);
+      // if (this.history) this.history.push(this.state.drupal.path);
       const body = this.state.drupal.page.body.und[0].safe_value;
       const title = this.state.drupal.page.title;
       const content = `<div><h3>${title}</h3><div>${body}</div></div>`;
@@ -48,7 +48,7 @@ export default class Welcome extends React.Component {
         </div>);
     }
     else {
-      if (this.history) this.history.push('/');
+      // if (this.history) this.history.push('/');
       return <GrameneTools />;
     }
   }
