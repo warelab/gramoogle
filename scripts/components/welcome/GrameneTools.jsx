@@ -27,10 +27,10 @@ function focusSearch() {
   WelcomeActions.flashSearchBox(250);
 }
 
-function drupalLink(url) {
+function drupalLink(path) {
   return {
-    onClick: () => DrupalActions.fetchDrupalPage(url),
-    href: "javascript:void()"
+    onClick: () => DrupalActions.fetchDrupalPage(path),
+    href: "javascript:void(0);"
   };
 }
 
@@ -65,15 +65,15 @@ const GrameneTools = () =>
                      imgSrc="assets/images/welcome/Biomart250.png"/>
         <GrameneTool title="Outreach and Training"
                      description="Educational resources and webinars"
-                     link={drupalLink('http://data.gramene.org/drupal/outreach')}
+                     link={drupalLink('/outreach')}
                      imgSrc="assets/images/welcome/noun_553934.png"/>
         <GrameneTool title="Bulk Downloads"
                      description="FTP download of our data"
-                     link={drupalLink('http://data.gramene.org/drupal/ftp-download')}
+                     link={drupalLink('/ftp-download')}
                      imgSrc="assets/images/welcome/download.png"/>
         <GrameneTool title="Archive"
                      description="Legacy tools and data (markers, Cyc pathways, etc)"
-                     link={drupalLink('http://data.gramene.org/drupal/archive')}
+                     link={drupalLink('/archive')}
                      imgSrc="assets/images/welcome/archive.jpg"/>
       </ListGroup>
     </div>;

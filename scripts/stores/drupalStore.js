@@ -8,7 +8,8 @@ const DrupalStore = Reflux.createStore(
       init: function () {
         this.state = {
           feed: require('../../static/blogFeed.json'),
-          page: undefined
+          page: undefined,
+          path: undefined
         }
       },
       refreshBlogFeedCompleted: function (results) {
@@ -21,14 +22,14 @@ const DrupalStore = Reflux.createStore(
       },
       fetchDrupalPageCompleted: function (results) {
         console.log('DrupalActions.fetchDrupalPageCompleted', results);
-        this.state = _.assign({}, this.state, {page: results});
+        this.state = _.assign({}, this.state, results);
         this.trigger(this.state);
       },
       fetchDrupalPageFailed: function (error) {
         console.log('DrupalActions.fetchDrupalPageFailed', error);
       },
       hidePage: function() {
-        this.state = _.assign({}, this.state, {page: undefined});
+        this.state = _.assign({}, this.state, {path: undefined, page: undefined});
         this.trigger(this.state);
       }
     });

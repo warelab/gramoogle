@@ -15,5 +15,5 @@ export const getBlogFeed = () => axios.get("http://gramene.org/blog/feed")
                                  return _.get(rss, 'feed.entries');
                                });
 
-export const getDrupalPage = (url) => axios.get(url)
-                                    .then(response => response.data);
+export const getDrupalPage = (path) => axios.get('http://data.gramene.org/drupal'+path)
+                                    .then(response => {return {path:path,page:response.data}});

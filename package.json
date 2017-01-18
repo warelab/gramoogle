@@ -32,6 +32,7 @@
     "gramene-search-vis": "^4.1.2",
     "gramene-taxonomy-with-genomes": "^3.0.8",
     "gramene-trees-client": "2.4.7",
+    "history": "^4.5.1",
     "lodash": "^4.3.0",
     "normalize.less": "^1.0.0",
     "numeral": "^1.5.3",
