@@ -23,6 +23,8 @@
   "homepage": "https://github.com/warelab/gramoogle",
   "dependencies": {
     "axios": "^0.9.1",
+    "compression": "^1.6.2",
+    "express": "^4.14.0",
     "gramene-bins-client": "^2.2.9",
     "gramene-client-cache": "1.0.0",
     "gramene-dalliance": "^0.13.2",
@@ -36,11 +38,13 @@
     "lodash": "^4.3.0",
     "normalize.less": "^1.0.0",
     "numeral": "^1.5.3",
+    "path": "^0.12.7",
     "q": "^1.2.0",
     "query-string": "^4.2.2",
     "react": "^15.0.1",
     "react-bootstrap": "^0.30.0",
     "react-dom": "^15.0.1",
+    "react-router": "^3.0.2",
     "reflux": "^0.4.1",
     "rss-parser": "latest",
     "xml2js": "^0.4.16"

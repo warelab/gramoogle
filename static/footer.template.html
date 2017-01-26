@@ -107,14 +107,14 @@
     };
 
     // update the URL so that the search component only specifies the data server
-    if (history.pushState) {
-        var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname;
-        if(searchParams.server) {
-            newurl += '?server=' + searchParams.server;
-        }
-        if(window.location.hash) {
-            newurl += window.location.hash;
-        }
-        window.history.pushState({path:newurl},'',newurl);
-    }
+//    if (history.pushState) {
+//        var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+//        if(searchParams.server) {
+//            newurl += '?server=' + searchParams.server;
+//        }
+//        if(window.location.hash) {
+//            newurl += window.location.hash;
+//        }
+//        window.history.pushState({path:newurl},'',newurl);
+//    }
 </script>

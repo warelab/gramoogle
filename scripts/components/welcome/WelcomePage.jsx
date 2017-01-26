@@ -28,9 +28,9 @@ export default class Welcome extends React.Component {
     if (this.unsubscribe) this.unsubscribe();
   }
 
-  componentDidMount() {
-    this.history = createHistory();
-  }
+  // componentDidMount() {
+  //   this.history = createHistory();
+  // }
 
   hideIntro() {
     this.setState({showIntro: false});
@@ -64,7 +64,7 @@ export default class Welcome extends React.Component {
             </Row>
             <Row>
               <Col sm={9} className="tools-col">
-                {this.bodyContent()}
+                <GrameneTools />
               </Col>
               <Col sm={3} className="posts-col">
                 <Posts feed={this.state.drupal.feed}/>

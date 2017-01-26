@@ -4,8 +4,7 @@ import Q from 'q';
 
 const DrupalActions = Reflux.createActions([
   {'refreshBlogFeed': {asyncResult: true}},
-  {'fetchDrupalPage': {asyncResult: true}},
-  {'hidePage': {asyncResult: false}}
+  {'fetchDrupalPage': {asyncResult: true}}
 ]);
 
 console.log(DrupalActions);

@@ -27,10 +27,6 @@ const DrupalStore = Reflux.createStore(
       },
       fetchDrupalPageFailed: function (error) {
         console.log('DrupalActions.fetchDrupalPageFailed', error);
-      },
-      hidePage: function() {
-        this.state = _.assign({}, this.state, {path: undefined, page: undefined});
-        this.trigger(this.state);
       }
     });
 
