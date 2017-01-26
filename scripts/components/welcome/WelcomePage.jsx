@@ -38,17 +38,10 @@ export default class Welcome extends React.Component {
   }
 
   bodyContent() {
-    if(this.state.drupal.page) {
-      // if (this.history) this.history.push(this.state.drupal.path);
-      const body = this.state.drupal.page.body.und[0].safe_value;
-      const title = this.state.drupal.page.title;
-      const content = `<div><h3>${title}</h3><div>${body}</div></div>`;
-      return (
-        <div dangerouslySetInnerHTML={{__html:content}}>
-        </div>);
+    if (this.props.children) {
+      return this.props.children;
     }
     else {
-      // if (this.history) this.history.push('/');
       return <GrameneTools />;
     }
   }
@@ -64,7 +57,7 @@ export default class Welcome extends React.Component {
             </Row>
             <Row>
               <Col sm={9} className="tools-col">
-                <GrameneTools />
+                {this.bodyContent()}
               </Col>
               <Col sm={3} className="posts-col">
                 <Posts feed={this.state.drupal.feed}/>

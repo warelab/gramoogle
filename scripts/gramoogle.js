@@ -13,6 +13,7 @@ import DrupalActions from './actions/drupalActions';
 
 import App from './components/app.jsx';
 import Welcome from './components/welcome/WelcomePage.jsx';
+import GrameneTools from './components/welcome/GrameneTools.jsx';
 import DrupalPage from './components/DrupalPage.jsx';
 
 TaxonomyActions.getTaxonomy();
@@ -25,8 +26,10 @@ ReactDOM.render((
   <Router history={browserHistory}>
     <Route path="/" component={App}>
       <IndexRoute component={Welcome}/>
-      <Route path="/:drupalPath" component={DrupalPage}/>
-      <Route path="/node/:drupalNode" component={DrupalPage}/>
+      <Route component={Welcome}>
+        <Route path=":drupalPath" component={DrupalPage}/>
+        <Route path="node/:drupalNode" component={DrupalPage}/>
+      </Route>
     </Route>
   </Router>
 ), document.getElementById('content'));
