@@ -16,6 +16,7 @@ import React from 'react';
 // export default Posts;
 
 import BlogModal from "./BlogModal.jsx";
+import { browserHistory } from 'react-router';
 
 
 export default class Posts extends React.Component {
@@ -47,7 +48,7 @@ export default class Posts extends React.Component {
         <h3>Latest News</h3>
         <ul className="posts list-unstyled">
           {this.props.feed.map(
-              (post) => <li key={post.guid}><a onClick={(event) => this.show(post)}>{post.title}</a></li>)
+              (post) => <li key={post.guid}><a onClick={(event) => browserHistory.push(post.link.replace(/.*gramene\.org/,''))}>{post.title}</a></li>)
           }
         </ul>
           {modal}
