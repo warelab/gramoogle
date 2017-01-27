@@ -28,9 +28,9 @@ export default class Welcome extends React.Component {
     if (this.unsubscribe) this.unsubscribe();
   }
 
-  componentDidMount() {
-    this.history = createHistory();
-  }
+  // componentDidMount() {
+  //   this.history = createHistory();
+  // }
 
   hideIntro() {
     this.setState({showIntro: false});
@@ -38,17 +38,10 @@ export default class Welcome extends React.Component {
   }
 
   bodyContent() {
-    if(this.state.drupal.page) {
-      // if (this.history) this.history.push(this.state.drupal.path);
-      const body = this.state.drupal.page.body.und[0].safe_value;
-      const title = this.state.drupal.page.title;
-      const content = `<div><h3>${title}</h3><div>${body}</div></div>`;
-      return (
-        <div dangerouslySetInnerHTML={{__html:content}}>
-        </div>);
+    if (this.props.children) {
+      return this.props.children;
     }
     else {
-      // if (this.history) this.history.push('/');
       return <GrameneTools />;
     }
   }

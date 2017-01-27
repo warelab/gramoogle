@@ -1,24 +1,19 @@
 'use strict';
 
-var React = require('react');
-var _ = require('lodash');
-
+import React from 'react';
+import _ from 'lodash';
 import Search from './search/search.jsx';
 import QueryActions from '../actions/queryActions';
-import DrupalActions from '../actions/drupalActions';
+import { browserHistory } from 'react-router';
+import { Navbar, SplitButton, MenuItem } from 'react-bootstrap';
 
-var bs = require('react-bootstrap');
-var Navbar = bs.Navbar;
-var SplitButton = bs.SplitButton;
-var MenuItem = bs.MenuItem;
-
-var Header = React.createClass({
+const Header = React.createClass({
   propTypes: {
     search: React.PropTypes.object.isRequired
   },
   removeAllFilters: function() {
     QueryActions.removeAllFilters();
-    DrupalActions.hidePage();
+    browserHistory.push('/');
   },
   render: function() {
     var search = this.props.search;

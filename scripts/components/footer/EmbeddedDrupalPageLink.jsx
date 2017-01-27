@@ -1,11 +1,11 @@
 import React from 'react';
-import DrupalActions from '../../actions/drupalActions';
+import { browserHistory } from 'react-router';
 import QueryActions from '../../actions/queryActions';
 
 const EmbeddedDrupalPageLink = ({text, path, onClick}) =>
   <a href="javascript:void(0)" onClick={() => {
     QueryActions.removeAllFilters();
-    DrupalActions.fetchDrupalPage(path)
+    browserHistory.push(path);
   }}>{text}</a>;
 
 EmbeddedDrupalPageLink.propTypes = {

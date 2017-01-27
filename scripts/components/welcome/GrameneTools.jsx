@@ -1,7 +1,7 @@
 import React from "react";
 import {ListGroup, ListGroupItem, Media, Glyphicon} from "react-bootstrap";
 import WelcomeActions from "../../actions/welcomeActions";
-import DrupalActions from "../../actions/drupalActions";
+import { browserHistory } from 'react-router';
 
 const GrameneTool = ({title, description, imgSrc, link, isExternal}) => {
   let external;
@@ -29,7 +29,7 @@ function focusSearch() {
 
 function drupalLink(path) {
   return {
-    onClick: () => DrupalActions.fetchDrupalPage(path),
+    onClick: () => browserHistory.push(path),
     href: "javascript:void(0);"
   };
 }
