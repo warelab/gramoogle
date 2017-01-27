@@ -206,12 +206,12 @@ module.exports = function (grunt) {
     var atlas = grunt.file.read('./static/atlasWidget.template.html')
     grunt.file.write('build/atlasWidget.html', atlas);
 
-    var htaccess = "RewriteBase /\n"
-     + "RewriteRule ^index\.html$ - [L]\n"
-     + "RewriteCond %{REQUEST_FILENAME} !-f\n"
-     + "RewriteCond %{REQUEST_FILENAME} !-d\n"
-     + "RewriteRule . /index.html [L]\n";
-    grunt.file.write('build/.htaccess', htaccess);
+    // var htaccess = "RewriteBase /\n"
+    //  + "RewriteRule ^index\.html$ - [L]\n"
+    //  + "RewriteCond %{REQUEST_FILENAME} !-f\n"
+    //  + "RewriteCond %{REQUEST_FILENAME} !-d\n"
+    //  + "RewriteRule . /index.html [L]\n";
+    // grunt.file.write('build/.htaccess', htaccess);
   });
   
   grunt.registerTask('generateStaticFiles', ['exec:blogFeed', 'copy:assets', 'copy:icons', 'exec:generateStaticApp', 'packageIndexHtml']);
