@@ -1,49 +1,46 @@
 import React from 'react';
-import DrupalActions from "../actions/drupalActions";
-import DrupalStore from "../stores/drupalStore";
-import Spinner from "./Spinner.jsx";
+import axios from "axios";
 
 
 export default class DrupalPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      drupal: DrupalStore.state
+      page: null
     };
   }
 
-  componentWillMount() {
-    this.unsubscribe = DrupalStore.listen(
-      (state) => this.setState({drupal: state})
-    );
+  componentDidMount() {
+    this.fetchPage()
   }
 
-  componentWillUnmount() {
-    if (this.unsubscribe) this.unsubscribe();
+  componentDidUpdate (prevProps) {
+    let oldNode = prevProps.params.drupalPath || prevProps.params.drupalNode;
+    let newNode = this.props.params.drupalPath || this.props.params.drupalNode;
+    if (newNode !== oldNode)
+      this.fetchPage();
   }
 
-  bodyContent() {
-    if(this.state.drupal.page) {
-      // if (this.history) this.history.push(this.state.drupal.path);
-      const body = this.state.drupal.page.body.und[0].safe_value;
-      const title = this.state.drupal.page.title;
-      const content = `<div><h3>${title}</h3><div>${body}</div></div>`;
-      return (
-        <div dangerouslySetInnerHTML={{__html:content}}>
-        </div>);
-    }
-    else {
-      return <Spinner />;
-    }
+  componentWillUnmount () {
+    this.ignoreLastFetch = true;
+  }
+
+  fetchPage () {
+    let drupal = this.props.params.drupalPath || `node/${this.props.params.drupalNode}`;
+    let url = `http://data.gramene.org/drupal/${drupal}`;
+    axios.get(url).then(response => {
+      if (!this.ignoreLastFetch) {
+        const title = response.data.title;
+        const body = response.data.body.und[0].safe_value;
+        const content = `<h3>${title}</h3><div>${body}</div>`;
+        this.setState({ page: content });
+      }
+    })
   }
 
   render() {
-    const drupal = this.props.params.drupalPath || `node/${this.props.params.drupalNode}`;
-    if (this.state.drupal.path != drupal) {
-      DrupalActions.fetchDrupalPage(drupal);
-    }
     return (
-      <div>{this.bodyContent()}</div>
+      <div dangerouslySetInnerHTML={{__html:this.state.page}}></div>
     );
   }
 }

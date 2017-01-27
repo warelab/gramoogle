@@ -1,7 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router';
-
+import EmbeddedDrupalPageLink from './EmbeddedDrupalPageLink.jsx';
 import StaticSocialButtons from './StaticSocialButtons.jsx';
+
+
 
 const Footer = () => {
   const releaseUrl = `/release-notes-${window.gramene.grameneRelease}`;
@@ -11,14 +12,14 @@ const Footer = () => {
       <div className="container">
         <ul className="nav navbar-nav">
           <li>
-            <Link to={releaseUrl}>{releaseLabel}</Link>
+            <EmbeddedDrupalPageLink text={releaseLabel} path={releaseUrl} />
           </li>
           <li><a href="//gramene.org/contact">Contact</a></li>
           <li>
-            <Link to="/about-gramene">About</Link>
+            <EmbeddedDrupalPageLink text="About" path="/about-gramene" />
           </li>
           <li>
-            <Link to="/cite">Cite</Link>
+            <EmbeddedDrupalPageLink text="Cite" path="/cite" />
           </li>
           <li><a href="//tools.gramene.org/feedback">Feedback</a></li>
         </ul>
