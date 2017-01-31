@@ -36,6 +36,8 @@
     "gramene-trees-client": "2.4.7",
     "history": "^4.5.1",
     "lodash": "^4.3.0",
+    "mysql": "^2.13.0",
+    "node-schedule": "^1.2.0",
     "normalize.less": "^1.0.0",
     "numeral": "^1.5.3",
     "path": "^0.12.7",
