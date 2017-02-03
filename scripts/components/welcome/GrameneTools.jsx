@@ -63,6 +63,10 @@ const GrameneTools = () =>
                      description="An advanced query interface powered by BioMart"
                      link={{href: "http://www.gramene.org/biomart/martview"}}
                      imgSrc="assets/images/welcome/Biomart250.png"/>
+        <GrameneTool title="Track Hub Registry"
+                     description="A global centralised collection of publicly accessible track hubs"
+                     link={{href: "http://trackhubregistry.org"}}
+                     imgSrc="assets/images/welcome/TrackHub.png"/>
         <GrameneTool title="Outreach and Training"
                      description="Educational resources and webinars"
                      link={drupalLink('/outreach')}
