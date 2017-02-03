@@ -124,7 +124,8 @@ module.exports = Reflux.createStore({
 
   removeAllFilters: function () {
     console.log('removeAllFilters');
-    this.setAllFilters({});
+    if(!_.isEmpty(this.state.query.filters))
+      this.setAllFilters({});
   },
 
   moreResults: function (howManyMore) {
