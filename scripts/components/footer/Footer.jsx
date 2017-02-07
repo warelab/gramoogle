@@ -14,14 +14,15 @@ const Footer = () => {
           <li>
             <EmbeddedDrupalPageLink text={releaseLabel} path={releaseUrl} />
           </li>
-          <li><a href="//gramene.org/contact">Contact</a></li>
           <li>
             <EmbeddedDrupalPageLink text="About" path="/about-gramene" />
           </li>
           <li>
             <EmbeddedDrupalPageLink text="Cite" path="/cite" />
           </li>
-          <li><a href="//tools.gramene.org/feedback">Feedback</a></li>
+          <li>
+            <EmbeddedDrupalPageLink text="Feedback" path="/feedback" />
+          </li>
         </ul>
         <StaticSocialButtons />
       </div>

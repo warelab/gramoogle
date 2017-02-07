@@ -4,31 +4,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Route, browserHistory, IndexRoute } from 'react-router';
-
-// Instantiate searchStore now so it's ready
-// to listen to taxonomyActions.getTaxonomy
-import './stores/searchStore';
-import TaxonomyActions from './actions/taxonomyActions';
-import DrupalActions from './actions/drupalActions';
-
 import App from './components/app.jsx';
 import Welcome from './components/welcome/WelcomePage.jsx';
-import GrameneTools from './components/welcome/GrameneTools.jsx';
 import DrupalPage from './components/DrupalPage.jsx';
+import Feedback from './components/Feedback.jsx';
+import './stores/searchStore'; // Instantiate searchStore now so it's ready
+import TaxonomyActions from './actions/taxonomyActions'; // to listen to taxonomyActions.getTaxonomy
+import DrupalActions from './actions/drupalActions'; // and drupalActions.refreshBlogFeed
 
 TaxonomyActions.getTaxonomy();
 DrupalActions.refreshBlogFeed();
-
-// const AppFactory = React.createFactory(App);
-// const app = new AppFactory({context: 'client'});
 
 ReactDOM.render((
   <Router history={browserHistory}>
     <Route path="/" component={App}>
       <IndexRoute component={Welcome}/>
       <Route component={Welcome}>
-        <Route path=":drupalPath" component={DrupalPage}/>
+        <Route path="feedback" component={Feedback}/>
         <Route path="node/:drupalNode" component={DrupalPage}/>
+        <Route path=":drupalPath" component={DrupalPage}/>
       </Route>
     </Route>
   </Router>
