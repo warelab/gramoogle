@@ -5,7 +5,6 @@ import Posts from "./Posts.jsx";
 import GrameneTools from "./GrameneTools.jsx";
 import {shouldShowIntro, setIntroVisibility} from "../../welcome/intro";
 import {Grid, Row, Col} from "react-bootstrap";
-import createHistory from 'history/createBrowserHistory';
 
 export default class Welcome extends React.Component {
   constructor(props) {
@@ -27,10 +26,6 @@ export default class Welcome extends React.Component {
   componentWillUnmount() {
     if (this.unsubscribe) this.unsubscribe();
   }
-
-  // componentDidMount() {
-  //   this.history = createHistory();
-  // }
 
   hideIntro() {
     this.setState({showIntro: false});

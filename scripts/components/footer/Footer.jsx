@@ -1,12 +1,12 @@
 import React from 'react';
 import EmbeddedDrupalPageLink from './EmbeddedDrupalPageLink.jsx';
 import StaticSocialButtons from './StaticSocialButtons.jsx';
-
+var grameneRelease = require('../../../package.json').gramene.dbRelease;
 
 
 const Footer = () => {
-  const releaseUrl = `/release-notes-${window.gramene.grameneRelease}`;
-  const releaseLabel = `Release Notes (${window.gramene.grameneRelease})`;
+  const releaseUrl = `/release-notes-${grameneRelease}`;
+  const releaseLabel = `Release Notes (${grameneRelease})`;
   return (
     <nav className="submenu navbar navbar-default">
       <div className="container">

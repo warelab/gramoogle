@@ -11,7 +11,7 @@ export default class DrupalPage extends React.Component {
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     this.fetchAliases();
   }
 
