@@ -1,12 +1,13 @@
 import React from 'react';
+import Recaptcha from 'react-recaptcha';
 import { FormGroup, FormControl, Form, ControlLabel, InputGroup, Col, Button } from 'react-bootstrap';
+import isEmail from 'is-email';
 import _ from 'lodash';
 
 export default class Feedback extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      completedForm: false,
       referrer: 'No referrer',
       subject: '',
       content: '',
@@ -17,7 +18,9 @@ export default class Feedback extends React.Component {
   }
 
   componentWillMount() {
-    this.setState({referrer: document.referrer});
+    if (document.referrer) {
+      this.setState({referrer : document.referrer});
+    }
   }
 
   handleChange(e) {
@@ -26,11 +29,65 @@ export default class Feedback extends React.Component {
     this.setState(nextState);
   }
 
+  validateField(fieldName) {
+    if (fieldName === 'subject') {
+      const length = this.state.subject.length;
+      if (length > 10) return 'success';
+      else if (length > 5) return 'warning';
+      else if (length > 0) return 'error';
+    }
+    if (fieldName === 'name') {
+      const length = this.state.name.length;
+      if (length > 4) return 'success';
+      else if (length > 2) return 'warning';
+      else if (length > 0) return 'error';
+    }
+    if (fieldName === 'email') {
+      const length = this.state.email.length;
+      if (isEmail(this.state.email))
+        return 'success';
+      else if (length > 0)
+        return 'error';
+    }
+    if (fieldName === 'org') {
+      const length = this.state.org.length;
+      if (length > 2) return 'success';
+      else if (length > 1) return 'warning';
+      else if (length > 0) return 'error';
+    }
+  }
+
   submitForm() {
-    this.setState({completedForm: true});
+    this.setState({submittedForm: true});
+  }
+
+  verifyRecaptcha(response) {
+    this.setState({recaptcha: response});
+  }
+
+  loadRecaptcha() {
+    console.log('loaded recaptcha');
+  }
+
+  formIsValid() {
+    return (this.validateField('subject') === 'success'
+      && this.validateField('name') === 'success'
+      && this.validateField('email') === 'success'
+      && this.validateField('org') === 'success'
+      && this.state.recaptcha
+    )
   }
 
   renderForm() {
+    let submit = this.formIsValid() ? (
+      <FormGroup>
+        <Col smOffset={3} sm={9}>
+          <Button onClick={this.submitForm.bind(this)}>
+            Send your feedback
+          </Button>
+        </Col>
+      </FormGroup>
+    ) : '';
     return (
       <div>
         <h3>
@@ -48,7 +105,7 @@ export default class Feedback extends React.Component {
             </Col>
           </FormGroup>
 
-          <FormGroup controlId="subject">
+          <FormGroup controlId="subject" validationState={this.validateField("subject")}>
             <Col componentClass={ControlLabel} sm={3}>
               Subject
             </Col>
@@ -58,6 +115,7 @@ export default class Feedback extends React.Component {
                 value={this.state.subject}
                 onChange={this.handleChange.bind(this)}
               />
+              <FormControl.Feedback />
             </Col>
           </FormGroup>
 
@@ -74,7 +132,7 @@ export default class Feedback extends React.Component {
             </Col>
           </FormGroup>
 
-          <FormGroup controlId="name">
+          <FormGroup controlId="name" validationState={this.validateField('name')}>
             <Col componentClass={ControlLabel} sm={3}>
               Your Name
             </Col>
@@ -84,10 +142,11 @@ export default class Feedback extends React.Component {
                 value={this.state.name}
                 onChange={this.handleChange.bind(this)}
               />
+              <FormControl.Feedback />
             </Col>
           </FormGroup>
 
-          <FormGroup controlId="email">
+          <FormGroup controlId="email" validationState={this.validateField('email')}>
             <Col componentClass={ControlLabel} sm={3}>
               Your Email
             </Col>
@@ -97,10 +156,11 @@ export default class Feedback extends React.Component {
                 value={this.state.email}
                 onChange={this.handleChange.bind(this)}
               />
+              <FormControl.Feedback />
             </Col>
           </FormGroup>
 
-          <FormGroup controlId="org">
+          <FormGroup controlId="org" validationState={this.validateField('org')}>
             <Col componentClass={ControlLabel} sm={3}>
               Organization
             </Col>
@@ -110,16 +170,20 @@ export default class Feedback extends React.Component {
                 value={this.state.org}
                 onChange={this.handleChange.bind(this)}
               />
+              <FormControl.Feedback />
             </Col>
           </FormGroup>
-
           <FormGroup>
             <Col smOffset={3} sm={9}>
-              <Button onClick={this.submitForm.bind(this)}>
-                Send your feedback
-              </Button>
+              <Recaptcha
+                sitekey="6LcDFdMSAAAAABJNbBf5O18x3LA4h1cb0dlclHY8"
+                render="explicit"
+                verifyCallback={this.verifyRecaptcha.bind(this)}
+                onloadCallback={this.loadRecaptcha}
+              />
             </Col>
           </FormGroup>
+          {submit}
         </Form>
       </div>
     );
@@ -127,12 +191,12 @@ export default class Feedback extends React.Component {
 
   renderThanks() {
     return (
-      <div>Thanks</div>
+      <div>Thanks<pre>{JSON.stringify(this.state,null,2)}</pre></div>
     );
   }
 
   render() {
-    if (this.state.completedForm) {
+    if (this.state.submittedForm) {
       return this.renderThanks();
     }
     else {
