@@ -3,6 +3,7 @@ import Recaptcha from 'react-recaptcha';
 import { FormGroup, FormControl, Form, ControlLabel, InputGroup, Col, Button } from 'react-bootstrap';
 import isEmail from 'is-email';
 import _ from 'lodash';
+import axios from 'axios';
 
 export default class Feedback extends React.Component {
   constructor(props) {
@@ -58,7 +59,14 @@ export default class Feedback extends React.Component {
   }
 
   submitForm() {
-    this.setState({submittedForm: true});
+    let that = this;
+    axios.post('/feedback',this.state)
+      .then(function (response) {
+        that.setState({submittedForm: true, response: response});
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   }
 
   verifyRecaptcha(response) {

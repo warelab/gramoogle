@@ -23,6 +23,7 @@
   "homepage": "https://github.com/warelab/gramoogle",
   "dependencies": {
     "axios": "^0.9.1",
+    "body-parser": "^1.16.0",
     "compression": "^1.6.2",
     "express": "^4.14.0",
     "gramene-bins-client": "^2.2.9",
