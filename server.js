@@ -5,7 +5,18 @@ var path = require('path');
 var compression = require('compression');
 var schedule = require('node-schedule');
 var mysql = require('mysql');
+var soap = require('soap');
 var argv = require('minimist')(process.argv.slice(2));
+
+const drupalArgs = {
+  host: argv.h,
+  user: argv.u,
+  password: argv.p,
+  database: argv.d
+};
+const recaptchaSecret = argv.s;
+const mantisUser = argv.m;
+const mantisPass = argv.n;
 
 var app = express();
 
@@ -16,12 +27,7 @@ app.use(bodyParser.json());
 var aliasLUT = {};
 
 function updateLUT() {
-  var drupalDb = mysql.createConnection({
-    host: argv.h,
-    user: argv.u,
-    password: argv.p,
-    database: argv.d
-  });
+  var drupalDb = mysql.createConnection(drupalArgs);
   drupalDb.query("select source, alias from url_alias", function(err, rows, fields) {
     if (err) throw err;
     rows.forEach(function(row) {
@@ -43,15 +49,23 @@ app.get('/aliases', function (req, res) {
 });
 
 app.post('/feedback', function (req, res) {
-  console.log(req.body.subject);
-  console.log(req.body.content);
-  console.log(req.body.name);
-  console.log(req.body.email);
-  console.log(req.body.org);
-  console.log(req.body.recaptcha);
+  let comments = req.body.content;
+  if (comments.length > 10000) {
+    comments = comments.substr(0,10000);
+    comments += "\n[MESSAGE TRUNCATED]";
+  }
+  let message = [
+    `URL         : ${req.body.referrer}`,
+    `Subject     : ${req.body.subject}`,
+    `Name        : ${req.body.name}`,
+    `Email       : ${req.body.email}`,
+    `Organization: ${req.body.org}`,
+    `Comments    : ${comments}`
+  ].join("\n\n");
+  let subject = `Site Feedback: ${req.body.subject}`;
   request.post({
     url: 'https://www.google.com/recaptcha/api/siteverify',
-    formData: {secret: argv.s, response: req.body.recaptcha}
+    formData: {secret: recaptchaSecret, response: req.body.recaptcha}
   },function(err, response, body) {
     let check = JSON.parse(body);
     if (err) {
@@ -59,7 +73,33 @@ app.post('/feedback', function (req, res) {
     }
     if (check.success) {
       // submit the ticket
-      res.json({});
+      const url = 'http://warelab.org/bugs/api/soap/mantisconnect.php?wsdl';
+      soap.createClient(url, function(err, client) {
+        if (err) {
+          res.json({error: 'soap error'});
+        }
+        client.mc_issue_add({
+          username: mantisUser,
+          password: mantisPass,
+          issue: {
+            project: {
+              id: 2
+            },
+            category: 'Uncategorized',
+            summary: subject,
+            description: message
+          }
+        }, function(err, result) {
+          if (err) {
+            res.json({error: 'error adding issue: ' + err});
+          }
+          else {
+            const ticket = result.return.$value;
+            console.log(ticket)
+            res.json({ticket:ticket});
+          }
+        });
+      });
     }
     else {
       res.json({error: check});
