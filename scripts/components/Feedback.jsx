@@ -62,7 +62,7 @@ export default class Feedback extends React.Component {
     let that = this;
     axios.post('/feedback',this.state)
       .then(function (response) {
-        that.setState({submittedForm: true, response: response});
+        that.setState({submittedForm: true, ticket: response.data.ticket});
       })
       .catch(function (error) {
         console.log(error);
@@ -199,7 +199,7 @@ export default class Feedback extends React.Component {
 
   renderThanks() {
     return (
-      <div>Thanks<pre>{JSON.stringify(this.state,null,2)}</pre></div>
+      <div>Thank You. <p>Your issue has been assigned the ticket number {this.state.ticket}.</p></div>
     );
   }
 

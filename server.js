@@ -6,6 +6,7 @@ var compression = require('compression');
 var schedule = require('node-schedule');
 var mysql = require('mysql');
 var soap = require('soap');
+var Email = require('email').Email;
 var argv = require('minimist')(process.argv.slice(2));
 
 const drupalArgs = {
@@ -95,7 +96,17 @@ app.post('/feedback', function (req, res) {
           }
           else {
             const ticket = result.return.$value;
-            console.log(ticket)
+            var myMsg = new Email(
+              { from: "feedback@gramene.org"
+                , to: "feedback@gramene.org"
+                , cc: req.body.email
+                , 'reply-to' : `${req.body.email}, feedback@gramene.org`
+                , subject: subject
+                , body: `${message}\n\nhttp://www.warelab.org/bugs/view.php?id=${ticket}\n`
+              });
+
+            myMsg.send();
+
             res.json({ticket:ticket});
           }
         });
