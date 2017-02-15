@@ -77,7 +77,6 @@ export default class SearchBox extends React.Component {
                        tabIndex="1"
                        placeholder="Search for genes, species, pathways, ontology terms, domains…"
                        autoComplete="off"
-                       standalone={true}
                        onChange={this.handleQueryStringChange}/>
           <InputGroup.Button>
             <HelpButton toggleHelp={this.props.toggleHelp}
