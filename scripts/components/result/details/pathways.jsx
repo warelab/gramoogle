@@ -102,7 +102,7 @@ var Pathways = React.createClass({
   render: function () {
     return (
       <div ref={(div) => {this.divWrapper = div;}}>
-        <ReactomeImg pathwayId={this.pathwayId} />
+        {/*<ReactomeImg pathwayId={this.pathwayId} />*/}
         <ul>
           {this.renderHierarchy()}
         </ul>
