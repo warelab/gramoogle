@@ -122,14 +122,17 @@ export default class Homology extends React.Component {
 
   filterAllHomologs() {
     queryActions.setAllFilters(this.createAllHomologsFilters());
+    if (this.props.closeModal) this.props.closeModal();
   }
 
   filterOrthologs() {
     queryActions.setAllFilters(this.createOrthologFilters());
+    if (this.props.closeModal) this.props.closeModal();
   }
 
   filterParalogs() {
     queryActions.setAllFilters(this.createParalogFilters());
+    if (this.props.closeModal) this.props.closeModal();
   }
 
   renderTreeVis() {
@@ -212,5 +215,6 @@ export default class Homology extends React.Component {
 
 Homology.propTypes = {
   gene: React.PropTypes.object.isRequired,
-  docs: React.PropTypes.object.isRequired
+  docs: React.PropTypes.object.isRequired,
+  closeModal: React.PropTypes.func
 };

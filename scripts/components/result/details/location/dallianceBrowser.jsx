@@ -71,13 +71,13 @@ export default class DallianceBrowser extends React.Component {
         noPersistView: true,
         maxWorkers: 2,
         noTitle: true,
-        noLocationField: true, //!this.props.expanded,
-        noLeapButtons: true, //!this.props.expanded,
-        noZoomSlider: false, //!this.props.expanded,
-        noTrackAdder: true, //!this.props.expanded,
+        noLocationField: !this.props.expanded,
+        noLeapButtons: !this.props.expanded,
+        noZoomSlider: !this.props.expanded,
+        noTrackAdder: !this.props.expanded,
         noTrackEditor: true,
         noExport: true,
-        noOptions: true , // !this.props.expanded,
+        noOptions: !this.props.expanded,
         noHelp: true,
         maxViewWidth: 1000000
       }

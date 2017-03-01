@@ -1,7 +1,7 @@
 import React from "react";
 import getProp from "lodash/get";
 import isEqual from "lodash/isEqual";
-import {Col} from "react-bootstrap";
+import {Button} from "react-bootstrap";
 import Browser from "./location/browser.jsx";
 import QueryActions from "../../../actions/queryActions";
 import {Detail, Title, Description, Content, Explore, Links} from "./generic/detail.jsx";
@@ -14,7 +14,6 @@ export default class Location extends React.Component {
     this.state = {
       visibleRange: this.initVisibleRange(props)
     };
-    // this.handleViewChange = _.debounce(this._undebounced_handleViewChange, 50).bind(this);
   }
   
   initVisibleRange(props) {
@@ -60,12 +59,8 @@ export default class Location extends React.Component {
     }
   }
 
-  // handleSelection(selection) {
-  //   this.setState({ selection: selection });
-  // }
 
   handleViewChange(chr, start, end) {
-    // console.log('view changed:', arguments);
     var visibleRange = {
       chr: chr,
       start: start,
@@ -108,6 +103,7 @@ export default class Location extends React.Component {
 
     QueryActions.removeAllFilters();
     QueryActions.setFilter(filter);
+    if (this.props.closeModal) this.props.closeModal();
   }
 
   explorations() {
@@ -141,7 +137,7 @@ export default class Location extends React.Component {
     return (
       <Detail>
         <Title key="title">Genome location: {this.renderGenePosition()}</Title>
-        <Description key="description">Currently viewing: {this.renderLocation()}</Description>
+        <Description key="description">Currently viewing: {this.renderLocation()}&nbsp;{this.renderResetButton()}</Description>
         <Content key="content">
           {this.renderBrowser()}
         </Content>
@@ -175,6 +171,21 @@ export default class Location extends React.Component {
         className="end">{location.end}</span>
       </span>
     );
+  }
+
+  resetVisibleRange() {
+    const {chr, start, end} = this.initVisibleRange(this.props);
+    this.handleViewChange(chr, start, end);
+  }
+
+  renderResetButton() {
+    // let active=isEqual(this.props.visibleRange, this.state.visibleRange);
+    return (
+      <Button
+        onClick={() => this.resetVisibleRange()}>
+        Reset
+      </Button>
+    )
   }
 }
 
