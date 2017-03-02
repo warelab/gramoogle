@@ -14,7 +14,7 @@ export default class ResultDetails extends React.Component {
     this.setState({fullScreen: !this.state.fullScreen});
   }
 
-  renderVisibleDetailElement({visibleDetail, geneDoc, docs}) {
+  renderVisibleDetailElement({visibleDetail, geneDoc, docs, speciesName}) {
     if (visibleDetail) {
       const visibleDetailComponent = visibleDetail.reactClass;
       let resizeStyle = {'ariaHidden': "true", float: "right"};
@@ -28,8 +28,15 @@ export default class ResultDetails extends React.Component {
               dialogClassName="detail-modal"
             >
               <Modal.Header closeButton>
-                <Modal.Title id="contained-modal-title-lg">
-                  {geneDoc.name}&nbsp;-&nbsp;{visibleDetail.name}
+                <Modal.Title>
+                  <div className="result-gene-title-body">
+                    <h3 className="gene-title">
+                      <span className="gene-name" style={{color: '#557B74'}}>{geneDoc.name}</span>&nbsp;
+                      <small className="gene-id">{geneDoc._id}</small>&nbsp;
+                      <small className="gene-species" style={{'font-style': 'italic'}}>{speciesName}</small>
+                    </h3>
+                    <p className="gene-description">{geneDoc.description}</p>
+                  </div>
                 </Modal.Title>
               </Modal.Header>
               <Modal.Body>
