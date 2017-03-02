@@ -3,8 +3,8 @@ import isEqual from "lodash/isEqual";
 import {browser as Dalliance} from "gramene-dalliance";
 
 // calculate this once.
-const PREFIX = (global.location ? global.location.origin + global.location.pathname : '')
-  + 'assets/gramene-dalliance/';
+const PREFIX = (global.location ? global.location.origin : '')
+  + '/assets/gramene-dalliance/';
 
 export default class DallianceBrowser extends React.Component {
 
@@ -66,17 +66,17 @@ export default class DallianceBrowser extends React.Component {
         ],
         disablePoweredBy: true,
         setDocumentTitle: false,
-        noDefaultLabels: true,
+        noDefaultLabels: !this.props.expanded,
         noPersist: true,
         noPersistView: true,
         maxWorkers: 2,
         noTitle: true,
-        noLocationField: !this.props.expanded,
+        noLocationField: true,
         noLeapButtons: !this.props.expanded,
         noZoomSlider: !this.props.expanded,
         noTrackAdder: !this.props.expanded,
-        noTrackEditor: true,
-        noExport: true,
+        noTrackEditor: !this.props.expanded,
+        noExport: !this.props.expanded,
         noOptions: !this.props.expanded,
         noHelp: true,
         maxViewWidth: 1000000

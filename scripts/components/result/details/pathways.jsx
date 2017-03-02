@@ -25,8 +25,8 @@ var Pathways = React.createClass({
       proxyPrefix : 'http://www.reactome.org',
       placeHolder : this.holderId,
       width : this.divWrapper.clientWidth,
-      height : 500
-    });
+      height : (!!this.props.closeModal) ? window.innerHeight : 500
+  });
 
     //Initialising it to the "Metabolism of nucleotides" pathway
     diagram.loadDiagram("R-HSA-15869");
