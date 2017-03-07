@@ -20,13 +20,13 @@ var Pathways = React.createClass({
     return {};
   },
 
-  componentDidMount: function()  {
+  initDiagram: function() {
     let diagram = Reactome.Diagram.create({
-      proxyPrefix : 'http://www.reactome.org',
-      placeHolder : this.holderId,
-      width : this.divWrapper.clientWidth,
-      height : (!!this.props.closeModal) ? window.innerHeight : 500
-  });
+      proxyPrefix: 'http://www.reactome.org',
+      placeHolder: this.holderId,
+      width: this.divWrapper.clientWidth,
+      height: (!!this.props.closeModal) ? window.innerHeight : 500
+    });
 
     //Initialising it to the "Metabolism of nucleotides" pathway
     diagram.loadDiagram("R-HSA-15869");
@@ -38,7 +38,17 @@ var Pathways = React.createClass({
       diagram.selectItem("R-HSA-111804");
       diagram.flagItems("TXN");
     });
+  },
 
+  componentDidMount: function()  {
+    if (Reactome && Reactome.Diagram) {
+      this.initDiagram();
+    }
+    else {
+      window.addEventListener('launchDiagram', function (e) {
+        this.initDiagram()
+      });
+    }
   },
 
   componentWillMount: function() {
