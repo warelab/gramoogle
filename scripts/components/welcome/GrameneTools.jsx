@@ -38,10 +38,10 @@ const GrameneTools = () =>
     <div className="tools-wrapper">
       <h3>Gramene Portals</h3>
       <ListGroup className="row">
-        <GrameneTool title="Gramene Search"
-                     description="Find and explore all data in Gramene database"
-                     link={{onClick: focusSearch, href: 'javascript:void(0)'}}
-                     imgSrc="/assets/images/gramene_leaves.svg"/>
+        {/*<GrameneTool title="Gramene Search"*/}
+                     {/*description="Find and explore all data in Gramene database"*/}
+                     {/*link={{onClick: focusSearch, href: 'javascript:void(0)'}}*/}
+                     {/*imgSrc="/assets/images/gramene_leaves.svg"/>*/}
         <GrameneTool title="Genome Browser"
                      description="Browse genomes with annotations, variation and comparative tools"
                      link={{href: "http://ensembl.gramene.org/genome_browser/index.html"}}
@@ -50,6 +50,10 @@ const GrameneTools = () =>
                      description="Browse and analyze metabolic and regulatory pathways"
                      link={{href: "http://plantreactome.gramene.org/"}}
                      imgSrc="/assets/images/welcome/pathways.png"/>
+        <GrameneTool title="Tools"
+                     description="Tools for processing both our data and yours"
+                     link={{href: "http://ensembl.gramene.org/tools.html"}}
+                     imgSrc="/assets/images/welcome/tools.png"/>
         <GrameneTool title="Plant Expression ATLAS"
                      description="Browse plant expression results at EBI ATLAS"
                      link={{href: "https://www.ebi.ac.uk/gxa/plant/experiments"}}
