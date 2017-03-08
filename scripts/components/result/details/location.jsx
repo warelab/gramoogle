@@ -126,11 +126,15 @@ export default class Location extends React.Component {
 
   links() {
     var gene = this.props.gene;
-    return [
+    let links = [
       {name: 'Gramene Ensembl', url: `//ensembl.gramene.org/${gene.system_name}/Gene/Summary?g=${gene._id}`},
       {name: 'PhytoMine', url: `https://phytozome.jgi.doe.gov/phytomine/keywordSearchResults.do?searchTerm=${gene._id}&searchSubmit=Search`},
-      {name: 'Araport', url: `https://www.araport.org/search/thalemine/${gene._id}`}
-    ]
+    ];
+    if (gene.taxon_id === 3702)
+      links.push({name: 'Araport', url: `https://www.araport.org/search/thalemine/${gene._id}`});
+    if (gene.taxon_id === 4577)
+      links.push({name: 'MaizeGDB', url: `http://www.maizegdb.org/gene_center/gene/${gene._id}`});
+    return links;
   }
 
   render() {
