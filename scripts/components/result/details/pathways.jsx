@@ -22,21 +22,21 @@ var Pathways = React.createClass({
 
   initDiagram: function() {
     let diagram = Reactome.Diagram.create({
-      proxyPrefix: 'http://www.reactome.org',
+      proxyPrefix: '//reactomedev.oicr.on.ca',
       placeHolder: this.holderId,
       width: this.divWrapper.clientWidth,
       height: (!!this.props.closeModal) ? window.innerHeight : 500
     });
 
     //Initialising it to the "Metabolism of nucleotides" pathway
-    diagram.loadDiagram("R-HSA-15869");
+    diagram.loadDiagram("R-OSA-1119531");
 
     //Adding different listeners
 
     diagram.onDiagramLoaded(function (loaded) {
       console.info("Loaded ", loaded);
-      diagram.selectItem("R-HSA-111804");
-      diagram.flagItems("TXN");
+      // diagram.selectItem("R-HSA-111804");
+      // diagram.flagItems("TXN");
     });
   },
 
