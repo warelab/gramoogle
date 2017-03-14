@@ -29,7 +29,7 @@ var Pathways = React.createClass({
     });
 
     //Initialising it to the "Metabolism of nucleotides" pathway
-    diagram.loadDiagram("R-OSA-1119531");
+    diagram.loadDiagram("R-HSA-15869");
 
     //Adding different listeners
 
