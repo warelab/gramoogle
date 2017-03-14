@@ -30,10 +30,14 @@ var aliasLUT = {};
 function updateLUT() {
   var drupalDb = mysql.createConnection(drupalArgs);
   drupalDb.query("select source, alias from url_alias", function(err, rows, fields) {
-    if (err) throw err;
-    rows.forEach(function(row) {
-      aliasLUT[row.alias] = row.source.replace(/node\//,'');
-    })
+    if (err) {
+      console.log('error connecting to drupal db',err);
+    }
+    else {
+      rows.forEach(function(row) {
+        aliasLUT[row.alias] = row.source.replace(/node\//,'');
+      })
+    }
   });
   drupalDb.end();
 }
