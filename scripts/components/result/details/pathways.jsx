@@ -17,37 +17,39 @@ var Pathways = React.createClass({
 
   getInitialState: function() {
     this.holderId = 'displayHolder' + this.props.gene._id;
-    return {};
+    return {
+    };
   },
 
   initDiagram: function() {
-    let diagram = Reactome.Diagram.create({
-      proxyPrefix: '//reactomedev.oicr.on.ca',
+    this.diagram = Reactome.Diagram.create({
+      proxyPrefix: '//reactome.org', // cord3084-pc7.science.oregonstate.edu reactomedev.oicr.on.ca
       placeHolder: this.holderId,
       width: this.divWrapper.clientWidth,
       height: (!!this.props.closeModal) ? window.innerHeight : 500
     });
-
-    //Initialising it to the "Metabolism of nucleotides" pathway
-    diagram.loadDiagram("R-HSA-15869");
-
-    //Adding different listeners
-
-    diagram.onDiagramLoaded(function (loaded) {
-      console.info("Loaded ", loaded);
-      // diagram.selectItem("R-HSA-111804");
-      // diagram.flagItems("TXN");
-    });
   },
 
-  componentDidMount: function()  {
+  loadDiagram: function(pathwayId, reactionId) {
+    pathwayId = "R-HSA-15869";
+    reactionId = "R-HSA-111804";
+
+    this.diagram.loadDiagram(pathwayId);
+
+    this.diagram.onDiagramLoaded(function (loaded) {
+      this.diagram.selectItem(reactionId);
+      this.diagram.flagItems("TXN"); //this.props.gene._id);
+    }.bind(this));
+  },
+
+  componentDidMount: function() {
     if (Reactome && Reactome.Diagram) {
       this.initDiagram();
     }
     else {
       window.addEventListener('launchDiagram', function (e) {
         this.initDiagram()
-      });
+      }.bind(this));
     }
   },
 
@@ -58,64 +60,49 @@ var Pathways = React.createClass({
       throw new Error("No pathway annotation present for " + _.get(this.props, 'gene._id'));
     }
 
-    ancestorIds = pathways.ancestors;
-    if(!ancestorIds) {
-      throw new Error("Reactome ancestors are required because that's where the Pathway is");
-    }
+    this.pathwayIds = _.clone(pathways.ancestors);
+    pathways.entries.forEach(function(reaction) {
+      this.pathwayIds.push(reaction.id); 
+    }.bind(this));
 
-    this.pathwayId = _.head(ancestorIds);
-
-    if(_.get(pathways, 'entries.length') != 1) {
-      console.error("Number of reactions is not 1");
-    }
-
-    reactionId = _.get(pathways, 'entries[0].id');
-    this.pathwayIds = [+reactionId].concat(ancestorIds);
-
-    DocActions.needDocs('pathways', this.pathwayIds);
+    DocActions.needDocs('pathways', this.pathwayIds, this.getHierarchy);
   },
 
   componentWillUnmount: function() {
     DocActions.noLongerNeedDocs('pathways', this.pathwayIds);
   },
 
-  getReaction: function() {
-    var rxnId, rxn;
-    if(!this.reaction) {
-      rxnId = _.head(this.pathwayIds);
-      rxn = _.get(this.props.docs, ['pathways', rxnId]);
-      if(rxn) {
-        this.reaction = rxn;
-      }
-    }
-    return this.reaction;
+  getHierarchy: function (docs) {
+    let pathways = _.keyBy(docs, '_id');
+    let reactions = [];
+    this.pathwayIds.forEach(function (pwyId) {
+      let pwy = pathways[pwyId];
+      if (pwy.type === 'Reaction') reactions.push(pwy);
+    }.bind(this));
+
+    let lineage = reactions[0].lineage[0];
+    let pwy = pathways[lineage[lineage.length - 2]];
+    this.loadDiagram(`R_ATH_${pwy.id}`, `R_ATH_${reactions[0].id}`);
+
+    this.setState({hierarchy: 'root'});
+    return docs;
   },
 
+
   renderHierarchy: function() {
-    var reactionData, currentNodeId, currentNode, els;
-    reactionData = this.getReaction();
-    if(reactionData) {
-      currentNodeId = reactionData._id;
-      els = [];
-      while(currentNodeId) {
-        currentNode = this.props.docs.pathways[currentNodeId];
-        els.push( <ReactomeItem key={currentNodeId} reactomeItem={currentNode}/> );
-        currentNodeId = _.get(currentNode, 'parents[0]');
-      }
+    if(this.state.hierarchy) {
+      return <div>ok</div>
     }
     else {
-      els = <li>Nothing yet.</li>
+      return <div>Nothing yet.</div>
     }
-    return els;
   },
 
   render: function () {
     return (
       <div ref={(div) => {this.divWrapper = div;}}>
         {/*<ReactomeImg pathwayId={this.pathwayId} />*/}
-        <ul>
-          {this.renderHierarchy()}
-        </ul>
+        {this.renderHierarchy()}
         <div id={this.holderId}></div>
       </div>
     );
