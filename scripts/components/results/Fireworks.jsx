@@ -13,7 +13,7 @@ export default class Fireworks extends React.Component {
 
   initFireworks() {
     this.fireworks = Reactome.Fireworks.create({
-      proxyPrefix: '//reactomedev.oicr.on.ca',
+      proxyPrefix: '//cord3084-pc7.science.oregonstate.edu',
       placeHolder: 'fireworksHolder',
       width: 1140,
       height: 500
@@ -36,7 +36,7 @@ export default class Fireworks extends React.Component {
 
     this.fireworks.onFireworksLoaded(function(id) {
       console.log('FireworksLoaded',id);
-      this.fireworks.setAnalysisToken(TEST_TOKEN,'TOTAL');
+      // this.fireworks.setAnalysisToken(TEST_TOKEN,'TOTAL');
       this.setState({isTokenSet: true});
     }.bind(this));
   }

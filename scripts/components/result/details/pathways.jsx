@@ -1,14 +1,12 @@
 'use strict';
 
 var React = require('react');
-var Reflux = require('reflux');
 var _ = require('lodash');
 var DocActions = require('../../../actions/docActions');
 var docStore = require('../../../stores/docStore');
-
-var ReactomeItem = require('./pathways/reactomeItem.jsx');
-var ReactomeImg = require('./pathways/reactomeImg.jsx');
-
+import searchStore from "../../../stores/searchStore";
+var FlatToNested = require('flat-to-nested');
+import TreeMenu from 'react-tree-menu';
 var Pathways = React.createClass({
   propTypes: {
     gene: React.PropTypes.object.isRequired,
@@ -18,12 +16,13 @@ var Pathways = React.createClass({
   getInitialState: function() {
     this.holderId = 'displayHolder' + this.props.gene._id;
     return {
+      taxonomy: searchStore.taxonomy,
     };
   },
 
   initDiagram: function() {
     this.diagram = Reactome.Diagram.create({
-      proxyPrefix: '//reactome.org', // cord3084-pc7.science.oregonstate.edu reactomedev.oicr.on.ca
+      proxyPrefix: '//cord3084-pc7.science.oregonstate.edu', // reactomedev.oicr.on.ca
       placeHolder: this.holderId,
       width: this.divWrapper.clientWidth,
       height: (!!this.props.closeModal) ? window.innerHeight : 500
@@ -31,24 +30,28 @@ var Pathways = React.createClass({
   },
 
   loadDiagram: function(pathwayId, reactionId) {
-    pathwayId = "R-HSA-15869";
-    reactionId = "R-HSA-111804";
-
+    // pathwayId = "R-OSA-8933811";
+    // reactionId = "R-OSA-8933859";
+    let prefix = this.state.taxonomy.indices.id[this.props.gene.taxon_id].model.reactomePrefix;
+    pathwayId = `R-${prefix}-${pathwayId}`;
+    reactionId= `R-${prefix}-${reactionId}`;
+    console.log('loadDiagram', pathwayId, reactionId);
+    this.initDiagram();
     this.diagram.loadDiagram(pathwayId);
 
     this.diagram.onDiagramLoaded(function (loaded) {
       this.diagram.selectItem(reactionId);
-      this.diagram.flagItems("TXN"); //this.props.gene._id);
+      this.diagram.flagItems(this.props.gene._id);
     }.bind(this));
   },
 
   componentDidMount: function() {
     if (Reactome && Reactome.Diagram) {
-      this.initDiagram();
+      // this.initDiagram();
     }
     else {
       window.addEventListener('launchDiagram', function (e) {
-        this.initDiagram()
+        // this.initDiagram()
       }.bind(this));
     }
   },
@@ -70,30 +73,66 @@ var Pathways = React.createClass({
 
   componentWillUnmount: function() {
     DocActions.noLongerNeedDocs('pathways', this.pathwayIds);
+    if (this.diagram) this.diagram.detach();
   },
 
   getHierarchy: function (docs) {
     let pathways = _.keyBy(docs, '_id');
-    let reactions = [];
+    let nodes = [];
     this.pathwayIds.forEach(function (pwyId) {
-      let pwy = pathways[pwyId];
-      if (pwy.type === 'Reaction') reactions.push(pwy);
-    }.bind(this));
+      if (pathways[pwyId]) {
+        let pwy = pathways[pwyId];
+        pwy.lineage.forEach(function(line) {
+          let parentOffset = line.length - 2;
+          nodes.push({
+            id: pwyId,
+            label: pwy.name,
+            type: pwy.type,
+            parent: parentOffset >=0 ? line[parentOffset] : undefined
+          });
+        });
+      }
+    });
 
-    let lineage = reactions[0].lineage[0];
-    let pwy = pathways[lineage[lineage.length - 2]];
-    this.loadDiagram(`R_ATH_${pwy.id}`, `R_ATH_${reactions[0].id}`);
+    let nested = new FlatToNested().convert(nodes);
 
-    this.setState({hierarchy: 'root'});
+    this.setState({hierarchy: [nested]});
     return docs;
   },
 
 
   renderHierarchy: function() {
     if(this.state.hierarchy) {
-      return <div>ok</div>
+
+      var onClick = function(nodes) {
+        console.log('onClick',nodes,this.state.hierarchy);
+        let offset = nodes.shift();
+        let nodeRef = this.state.hierarchy[offset];
+        let lineage = [nodeRef];
+        nodes.forEach(function(n) {
+          nodeRef = nodeRef.children[n];
+          lineage.unshift(nodeRef);
+        });
+        console.log('leaf',lineage);
+        if (lineage[0].type === "Reaction") {
+          this.loadDiagram(lineage[1].id,lineage[0].id);
+        }
+      };
+
+      return (
+        <TreeMenu
+          data={this.state.hierarchy}
+          expandIconClass="fa fa-chevron-right"
+          collapseIconClass="fa fa-chevron-down"
+          stateful={true}
+          onTreeNodeClick={onClick.bind(this)}
+        />
+      );
     }
     else {
+      if (this.state.docs && this.state.docs.pathways) {
+        this.getHierarchy(this.state.docs.pathways);
+      }
       return <div>Nothing yet.</div>
     }
   },

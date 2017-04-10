@@ -33,7 +33,7 @@ export default class ResultDetails extends React.Component {
                     <h3 className="gene-title">
                       <span className="gene-name" style={{color: '#557B74'}}>{geneDoc.name}</span>&nbsp;
                       <small className="gene-id">{geneDoc._id}</small>&nbsp;
-                      <small className="gene-species" style={{'font-style': 'italic'}}>{speciesName}</small>
+                      <small className="gene-species" style={{'fontStyle': 'italic'}}>{speciesName}</small>
                     </h3>
                     <p className="gene-description">{geneDoc.description}</p>
                   </div>

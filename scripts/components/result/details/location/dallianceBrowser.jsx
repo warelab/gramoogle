@@ -1,6 +1,6 @@
 import React from "react";
 import isEqual from "lodash/isEqual";
-import {browser as Dalliance} from "gramene-dalliance";
+// import {browser as Dalliance} from "dalliance";
 
 // calculate this once.
 const PREFIX = (global.location ? global.location.origin : '')
@@ -16,7 +16,7 @@ export default class DallianceBrowser extends React.Component {
   shouldComponentUpdate(newProps) {
     // should we reset the view to initial state?
     if(isEqual(newProps.visibleRange, this.initialVisibleRange)) {
-      this.browser.setLocation(newProps.visibleRange.chr, newProps.visibleRange.start, newProps.visibleRange.end);
+      // this.browser.setLocation(newProps.visibleRange.chr, newProps.visibleRange.start, newProps.visibleRange.end);
     }
 
     return false;
@@ -33,7 +33,7 @@ export default class DallianceBrowser extends React.Component {
     start = view.start;
     end = view.end;
 
-    this.browser = browser = new Dalliance(
+    this.browser = browser = new Browser(
       {
         pageName: this.biodallianceElementId(),
         chr: g.location.region,
@@ -46,7 +46,8 @@ export default class DallianceBrowser extends React.Component {
           speciesName: g.system_name,
           taxon: g.taxon_id,
           auth: 'Gramene',
-          version: '3'
+          version: '3',
+          ucscName: 'IRGSP-1.0'
         },
 
         sources: [
@@ -64,6 +65,8 @@ export default class DallianceBrowser extends React.Component {
             type: ['gene', 'transcript', 'exon', 'cds']
           }
         ],
+
+        hubs: ['http://localhost:8080/Track_Hubs/DRP000315/hub.txt'],
         disablePoweredBy: true,
         setDocumentTitle: false,
         noDefaultLabels: !this.props.expanded,

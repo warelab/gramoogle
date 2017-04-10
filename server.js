@@ -1,4 +1,5 @@
 var express = require('express');
+var cors = require('cors');
 var bodyParser = require('body-parser');
 var request = require('request');
 var path = require('path');
@@ -20,7 +21,7 @@ const mantisUser = argv.m;
 const mantisPass = argv.n;
 
 var app = express();
-
+app.use(cors());
 app.use(compression());
 app.use(bodyParser.urlencoded({ extended: false}));
 app.use(bodyParser.json());
