@@ -121,7 +121,7 @@ module.exports = function (grunt) {
           {expand: true, cwd: 'assets/', src: ['**'], dest: 'build/assets/'},
           {
             expand: true,
-            cwd: 'node_modules/gramene-dalliance', 
+            cwd: 'node_modules/dalliance',
             src: [
               'css/*-scoped.css',
               'css/font-awesome.min.css',
@@ -131,8 +131,12 @@ module.exports = function (grunt) {
             dest: 'build/assets/gramene-dalliance/'
           },
           {
-            src: 'node_modules/dalliance/build/worker-all.js',
+            src: 'node_modules/dalliance/prebuilt/worker-all.js',
             dest: 'build/assets/gramene-dalliance/worker-all.js'
+          },
+          {
+            src: 'node_modules/dalliance/prebuilt/dalliance-all.js',
+            dest: 'build/assets/gramene-dalliance/dalliance-all.js'
           }
         ]
       },

@@ -26,7 +26,7 @@
     "body-parser": "^1.16.0",
     "compression": "^1.6.2",
     "cors": "^2.8.1",
-    "dalliance": "^0.13.2",
+    "dalliance": "git://github.com/ajo2995/dalliance.git#cran",
     "email": "^0.2.6",
     "express": "^4.14.0",
     "flat-to-nested": "^1.0.2",
