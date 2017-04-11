@@ -1,6 +1,7 @@
 'use strict';
 
 var React = require('react');
+const Reflux = require('reflux');
 var _ = require('lodash');
 var DocActions = require('../../../actions/docActions');
 var docStore = require('../../../stores/docStore');
@@ -12,11 +13,14 @@ var Pathways = React.createClass({
     gene: React.PropTypes.object.isRequired,
     docs: React.PropTypes.object // all documents requested by the page.
   },
+  mixins: [
+    Reflux.connect(docStore, 'docs')
+  ],
 
   getInitialState: function() {
     this.holderId = 'displayHolder' + this.props.gene._id;
     return {
-      taxonomy: searchStore.taxonomy,
+      taxonomy: searchStore.taxonomy
     };
   },
 
@@ -29,19 +33,21 @@ var Pathways = React.createClass({
     });
   },
 
-  loadDiagram: function(pathwayId, reactionId) {
-    // pathwayId = "R-OSA-8933811";
-    // reactionId = "R-OSA-8933859";
+  stableId: function(dbId) {
     let prefix = this.state.taxonomy.indices.id[this.props.gene.taxon_id].model.reactomePrefix;
-    pathwayId = `R-${prefix}-${pathwayId}`;
-    reactionId= `R-${prefix}-${reactionId}`;
-    console.log('loadDiagram', pathwayId, reactionId);
-    this.initDiagram();
+    return `R-${prefix}-${dbId}`;
+  },
+
+  loadDiagram: function(pathwayId, reactionId) {
+    if (!this.diagram) this.initDiagram();
     this.diagram.loadDiagram(pathwayId);
 
     this.diagram.onDiagramLoaded(function (loaded) {
-      this.diagram.selectItem(reactionId);
-      this.diagram.flagItems(this.props.gene._id);
+      this.loadedDiagram = loaded;
+      if (reactionId) {
+        this.diagram.selectItem(reactionId);
+      }
+      // this.diagram.flagItems(this.props.gene._id);
     }.bind(this));
   },
 
@@ -68,8 +74,9 @@ var Pathways = React.createClass({
       this.pathwayIds.push(reaction.id); 
     }.bind(this));
 
-    DocActions.needDocs('pathways', this.pathwayIds, this.getHierarchy);
+    DocActions.needDocs('pathways', this.pathwayIds, undefined, this.getHierarchy);
   },
+
 
   componentWillUnmount: function() {
     DocActions.noLongerNeedDocs('pathways', this.pathwayIds);
@@ -77,7 +84,7 @@ var Pathways = React.createClass({
   },
 
   getHierarchy: function (docs) {
-    let pathways = _.keyBy(docs, '_id');
+    let pathways = _.keyBy(docs,'_id');
     let nodes = [];
     this.pathwayIds.forEach(function (pwyId) {
       if (pathways[pwyId]) {
@@ -88,6 +95,8 @@ var Pathways = React.createClass({
             id: pwyId,
             label: pwy.name,
             type: pwy.type,
+            checkbox: false,
+            selected: false,
             parent: parentOffset >=0 ? line[parentOffset] : undefined
           });
         });
@@ -96,8 +105,7 @@ var Pathways = React.createClass({
 
     let nested = new FlatToNested().convert(nodes);
 
-    this.setState({hierarchy: [nested]});
-    return docs;
+    this.setState({hierarchy: [nested], selectedNode: undefined});
   },
 
 
@@ -105,18 +113,57 @@ var Pathways = React.createClass({
     if(this.state.hierarchy) {
 
       var onClick = function(nodes) {
-        console.log('onClick',nodes,this.state.hierarchy);
+        let hierarchy = this.state.hierarchy;
+        let selectedNode = this.state.selectedNode;
         let offset = nodes.shift();
-        let nodeRef = this.state.hierarchy[offset];
+        let nodeRef = hierarchy[offset];
         let lineage = [nodeRef];
         nodes.forEach(function(n) {
           nodeRef = nodeRef.children[n];
           lineage.unshift(nodeRef);
         });
-        console.log('leaf',lineage);
+        let pathway = this.stableId(lineage[0].id);
+        let reaction = undefined;
         if (lineage[0].type === "Reaction") {
-          this.loadDiagram(lineage[1].id,lineage[0].id);
+          reaction = pathway;
+          pathway = this.stableId(lineage[1].id);
         }
+        if (lineage[0].selected) {
+          selectedNode = undefined;
+          lineage[0].selected = false;
+          if (this.loadedDiagram === pathway) {
+            this.diagram.resetSelection();
+          }
+          else {
+            if (this.diagram) this.diagram.resetSelection();
+            this.loadDiagram(pathway);
+          }
+        }
+        else {
+          if (selectedNode) {
+            selectedNode.selected=false;
+          }
+          selectedNode = lineage[0];
+          lineage[0].selected = true;
+          if (this.loadedDiagram === pathway) {
+            if(reaction) {
+              this.diagram.selectItem(reaction);
+            }
+            else {
+              this.diagram.resetSelection();
+            }
+          }
+          else {
+            if (this.diagram) this.diagram.resetSelection();
+            if (reaction) {
+              this.loadDiagram(pathway, reaction);
+            }
+            else {
+              this.loadDiagram(pathway);
+            }
+          }
+        }
+        this.setState({hierarchy: hierarchy,selectedNode: selectedNode});
       };
 
       return (
@@ -130,9 +177,6 @@ var Pathways = React.createClass({
       );
     }
     else {
-      if (this.state.docs && this.state.docs.pathways) {
-        this.getHierarchy(this.state.docs.pathways);
-      }
       return <div>Nothing yet.</div>
     }
   },
