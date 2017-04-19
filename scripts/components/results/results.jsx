@@ -30,8 +30,8 @@ export default class Results extends React.Component {
                 bsStyle='tabs'
                 onSelect={(summary) => this.setState({summary})}
                 id="results-summary-tabs">
-            <Tab eventKey='taxagenomic' title="Taxagenomic distribution&#8482;">{viz}</Tab>
-            <Tab eventKey='pathways' title="Pathways distribution">{pathways}</Tab>
+            <Tab eventKey='taxagenomic' title="Taxagenomic distribution">{viz}</Tab>
+            {/*<Tab eventKey='pathways' title="Pathways distribution">{pathways}</Tab>*/}
           </Tabs>
           <ResultsList results={this.props.results}/>
         </div>

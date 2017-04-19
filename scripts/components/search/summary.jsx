@@ -28,8 +28,9 @@ var Summary = React.createClass({
     if (_.size(results) === 0) {
       return (
           <div className="results-summary">
-            <span>Initializing</span>
-            <Spinner />
+            <span className="gene-count"><Spinner /> genes</span>
+            <span className="join"> in </span>
+            <span className="genomes-count"><Spinner /> genomes</span>
           </div>
       )
     }

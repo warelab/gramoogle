@@ -5,6 +5,8 @@ var moment = require('moment');
 var fs = require('fs');
 
 var grameneRelease = require('./package.json').gramene.dbRelease;
+var reactomeURL = require('./package.json').gramene.reactomeURL;
+
 var webserviceVersion = 'v' + grameneRelease;
 
 module.exports = function (grunt) {
@@ -199,7 +201,8 @@ module.exports = function (grunt) {
         footer: footer,
         content: content,
         loadingMessage: loadingMessage,
-        hideIntro: hideIntro
+        hideIntro: hideIntro,
+        reactomeURL: reactomeURL
       };
 
       return template(props);

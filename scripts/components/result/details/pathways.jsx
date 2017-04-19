@@ -3,11 +3,17 @@
 var React = require('react');
 const Reflux = require('reflux');
 var _ = require('lodash');
+import QueryActions from "../../../actions/queryActions";
 var DocActions = require('../../../actions/docActions');
 var docStore = require('../../../stores/docStore');
+var reactomeURL = require('../../../../package.json').gramene.reactomeURL;
 import searchStore from "../../../stores/searchStore";
 var FlatToNested = require('flat-to-nested');
 import TreeMenu from 'react-tree-menu';
+import {Explore, Links} from "./generic/detail.jsx";
+
+
+
 var Pathways = React.createClass({
   propTypes: {
     gene: React.PropTypes.object.isRequired,
@@ -26,7 +32,7 @@ var Pathways = React.createClass({
 
   initDiagram: function() {
     this.diagram = Reactome.Diagram.create({
-      proxyPrefix: '//cord3084-pc7.science.oregonstate.edu', // reactomedev.oicr.on.ca
+      proxyPrefix: reactomeURL, //'//plantreactome.gramene.org', //'//plantreactomedev.oicr.on.ca', ////cord3084-pc7.science.oregonstate.edu', // reactomedev.oicr.on.ca
       placeHolder: this.holderId,
       width: this.divWrapper.clientWidth,
       height: (!!this.props.closeModal) ? window.innerHeight : 500
@@ -122,48 +128,50 @@ var Pathways = React.createClass({
           nodeRef = nodeRef.children[n];
           lineage.unshift(nodeRef);
         });
-        let pathway = this.stableId(lineage[0].id);
-        let reaction = undefined;
-        if (lineage[0].type === "Reaction") {
-          reaction = pathway;
-          pathway = this.stableId(lineage[1].id);
-        }
-        if (lineage[0].selected) {
-          selectedNode = undefined;
-          lineage[0].selected = false;
-          if (this.loadedDiagram === pathway) {
-            this.diagram.resetSelection();
+        if (lineage[0].id !== 2894885) {
+          let pathway = this.stableId(lineage[0].id);
+          let reaction = undefined;
+          if (lineage[0].type === "Reaction") {
+            reaction = pathway;
+            pathway = this.stableId(lineage[1].id);
           }
-          else {
-            if (this.diagram) this.diagram.resetSelection();
-            this.loadDiagram(pathway);
-          }
-        }
-        else {
-          if (selectedNode) {
-            selectedNode.selected=false;
-          }
-          selectedNode = lineage[0];
-          lineage[0].selected = true;
-          if (this.loadedDiagram === pathway) {
-            if(reaction) {
-              this.diagram.selectItem(reaction);
-            }
-            else {
+          if (lineage[0].selected) {
+            selectedNode = undefined;
+            lineage[0].selected = false;
+            if (this.loadedDiagram === pathway) {
               this.diagram.resetSelection();
             }
-          }
-          else {
-            if (this.diagram) this.diagram.resetSelection();
-            if (reaction) {
-              this.loadDiagram(pathway, reaction);
-            }
             else {
+              if (this.diagram) this.diagram.resetSelection();
               this.loadDiagram(pathway);
             }
           }
+          else {
+            if (selectedNode) {
+              selectedNode.selected = false;
+            }
+            selectedNode = lineage[0];
+            lineage[0].selected = true;
+            if (this.loadedDiagram === pathway) {
+              if (reaction) {
+                this.diagram.selectItem(reaction);
+              }
+              else {
+                this.diagram.resetSelection();
+              }
+            }
+            else {
+              if (this.diagram) this.diagram.resetSelection();
+              if (reaction) {
+                this.loadDiagram(pathway, reaction);
+              }
+              else {
+                this.loadDiagram(pathway);
+              }
+            }
+          }
+          this.setState({hierarchy: hierarchy, selectedNode: selectedNode});
         }
-        this.setState({hierarchy: hierarchy,selectedNode: selectedNode});
       };
 
       return (
@@ -181,12 +189,44 @@ var Pathways = React.createClass({
     }
   },
 
+  updateQuery() {
+    let fq = `pathways__ancestors:${this.state.selectedNode.id}`;
+    let filterDisplayName = `${this.state.selectedNode.label}`;
+    console.log("User asked to filter by "+ this.state.selectedNode.type);
+
+    let filter = {
+      category: 'Plant Reactome',
+      id: fq,
+      fq: fq,
+      display_name: filterDisplayName
+    };
+
+    QueryActions.removeAllFilters();
+    QueryActions.setFilter(filter);
+    if (this.props.closeModal) this.props.closeModal();
+  },
+
   render: function () {
+    let reactomeLink,searchFilter;
+    if (this.state.selectedNode) {
+      let links = [
+        {name: 'Plant Reactome', url: `${reactomeURL}/content/detail/${this.stableId(this.state.selectedNode.id)}`}
+      ];
+      reactomeLink = <Links key="links" links={links}/>;
+      let filters = [
+        {
+          name: `All genes in this ${this.state.selectedNode.type}`,
+          handleClick: ()=>this.updateQuery()
+        }
+      ];
+      searchFilter = <Explore key="explore" explorations={filters}/>;
+    }
     return (
       <div ref={(div) => {this.divWrapper = div;}}>
-        {/*<ReactomeImg pathwayId={this.pathwayId} />*/}
         {this.renderHierarchy()}
         <div id={this.holderId}></div>
+        {searchFilter}
+        {reactomeLink}
       </div>
     );
   }

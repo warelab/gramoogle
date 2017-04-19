@@ -1,5 +1,6 @@
 import React from 'react';
 import {Button} from 'react-bootstrap';
+var reactomeURL = require('../../../package.json').gramene.reactomeURL;
 
 const TEST_TOKEN = 'MjAxNzAzMDkxNTE4MjBfMjI%3D';
 
@@ -13,7 +14,7 @@ export default class Fireworks extends React.Component {
 
   initFireworks() {
     this.fireworks = Reactome.Fireworks.create({
-      proxyPrefix: '//cord3084-pc7.science.oregonstate.edu',
+      proxyPrefix: reactomeURL,
       placeHolder: 'fireworksHolder',
       width: 1140,
       height: 500

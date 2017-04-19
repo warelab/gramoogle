@@ -4,7 +4,8 @@
   "description": "Gramene search interface",
   "main": "index.js",
   "gramene": {
-    "dbRelease": 52
+    "dbRelease": 53,
+    "reactomeURL": "//plantreactomedev.oicr.on.ca"
   },
   "scripts": {
     "build": "grunt package",

@@ -1,6 +1,6 @@
 import React from "react";
 import isEqual from "lodash/isEqual";
-// import {browser as Dalliance} from "dalliance";
+var grameneRelease = require('../../../../../package.json').gramene.dbRelease;
 
 // calculate this once.
 const PREFIX = (global.location ? global.location.origin : '')
@@ -53,20 +53,20 @@ export default class DallianceBrowser extends React.Component {
         sources: [
           {
             name: 'DNA',
-            ensemblURI: 'http://data.gramene.org/ensembl',
+            ensemblURI: 'http://data.gramene.org/ensembl'+ grameneRelease,
             species: g.system_name,
             tier_type: 'sequence'
           },
           {
             name: 'Genes',
-            uri: 'http://data.gramene.org/ensembl',
+            uri: 'http://data.gramene.org/ensembl'+ grameneRelease,
             tier_type: 'ensembl',
             species: g.system_name,
             type: ['gene', 'transcript', 'exon', 'cds']
           }
         ],
 
-        hubs: ['http://localhost:8080/Track_Hubs/DRP000315/hub.txt'],
+        hubs: ['/Track_Hubs/DRP000315/hub.txt'],
         disablePoweredBy: true,
         setDocumentTitle: false,
         noDefaultLabels: !this.props.expanded,
@@ -76,7 +76,7 @@ export default class DallianceBrowser extends React.Component {
         noTitle: true,
         noLocationField: true,
         noLeapButtons: !this.props.expanded,
-        noZoomSlider: !this.props.expanded,
+        noZoomSlider: false, //!this.props.expanded,
         noTrackAdder: !this.props.expanded,
         noTrackEditor: !this.props.expanded,
         noExport: !this.props.expanded,
