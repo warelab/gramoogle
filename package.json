@@ -5,7 +5,8 @@
   "main": "index.js",
   "gramene": {
     "dbRelease": 53,
-    "reactomeURL": "//plantreactome.gramene.org"
+    "reactomeURL": "//plantreactome.gramene.org",
+    "ensemblURL": "//dev.gramene.org"
   },
   "scripts": {
     "build": "grunt package",

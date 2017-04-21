@@ -5,6 +5,7 @@ import {Button} from "react-bootstrap";
 import Browser from "./location/browser.jsx";
 import QueryActions from "../../../actions/queryActions";
 import {Detail, Title, Description, Content, Explore, Links} from "./generic/detail.jsx";
+var ensemblURL = require('../../../../package.json').gramene.ensemblURL;
 
 export default class Location extends React.Component {
 
@@ -127,7 +128,7 @@ export default class Location extends React.Component {
   links() {
     var gene = this.props.gene;
     let links = [
-      {name: 'Gramene Ensembl', url: `//ensembl.gramene.org/${gene.system_name}/Gene/Summary?g=${gene._id}`},
+      {name: 'Gramene Ensembl', url: `${ensemblURL}/${gene.system_name}/Gene/Summary?g=${gene._id}`},
       {name: 'PhytoMine', url: `https://phytozome.jgi.doe.gov/phytomine/keywordSearchResults.do?searchTerm=${gene._id}&searchSubmit=Search`},
     ];
     if (gene.taxon_id === 3702)
