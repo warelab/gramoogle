@@ -223,8 +223,8 @@ var Pathways = React.createClass({
     }
     return (
       <div ref={(div) => {this.divWrapper = div;}}>
-        {this.renderHierarchy()}
         <div id={this.holderId}></div>
+        {this.renderHierarchy()}
         {searchFilter}
         {reactomeLink}
       </div>

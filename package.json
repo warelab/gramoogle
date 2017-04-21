@@ -5,7 +5,7 @@
   "main": "index.js",
   "gramene": {
     "dbRelease": 53,
-    "reactomeURL": "//plantreactomedev.oicr.on.ca"
+    "reactomeURL": "//plantreactome.gramene.org"
   },
   "scripts": {
     "build": "grunt package",

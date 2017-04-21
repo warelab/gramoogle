@@ -54,6 +54,11 @@ app.get('/aliases', function (req, res) {
   res.json(aliasLUT)
 });
 
+app.get('/ww/:nid', function (req, res) {
+  let url = `http://news.gramene.org/ww?nid=${req.params.nid}`;
+  request.get(url).pipe(res); // just proxying
+});
+
 app.post('/feedback', function (req, res) {
   let comments = req.body.content;
   if (comments.length > 10000) {
