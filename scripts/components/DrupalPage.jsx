@@ -2,6 +2,8 @@ import React from 'react';
 import axios from "axios";
 import Spinner from './Spinner.jsx';
 import { browserHistory } from 'react-router';
+import _ from 'lodash';
+import closest from 'component-closest';
 
 
 export default class DrupalPage extends React.Component {
@@ -56,23 +58,22 @@ export default class DrupalPage extends React.Component {
 
   iframeClickHandler(e) {
     let target = e.target || e.srcElement;
-    if (target.tagName === 'A') {
-      let href = target.getAttribute('href');
-      let drupalLink;
-      let matches = href.match(/(node\/\d+)$/);
-      if (!matches) {
-        matches = href.match(/gramene\.org\/(.+)/);
-        if (matches && this.state.aliases[matches[1]]) {
-          drupalLink = matches[1];
-        }
-      }
-      else {
+    target = closest(target, 'a');
+    let href = target.getAttribute('href');
+    let drupalLink;
+    let matches = href.match(/(node\/\d+)$/);
+    if (!matches) {
+      matches = href.match(/gramene\.org\/(.+)/);
+      if (matches && this.state.aliases[matches[1]]) {
         drupalLink = matches[1];
       }
-      if (drupalLink) {
-        e.preventDefault();
-        browserHistory.push('/'+drupalLink);
-      }
+    }
+    else {
+      drupalLink = matches[1];
+    }
+    if (drupalLink) {
+      e.preventDefault();
+      browserHistory.push('/'+drupalLink);
     }
   }
 
@@ -95,9 +96,16 @@ export default class DrupalPage extends React.Component {
     if (this.nid) {
       src = `/ww/${this.nid}`;
     }
+    const setIframeRef = (elem) => {
+      // TODO ignoring null here is probably a bad idea.
+      if(!_.isNull(elem)) {
+        this.iframe = elem;
+      }
+    }
+
     //onLoad={this.initListener.bind(this)}
     return (
-      <iframe src={src} ref={(elem) => {this.iframe = elem}} onLoad={this.initListener.bind(this)} frameBorder="0" width="100%" height="650px">
+      <iframe src={src} ref={setIframeRef} onLoad={this.initListener.bind(this)} frameBorder="0" width="100%" height="650px">
         <p>browser doesn't support iframes</p>
       </iframe>
     );

@@ -25,6 +25,7 @@
   "dependencies": {
     "axios": "^0.9.1",
     "body-parser": "^1.16.0",
+    "component-closest": "^1.0.1",
     "compression": "^1.6.2",
     "cors": "^2.8.1",
     "dalliance": "git://github.com/ajo2995/dalliance.git#cran",
