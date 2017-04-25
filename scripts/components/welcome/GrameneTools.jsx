@@ -2,6 +2,7 @@ import React from "react";
 import {ListGroup, ListGroupItem, Media, Glyphicon} from "react-bootstrap";
 import WelcomeActions from "../../actions/welcomeActions";
 import { browserHistory } from 'react-router';
+var ensemblURL = require('../../../package.json').gramene.ensemblURL;
 
 const GrameneTool = ({title, description, imgSrc, link, isExternal}) => {
   let external;
@@ -44,7 +45,7 @@ const GrameneTools = () =>
                      {/*imgSrc="/assets/images/gramene_leaves.svg"/>*/}
         <GrameneTool title="Genome Browser"
                      description="Browse genomes with annotations, variation and comparative tools"
-                     link={{href: "http://ensembl.gramene.org/genome_browser/index.html"}}
+                     link={{href: `${ensemblURL}/genome_browser/index.html`}}
                      imgSrc="/assets/images/welcome/genomes.png"/>
         <GrameneTool title="Plant Reactome"
                      description="Browse and analyze metabolic and regulatory pathways"
@@ -52,7 +53,7 @@ const GrameneTools = () =>
                      imgSrc="/assets/images/welcome/pathways.png"/>
         <GrameneTool title="Tools"
                      description="Tools for processing both our data and yours"
-                     link={{href: "http://ensembl.gramene.org/tools.html"}}
+                     link={{href: `${ensemblURL}/tools.html`}}
                      imgSrc="/assets/images/welcome/tools.png"/>
         <GrameneTool title="Plant Expression ATLAS"
                      description="Browse plant expression results at EBI ATLAS"
@@ -61,7 +62,7 @@ const GrameneTools = () =>
                      isExternal={true} />
         <GrameneTool title="BLAST"
                      description="Query our genomes with a DNA or protein sequence"
-                     link={{href: "http://ensembl.gramene.org/Tools/Blast?db=core"}}
+                     link={{href: `${ensemblURL}/Tools/Blast?db=core`}}
                      imgSrc="/assets/images/welcome/BLAST.png"/>
         <GrameneTool title="Gramene Mart"
                      description="An advanced query interface powered by BioMart"
