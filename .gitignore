@@ -1,6 +1,7 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 # ignore static files generated during build process
 /static/app.html.fragment
+/static/static.html.fragment
 /static/blogFeed.json
 
 # deploy key
