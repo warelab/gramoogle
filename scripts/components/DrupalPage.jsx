@@ -32,11 +32,16 @@ export default class DrupalPage extends React.Component {
   }
 
   componentDidMount() {
+    window.scrollTo(0, 0);
     // this.initListener();
     // this.nid = this.getNid(this.props.params);
     // if (this.nid) {
     //   this.iframe.src = `/ww/${this.nid}`;
     // }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    window.scrollTo(0, 0);
   }
 
   initListener() {

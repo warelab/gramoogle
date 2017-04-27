@@ -3,6 +3,9 @@
 'use strict';
 
 var fs = require('fs');
+var argv = require('minimist')(process.argv.slice(2));
+
+var context = argv.c;
 
 require('babel-register')({
   presets: ['es2015', 'react']
@@ -16,4 +19,4 @@ var ReactDOMServer = require('react-dom/server');
 
 var App = React.createFactory(require('./components/appStatic.jsx').default);
 
-fs.writeFileSync('static/app.html.fragment', ReactDOMServer.renderToString(new App({context: 'compile'})));
+fs.writeFileSync(`static/${context}.html.fragment`, ReactDOMServer.renderToString(new App({context: context})));

@@ -128,9 +128,9 @@ app.post('/feedback', function (req, res) {
   });
 });
 
-// send all requests to index.html so browserHistory works
+// send all requests to static.html so browserHistory works
 app.get('*', function (req, res) {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'))
+  res.sendFile(path.join(__dirname, 'build', 'static.html'))
 });
 
 var PORT = process.env.PORT || 8080;

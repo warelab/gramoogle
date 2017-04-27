@@ -20,11 +20,19 @@ import Header from './header.jsx';
 import Footer from './footer/Footer.jsx';
 import Welcome from "./welcome/WelcomePage.jsx";
 
-const App = () =>
+export default class App extends React.Component {
+
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
       <div className="app">
         <Header search={ {query: {}, results: {}} }/>
-        <Welcome context="compile"/>
-        <Footer/>
-      </div>;
-
-export default App;
+        <Welcome {...this.props}/>
+        <Footer />
+      </div>
+    );
+  }
+};

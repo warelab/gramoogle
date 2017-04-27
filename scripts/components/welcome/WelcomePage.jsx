@@ -3,6 +3,7 @@ import DrupalStore from "../../stores/drupalStore";
 import Intro from "./Intro.jsx";
 import Posts from "./Posts.jsx";
 import GrameneTools from "./GrameneTools.jsx";
+import Spinner from "../Spinner.jsx";
 import {shouldShowIntro, setIntroVisibility} from "../../welcome/intro";
 import {Grid, Row, Col} from "react-bootstrap";
 
@@ -35,6 +36,9 @@ export default class Welcome extends React.Component {
   bodyContent() {
     if (this.props.children) {
       return this.props.children;
+    }
+    else if (this.props.context === 'static') {
+      return <Spinner />;
     }
     else {
       return <GrameneTools />;
