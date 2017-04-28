@@ -139,7 +139,6 @@ export default class Homology extends React.Component {
     if (this.genetree && this.state.taxonomy) {
       return (
         <div className="gene-genetree">
-          <h5>Gene Tree</h5>
           <TreeVis genetree={this.genetree}
                    initialGeneOfInterest={this.props.gene}
                    genomesOfInterest={this.state.genomesOfInterest}
