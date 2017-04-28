@@ -55,6 +55,7 @@ export default class Search extends React.Component {
 
   clearInputString() {
     this.refs.searchBox.clearSearchString();
+    this.refs.searchBox.focus();
     this.setState({
       suggestionsVisible: false
     });

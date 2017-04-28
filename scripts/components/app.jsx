@@ -5,7 +5,6 @@ import Header from './header.jsx';
 import Footer from './footer/Footer.jsx';
 import Results from './results/results.jsx';
 import searchStore from '../stores/searchStore';
-// import drupalStore from '../stores/drupalStore';
 import _ from 'lodash';
 
 export default class App extends React.Component {
@@ -14,7 +13,6 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       search: searchStore.state
-      // drupal: drupalStore.state
     };
   }
 
@@ -22,19 +20,19 @@ export default class App extends React.Component {
     this.unsubscribeFromSearchStore = searchStore.listen((searchState) =>
         this.setState({search: searchState})
     );
-    // this.unsubscribeFromDrupalStore = drupalStore.listen((drupalState) =>
-    //     this.setState({drulap: drupalState})
-    // );
   }
 
   componentWillUnmount() {
     this.unsubscribeFromSearchStore();
-    // this.unsubscribeFromDrupalStore();
   }
   
   dontShowResults() {
-    // don't show the results if there are no user-specified filters 
-    return _.isEmpty(_.get(this.state.search, 'query.filters'));
+    // don't show the results if there are no user-specified filters
+    const result = _.isEmpty(_.get(this.state.search, 'query.filters'));
+
+    // console.log('dontShowResults?', result, this.state);
+
+    return result;
   }
 
   render() {
