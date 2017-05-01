@@ -29,7 +29,7 @@ export default class App extends React.Component {
   render() {
     return (
       <div className="app">
-        <Header search={ {query: {}, results: {}} }/>
+        <Header />
         <Welcome {...this.props}/>
         <Footer />
       </div>

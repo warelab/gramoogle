@@ -12,7 +12,7 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      search: searchStore.state
+      // search: searchStore.state
     };
   }
 
@@ -28,7 +28,7 @@ export default class App extends React.Component {
   
   dontShowResults() {
     // don't show the results if there are no user-specified filters
-    const result = _.isEmpty(_.get(this.state.search, 'query.filters'));
+    const result = _.isEmpty(_.get(this.state, 'search.query.filters'));
 
     // console.log('dontShowResults?', result, this.state);
 
@@ -36,15 +36,14 @@ export default class App extends React.Component {
   }
 
   render() {
-    var search = this.state.search,
-      content = this.dontShowResults() ?
+    let content = this.dontShowResults() ?
         this.props.children :
-        <Results results={search.results}/>
+        <Results />
       ;
 
     return (
       <div className="app">
-        <Header search={search}/>
+        <Header />
         {content}
         <Footer />
       </div>

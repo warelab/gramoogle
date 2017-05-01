@@ -8,15 +8,11 @@ import { browserHistory } from 'react-router';
 import { Navbar, SplitButton, MenuItem } from 'react-bootstrap';
 
 const Header = React.createClass({
-  propTypes: {
-    search: React.PropTypes.object.isRequired
-  },
   removeAllFilters: function() {
     QueryActions.removeAllFilters();
     browserHistory.push('/');
   },
   render: function() {
-    var search = this.props.search;
 
     var logo = (
       <a className="logo-link" onClick={this.removeAllFilters}><div className="logo"></div></a>
@@ -31,7 +27,7 @@ const Header = React.createClass({
             {logo}
           </Navbar.Brand>
         </Navbar.Header>
-        <Search search={search} />
+        <Search />
       </Navbar>
     );
   }

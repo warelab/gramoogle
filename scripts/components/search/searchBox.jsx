@@ -84,7 +84,7 @@ export default class SearchBox extends React.Component {
                         showHelp={this.props.showHelp}/>
             <TaxonomyMenu toggleGenomesOfInterest={this.props.toggleGenomesOfInterest}
                           showGenomesOfInterest={this.props.showGenomesOfInterest}>
-              <Summary results={this.props.results}/>
+              <Summary />
             </TaxonomyMenu>
           </InputGroup.Button>
           {this.props.children}
@@ -94,7 +94,6 @@ export default class SearchBox extends React.Component {
 };
 
 SearchBox.propTypes = {
-  results: React.PropTypes.object.isRequired,
   onQueryChange: React.PropTypes.func.isRequired,
   toggleGenomesOfInterest: React.PropTypes.func.isRequired,
   showGenomesOfInterest: React.PropTypes.bool.isRequired,
