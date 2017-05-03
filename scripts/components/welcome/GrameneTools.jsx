@@ -46,11 +46,11 @@ const GrameneTools = () =>
         <GrameneTool title="Genome Browser"
                      description="Browse genomes with annotations, variation and comparative tools"
                      link={{href: `${ensemblURL}/genome_browser/index.html`}}
-                     imgSrc="/assets/images/welcome/genomes.png"/>
+                     imgSrc="/assets/images/welcome/ensemblgramene.png"/>
         <GrameneTool title="Plant Reactome"
                      description="Browse and analyze metabolic and regulatory pathways"
                      link={{href: "http://plantreactome.gramene.org/"}}
-                     imgSrc="/assets/images/welcome/pathways.png"/>
+                     imgSrc="/assets/images/welcome/plantReactome.svg"/>
         <GrameneTool title="Tools"
                      description="Tools for processing both our data and yours"
                      link={{href: `${ensemblURL}/tools.html`}}
