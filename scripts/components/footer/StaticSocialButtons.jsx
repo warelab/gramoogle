@@ -1,11 +1,18 @@
 import React from 'react'
 
-export default class StaticSocialButtons extends React.PureComponent {
+export default class StaticSocialButtons extends React.Component {
   componentDidMount() {
-    console.log('what')
+
     if(twttr && this.twttrEl) {
-      twttr.widgets.load(this.twttrEl);
+      twttr.widgets.createFollowButton(
+        "GrameneDatabase",
+        this.twttrEl,
+      );
     }
+  }
+
+  shouldComponentUpdate() {
+    return false;
   }
 
   render() {
@@ -20,13 +27,7 @@ export default class StaticSocialButtons extends React.PureComponent {
             allowTransparency="true">
           </iframe>
         </li>
-        <li ref={(el) => this.twttrEl = el}>
-          <a href="https://twitter.com/GrameneDatabase"
-             className="twitter-follow-button"
-             data-show-count="true">
-            Follow @Gramene
-          </a>
-        </li>
+        <li ref={(el) => this.twttrEl = el}/>
       </ul>
     );
   }
