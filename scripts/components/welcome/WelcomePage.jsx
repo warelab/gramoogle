@@ -17,7 +17,8 @@ export default class Welcome extends React.Component {
   }
 
   componentWillMount() {
-    if (this.props.context === 'client') {
+    console.log("WelcomePAge componentWillMount", this);
+    if (!this.props.serverRenderMode) {
       this.unsubscribe = DrupalStore.listen(
           (state) => this.setState({drupal: state})
       );
@@ -37,7 +38,7 @@ export default class Welcome extends React.Component {
     if (this.props.children) {
       return this.props.children;
     }
-    else if (this.props.context === 'static') {
+    else if (this.props.serverRenderMode === 'static') {
       return <Spinner />;
     }
     else {
@@ -75,5 +76,5 @@ export default class Welcome extends React.Component {
 };
 
 Welcome.propTypes = {
-  context: React.PropTypes.string
+  serverRenderMode: React.PropTypes.string
 };

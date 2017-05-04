@@ -7,7 +7,7 @@ const DrupalStore = Reflux.createStore(
       listenables: DrupalActions,
       init: function () {
         this.state = {
-          feed: require('../../static/blogFeed.json')
+          feed: []
         }
       },
       refreshBlogFeedCompleted: function (results) {

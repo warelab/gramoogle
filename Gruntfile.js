@@ -36,9 +36,6 @@ module.exports = function (grunt) {
       },
       generateStaticApp: {
         cmd: 'node scripts/babel.js -c static'
-      },
-      blogFeed: {
-        cmd: 'node scripts/getBlogFeed.js'
       }
     },
 
@@ -285,7 +282,7 @@ module.exports = function (grunt) {
     grunt.file.write('build/static.html', index);
   });
 
-  grunt.registerTask('generateStaticFiles', ['exec:blogFeed', 'copy:assets', 'copy:icons', 'exec:generateStaticApp', 'exec:generateStaticWelcome', 'packageStaticHtml', 'packageIndexHtml']);
+  grunt.registerTask('generateStaticFiles', ['copy:assets', 'copy:icons', 'exec:generateStaticApp', 'exec:generateStaticWelcome', 'packageStaticHtml', 'packageIndexHtml']);
   grunt.registerTask('test', ['jasmine_node']);
   grunt.registerTask('default', ['env:dev', 'generateStaticFiles', 'less:dev', 'browserify:dev', 'watch']);
   grunt.registerTask('package', ['env:prod', 'generateStaticFiles', 'less:production', 'browserify:production', 'test']);

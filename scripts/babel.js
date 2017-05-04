@@ -5,7 +5,7 @@
 var fs = require('fs');
 var argv = require('minimist')(process.argv.slice(2));
 
-var context = argv.c;
+var serverRenderMode = argv.c;
 
 require('babel-register')({
   presets: ['es2015', 'react']
@@ -19,4 +19,4 @@ var ReactDOMServer = require('react-dom/server');
 
 var App = React.createFactory(require('./components/appStatic.jsx').default);
 
-fs.writeFileSync(`static/${context}.html.fragment`, ReactDOMServer.renderToString(new App({context: context})));
+fs.writeFileSync(`static/${serverRenderMode}.html.fragment`, ReactDOMServer.renderToString(new App({serverRenderMode})));

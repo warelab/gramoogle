@@ -31,7 +31,7 @@ export default class App extends React.Component {
       <div className="app">
         <Header />
         <Welcome {...this.props}/>
-        <Footer />
+        <Footer noSocial/>
       </div>
     );
   }

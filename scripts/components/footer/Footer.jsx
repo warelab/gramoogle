@@ -4,9 +4,10 @@ import StaticSocialButtons from './StaticSocialButtons.jsx';
 var grameneRelease = require('../../../package.json').gramene.dbRelease;
 
 
-const Footer = () => {
+const Footer = ({noSocial}) => {
   const releaseUrl = `/release-notes-${grameneRelease}`;
   const releaseLabel = `Release Notes (${grameneRelease})`;
+  const socialMaybe = noSocial ? undefined : <StaticSocialButtons />;
   return (
     <nav className="submenu navbar navbar-default">
       <div className="container">
@@ -24,10 +25,14 @@ const Footer = () => {
             <EmbeddedDrupalPageLink text="Feedback" path="/feedback" />
           </li>
         </ul>
-        <StaticSocialButtons />
+        {socialMaybe}
       </div>
     </nav>
   );
+};
+
+Footer.propTypes = {
+  noSocial: React.PropTypes.bool
 };
 
 export default Footer;
