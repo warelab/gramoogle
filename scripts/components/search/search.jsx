@@ -49,6 +49,7 @@ export default class Search extends React.Component {
     // of app state and we must manually clear it here if the query string is
     // removed (e.g. when a suggestion is picked)
     QueryActions.removeQueryString.listen(this.clearInputString);
+    QueryActions.removeAllFilters.listen(this.clearInputString);
   }
 
   handleQueryChange(queryString) {
