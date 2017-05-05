@@ -16,9 +16,15 @@ export default class Posts extends React.Component {
     }
     else {
       content = (
-        <ul className="posts list-unstyled">
+        <ul className="posts list-unstyled" style={{overflow:'auto',height:'600px'}}>
           {this.props.feed.map(
-            (post) => <li key={post.guid}><a onClick={(event) => browserHistory.push(post.link.replace(/.*gramene\.org/,''))}>{post.title}</a></li>)
+            (post) =>
+              <li key={post.guid}>
+                <a onClick={(event) => browserHistory.push(post.link.replace(/.*gramene\.org/,''))}>
+                  {post.title}
+                </a><br/>
+                <span>{post.pubDate.replace(/\s\d\d:\d\d:\d\d.*/,'')}</span>
+              </li>)
           }
         </ul>
       );

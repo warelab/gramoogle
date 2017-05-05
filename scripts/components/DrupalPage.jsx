@@ -1,6 +1,5 @@
 import React from 'react';
 import axios from "axios";
-import Spinner from './Spinner.jsx';
 import { browserHistory } from 'react-router';
 import _ from 'lodash';
 import closest from 'component-closest';
@@ -33,11 +32,6 @@ export default class DrupalPage extends React.Component {
 
   componentDidMount() {
     window.scrollTo(0, 0);
-    // this.initListener();
-    // this.nid = this.getNid(this.props.params);
-    // if (this.nid) {
-    //   this.iframe.src = `/ww/${this.nid}`;
-    // }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -106,33 +100,13 @@ export default class DrupalPage extends React.Component {
       if(!_.isNull(elem)) {
         this.iframe = elem;
       }
-    }
+    };
 
-    //onLoad={this.initListener.bind(this)}
     return (
       <iframe src={src} ref={setIframeRef} onLoad={this.initListener.bind(this)} frameBorder="0" width="100%" height="650px">
         <p>browser doesn't support iframes</p>
       </iframe>
     );
 
-    // let nid = null;
-    // if (this.props.params.drupalPath) {
-    //   if (this.state.aliases[this.props.params.drupalPath]) {
-    //     nid = this.state.aliases[this.props.params.drupalPath];
-    //   }
-    // }
-    // else if (this.props.params.drupalNode) {
-    //   nid = this.props.params.drupalNode;
-    // }
-    // if (nid) {
-    //   return (
-    //     <iframe ref={(elem) => { this.drupalIframe = elem; }} src={`/ww/${nid}`} frameBorder="0" width="100%" height="650px">
-    //       <p>browser doesn't support iframes</p>
-    //     </iframe>
-    //   );
-    // }
-    // else {
-    //   return <Spinner />;
-    // }
   }
 }
