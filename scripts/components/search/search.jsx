@@ -49,7 +49,12 @@ export default class Search extends React.Component {
     // of app state and we must manually clear it here if the query string is
     // removed (e.g. when a suggestion is picked)
     QueryActions.removeQueryString.listen(this.clearInputString);
+    QueryActions.setFilter.listen(this.clearInputString);
+    QueryActions.setAllFilters.listen(this.clearInputString);
+    QueryActions.removeFilter.listen(this.clearInputString);
+    QueryActions.removeFilters.listen(this.clearInputString);
     QueryActions.removeAllFilters.listen(this.clearInputString);
+    QueryActions.toggleFilter.listen(this.clearInputString);
   }
 
   handleQueryChange(queryString) {
@@ -67,6 +72,7 @@ export default class Search extends React.Component {
   clearInputString() {
     this.refs.searchBox.clearSearchString();
     this.refs.searchBox.focus();
+    window.scrollTo(0,0);
     this.setState({
       suggestionsVisible: false
     });

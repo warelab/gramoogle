@@ -25,6 +25,11 @@ export default class Welcome extends React.Component {
     }
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    window.scrollTo(0, 0);
+  }
+
+
   componentWillUnmount() {
     if (this.unsubscribe) this.unsubscribe();
   }
