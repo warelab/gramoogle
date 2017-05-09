@@ -1,5 +1,6 @@
 import React from "react";
 import ClosestOrtholog from "./closestOrtholog.jsx";
+var ensemblURL = require('../../../package.json').gramene.ensemblURL;
 
 const ResultBody = (props) =>
         <div className="result-gene-summary">
@@ -35,7 +36,7 @@ function renderTitle({searchResult}) {
         <wbr/>
         <small className="gene-id">{geneId} </small>
         <small className="gene-synonyms">{synonyms}</small>
-        <small className="gene-species"> {species}</small>
+        <small className="gene-species"> <a href={`//${ensemblURL}/${searchResult.system_name}/Info/Index`}>{species}</a></small>
       </h3>
   );
 }
