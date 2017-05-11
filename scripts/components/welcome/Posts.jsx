@@ -26,6 +26,9 @@ export default class Posts extends React.Component {
                 <span>{post.pubDate.replace(/\s\d\d:\d\d:\d\d.*/,'')}</span>
               </li>)
           }
+          <li key="newslink">
+            <a href="http://news.gramene.org/blog">Visit our blog</a>
+          </li>
         </ul>
       );
     }

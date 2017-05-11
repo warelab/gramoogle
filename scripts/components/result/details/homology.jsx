@@ -6,6 +6,8 @@ import DocActions from "../../../actions/docActions";
 import searchStore from "../../../stores/searchStore";
 import _ from "lodash";
 import treesClient from "gramene-trees-client";
+var ensemblURL = require('../../../../package.json').gramene.ensemblURL;
+
 const processGenetreeDoc = treesClient.genetree.tree;
 
 export default class Homology extends React.Component {
@@ -192,7 +194,7 @@ export default class Homology extends React.Component {
     var gene, ensemblGenetreeUrl;
 
     gene = this.props.gene;
-    ensemblGenetreeUrl = '//ensembl.gramene.org/' + gene.system_name + '/Gene/Compara_Tree?g=' + gene._id;
+    ensemblGenetreeUrl = `//${ensemblURL}/${gene.system_name}/Gene/Compara_Tree?g=${gene._id}`;
 
     return [
       {name: 'Ensembl Gene Tree view', url: ensemblGenetreeUrl}
