@@ -6,7 +6,7 @@
   "gramene": {
     "dbRelease": 53,
     "reactomeURL": "//plantreactome.gramene.org",
-    "ensemblURL": "//dev.gramene.org"
+    "ensemblURL": "//ensembl-dev.gramene.org"
   },
   "scripts": {
     "build": "grunt package",
