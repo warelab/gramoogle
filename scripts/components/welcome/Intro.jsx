@@ -8,7 +8,6 @@ const Intro = ({onClose}) => <Jumbotron className="gramene-intro">
     integrated</em> data resource for comparative
     functional genomics in crops and model
     plant species.</p>
-
 </Jumbotron>;
 
 Intro.propTypes = {

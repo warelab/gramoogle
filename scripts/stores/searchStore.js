@@ -3,6 +3,7 @@
 /* @flow */
 
 var Reflux = require('reflux');
+import ReactGA from "react-ga";
 var _ = require('lodash');
 var QueryActions = require('../actions/queryActions');
 import TaxonomyActions from '../actions/taxonomyActions';
@@ -83,12 +84,22 @@ module.exports = Reflux.createStore({
     console.log('setFilter', arguments);
     if (!this.state.query.filters.hasOwnProperty(filter.fq)) {
       this.state.query.filters[filter.fq] = filter;
+      ReactGA.event({
+        category: 'Search',
+        action: 'setFilter',
+        label: JSON.stringify(arguments)
+      });
       this.search();
     }
   },
 
   toggleFilter: function (filter) {
-    console.log('toggleFilter', arguments);
+    console.log('toggleFilter', filter);
+    ReactGA.event({
+      category: 'Search',
+      action: 'toggleFilter',
+      label: JSON.stringify(filter)
+    });
     filter = _.clone(filter);
     delete this.state.query.filters[filter.fq];
     if (filter.exclude) {
@@ -104,13 +115,23 @@ module.exports = Reflux.createStore({
   },
 
   setAllFilters: function (filters) {
-    console.log('setAllFilters', arguments);
+    console.log('setAllFilters', filters);
+    ReactGA.event({
+      category: 'Search',
+      action: 'setAllFilters',
+      label: JSON.stringify(filters)
+    });
     this.state.query.filters = filters;
     this.search();
   },
 
   removeFilter: function (filter) {
-    console.log('removeFilter', arguments);
+    console.log('removeFilter', filter);
+    ReactGA.event({
+      category: 'Search',
+      action: 'removeFilter',
+      label: JSON.stringify(filter)
+    });
     if (this.state.query.filters.hasOwnProperty(filter.fq)) {
       delete this.state.query.filters[filter.fq];
       this.search();
@@ -118,12 +139,22 @@ module.exports = Reflux.createStore({
   },
 
   removeFilters: function (predicate) {
+    ReactGA.event({
+      category: 'Search',
+      action: 'removeFilters',
+      label: JSON.stringify(predicate)
+    });
     this.state.query.filters = _.omitBy(this.state.query.filters, predicate);
     this.search();
   },
 
   removeAllFilters: function () {
     console.log('removeAllFilters');
+    ReactGA.event({
+      category: 'Search',
+      action: 'removeAllFilters',
+      label: 'remove all filters'
+    });
     if(!_.isEmpty(this.state.query.filters))
       this.setAllFilters({});
   },

@@ -1,4 +1,5 @@
 import React from "react";
+import ReactGA from "react-ga";
 import _ from "lodash";
 
 const HOW_MANY_TO_SHOW_BY_DEFAULT = 10;
@@ -56,7 +57,14 @@ export default class Xref extends React.Component {
         var url = members[0].url(item),
           liClass = idx < HOW_MANY_TO_SHOW_BY_DEFAULT ? "default" : "extra";
         return (
-          <li key={idx} className={liClass}><a href={url}>{item}</a></li>
+          <li key={idx} className={liClass}>
+            <ReactGA.OutboundLink
+              eventLabel={members[0].label}
+              to={url}
+              target="_blank">
+              {item}
+            </ReactGA.OutboundLink>
+          </li>
         )
       })
       .value();

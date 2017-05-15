@@ -6,6 +6,7 @@ import GrameneTools from "./GrameneTools.jsx";
 import Spinner from "../Spinner.jsx";
 import {shouldShowIntro, setIntroVisibility} from "../../welcome/intro";
 import {Grid, Row, Col} from "react-bootstrap";
+import WelcomeActions from "../../actions/welcomeActions";
 
 export default class Welcome extends React.Component {
   constructor(props) {
@@ -27,8 +28,11 @@ export default class Welcome extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     window.scrollTo(0, 0);
+    if (!this.props.children) {
+      let ms = this.state.showIntro ? 600 : 300;
+      WelcomeActions.flashSearchBox(ms);
+    }
   }
-
 
   componentWillUnmount() {
     if (this.unsubscribe) this.unsubscribe();
