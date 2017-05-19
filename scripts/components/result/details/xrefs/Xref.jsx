@@ -42,7 +42,8 @@ export default class Xref extends React.Component {
   }
 
   render() {
-    var members, vals;
+    var members, vals, db;
+    db = this.props.displayName;
 
     members = this.props.members;
 
@@ -59,9 +60,8 @@ export default class Xref extends React.Component {
         return (
           <li key={idx} className={liClass}>
             <ReactGA.OutboundLink
-              eventLabel={members[0].label}
-              to={url}
-              target="_blank">
+              eventLabel={db}
+              to={url}>
               {item}
             </ReactGA.OutboundLink>
           </li>

@@ -6,6 +6,7 @@ import DocActions from "../../../actions/docActions";
 import searchStore from "../../../stores/searchStore";
 import _ from "lodash";
 import treesClient from "gramene-trees-client";
+import Spinner from "../../Spinner.jsx";
 var ensemblURL = require('../../../../package.json').gramene.ensemblURL;
 
 const processGenetreeDoc = treesClient.genetree.tree;
@@ -150,6 +151,13 @@ export default class Homology extends React.Component {
           />
         </div>
       );
+    }
+    else {
+      return (
+        <div className="gene-genetree">
+          Loading <Spinner />
+        </div>
+      )
     }
   }
 

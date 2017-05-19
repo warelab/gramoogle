@@ -3,6 +3,7 @@ import axios from "axios";
 import { browserHistory } from 'react-router';
 import _ from 'lodash';
 import closest from 'component-closest';
+import ReactGA from "react-ga";
 
 
 export default class DrupalPage extends React.Component {
@@ -73,6 +74,13 @@ export default class DrupalPage extends React.Component {
     if (drupalLink) {
       e.preventDefault();
       browserHistory.push('/'+drupalLink);
+    }
+    else {
+      ReactGA.outboundLink({
+        label: href
+      }, function () {
+        console.log('have fun at',href);
+      });
     }
   }
 

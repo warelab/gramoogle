@@ -1,10 +1,16 @@
 import React from "react";
+import ReactGA from "react-ga";
 
 export default class Links extends React.Component {
   renderLinks() {
     return this.props.links.map((link, idx) =>
       <li key={idx}>
-        <a className="external-link" href={link.url}>{link.name}</a>
+        <ReactGA.OutboundLink
+          eventLabel={link.name}
+          to={link.url}
+          className="external-link">
+          {link.name}
+        </ReactGA.OutboundLink>
       </li>
     )
   }
