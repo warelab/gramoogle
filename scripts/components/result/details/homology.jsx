@@ -6,6 +6,9 @@ import DocActions from "../../../actions/docActions";
 import searchStore from "../../../stores/searchStore";
 import _ from "lodash";
 import treesClient from "gramene-trees-client";
+import Spinner from "../../Spinner.jsx";
+var ensemblURL = require('../../../../package.json').gramene.ensemblURL;
+
 const processGenetreeDoc = treesClient.genetree.tree;
 
 export default class Homology extends React.Component {
@@ -122,29 +125,39 @@ export default class Homology extends React.Component {
 
   filterAllHomologs() {
     queryActions.setAllFilters(this.createAllHomologsFilters());
+    if (this.props.closeModal) this.props.closeModal();
   }
 
   filterOrthologs() {
     queryActions.setAllFilters(this.createOrthologFilters());
+    if (this.props.closeModal) this.props.closeModal();
   }
 
   filterParalogs() {
     queryActions.setAllFilters(this.createParalogFilters());
+    if (this.props.closeModal) this.props.closeModal();
   }
 
   renderTreeVis() {
     if (this.genetree && this.state.taxonomy) {
       return (
         <div className="gene-genetree">
-          <h5>Gene Tree</h5>
           <TreeVis genetree={this.genetree}
                    initialGeneOfInterest={this.props.gene}
                    genomesOfInterest={this.state.genomesOfInterest}
                    taxonomy={this.state.taxonomy}
                    allowGeneSelection={true}
+                   pivotTree={true}
           />
         </div>
       );
+    }
+    else {
+      return (
+        <div className="gene-genetree">
+          Loading <Spinner />
+        </div>
+      )
     }
   }
 
@@ -189,7 +202,7 @@ export default class Homology extends React.Component {
     var gene, ensemblGenetreeUrl;
 
     gene = this.props.gene;
-    ensemblGenetreeUrl = '//ensembl.gramene.org/' + gene.system_name + '/Gene/Compara_Tree?g=' + gene._id;
+    ensemblGenetreeUrl = `//${ensemblURL}/${gene.system_name}/Gene/Compara_Tree?g=${gene._id}`;
 
     return [
       {name: 'Ensembl Gene Tree view', url: ensemblGenetreeUrl}
@@ -212,5 +225,6 @@ export default class Homology extends React.Component {
 
 Homology.propTypes = {
   gene: React.PropTypes.object.isRequired,
-  docs: React.PropTypes.object.isRequired
+  docs: React.PropTypes.object.isRequired,
+  closeModal: React.PropTypes.func
 };

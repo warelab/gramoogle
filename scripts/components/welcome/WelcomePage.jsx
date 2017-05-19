@@ -1,36 +1,58 @@
 import React from "react";
-import WelcomeStore from "../../stores/welcomeStore";
+import DrupalStore from "../../stores/drupalStore";
 import Intro from "./Intro.jsx";
 import Posts from "./Posts.jsx";
 import GrameneTools from "./GrameneTools.jsx";
+import Spinner from "../Spinner.jsx";
 import {shouldShowIntro, setIntroVisibility} from "../../welcome/intro";
-
 import {Grid, Row, Col} from "react-bootstrap";
+import WelcomeActions from "../../actions/welcomeActions";
 
 export default class Welcome extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      posts: require('../../../static/blogFeed.json'),
+      drupal: DrupalStore.state,
       showIntro: shouldShowIntro()
     };
   }
 
   componentWillMount() {
-    if (this.props.context === 'client') {
-      this.unsubscribe = WelcomeStore.listen(
-          (posts) => this.setState({posts: posts})
+    console.log("WelcomePAge componentWillMount", this);
+    if (!this.props.serverRenderMode) {
+      this.unsubscribe = DrupalStore.listen(
+          (state) => this.setState({drupal: state})
       );
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    window.scrollTo(0, 0);
+    if (!this.props.children) {
+      let ms = this.state.showIntro ? 600 : 300;
+      WelcomeActions.flashSearchBox(ms);
     }
   }
 
   componentWillUnmount() {
     if (this.unsubscribe) this.unsubscribe();
   }
-  
+
   hideIntro() {
     this.setState({showIntro: false});
     setIntroVisibility(false);
+  }
+
+  bodyContent() {
+    if (this.props.children) {
+      return this.props.children;
+    }
+    else if (this.props.serverRenderMode === 'static') {
+      return <Spinner />;
+    }
+    else {
+      return <GrameneTools />;
+    }
   }
 
   render() {
@@ -44,10 +66,10 @@ export default class Welcome extends React.Component {
             </Row>
             <Row>
               <Col sm={9} className="tools-col">
-                <GrameneTools />
+                {this.bodyContent()}
               </Col>
               <Col sm={3} className="posts-col">
-                <Posts {...this.state}/>
+                <Posts feed={this.state.drupal.feed}/>
               </Col>
             </Row>
           </Grid>
@@ -63,5 +85,5 @@ export default class Welcome extends React.Component {
 };
 
 Welcome.propTypes = {
-  context: React.PropTypes.string
+  serverRenderMode: React.PropTypes.string
 };

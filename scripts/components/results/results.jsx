@@ -1,56 +1,41 @@
 'use strict';
 
-var React = require('react');
+import React from 'react';
+import {Tabs, Tab} from 'react-bootstrap';
 import ResultsList from './resultsList.jsx';
-var ResultsVisualization = require('./resultsVisualization.jsx');
-var mq = require('../../config/mq');
+import ResultsVisualization from './resultsVisualization.jsx';
+import Fireworks from './Fireworks.jsx';
 
-var bs = require('react-bootstrap');
-
-var Results = React.createClass({
-  getInitialState: function () {
-    return {
-      viz: this.shouldShowVis(),
+export default class Results extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      summary: 'taxagenomic',
       list: true
     };
-  },
-  shouldShowVis: function(props) {
-    return true;
-  },
-  toggleViz: function() {
-    var newState = {
-      viz: !this.state.viz
-    };
-    this.setState(newState);
-  },
-  toggleList: function() {
-    var newState = {
-      list: !this.state.list
-    };
-    this.setState(newState);
-  },
-  componentWillReceiveProps: function(newProps) {
-    this.setState({
-      viz: this.shouldShowVis(newProps)
-    });
-  },
-  render: function () {
-    var theViz, theList;
-    if(this.state.viz) {
-      theViz = (<ResultsVisualization results={this.props.results}/>);
-    }
-    if(this.state.list) {
-      theList = (<ResultsList results={this.props.results}/>);
-    }
+  }
 
+  render() {
+    let viz, pathways;
+    if (this.state.summary === 'taxagenomic')
+      viz = (<ResultsVisualization results={this.props.results}/>);
+    if (this.state.summary === 'pathways')
+      pathways = (<Fireworks results={this.props.results}/>);
     return (
       <section className="results container">
         <div>
-          {theViz}
-          {theList}
+          <Tabs activeKey={this.state.summary}
+                animation={false}
+                unmountOnExit={true}
+                bsStyle='tabs'
+                onSelect={(summary) => this.setState({summary})}
+                id="results-summary-tabs">
+            <Tab eventKey='taxagenomic' title="Taxagenomic distribution">{viz}</Tab>
+            {/*<Tab eventKey='pathways' title="Pathways distribution">{pathways}</Tab>*/}
+          </Tabs>
+          <ResultsList results={this.props.results}/>
         </div>
       </section>
     );
   }
-});
-module.exports = Results;
+}

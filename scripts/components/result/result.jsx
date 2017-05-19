@@ -65,7 +65,7 @@ export default class Result extends React.Component {
                          hoverDetailCapability={_.get(this.state.hoverDetail, 'capability')}
                          geneDoc={this.props.geneDoc}
                          docs={this.props.docs}
-
+                         speciesName={this.props.searchResult.species_name}
                          onDetailSelect={this.updateVisibleDetail.bind(this)}
           />
         </li>

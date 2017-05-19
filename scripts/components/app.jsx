@@ -2,8 +2,8 @@
 
 import React from 'react';
 import Header from './header.jsx';
+import Footer from './footer/Footer.jsx';
 import Results from './results/results.jsx';
-import Welcome from './welcome/WelcomePage.jsx';
 import searchStore from '../stores/searchStore';
 import _ from 'lodash';
 
@@ -11,9 +11,7 @@ export default class App extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      search: searchStore.state
-    };
+    this.state = {};
   }
 
   componentWillMount() {
@@ -27,21 +25,21 @@ export default class App extends React.Component {
   }
   
   dontShowResults() {
-    // don't show the results if there are no user-specified filters 
-    return _.isEmpty(_.get(this.state.search, 'query.filters'));
+    // don't show the results if there are no user-specified filters
+    return _.isEmpty(_.get(this.state, 'search.query.filters'));
   }
 
   render() {
-    var search = this.state.search,
-      content = this.dontShowResults() ?
-        <Welcome context="client" /> :
-        <Results results={search.results}/>
+    let content = this.dontShowResults() ?
+        this.props.children :
+        <Results />
       ;
 
     return (
       <div className="app">
-        <Header search={search}/>
+        <Header />
         {content}
+        <Footer />
       </div>
     );
   }

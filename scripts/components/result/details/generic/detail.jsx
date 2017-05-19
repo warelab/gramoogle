@@ -5,7 +5,6 @@ import { Grid, Row, Col } from 'react-bootstrap';
 export class Detail extends React.Component {
   render() {
     var subComponents = keyBy(this.props.children, 'key');
-    console.log(subComponents, this.props.children);
     return (
       <Grid fluid className="detail">
         <Row className="intro">
