@@ -1,20 +1,19 @@
 <!doctype html>
 <html>
 <head>
-    <script src="http://www.ebi.ac.uk/gxa/resources/js-bundles/vendorCommons.bundle.js"></script>
-    <script src="http://www.ebi.ac.uk/gxa/resources/js-bundles/expressionAtlasHeatmapHighcharts.bundle.js"></script>
+    <script src="//www.ebi.ac.uk/gxa/resources/js-bundles/vendorCommons.bundle.js"></script>
+    <script src="//www.ebi.ac.uk/gxa/resources/js-bundles/expressionAtlasHeatmapHighcharts.bundle.js"></script>
     <link rel="stylesheet" type="text/css"
           href="/style.css"/>
     <link rel="stylesheet" type="text/css"
-          href="http://www.ebi.ac.uk/gxa/resources/css/customized-bootstrap-3.3.5.css"/>
+          href="//www.ebi.ac.uk/gxa/resources/css/alt-customized-bootstrap-3.3.5.css"/>
     <base target="_parent"/>
 </head>
 <body>
     <div id="heatmapContainer"></div>
     <script language="JavaScript" type="application/javascript">
         expressionAtlasHeatmapHighcharts.render({
-            params: location.search.replace(/\?/,''),
-            isMultiExperiment: true,
+            query: { gene: location.search.replace(/\?/,'') },
             target: "heatmapContainer"
         });
     </script>
