@@ -64,7 +64,7 @@ export default class DrupalPage extends React.Component {
     let matches = href.match(/(node\/\d+)$/);
     if (!matches) {
       matches = href.match(/gramene\.org\/(.+)/);
-      if (matches && this.state.aliases[matches[1]]) {
+      if (matches && this.state.aliases[matches[1]] && matches[1] ) {
         drupalLink = matches[1];
       }
     }
@@ -76,11 +76,13 @@ export default class DrupalPage extends React.Component {
       browserHistory.push('/'+drupalLink);
     }
     else {
-      ReactGA.outboundLink({
-        label: href
-      }, function () {
-        console.log('have fun at',href);
-      });
+      if (!href.match(/^#/)) {
+        ReactGA.outboundLink({
+          label: href
+        }, function () {
+          console.log('have fun at', href);
+        });
+      }
     }
   }
 
