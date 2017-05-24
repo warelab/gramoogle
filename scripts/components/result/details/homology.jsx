@@ -1,4 +1,5 @@
 import React from "react";
+import ReactGA from "react-ga";
 import {Detail, Title, Description, Content, Explore, Links} from "./generic/detail.jsx";
 import TreeVis from "gramene-genetree-vis";
 import queryActions from "../../../actions/queryActions";
@@ -213,8 +214,14 @@ export default class Homology extends React.Component {
     return (
       <Detail>
         <Title key="title">Compara Gene Tree</Title>
-        <Description key="description">This phylogram shows the relationships between this genes and others similar to it, as determined
-          by <a href="http://ensembl.org/info/genome/compara/index.html">Ensembl Compara</a>.</Description>
+        <Description key="description">This phylogram shows the relationships between this gene and others similar to it, as determined by
+          &nbsp;<ReactGA.OutboundLink
+            eventLabel="Ensembl Compara"
+            to="http://ensembl.org/info/genome/compara/index.html">
+            Ensembl Compara
+          </ReactGA.OutboundLink>
+          .
+        </Description>
         <Content key="content">{this.renderTreeVis()}</Content>
         <Explore key="explore" explorations={this.explorations()}/>
         <Links key="links" links={this.links()}/>
