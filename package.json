@@ -4,9 +4,9 @@
   "description": "Gramene search interface",
   "main": "index.js",
   "gramene": {
-    "dbRelease": 53,
+    "dbRelease": 54,
     "reactomeURL": "//plantreactome.gramene.org",
-    "ensemblURL": "//ensembl.gramene.org"
+    "ensemblURL": "//ensembl-dev.gramene.org"
   },
   "scripts": {
     "build": "grunt package",
@@ -33,14 +33,14 @@
     "email": "^0.2.6",
     "express": "^4.14.0",
     "flat-to-nested": "^1.0.2",
-    "gramene-bins-client": "^2.2.9",
+    "gramene-bins-client": "^2.2.13",
     "gramene-client-cache": "1.0.0",
     "gramene-dbxrefs": "^3.0.2",
-    "gramene-genetree-vis": "git://github.com/warelab/gramene-genetree-vis.git",
+    "gramene-genetree-vis": "git://github.com/warelab/gramene-genetree-vis.git#phyloview-boats",
     "gramene-search-client": "^3.0.4",
     "gramene-search-vis": "^4.1.2",
-    "gramene-taxonomy-with-genomes": "^3.0.8",
-    "gramene-trees-client": "git://github.com/warelab/gramene-trees-client.git#consensus",
+    "gramene-taxonomy-with-genomes": "^3.0.9",
+    "gramene-trees-client": "^2.5.6",
     "history": "^4.5.1",
     "is-email": "^1.0.0",
     "lodash": "^4.3.0",
@@ -67,6 +67,7 @@
   },
   "devDependencies": {
     "babel-jest": "^6.0.1",
+    "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-polyfill": "^6.7.4",
     "babel-preset-es2015": "^6.1.2",
     "babel-preset-react": "^6.1.2",
