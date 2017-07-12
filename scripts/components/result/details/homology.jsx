@@ -149,8 +149,8 @@ export default class Homology extends React.Component {
                    taxonomy={this.state.taxonomy}
                    allowGeneSelection={true}
                    pivotTree={true}
-                   enablePhyloview={true}
-                   numberOfNeighbors={20}
+                   enablePhyloview={false}
+                   numberOfNeighbors={10}
           />
         </div>
       );
