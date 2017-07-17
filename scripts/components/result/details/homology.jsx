@@ -216,13 +216,16 @@ export default class Homology extends React.Component {
     return (
       <Detail>
         <Title key="title">Compara Gene Tree</Title>
-        <Description key="description">This phylogram shows the relationships between this gene and others similar to it, as determined by
+        <Description key="description">
+          <p>This phylogram shows the relationships between this gene and others similar to it, as determined by
           &nbsp;<ReactGA.OutboundLink
             eventLabel="Ensembl Compara"
             to="http://ensembl.org/info/genome/compara/index.html">
             Ensembl Compara
           </ReactGA.OutboundLink>
           .
+          </p>
+          <p>Regions present in the multiple sequence alignment are displayed to the right, color-coded by annotated interpro domain.</p>
         </Description>
         <Content key="content">{this.renderTreeVis()}</Content>
         <Explore key="explore" explorations={this.explorations()}/>
