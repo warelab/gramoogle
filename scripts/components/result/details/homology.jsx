@@ -34,7 +34,9 @@ export default class Homology extends React.Component {
     this.orthologs = this.orthologList();
     this.paralogs = this.paralogList();
     this.treeId = _.get(this.props.gene, 'homology.gene_tree.id');
-
+    if (!this.treeId) {
+      this.treeId = _.get(this.props.gene, 'homology.pan_tree.id');
+    }
     if (this.treeId) {
       DocActions.needDocs('genetrees', this.treeId, processGenetreeDoc);
     }
@@ -149,7 +151,7 @@ export default class Homology extends React.Component {
                    taxonomy={this.state.taxonomy}
                    allowGeneSelection={true}
                    pivotTree={true}
-                   enablePhyloview={false}
+                   enablePhyloview={true}
                    numberOfNeighbors={10}
           />
         </div>
