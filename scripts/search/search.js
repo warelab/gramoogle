@@ -64,7 +64,7 @@ module.exports = {
 
     if (!_.isEmpty(search.global.taxa)) {
       for(var taxon_id in search.global.taxa) {
-        queryCopy.filters['taxon_id:'+taxon_id] = {
+        queryCopy.filters['taxonomy__ancestors:'+taxon_id] = {
           category: "TaxaOfInterest"
         }
       }
