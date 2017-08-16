@@ -227,7 +227,6 @@ export default class Homology extends React.Component {
           </ReactGA.OutboundLink>
           .
           </p>
-          <p>Regions present in the multiple sequence alignment are displayed to the right, color-coded by annotated interpro domain.</p>
         </Description>
         <Content key="content">{this.renderTreeVis()}</Content>
         <Explore key="explore" explorations={this.explorations()}/>
