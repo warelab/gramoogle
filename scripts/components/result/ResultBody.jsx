@@ -49,7 +49,7 @@ function renderBody({searchResult}) {
 
 function renderTairSummary({searchResult}) {
   const summary = searchResult.summary;
-  if(summary) {
+  if(summary && searchResult.taxon_id === 3702) {
     return (
         <div className="gene-summary-tair">
           {trimSummary(summary)}
