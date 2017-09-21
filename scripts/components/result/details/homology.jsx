@@ -8,6 +8,7 @@ import searchStore from "../../../stores/searchStore";
 import _ from "lodash";
 import treesClient from "gramene-trees-client";
 import Spinner from "../../Spinner.jsx";
+import {Glyphicon} from "react-bootstrap";
 var ensemblURL = require('../../../../package.json').gramene.ensemblURL;
 
 const processGenetreeDoc = treesClient.genetree.tree;
@@ -215,6 +216,7 @@ export default class Homology extends React.Component {
   }
 
   render() {
+    let external = <small title="This link opens a page from an external site"> <Glyphicon glyph="new-window" /></small>;
     return (
       <Detail>
         <Title key="title">Compara Gene Tree</Title>
@@ -222,8 +224,9 @@ export default class Homology extends React.Component {
           <p>This phylogram shows the relationships between this gene and others similar to it, as determined by
           &nbsp;<ReactGA.OutboundLink
             eventLabel="Ensembl Compara"
+            target="_blank"
             to="http://ensembl.org/info/genome/compara/index.html">
-            Ensembl Compara
+            Ensembl Compara{external}
           </ReactGA.OutboundLink>
           .
           </p>
