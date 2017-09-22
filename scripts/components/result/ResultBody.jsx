@@ -1,5 +1,8 @@
 import React from "react";
+import ReactGA from "react-ga";
+import {Glyphicon} from "react-bootstrap";
 import ClosestOrtholog from "./closestOrtholog.jsx";
+
 var ensemblURL = require('../../../package.json').gramene.ensemblURL;
 
 const ResultBody = (props) =>
@@ -19,6 +22,7 @@ function renderMetadata(props) {
 
 function renderTitle({searchResult}) {
   let species, geneId, synonyms;
+  let external = <small title="This link opens a page from an external site"> <Glyphicon glyph="new-window" /></small>;
 
   if (searchResult.species_name) {
     species = <span className="species-name">{searchResult.species_name}</span>;
@@ -36,7 +40,16 @@ function renderTitle({searchResult}) {
         <wbr/>
         <small className="gene-id">{geneId} </small>
         <small className="gene-synonyms">{synonyms}</small>
-        <small className="gene-species"> <a href={`//${ensemblURL}/${searchResult.system_name}/Info/Index`}>{species}</a></small>
+        <small className="gene-species">
+          <ReactGA.OutboundLink
+            eventLabel={searchResult.system_name}
+            to={`//${ensemblURL}/${searchResult.system_name}/Info/Index`}
+            className="external-link"
+            target="_blank"
+          >
+            {species}{external}
+          </ReactGA.OutboundLink>
+        </small>
       </h3>
   );
 }

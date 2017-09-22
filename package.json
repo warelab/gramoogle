@@ -1,12 +1,12 @@
 {
   "name": "gramoogle",
-  "version": "3.0.2",
+  "version": "3.1.0",
   "description": "Gramene search interface",
   "main": "index.js",
   "gramene": {
     "dbRelease": 55,
     "reactomeURL": "//plantreactome.gramene.org",
-    "ensemblURL": "//ensembl-dev.gramene.org"
+    "ensemblURL": "//ensembl.gramene.org"
   },
   "scripts": {
     "build": "grunt package",

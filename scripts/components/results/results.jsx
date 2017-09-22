@@ -4,7 +4,7 @@ import React from 'react';
 import {Tabs, Tab} from 'react-bootstrap';
 import ResultsList from './resultsList.jsx';
 import ResultsVisualization from './resultsVisualization.jsx';
-import Fireworks from './Fireworks.jsx';
+// import Fireworks from './Fireworks.jsx';
 
 export default class Results extends React.Component {
   constructor(props) {
@@ -19,8 +19,8 @@ export default class Results extends React.Component {
     let viz, pathways;
     if (this.state.summary === 'taxagenomic')
       viz = (<ResultsVisualization results={this.props.results}/>);
-    if (this.state.summary === 'pathways')
-      pathways = (<Fireworks results={this.props.results}/>);
+    // if (this.state.summary === 'pathways')
+    //   pathways = (<Fireworks results={this.props.results}/>);
     return (
       <section className="results container">
         <div>
