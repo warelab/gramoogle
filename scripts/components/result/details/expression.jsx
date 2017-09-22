@@ -8,7 +8,7 @@ export default class Atlas extends React.Component {
   }
 
   render() {
-    const url = `./atlasWidget.html?${this.props.gene._id}`;
+    const url = `./atlasWidget.html?${this.props.gene.taxon_id === 112509 ? this.props.gene.synonyms[0] : this.props.gene._id}`;
     const height = (!!this.props.closeModal) ? window.innerHeight : '500px';
     return (
       <iframe src={url} frameBorder="0" width="100%" height={height}>

@@ -36,7 +36,9 @@ DocActions.needDocs.listen(function (collection, id, postprocessFn, callbackFn) 
   console.log('DocActions.needDocs', collection, id);
 
   clientCall = getClientPromise(collection);
-
+  if (typeof id === 'number') {
+    id = [id,0];
+  }
   if (!(_.isString(id) || _.isArray(id))) {
     throw new Error('id must be a string or array, you gave me a ' + typeof id);
   }
