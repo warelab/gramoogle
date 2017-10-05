@@ -34,8 +34,8 @@ var Pathways = React.createClass({
     this.diagram = Reactome.Diagram.create({
       proxyPrefix: reactomeURL, //'//plantreactome.gramene.org', //'//plantreactomedev.oicr.on.ca', ////cord3084-pc7.science.oregonstate.edu', // reactomedev.oicr.on.ca
       placeHolder: this.holderId,
-      width: this.divWrapper.clientWidth,
-      height: (!!this.props.closeModal) ? window.innerHeight : 500
+      width: this.divWrapper.clientWidth - 350,
+      height: (!!this.props.closeModal) ? window.innerHeight - 300 : 500
     });
   },
 
@@ -53,7 +53,8 @@ var Pathways = React.createClass({
       if (reactionId) {
         this.diagram.selectItem(reactionId);
       }
-      // this.diagram.flagItems(this.props.gene._id);
+      var xref = _.find(this.props.gene.xrefs,{db : 'Gramene_Plant_Reactome'}).ids[0];
+      this.diagram.flagItems(this.props.gene._id);
     }.bind(this));
   },
 
@@ -68,6 +69,21 @@ var Pathways = React.createClass({
     }
   },
 
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.hierarchy && ! this.state.selectedNode) {
+      let node = this.state.hierarchy[0];
+      let path = [0];
+      let parent = node;
+      while (node.children) {
+        path.push(0);
+        parent = node;
+        node = node.children[0];
+      }
+      console.log(parent,node,path);
+      this.loadNodes(path);
+    }
+  },
+
   componentWillMount: function() {
     var pathways, reactionId, ancestorIds;
     pathways = _.get(this.props, 'gene.annotations.pathways');
@@ -77,12 +93,24 @@ var Pathways = React.createClass({
 
     this.pathwayIds = _.clone(pathways.ancestors);
     pathways.entries.forEach(function(reaction) {
-      this.pathwayIds.push(reaction.id); 
+      let [r,speciesCode,id] = reaction.id.split('-');
+
+      this.pathwayIds.push(+id); 
     }.bind(this));
 
-    DocActions.needDocs('pathways', this.pathwayIds, undefined, this.getHierarchy);
+    DocActions.needDocs('pathways', this.pathwayIds, (docs) => { return this.makeTaxonSpecific(docs,this.props.gene.taxon_id)}, this.getHierarchy);
   },
 
+  makeTaxonSpecific: function (docs,taxon_id) {
+    let lineageField = 'lineage_'+taxon_id;
+    let tsDocs = docs.map(function(doc) {
+      let tsDoc = _.pick(doc,['_id','name','type']);
+      tsDoc.lineage = doc[lineageField];
+      return tsDoc;
+    });
+    console.log(tsDocs);
+    return tsDocs;
+  },
 
   componentWillUnmount: function() {
     DocActions.noLongerNeedDocs('pathways', this.pathwayIds);
@@ -114,73 +142,72 @@ var Pathways = React.createClass({
     this.setState({hierarchy: [nested], selectedNode: undefined});
   },
 
+  loadNodes: function(nodes) {
+    let hierarchy = this.state.hierarchy;
+    let selectedNode = this.state.selectedNode;
+    let offset = nodes.shift();
+    let nodeRef = hierarchy[offset];
+    let lineage = [nodeRef];
+    nodes.forEach(function(n) {
+      nodeRef = nodeRef.children[n];
+      lineage.unshift(nodeRef);
+    });
+    if (lineage[0].id !== 2894885) {
+      let pathway = this.stableId(lineage[0].id);
+      let reaction = undefined;
+      if (lineage[0].type === "Reaction") {
+        reaction = pathway;
+        pathway = this.stableId(lineage[1].id);
+      }
+      if (lineage[0].selected) {
+        selectedNode = undefined;
+        lineage[0].selected = false;
+        if (this.loadedDiagram === pathway) {
+          this.diagram.resetSelection();
+        }
+        else {
+          if (this.diagram) this.diagram.resetSelection();
+          this.loadDiagram(pathway);
+        }
+      }
+      else {
+        if (selectedNode) {
+          selectedNode.selected = false;
+        }
+        selectedNode = lineage[0];
+        lineage[0].selected = true;
+        if (this.loadedDiagram === pathway) {
+          if (reaction) {
+            this.diagram.selectItem(reaction);
+          }
+          else {
+            this.diagram.resetSelection();
+          }
+        }
+        else {
+          if (this.diagram) this.diagram.resetSelection();
+          if (reaction) {
+            this.loadDiagram(pathway, reaction);
+          }
+          else {
+            this.loadDiagram(pathway);
+          }
+        }
+      }
+      this.setState({hierarchy: hierarchy, selectedNode: selectedNode});
+    }
+  },
 
   renderHierarchy: function() {
     if(this.state.hierarchy) {
-
-      var onClick = function(nodes) {
-        let hierarchy = this.state.hierarchy;
-        let selectedNode = this.state.selectedNode;
-        let offset = nodes.shift();
-        let nodeRef = hierarchy[offset];
-        let lineage = [nodeRef];
-        nodes.forEach(function(n) {
-          nodeRef = nodeRef.children[n];
-          lineage.unshift(nodeRef);
-        });
-        if (lineage[0].id !== 2894885) {
-          let pathway = this.stableId(lineage[0].id);
-          let reaction = undefined;
-          if (lineage[0].type === "Reaction") {
-            reaction = pathway;
-            pathway = this.stableId(lineage[1].id);
-          }
-          if (lineage[0].selected) {
-            selectedNode = undefined;
-            lineage[0].selected = false;
-            if (this.loadedDiagram === pathway) {
-              this.diagram.resetSelection();
-            }
-            else {
-              if (this.diagram) this.diagram.resetSelection();
-              this.loadDiagram(pathway);
-            }
-          }
-          else {
-            if (selectedNode) {
-              selectedNode.selected = false;
-            }
-            selectedNode = lineage[0];
-            lineage[0].selected = true;
-            if (this.loadedDiagram === pathway) {
-              if (reaction) {
-                this.diagram.selectItem(reaction);
-              }
-              else {
-                this.diagram.resetSelection();
-              }
-            }
-            else {
-              if (this.diagram) this.diagram.resetSelection();
-              if (reaction) {
-                this.loadDiagram(pathway, reaction);
-              }
-              else {
-                this.loadDiagram(pathway);
-              }
-            }
-          }
-          this.setState({hierarchy: hierarchy, selectedNode: selectedNode});
-        }
-      };
-
       return (
         <TreeMenu
           data={this.state.hierarchy}
           expandIconClass="fa fa-chevron-right"
           collapseIconClass="fa fa-chevron-down"
           stateful={true}
-          onTreeNodeClick={onClick.bind(this)}
+          collapsible={true}
+          onTreeNodeClick={this.loadNodes.bind(this)}
         />
       );
     }
@@ -223,8 +250,8 @@ var Pathways = React.createClass({
     }
     return (
       <div ref={(div) => {this.divWrapper = div;}}>
+        <div style={{width:350, height:(!!this.props.closeModal) ? window.innerHeight - 300 : 500, overflow:'scroll', float:'left'}}>{this.renderHierarchy()}</div>
         <div id={this.holderId}></div>
-        {this.renderHierarchy()}
         {searchFilter}
         {reactomeLink}
       </div>
