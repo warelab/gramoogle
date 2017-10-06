@@ -235,9 +235,12 @@ var Pathways = React.createClass({
 
   render: function () {
     let reactomeLink,searchFilter;
+
     if (this.state.selectedNode) {
+      let xrefLUT = _.keyBy(this.props.gene.xrefs,'db');
       let links = [
-        {name: 'Plant Reactome', url: `${reactomeURL}/content/detail/${this.stableId(this.state.selectedNode.id)}`}
+        {name: 'Plant Reactome Gene', url: `${reactomeURL}/content/detail/${xrefLUT.Gramene_Plant_Reactome.ids[0]}`},
+        {name: 'Plant Reactome '+this.state.selectedNode.type, url: `${reactomeURL}/content/detail/${this.stableId(this.state.selectedNode.id)}`}
       ];
       reactomeLink = <Links key="links" links={links}/>;
       let filters = [
