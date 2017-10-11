@@ -154,6 +154,7 @@ export default class Homology extends React.Component {
                    pivotTree={true}
                    enablePhyloview={true}
                    numberOfNeighbors={10}
+                   ensemblUrl={ensemblURL}
           />
         </div>
       );
