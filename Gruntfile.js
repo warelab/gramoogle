@@ -167,7 +167,7 @@ module.exports = function (grunt) {
           defaultServer = DEV_SERVER;
         }
 
-        defaultServer += webserviceVersion + '/swagger';
+        defaultServer += webserviceVersion;
 
         return defaultServer;
       }
@@ -185,9 +185,9 @@ module.exports = function (grunt) {
         grameneRelease: grameneRelease
       };
 
-      props.defaultServer = defaultServer();
+      props.defaultServer = defaultServer() + '/swagger';
+      props.apiServer = defaultServer();
       console.log("This build will use " + props.defaultServer + " as default web service server");
-
       return template(props);
     })();
 
@@ -238,7 +238,7 @@ module.exports = function (grunt) {
           defaultServer = DEV_SERVER;
         }
 
-        defaultServer += webserviceVersion + '/swagger';
+        defaultServer += webserviceVersion;
 
         return defaultServer;
       }
@@ -256,7 +256,8 @@ module.exports = function (grunt) {
         grameneRelease: grameneRelease
       };
 
-      props.defaultServer = defaultServer();
+      props.defaultServer = defaultServer() + '/swagger';
+      props.apiServer = defaultServer();
       console.log("This build will use " + props.defaultServer + " as default web service server");
 
       return template(props);
