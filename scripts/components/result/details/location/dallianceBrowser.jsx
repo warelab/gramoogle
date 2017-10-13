@@ -1,6 +1,6 @@
 import React from "react";
 import isEqual from "lodash/isEqual";
-var grameneRelease = require('../../../../../package.json').gramene.dbRelease;
+var ensemblREST = require('../../../../../package.json').gramene.ensemblREST;
 
 // calculate this once.
 const PREFIX = (global.location ? global.location.origin : '')
@@ -53,13 +53,13 @@ export default class DallianceBrowser extends React.Component {
         sources: [
           {
             name: 'DNA',
-            ensemblURI: 'http://data.gramene.org/ensembl'+ grameneRelease,
+            ensemblURI: ensemblREST,
             species: g.system_name,
             tier_type: 'sequence'
           },
           {
             name: 'Genes',
-            uri: 'http://data.gramene.org/ensembl'+ grameneRelease,
+            uri: ensemblREST,
             tier_type: 'ensembl',
             species: g.system_name,
             type: ['gene', 'transcript', 'exon', 'cds']
