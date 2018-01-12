@@ -40,7 +40,7 @@ var Pathways = React.createClass({
   },
 
   stableId: function(dbId) {
-    let prefix = this.state.taxonomy.indices.id[this.props.gene.taxon_id].model.reactomePrefix;
+    let prefix = this.state.taxonomy.indices.id[this.props.gene.taxon_id].model.reactomePrefix || 'OSA';
     return `R-${prefix}-${dbId}`;
   },
 
@@ -103,6 +103,9 @@ var Pathways = React.createClass({
 
   makeTaxonSpecific: function (docs,taxon_id) {
     let lineageField = 'lineage_'+taxon_id;
+    if (taxon_id === 39947) {
+      lineageField = 'lineage_4530';
+    }
     let tsDocs = docs.map(function(doc) {
       let tsDoc = _.pick(doc,['_id','name','type']);
       tsDoc.lineage = doc[lineageField];
