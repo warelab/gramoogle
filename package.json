@@ -5,7 +5,7 @@
   "main": "index.js",
   "gramene": {
     "dbRelease": 56,
-    "reactomeURL": "//plantreactome.gramene.org",
+    "reactomeURL": "//plantreactomedev.oicr.on.ca",
     "ensemblURL": "//ensembl.gramene.org",
     "ensemblREST": "//data.gramene.org/ensembl56"
   },

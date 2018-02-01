@@ -53,7 +53,7 @@ var Pathways = React.createClass({
       if (reactionId) {
         this.diagram.selectItem(reactionId);
       }
-      var xref = _.find(this.props.gene.xrefs,{db : 'Gramene_Plant_Reactome'}).ids[0];
+      // var xref = _.find(this.props.gene.xrefs,{db : 'Gramene_Plant_Reactome'}).ids[0];
       this.diagram.flagItems(this.props.gene._id);
     }.bind(this));
   },
@@ -103,9 +103,6 @@ var Pathways = React.createClass({
 
   makeTaxonSpecific: function (docs,taxon_id) {
     let lineageField = 'lineage_'+taxon_id;
-    if (taxon_id === 39947) {
-      lineageField = 'lineage_4530';
-    }
     let tsDocs = docs.map(function(doc) {
       let tsDoc = _.pick(doc,['_id','name','type']);
       tsDoc.lineage = doc[lineageField];
@@ -242,7 +239,7 @@ var Pathways = React.createClass({
     if (this.state.selectedNode) {
       let xrefLUT = _.keyBy(this.props.gene.xrefs,'db');
       let links = [
-        {name: 'Plant Reactome Gene', url: `${reactomeURL}/content/detail/${xrefLUT.Gramene_Plant_Reactome.ids[0]}`},
+        {name: 'Plant Reactome Gene', url: `${reactomeURL}/content/detail/${xrefLUT.notGramene_Plant_Reactome.ids[0]}`},
         {name: 'Plant Reactome '+this.state.selectedNode.type, url: `${reactomeURL}/content/detail/${this.stableId(this.state.selectedNode.id)}`}
       ];
       reactomeLink = <Links key="links" links={links}/>;
