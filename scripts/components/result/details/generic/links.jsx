@@ -11,7 +11,6 @@ export default class Links extends React.Component {
           eventLabel={link.name}
           to={link.url}
           className="external-link"
-          target="_blank"
         >
           {link.name}{external}
         </ReactGA.OutboundLink>

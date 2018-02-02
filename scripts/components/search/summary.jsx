@@ -17,6 +17,7 @@ export default class Summary extends React.Component {
     this.state = {};
     }
   componentWillMount() {
+    resultType['facet.field'] = resultType['facet.field'].replace('50','200');
     QueryActions.setResultType('taxon_id', resultType);
     this.unsubscribeFromSearchStore = searchStore.listen((searchState) =>
       this.setState({search: searchState})

@@ -40,7 +40,7 @@ var Pathways = React.createClass({
   },
 
   stableId: function(dbId) {
-    let prefix = this.state.taxonomy.indices.id[this.props.gene.taxon_id].model.reactomePrefix;
+    let prefix = this.state.taxonomy.indices.id[this.props.gene.taxon_id].model.reactomePrefix || 'OSA';
     return `R-${prefix}-${dbId}`;
   },
 
@@ -53,7 +53,7 @@ var Pathways = React.createClass({
       if (reactionId) {
         this.diagram.selectItem(reactionId);
       }
-      var xref = _.find(this.props.gene.xrefs,{db : 'Gramene_Plant_Reactome'}).ids[0];
+      // var xref = _.find(this.props.gene.xrefs,{db : 'Gramene_Plant_Reactome'}).ids[0];
       this.diagram.flagItems(this.props.gene._id);
     }.bind(this));
   },
@@ -239,7 +239,7 @@ var Pathways = React.createClass({
     if (this.state.selectedNode) {
       let xrefLUT = _.keyBy(this.props.gene.xrefs,'db');
       let links = [
-        {name: 'Plant Reactome Gene', url: `${reactomeURL}/content/detail/${xrefLUT.Gramene_Plant_Reactome.ids[0]}`},
+        {name: 'Plant Reactome Gene', url: `${reactomeURL}/content/detail/${xrefLUT.notGramene_Plant_Reactome.ids[0]}`},
         {name: 'Plant Reactome '+this.state.selectedNode.type, url: `${reactomeURL}/content/detail/${this.stableId(this.state.selectedNode.id)}`}
       ];
       reactomeLink = <Links key="links" links={links}/>;

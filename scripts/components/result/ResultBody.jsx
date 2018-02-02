@@ -45,7 +45,6 @@ function renderTitle({searchResult}) {
             eventLabel={searchResult.system_name}
             to={`//${ensemblURL}/${searchResult.system_name}/Info/Index`}
             className="external-link"
-            target="_blank"
           >
             {species}{external}
           </ReactGA.OutboundLink>

@@ -1,4 +1,5 @@
 import React from "react";
+import ReactGA from "react-ga";
 import _ from 'lodash';
 
 const ResultDetailLink = ({
@@ -19,6 +20,11 @@ const ResultDetailLink = ({
       }
       else {
         onDetailSelect(detail);
+        ReactGA.event({
+          category: 'Search',
+          action: 'Details',
+          label: detail.name
+        });
       }
     }
   };
