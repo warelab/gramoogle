@@ -6,8 +6,8 @@
   "gramene": {
     "dbRelease": 56,
     "reactomeURL": "//plantreactome.gramene.org",
-    "ensemblURL": "//ensembl.gramene.org",
-    "ensemblREST": "//data.gramene.org/ensembl56"
+    "ensemblURL": "//maize-pangenome-ensembl.gramene.org",
+    "ensemblREST": "//data.gramene.org/panmaize-ensembl"
   },
   "scripts": {
     "build": "grunt package",

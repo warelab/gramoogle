@@ -7,7 +7,7 @@ var fs = require('fs');
 var grameneRelease = require('./package.json').gramene.dbRelease;
 var reactomeURL = require('./package.json').gramene.reactomeURL;
 
-var webserviceVersion = 'v' + grameneRelease;
+var webserviceVersion = 'panmaize' + grameneRelease;
 
 module.exports = function (grunt) {
   require('jit-grunt')(grunt);
