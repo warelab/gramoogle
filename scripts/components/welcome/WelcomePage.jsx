@@ -13,7 +13,7 @@ export default class Welcome extends React.Component {
     super(props);
     this.state = {
       drupal: DrupalStore.state,
-      showIntro: shouldShowIntro()
+      showIntro: false //shouldShowIntro()
     };
   }
 
@@ -65,12 +65,12 @@ export default class Welcome extends React.Component {
               </Col>
             </Row>
             <Row>
-              <Col sm={9} className="tools-col">
+              <Col sm={12} className="tools-col">
                 {this.bodyContent()}
               </Col>
-              <Col sm={3} className="posts-col">
-                <Posts feed={this.state.drupal.feed}/>
-              </Col>
+              {/*<Col sm={3} className="posts-col">*/}
+                {/*<Posts feed={this.state.drupal.feed}/>*/}
+              {/*</Col>*/}
             </Row>
           </Grid>
         </div>
