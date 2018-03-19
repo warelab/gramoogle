@@ -51,7 +51,6 @@ function externalLink(path) {
 
 const GrameneTools = () =>
     <div className="tools-wrapper">
-      <h3>Maize Pan-Genome search interface and Ensembl genome browser</h3>
       <ListGroup className="row">
         <GrameneTool title="Search"
                      description="Search the pan-maize gene set"
