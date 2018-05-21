@@ -36,7 +36,7 @@
     "flat-to-nested": "^1.0.2",
     "gramene-bins-client": "^2.2.13",
     "gramene-client-cache": "1.0.0",
-    "gramene-dbxrefs": "^3.0.2",
+    "gramene-dbxrefs": "^3.0.3",
     "gramene-genetree-vis": "^3.1.8",
     "gramene-search-client": "^3.0.4",
     "gramene-search-vis": "^4.1.3",
