@@ -12,10 +12,19 @@ export default class Result extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
+    if (props.expandDetail) {
+      this.requestGeneDoc();
+    }
   }
 
   componentWillUnmount() {
     DocActions.noLongerNeedDocs('genes', this.props.searchResult.id);
+  }
+
+  componentDidMount() {
+    if (this.props.expandDetail) {
+      this.setState({visibleDetail: _.find(detailsInventory, {name: this.props.expandDetail})})
+    }
   }
 
   requestGeneDoc() {

@@ -34,14 +34,16 @@ var ResultsVisualization = React.createClass({
     var summary;
 
     if (this.state.visData) {
-      summary = (
-        <div>
-          <Vis {...this.state.visData}
-               onSelection={this.handleSelection}
-               onHighlight={this.handleHighlight}/>
-          {this.renderSelection()}
-        </div>
-      );
+      if (this.state.visData.taxonomy.model.results.count > 1) {
+        summary = (
+          <div>
+            <Vis {...this.state.visData}
+                 onSelection={this.handleSelection}
+                 onHighlight={this.handleHighlight}/>
+            {this.renderSelection()}
+          </div>
+        );
+      }
     }
     else {
       summary = (

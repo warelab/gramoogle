@@ -58,14 +58,28 @@ export default class ResultsList extends React.Component {
     const list = this.state.results ? this.state.results.list : undefined;
 
     if (list && list.length) {
-      var searchResults = list.map(function (searchResult) {
-        return (
+      if (list.length === 1) {
+        var searchResults = list.map(function (searchResult) {
+          return (
+            <Result key={searchResult.id}
+                    searchResult={searchResult}
+                    geneDoc={geneDocs[searchResult.id]}
+                    docs={docs}
+                    expandDetail='Homology'
+            />
+          );
+        });
+      }
+      else {
+        var searchResults = list.map(function (searchResult) {
+          return (
             <Result key={searchResult.id}
                     searchResult={searchResult}
                     geneDoc={geneDocs[searchResult.id]}
                     docs={docs}/>
-        );
-      });
+          );
+        });
+      }
 
       return (
           <div className="results-list-container">
