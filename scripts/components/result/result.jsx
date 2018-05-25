@@ -23,7 +23,11 @@ export default class Result extends React.Component {
 
   componentDidMount() {
     if (this.props.expandDetail) {
-      this.setState({visibleDetail: _.find(detailsInventory, {name: this.props.expandDetail})})
+      var idx = this.props.searchResult.capabilities.indexOf(this.props.expandDetail.toLowerCase());
+      console.log(this.props.searchResult.capabilities, this.props.expandDetail, idx);
+      if (idx >= 0) {
+        this.setState({visibleDetail: _.find(detailsInventory, {name: this.props.expandDetail})})
+      }
     }
   }
 
