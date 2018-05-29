@@ -24,15 +24,16 @@ export default class Results extends React.Component {
     return (
       <section className="results container">
         <div>
-          <Tabs activeKey={this.state.summary}
-                animation={false}
-                unmountOnExit={true}
-                bsStyle='tabs'
-                onSelect={(summary) => this.setState({summary})}
-                id="results-summary-tabs">
-            <Tab eventKey='taxagenomic' title="Taxagenomic distribution">{viz}</Tab>
-            {/*<Tab eventKey='pathways' title="Pathways distribution">{pathways}</Tab>*/}
-          </Tabs>
+          {/*<Tabs activeKey={this.state.summary}*/}
+                {/*animation={false}*/}
+                {/*unmountOnExit={true}*/}
+                {/*bsStyle='tabs'*/}
+                {/*onSelect={(summary) => this.setState({summary})}*/}
+                {/*id="results-summary-tabs">*/}
+            {/*<Tab eventKey='taxagenomic' title="Taxagenomic distribution">{viz}</Tab>*/}
+            {/*/!*<Tab eventKey='pathways' title="Pathways distribution">{pathways}</Tab>*!/*/}
+          {/*</Tabs>*/}
+          {viz}
           <ResultsList results={this.props.results}/>
         </div>
       </section>
