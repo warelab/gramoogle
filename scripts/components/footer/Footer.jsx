@@ -24,6 +24,9 @@ const Footer = ({noSocial}) => {
           <li>
             <EmbeddedDrupalPageLink text="Feedback" path="/feedback" />
           </li>
+          <li>
+            <EmbeddedDrupalPageLink text="Privacy" path="/personal-data-privacy" />
+          </li>
         </ul>
         {socialMaybe}
       </div>
