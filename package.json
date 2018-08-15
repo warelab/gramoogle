@@ -6,7 +6,7 @@
   "gramene": {
     "dbRelease": 58,
     "reactomeURL": "//plantreactome.gramene.org",
-    "ensemblURL": "//ensembl-dev.gramene.org",
+    "ensemblURL": "//ensembl.gramene.org",
     "ensemblREST": "//data.gramene.org/ensembl58"
   },
   "scripts": {
