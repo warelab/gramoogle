@@ -1,9 +1,25 @@
 import React from "react";
 import ReactGA from "react-ga";
 import {ListGroup, ListGroupItem, Media, Glyphicon} from "react-bootstrap";
+import {OverlayTrigger, Popover} from "react-bootstrap";
 import WelcomeActions from "../../actions/welcomeActions";
 import { browserHistory } from 'react-router';
 var ensemblURL = require('../../../package.json').gramene.ensemblURL;
+
+function possiblyShowMessage(title) {
+  if (title === 'Plant Reactome') {
+    const popoverTop = (
+      <Popover id="popover-positioned-bottom" title="Offline for maintenance this weekend">
+        The Plant Reactome hosting provider is performing scheduled server maintenance starting Friday Sep 14 at 6PM EST until midnight Sunday Sep 16. Plant Reactome services will be offline during this time. We apologize for any inconvenience.
+      </Popover>
+    );
+    return (
+      <OverlayTrigger trigger="hover" placement="bottom" overlay={popoverTop}>
+        <medium style={{color:'darkorange'}} title="Server maintenance"> <Glyphicon glyph="warning-sign" /></medium>
+      </OverlayTrigger>
+    )
+  }
+}
 
 const GrameneTool = ({title, description, imgSrc, link, isExternal}) => {
   let external;
@@ -17,8 +33,9 @@ const GrameneTool = ({title, description, imgSrc, link, isExternal}) => {
             <img src={imgSrc}/>
           </Media.Left>
           <Media.Body className="media-middle gramene-tool-text">
-            <Media.Heading>{title}{external}</Media.Heading>
+            <Media.Heading>{title}{external}{possiblyShowMessage(title)}</Media.Heading>
             <p className="gramene-tool-desc">{description}</p>
+
           </Media.Body>
         </Media>
       </ListGroupItem>
