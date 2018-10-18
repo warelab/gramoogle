@@ -8,17 +8,18 @@ var schedule = require('node-schedule');
 var mysql = require('mysql');
 var soap = require('soap');
 var Email = require('email').Email;
-var argv = require('minimist')(process.argv.slice(2));
+var config = require('/usr/local/gramene/gramoogle_config.json');
+var grameneRelease = require('./package.json').gramene.dbRelease;
 
-const drupalArgs = {
-  host: argv.h,
-  user: argv.u,
-  password: argv.p,
-  database: argv.d
+var drupalArgs = {
+  host: config.host,
+  user: config.user,
+  password: config.pass,
+  database: config.database
 };
-const recaptchaSecret = argv.s;
-const mantisUser = argv.m;
-const mantisPass = argv.n;
+var recaptchaSecret = config.secret;
+var mantisUser = config.m;
+var mantisPass = config.n;
 
 var app = express();
 app.use(cors());
@@ -55,17 +56,17 @@ app.get('/aliases', function (req, res) {
 });
 
 app.get('/ww/:nid', function (req, res) {
-  let url = `http://news.gramene.org/ww?nid=${req.params.nid}`;
+  var url = `http://news.gramene.org/ww?nid=${req.params.nid}`;
   request.get(url).pipe(res); // just proxying
 });
 
 app.post('/feedback', function (req, res) {
-  let comments = req.body.content;
+  var comments = req.body.content;
   if (comments.length > 10000) {
     comments = comments.substr(0,10000);
     comments += "\n[MESSAGE TRUNCATED]";
   }
-  let message = [
+  var message = [
     `URL         : ${req.body.referrer}`,
     `Subject     : ${req.body.subject}`,
     `Name        : ${req.body.name}`,
@@ -73,18 +74,18 @@ app.post('/feedback', function (req, res) {
     `Organization: ${req.body.org}`,
     `Comments    : ${comments}`
   ].join("\n\n");
-  let subject = `Site Feedback: ${req.body.subject}`;
+  var subject = `Site Feedback: ${req.body.subject}`;
   request.post({
     url: 'https://www.google.com/recaptcha/api/siteverify',
     formData: {secret: recaptchaSecret, response: req.body.recaptcha}
   },function(err, response, body) {
-    let check = JSON.parse(body);
+    var check = JSON.parse(body);
     if (err) {
       res.json({error: err});
     }
     if (check.success) {
       // submit the ticket
-      const url = 'http://warelab.org/bugs/api/soap/mantisconnect.php?wsdl';
+      var url = 'http://warelab.org/bugs/api/soap/mantisconnect.php?wsdl';
       soap.createClient(url, function(err, client) {
         if (err) {
           res.json({error: 'soap error'});
@@ -105,7 +106,7 @@ app.post('/feedback', function (req, res) {
             res.json({error: 'error adding issue: ' + err});
           }
           else {
-            const ticket = result.return.$value;
+            var ticket = result.return.$value;
             var myMsg = new Email(
               { from: "feedback@gramene.org"
                 , to: "feedback@gramene.org"
@@ -133,7 +134,7 @@ app.get('*', function (req, res) {
   res.sendFile(path.join(__dirname, 'build', 'static.html'))
 });
 
-var PORT = process.env.PORT || 8080;
+var PORT = 8000 + +grameneRelease
 
 app.listen(PORT, function() {
   console.log('Production Express server running at localhost:' + PORT)
