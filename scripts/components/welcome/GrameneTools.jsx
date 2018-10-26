@@ -7,7 +7,7 @@ import { browserHistory } from 'react-router';
 var ensemblURL = require('../../../package.json').gramene.ensemblURL;
 
 function possiblyShowMessage(title) {
-  if (title === 'Plant Reactome') {
+  if (false && title === 'Plant Reactome') {
     const popoverTop = (
       <Popover id="popover-positioned-bottom" title="Offline for maintenance this weekend">
         The Plant Reactome hosting provider is performing scheduled server maintenance starting Friday Sep 14 at 6PM EST until midnight Sunday Sep 16. Plant Reactome services will be offline during this time. We apologize for any inconvenience.

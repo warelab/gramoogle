@@ -4,10 +4,10 @@
   "description": "Gramene search interface",
   "main": "index.js",
   "gramene": {
-    "dbRelease": 58,
+    "dbRelease": 59,
     "reactomeURL": "//plantreactome.gramene.org",
     "ensemblURL": "//ensembl.gramene.org",
-    "ensemblREST": "//data.gramene.org/ensembl58"
+    "ensemblREST": "//data.gramene.org/ensembl59"
   },
   "scripts": {
     "build": "grunt package",
