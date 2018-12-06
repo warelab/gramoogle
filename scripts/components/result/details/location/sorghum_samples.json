@@ -1,0 +1,190 @@
+[
+    {
+        "forceHeight":20, "name": "internode_growing_upper.floral_initiation",
+        "bwgURI": "http://brie.cshl.edu/data/Sorghum_bicolor/JGI_Gene_Atlas/Internode_1cm_F.bw"
+    },
+    {
+        "forceHeight":20, "name": "internode_growing.floral_initiation",
+        "bwgURI": "http://brie.cshl.edu/data/Sorghum_bicolor/JGI_Gene_Atlas/Internode_2cm_F.bw"
+    },
+    {
+        "forceHeight":20, "name": "leaf_flag_1_internode.anthesis",
+        "bwgURI": "http://brie.cshl.edu/data/Sorghum_bicolor/JGI_Gene_Atlas/Internode_B_A.bw"
+    },
+    {
+        "forceHeight":20, "name": "leaf_flag_1_internode.grain_maturity",
+        "bwgURI": "http://brie.cshl.edu/data/Sorghum_bicolor/JGI_Gene_Atlas/Internode_B_G.bw"
+    },
+    {
+        "forceHeight":20, "name": "stem_mid_internode.anthesis",
+        "bwgURI": "http://brie.cshl.edu/data/Sorghum_bicolor/JGI_Gene_Atlas/Internode_M_A.bw"
+    },
+    {
+        "forceHeight":20, "name": "internode_mature.floral_initiation",
+        "bwgURI": "http://brie.cshl.edu/data/Sorghum_bicolor/JGI_Gene_Atlas/Internode_M_F.bw"
+    },
+    {
+        "forceHeight":20, "name": "stem_mid_internode.grain_maturity",
+        "bwgURI": "http://brie.cshl.edu/data/Sorghum_bicolor/JGI_Gene_Atlas/Internode_M_G.bw"
+    },
+    {
+        "forceHeight":20, "name": "leaf_upper_growing.anthesis",
+        "bwgURI": "http://brie.cshl.edu/data/Sorghum_bicolor/JGI_Gene_Atlas/Leaf-blade_D_A.bw"
+    },
+    {
+        "forceHeight":20, "name": "leaf_upper_growing.floral_initiation",
+        "bwgURI": "http://brie.cshl.edu/data/Sorghum_bicolor/JGI_Gene_Atlas/Leaf-blade_D_F.bw"
+    },
+    {
+        "forceHeight":20, "name": "leaf_upper.juvenile",
+        "bwgURI": "http://brie.cshl.edu/data/Sorghum_bicolor/JGI_Gene_Atlas/Leaf-blade_D_J.bw"
+    },
+    {
+        "forceHeight":20, "name": "leaf_lower_growing.anthesis",
+        "bwgURI": "http://brie.cshl.edu/data/Sorghum_bicolor/JGI_Gene_Atlas/Leaf-blade_P_A.bw"
+    },
+    {
+        "forceHeight":20, "name": "leaf_lower_growing.floral_initiation",
+        "bwgURI": "http://brie.cshl.edu/data/Sorghum_bicolor/JGI_Gene_Atlas/Leaf-blade_P_F.bw"
+    },
+    {
+        "forceHeight":20, "name": "leaf_lower_growing.grain_maturity",
+        "bwgURI": "http://brie.cshl.edu/data/Sorghum_bicolor/JGI_Gene_Atlas/Leaf-blade_P_G.bw"
+    },
+    {
+        "forceHeight":20, "name": "leaf_lower.juvenile",
+        "bwgURI": "http://brie.cshl.edu/data/Sorghum_bicolor/JGI_Gene_Atlas/Leaf-blade_P_J.bw"
+    },
+    {
+        "forceHeight":20, "name": "leaf_blade.juvenile",
+        "bwgURI": "http://brie.cshl.edu/data/Sorghum_bicolor/JGI_Gene_Atlas/Leaf-blade_W_J.bw"
+    },
+    {
+        "forceHeight":20, "name": "leaf_sheath_growing.anthesis",
+        "bwgURI": "http://brie.cshl.edu/data/Sorghum_bicolor/JGI_Gene_Atlas/Leaf-sheath_W_A.bw"
+    },
+    {
+        "forceHeight":20, "name": "leaf_sheath_growing.floral_initiation",
+        "bwgURI": "http://brie.cshl.edu/data/Sorghum_bicolor/JGI_Gene_Atlas/Leaf-sheath_W_F.bw"
+    },
+    {
+        "forceHeight":20, "name": "leaf_sheath_growing.grain_maturity",
+        "bwgURI": "http://brie.cshl.edu/data/Sorghum_bicolor/JGI_Gene_Atlas/Leaf-sheath_W_G.bw"
+    },
+    {
+        "forceHeight":20, "name": "leaf_upper_whorl.vegetative",
+        "bwgURI": "http://brie.cshl.edu/data/Sorghum_bicolor/JGI_Gene_Atlas/Leaf_D_V.bw"
+    },
+    {
+        "forceHeight":20, "name": "leaf_middle_whorl.vegetative",
+        "bwgURI": "http://brie.cshl.edu/data/Sorghum_bicolor/JGI_Gene_Atlas/Leaf_M_V.bw"
+    },
+    {
+        "forceHeight":20, "name": "leaf_lower_whorl.vegetative",
+        "bwgURI": "http://brie.cshl.edu/data/Sorghum_bicolor/JGI_Gene_Atlas/Leaf_P_V.bw"
+    },
+    {
+        "forceHeight":20, "name": "panicle_upper.anthesis",
+        "bwgURI": "http://brie.cshl.edu/data/Sorghum_bicolor/JGI_Gene_Atlas/Panicle_D_A.bw"
+    },
+    {
+        "forceHeight":20, "name": "panicle.floral_initiation",
+        "bwgURI": "http://brie.cshl.edu/data/Sorghum_bicolor/JGI_Gene_Atlas/Panicle_E_F.bw"
+    },
+    {
+        "forceHeight":20, "name": "panicle_lower.anthesis",
+        "bwgURI": "http://brie.cshl.edu/data/Sorghum_bicolor/JGI_Gene_Atlas/Panicle_P_A.bw"
+    },
+    {
+        "forceHeight":20, "name": "peduncle.floral_initiation",
+        "bwgURI": "http://brie.cshl.edu/data/Sorghum_bicolor/JGI_Gene_Atlas/Peduncle_E_F.bw"
+    },
+    {
+        "forceHeight":20, "name": "Root.ammonia",
+        "bwgURI": "http://brie.cshl.edu/data/Sorghum_bicolor/JGI_Gene_Atlas/Root_A_N.bw"
+    },
+    {
+        "forceHeight":20, "name": "Root.control_fertilized",
+        "bwgURI": "http://brie.cshl.edu/data/Sorghum_bicolor/JGI_Gene_Atlas/Root_C_N.bw"
+    },
+    {
+        "forceHeight":20, "name": "root_bottom.floral_initiation",
+        "bwgURI": "http://brie.cshl.edu/data/Sorghum_bicolor/JGI_Gene_Atlas/Root_D_F.bw"
+    },
+    {
+        "forceHeight":20, "name": "root_top.juvenile",
+        "bwgURI": "http://brie.cshl.edu/data/Sorghum_bicolor/JGI_Gene_Atlas/Root_D_J.bw"
+    },
+    {
+        "forceHeight":20, "name": "root_top.vegetative",
+        "bwgURI": "http://brie.cshl.edu/data/Sorghum_bicolor/JGI_Gene_Atlas/Root_D_V.bw"
+    },
+    {
+        "forceHeight":20, "name": "Root.nitrate",
+        "bwgURI": "http://brie.cshl.edu/data/Sorghum_bicolor/JGI_Gene_Atlas/Root_I_N.bw"
+    },
+    {
+        "forceHeight":20, "name": "root_bottom.anthesis",
+        "bwgURI": "http://brie.cshl.edu/data/Sorghum_bicolor/JGI_Gene_Atlas/Root_M_A.bw"
+    },
+    {
+        "forceHeight":20, "name": "root_middle.floral_initiation",
+        "bwgURI": "http://brie.cshl.edu/data/Sorghum_bicolor/JGI_Gene_Atlas/Root_M_F.bw"
+    },
+    {
+        "forceHeight":20, "name": "root_bottom.grain_maturity",
+        "bwgURI": "http://brie.cshl.edu/data/Sorghum_bicolor/JGI_Gene_Atlas/Root_M_G.bw"
+    },
+    {
+        "forceHeight":20, "name": "root_bottom.juvenile",
+        "bwgURI": "http://brie.cshl.edu/data/Sorghum_bicolor/JGI_Gene_Atlas/Root_M_J.bw"
+    },
+    {
+        "forceHeight":20, "name": "root_bottom.vegetative",
+        "bwgURI": "http://brie.cshl.edu/data/Sorghum_bicolor/JGI_Gene_Atlas/Root_M_V.bw"
+    },
+    {
+        "forceHeight":20, "name": "Root.urea",
+        "bwgURI": "http://brie.cshl.edu/data/Sorghum_bicolor/JGI_Gene_Atlas/Root_U_N.bw"
+    },
+    {
+        "forceHeight":20, "name": "Root.Control_water",
+        "bwgURI": "http://brie.cshl.edu/data/Sorghum_bicolor/JGI_Gene_Atlas/Root_V_N.bw"
+    },
+    {
+        "forceHeight":20, "name": "seed_imbibed.grain_maturity",
+        "bwgURI": "http://brie.cshl.edu/data/Sorghum_bicolor/JGI_Gene_Atlas/Seed_E_G.bw"
+    },
+    {
+        "forceHeight":20, "name": "seed_dry.grain_maturity",
+        "bwgURI": "http://brie.cshl.edu/data/Sorghum_bicolor/JGI_Gene_Atlas/Seed_O_G.bw"
+    },
+    {
+        "forceHeight":20, "name": "Shoot.ammonia",
+        "bwgURI": "http://brie.cshl.edu/data/Sorghum_bicolor/JGI_Gene_Atlas/Shoot_A_N.bw"
+    },
+    {
+        "forceHeight":20, "name": "Shoot.control_fertilized",
+        "bwgURI": "http://brie.cshl.edu/data/Sorghum_bicolor/JGI_Gene_Atlas/Shoot_C_N.bw"
+    },
+    {
+        "forceHeight":20, "name": "Shoot.nitrate",
+        "bwgURI": "http://brie.cshl.edu/data/Sorghum_bicolor/JGI_Gene_Atlas/Shoot_I_N.bw"
+    },
+    {
+        "forceHeight":20, "name": "Shoot.urea",
+        "bwgURI": "http://brie.cshl.edu/data/Sorghum_bicolor/JGI_Gene_Atlas/Shoot_U_N.bw"
+    },
+    {
+        "forceHeight":20, "name": "Shoot.Control_water",
+        "bwgURI": "http://brie.cshl.edu/data/Sorghum_bicolor/JGI_Gene_Atlas/Shoot_V_N.bw"
+    },
+    {
+        "forceHeight":20, "name": "stem_2mm.juvenile",
+        "bwgURI": "http://brie.cshl.edu/data/Sorghum_bicolor/JGI_Gene_Atlas/Stem_W_J.bw"
+    },
+    {
+        "forceHeight":20, "name": "stem_1cm.vegetative",
+        "bwgURI": "http://brie.cshl.edu/data/Sorghum_bicolor/JGI_Gene_Atlas/Stem_W_V.bw"
+    }
+]
