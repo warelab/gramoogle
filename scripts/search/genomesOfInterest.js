@@ -1,9 +1,6 @@
 import _ from "lodash";
 
-const speciesSets = {
-  default: {}
-  // default: {3702: true, 4577: true, 39947: true, 15368: true, 3847: true}
-};
+const speciesSets = require('../../package.json').gramene.taxa;
 
 export function matchesNamedSpeciesSet(setName, selection) {
   const referenceSet = speciesSets[setName];

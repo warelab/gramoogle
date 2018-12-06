@@ -1,6 +1,7 @@
 import React from "react";
 import isEqual from "lodash/isEqual";
 var ensemblREST = require('../../../../../package.json').gramene.ensemblREST;
+var sorghum_samples = require('./sorghum_samples.json');
 
 // calculate this once.
 const PREFIX = (global.location ? global.location.origin : '')
@@ -33,6 +34,25 @@ export default class DallianceBrowser extends React.Component {
     start = view.start;
     end = view.end;
 
+    var sourceList = [
+      {
+        name: 'DNA',
+        ensemblURI: ensemblREST,
+        species: g.system_name,
+        tier_type: 'sequence'
+      },
+      {
+        name: 'Genes',
+        uri: ensemblREST,
+        tier_type: 'ensembl',
+        species: g.system_name,
+        type: ['gene', 'transcript', 'exon', 'cds']
+      }
+    ];
+
+    if (g.system_name === "sorghum_bicolor") {
+      Array.prototype.push.apply(sourceList, sorghum_samples);
+    }
     this.browser = browser = new Browser(
       {
         pageName: this.biodallianceElementId(),
@@ -50,29 +70,15 @@ export default class DallianceBrowser extends React.Component {
           ucscName: 'IRGSP-1.0'
         },
 
-        sources: [
-          {
-            name: 'DNA',
-            ensemblURI: ensemblREST,
-            species: g.system_name,
-            tier_type: 'sequence'
-          },
-          {
-            name: 'Genes',
-            uri: ensemblREST,
-            tier_type: 'ensembl',
-            species: g.system_name,
-            type: ['gene', 'transcript', 'exon', 'cds']
-          }
-        ],
+        sources: sourceList,
 
         hubs: ['/Track_Hubs/DRP000315/hub.txt'],
         disablePoweredBy: true,
         setDocumentTitle: false,
-        noDefaultLabels: !this.props.expanded,
+        noDefaultLabels: false, //!this.props.expanded,
         noPersist: true,
         noPersistView: true,
-        maxWorkers: 2,
+        maxWorkers: 8,
         noTitle: true,
         noLocationField: true,
         noLeapButtons: !this.props.expanded,

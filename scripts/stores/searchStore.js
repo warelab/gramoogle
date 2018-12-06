@@ -11,6 +11,7 @@ import GoIActions from "../actions/genomesOfInterestActions";
 import {initUrlHashPersistence, persistState} from "../search/persist";
 import {trimFilters} from "../search/filterUtil";
 var search = require('../search/search');
+var defaultGenomes = require('../../package.json').gramene.taxa.default;
 
 module.exports = Reflux.createStore({
   listenables: [QueryActions, GoIActions, TaxonomyActions],
@@ -28,11 +29,10 @@ module.exports = Reflux.createStore({
         tally: {}
       },
       global: {
-        taxa: {} // key is taxon_id, value should be entry in taxonomy object
-        // taxa: {3702:'ath',4577:'zm',39947:'o.sat', 15368: 'brachy', 3847: 'g.max'} // key is taxon_id, value should
-        // be entry in taxonomy object
+        taxa: defaultGenomes // key is taxon_id, value should be entry in taxonomy object
       }
     };
+
 
     // make a copy of the query to keep with the results
     this.state.results.metadata.searchQuery = _.cloneDeep(this.state.query);
@@ -64,7 +64,7 @@ module.exports = Reflux.createStore({
   overwriteFilterState: function (updatedPersistedState) {
     const {filters, taxa} = updatedPersistedState;
     this.state.query.filters = filters || {};
-    this.state.global.taxa = taxa || {};
+    this.state.global.taxa = _.isUndefined(taxa) ? defaultGenomes : taxa;
     this.search();
   },
 
@@ -227,15 +227,15 @@ module.exports = Reflux.createStore({
       taxa: this.state.global.taxa
     };
 
-    if (_.size(newPersistState.filters)
-        || _.size(newPersistState.taxa)) {
-      // update the URL hash
+    // if (_.size(newPersistState.filters)
+    //     || _.size(newPersistState.taxa)) {
+    //   // update the URL hash
+    //   persistState(newPersistState);
+    // }
+    //
+    // else {
       persistState(newPersistState);
-    }
-
-    else {
-      persistState({});
-    }
+    // }
   },
 
   searchError: function (error) {

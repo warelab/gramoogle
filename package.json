@@ -4,10 +4,13 @@
   "description": "Gramene search interface",
   "main": "index.js",
   "gramene": {
-    "dbRelease": 59,
+    "dbRelease": 58,
     "reactomeURL": "//plantreactome.gramene.org",
     "ensemblURL": "//ensembl.gramene.org",
-    "ensemblREST": "//data.gramene.org/ensembl59"
+    "ensemblREST": "//data.gramene.org/ensembl58",
+    "taxa": {
+      "default": {"3702": true, "4558": true, "4577": true}
+    }
   },
   "scripts": {
     "build": "grunt package",

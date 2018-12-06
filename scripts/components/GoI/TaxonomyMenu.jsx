@@ -18,7 +18,11 @@ export default class TaxonomyMenu extends React.Component {
 
   componentDidMount() {
     this.unsubVis = visualizationStore.listen(
-        (visState) => this.setState({taxonomy: visState.taxonomy})
+        (visState) => this.setState(
+          {
+            taxonomy: visState.taxonomy,
+            numGenomes: visState.taxonomy.leafNodes().length
+          })
     );
     this.unsubSearch = searchStore.listen(
         (searchState) => this.setState({selectedTaxa: searchState.global.taxa})
@@ -36,7 +40,8 @@ export default class TaxonomyMenu extends React.Component {
 
   showAllIsSelected() {
     const numSelected = _.size(this.state.selectedTaxa);
-    return numSelected == 0 || (this.state.taxonomy && numSelected == _.size(this.state.taxonomy.leafNodes()));
+    return numSelected === 0 || numSelected === this.state.numGenomes;
+    //(this.state.taxonomy && numSelected == _.size(this.state.taxonomy.leafNodes()));
   }
 
   customSpeciesSetSelected() {
@@ -109,10 +114,10 @@ export default class TaxonomyMenu extends React.Component {
             {this.props.children}
           </Dropdown.Toggle>
           <Dropdown.Menu onSelect={this.handleSelection.bind(this)}>
-            {/*<MenuItem eventKey="default"*/}
-                      {/*active={this.defaultIsSelected()}>*/}
-              {/*Gramene Default Species*/}
-            {/*</MenuItem>*/}
+            <MenuItem eventKey="default"
+                      active={this.defaultIsSelected()}>
+              Default Species
+            </MenuItem>
             <MenuItem eventKey="all"
                       active={this.showAllIsSelected()}>
               Show All Species
