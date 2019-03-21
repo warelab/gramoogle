@@ -4,6 +4,34 @@
 
 .results {
   min-height: 50rem;
+  .sidenav {
+    width: 160px;
+    position: fixed;
+    top: 200;
+    left: 0;
+    background-color: @gramene-mediumgreen;
+    overflow-x: hidden;
+    padding-top: 20px;
+  }
+  .result-mode {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 18px;
+    color: @gramene-offwhite;
+    display: block;
+  }
+  .result-mode.active {
+    background-color: @gramene-darkgreen;
+    font-weight: bolder;
+  }
+  .sidenav a:hover {
+    color: @gramene-yellow;
+  }
+
+  .main {
+    margin-left: 160px;
+    padding: 0px 10px;
+  }
 }
 
 .gramene-search-vis .genomes ul {

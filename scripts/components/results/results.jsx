@@ -1,42 +1,106 @@
 'use strict';
 
 import React from 'react';
-import {Tabs, Tab} from 'react-bootstrap';
 import ResultsList from './resultsList.jsx';
 import ResultsVisualization from './resultsVisualization.jsx';
-// import Fireworks from './Fireworks.jsx';
+import Fireworks from './Fireworks.jsx';
+import Downloads from './downloads.jsx';
+import _ from "lodash";
+import {resultTypes} from "gramene-search-client";
+import QueryActions from "../../actions/queryActions";
+import searchStore from "../../stores/searchStore";
 
 export default class Results extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      summary: 'taxagenomic',
-      list: true
+      resultModes: [
+        {
+          name: "Species",
+          active: true,
+          component: ResultsVisualization,
+          key: 'taxon_id'
+        },
+        {
+          name: "Pathways",
+          active: false,
+          component: Fireworks
+        },
+        {
+          name: "-> Download",
+          active: false,
+          component: Downloads
+        },
+        {
+          name: "Genes",
+          active: true,
+          component: ResultsList,
+          key: 'metadata'
+        }
+      ]
     };
   }
 
+  componentWillMount() {
+    QueryActions.setResultType('species', resultTypes.get('distribution',{
+      'key':'species',
+      'facet.field' : 'taxon_id'
+    }));
+    QueryActions.setResultType('biotype', resultTypes.get('distribution',{
+      'facet.field' : 'biotype'
+    }));
+
+    this.unsubscribeFromSearchStore = searchStore.listen((searchState) =>
+      this.setState({search: searchState.results})
+    );
+  }
+  componentWillUnmount() {
+    QueryActions.removeResultType('species');
+    QueryActions.removeResultType('biotype');
+    this.unsubscribeFromSearchStore();
+  }
+
+  css(idx) {
+    return this.state.resultModes[idx].active ?
+      "result-mode active" : "result-mode"
+  }
+
+  toggleMode(idx) {
+    let resultModes = this.state.resultModes;
+    resultModes[idx].active = ! resultModes[idx].active;
+    this.setState(resultModes);
+  }
+
+  tally(idx) {
+    if (this.state.search && this.state.search.hasOwnProperty(this.state.resultModes[idx].key)) {
+      return this.state.search[this.state.resultModes[idx].key].count;
+    }
+  }
+
   render() {
-    let viz, downloads, pathways;
-    if (this.state.summary === 'taxagenomic')
-      viz = (<ResultsVisualization results={this.props.results}/>);
-    if (this.state.summary === 'download')
-      downloads = (<pre>this is the download UI</pre>);
-    // if (this.state.summary === 'pathways')
-    //   pathways = (<Fireworks results={this.props.results}/>);
     return (
       <section className="results container">
         <div>
-          <Tabs activeKey={this.state.summary}
-                animation={false}
-                unmountOnExit={true}
-                bsStyle='tabs'
-                onSelect={(summary) => this.setState({summary})}
-                id="results-summary-tabs">
-            <Tab eventKey='taxagenomic' title="Taxagenomic distribution">{viz}</Tab>
-            <Tab eventKey='download' title="Download results">{downloads}</Tab>
-          </Tabs>
-          {/*{viz}*/}
-          <ResultsList results={this.props.results}/>
+          <div className="sidenav">
+            {
+              this.state.resultModes.map((mode,idx) =>
+                <a key={idx} className={this.css(idx)} onClick={() => this.toggleMode(idx)}>{mode.name}{this.tally(idx)}</a>
+              )
+            }
+          </div>
+          <div className="main">
+            {
+              this.state.resultModes.map(mode => {
+                if (mode.active) {
+                  return (
+                    <div>
+                      {React.createElement(mode.component)}
+                    </div>
+                  )
+                }
+              })
+            }
+          </div>
         </div>
       </section>
     );
