@@ -5,7 +5,8 @@ import ResultsList from './resultsList.jsx';
 import ResultsVisualization from './resultsVisualization.jsx';
 import Fireworks from './Fireworks.jsx';
 import Downloads from './downloads.jsx';
-import _ from "lodash";
+import Ontology from './Ontology.jsx';
+import SummaryCount from "../search/SummaryCount.jsx";
 import {resultTypes} from "gramene-search-client";
 import QueryActions from "../../actions/queryActions";
 import searchStore from "../../stores/searchStore";
@@ -19,12 +20,31 @@ export default class Results extends React.Component {
           name: "Species",
           active: true,
           component: ResultsVisualization,
-          key: 'taxon_id'
+          key: 'taxon_id.count'
         },
         {
           name: "Pathways",
           active: false,
-          component: Fireworks
+          component: Fireworks,
+          key: 'pathways.count'
+        },
+        {
+          name: "Domains",
+          active: false,
+          component: Ontology,
+          key: 'domains.count'
+        },
+        {
+          name: "GO Terms",
+          active: false,
+          component: Ontology,
+          key: 'GO.count'
+        },
+        {
+          name: "PO Terms",
+          active: false,
+          component: Ontology,
+          key: 'PO.count'
         },
         {
           name: "-> Download",
@@ -35,7 +55,7 @@ export default class Results extends React.Component {
           name: "Genes",
           active: true,
           component: ResultsList,
-          key: 'metadata'
+          key: 'metadata.count'
         }
       ]
     };
@@ -49,14 +69,34 @@ export default class Results extends React.Component {
     QueryActions.setResultType('biotype', resultTypes.get('distribution',{
       'facet.field' : 'biotype'
     }));
+    QueryActions.setResultType('domains', resultTypes.get('distribution',{
+      'facet.field' : 'domains__ancestors',
+      key: 'domains'
+    }));
+    QueryActions.setResultType('GO', resultTypes.get('distribution',{
+      'facet.field' : 'GO__ancestors',
+      key: 'GO'
+    }));
+    QueryActions.setResultType('PO', resultTypes.get('distribution',{
+      'facet.field' : 'PO__ancestors',
+      key: 'PO'
+    }));
+    QueryActions.setResultType('pathways', resultTypes.get('distribution',{
+      'facet.field' : 'pathways__ancestors',
+      key: 'pathways'
+    }));
 
     this.unsubscribeFromSearchStore = searchStore.listen((searchState) =>
-      this.setState({search: searchState.results})
+      this.setState({search: searchState})
     );
   }
   componentWillUnmount() {
     QueryActions.removeResultType('species');
     QueryActions.removeResultType('biotype');
+    QueryActions.removeResultType('domains');
+    QueryActions.removeResultType('GO');
+    QueryActions.removeResultType('PO');
+    QueryActions.removeResultType('pathways');
     this.unsubscribeFromSearchStore();
   }
 
@@ -72,8 +112,11 @@ export default class Results extends React.Component {
   }
 
   tally(idx) {
-    if (this.state.search && this.state.search.hasOwnProperty(this.state.resultModes[idx].key)) {
-      return this.state.search[this.state.resultModes[idx].key].count;
+    let key = this.state.resultModes[idx].key;
+    if (key) {
+      let results = this.state.search ? this.state.search.results : undefined;
+
+      return <span style={{fontSize:'smaller'}}><SummaryCount results={results} path={key}/></span>
     }
   }
 
@@ -84,16 +127,21 @@ export default class Results extends React.Component {
           <div className="sidenav">
             {
               this.state.resultModes.map((mode,idx) =>
-                <a key={idx} className={this.css(idx)} onClick={() => this.toggleMode(idx)}>{mode.name}{this.tally(idx)}</a>
+                <div key={idx}>
+                  <a className={this.css(idx)} onClick={() => this.toggleMode(idx)}>
+                    <span style={{textAlign:'left'}}>{mode.name}</span>
+                    <span style={{textAlign:'right',float:'right'}}>{this.tally(idx)}</span>
+                  </a>
+                </div>
               )
             }
           </div>
           <div className="main">
             {
-              this.state.resultModes.map(mode => {
+              this.state.resultModes.map((mode,idx) => {
                 if (mode.active) {
                   return (
-                    <div>
+                    <div key={idx}>
                       {React.createElement(mode.component)}
                     </div>
                   )
