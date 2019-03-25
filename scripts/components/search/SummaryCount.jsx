@@ -20,7 +20,11 @@ export default class SummaryCount extends React.Component {
   }
 
   value(props = this.props) {
-    return _.get(props.results, this.props.path);
+    let value = _.get(props.results, this.props.path);
+    if (props.cutoff && props.cutoff === value) {
+      value = `>${value-1}`
+    }
+    return value;
   }
 
   haveValue() {

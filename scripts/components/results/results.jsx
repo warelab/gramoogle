@@ -66,22 +66,27 @@ export default class Results extends React.Component {
   componentWillMount() {
     QueryActions.setResultType('species', resultTypes.get('distribution',{
       'key':'species',
+      'facet.limit' : 101,
       'facet.field' : 'taxon_id'
     }));
     QueryActions.setResultType('domains', resultTypes.get('distribution',{
       'facet.field' : 'domains__ancestors',
+      'facet.limit' : 101,
       key: 'domains'
     }));
     QueryActions.setResultType('GO', resultTypes.get('distribution',{
       'facet.field' : 'GO__ancestors',
+      'facet.limit' : 101,
       key: 'GO'
     }));
     QueryActions.setResultType('PO', resultTypes.get('distribution',{
       'facet.field' : 'PO__ancestors',
+      'facet.limit' : 101,
       key: 'PO'
     }));
     QueryActions.setResultType('pathways', resultTypes.get('distribution',{
       'facet.field' : 'pathways__ancestors',
+      'facet.limit' : 101,
       key: 'pathways'
     }));
 
@@ -138,7 +143,7 @@ export default class Results extends React.Component {
     if (key) {
       let results = this.state.search ? this.state.search.results : undefined;
 
-      return <span style={{float:'right', textAlign:'right', marginLeft:'50px'}}><SummaryCount results={results} path={key}/></span>
+      return <span style={{float:'right', textAlign:'right', marginLeft:'50px'}}><SummaryCount results={results} path={key} cutoff={101}/></span>
     }
   }
 
