@@ -18,7 +18,7 @@ export default class Results extends React.Component {
       resultModes: [
         {
           name: "Species",
-          active: true,
+          active: false,
           component: ResultsVisualization,
           key: 'taxon_id.count'
         },
@@ -47,15 +47,16 @@ export default class Results extends React.Component {
           key: 'PO.count'
         },
         {
-          name: "-> Download",
-          active: false,
-          component: Downloads
-        },
-        {
           name: "Genes",
           active: true,
           component: ResultsList,
           key: 'metadata.count'
+        },
+        {
+          name: "-> Download",
+          active: false,
+          component: Downloads,
+          exclusive: true
         }
       ]
     };
@@ -65,9 +66,6 @@ export default class Results extends React.Component {
     QueryActions.setResultType('species', resultTypes.get('distribution',{
       'key':'species',
       'facet.field' : 'taxon_id'
-    }));
-    QueryActions.setResultType('biotype', resultTypes.get('distribution',{
-      'facet.field' : 'biotype'
     }));
     QueryActions.setResultType('domains', resultTypes.get('distribution',{
       'facet.field' : 'domains__ancestors',
@@ -92,7 +90,6 @@ export default class Results extends React.Component {
   }
   componentWillUnmount() {
     QueryActions.removeResultType('species');
-    QueryActions.removeResultType('biotype');
     QueryActions.removeResultType('domains');
     QueryActions.removeResultType('GO');
     QueryActions.removeResultType('PO');
@@ -102,12 +99,20 @@ export default class Results extends React.Component {
 
   css(idx) {
     return this.state.resultModes[idx].active ?
-      "result-mode active" : "result-mode"
+      "btn btn-primary" : "btn btn-outline-primary"
   }
 
   toggleMode(idx) {
     let resultModes = this.state.resultModes;
     resultModes[idx].active = ! resultModes[idx].active;
+    if (resultModes[idx].exclusive && resultModes[idx].active) {
+      // turn off all other modes
+      resultModes.forEach((mode,i)=> {
+        if (i !== idx) {
+          mode.active = false;
+        }
+      })
+    }
     this.setState(resultModes);
   }
 
@@ -116,39 +121,36 @@ export default class Results extends React.Component {
     if (key) {
       let results = this.state.search ? this.state.search.results : undefined;
 
-      return <span style={{fontSize:'smaller'}}><SummaryCount results={results} path={key}/></span>
+      return <span style={{float:'right', textAlign:'right', marginLeft:'50px'}}><SummaryCount results={results} path={key}/></span>
     }
   }
 
   render() {
     return (
       <section className="results container">
-        <div>
-          <div className="sidenav">
+        <div className="sidenav">
+          <div role="group" className="btn-group-vertical" style={{padding:"10px"}}>
             {
               this.state.resultModes.map((mode,idx) =>
-                <div key={idx}>
-                  <a className={this.css(idx)} onClick={() => this.toggleMode(idx)}>
-                    <span style={{textAlign:'left'}}>{mode.name}</span>
-                    <span style={{textAlign:'right',float:'right'}}>{this.tally(idx)}</span>
-                  </a>
-                </div>
+                <button key={idx} className={this.css(idx)} onClick={() => this.toggleMode(idx)}>
+                  <span><span style={{float:'left', textAlign:'left'}}>{mode.name}</span>{this.tally(idx)}</span>
+                </button>
               )
             }
           </div>
-          <div className="main">
-            {
-              this.state.resultModes.map((mode,idx) => {
-                if (mode.active) {
-                  return (
-                    <div key={idx}>
-                      {React.createElement(mode.component)}
-                    </div>
-                  )
-                }
-              })
-            }
-          </div>
+        </div>
+        <div className="main">
+          {
+            this.state.resultModes.map((mode,idx) => {
+              if (mode.active) {
+                return (
+                  <div key={idx}>
+                    {React.createElement(mode.component)}
+                  </div>
+                )
+              }
+            })
+          }
         </div>
       </section>
     );
