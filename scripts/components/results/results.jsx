@@ -48,6 +48,7 @@ export default class Results extends React.Component {
         },
         {
           name: "Genes",
+          default: true,
           active: true,
           component: ResultsList,
           key: 'metadata.count'
@@ -109,6 +110,22 @@ export default class Results extends React.Component {
       // turn off all other modes
       resultModes.forEach((mode,i)=> {
         if (i !== idx) {
+          mode.active = false;
+        }
+      })
+    }
+    else if (resultModes[idx].exclusive) { // just turned off an exclusive mode
+      // turn on the default modes
+      resultModes.forEach((mode,i) => {
+        if (mode.default) {
+          mode.active = true;
+        }
+      })
+    }
+    else {
+      // make sure all of the exclusive modes are off
+      resultModes.forEach((mode,i) => {
+        if (mode.exclusive && mode.active) {
           mode.active = false;
         }
       })
