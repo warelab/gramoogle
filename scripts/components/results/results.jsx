@@ -20,38 +20,41 @@ export default class Results extends React.Component {
           name: "Species",
           active: false,
           component: ResultsVisualization,
-          key: 'taxon_id.count'
+          path: 'taxon_id.count'
         },
         {
           name: "Pathways",
           active: false,
           component: Fireworks,
-          key: 'pathways.count'
+          path: 'pathways.count'
         },
         {
           name: "Domains",
           active: false,
           component: Ontology,
-          key: 'domains.count'
+          facet: 'domains__ancestors',
+          path: 'domains.count'
         },
         {
           name: "GO Terms",
           active: false,
           component: Ontology,
-          key: 'GO.count'
+          facet: 'GO__ancestors',
+          path: 'GO.count'
         },
         {
           name: "PO Terms",
           active: false,
           component: Ontology,
-          key: 'PO.count'
+          facet: 'PO__ancestors',
+          path: 'PO.count'
         },
         {
           name: "Genes",
           default: true,
           active: true,
           component: ResultsList,
-          key: 'metadata.count'
+          path: 'metadata.count'
         },
         {
           name: "-> Download",
@@ -139,11 +142,11 @@ export default class Results extends React.Component {
   }
 
   tally(idx) {
-    let key = this.state.resultModes[idx].key;
-    if (key) {
+    let path = this.state.resultModes[idx].path;
+    if (path) {
       let results = this.state.search ? this.state.search.results : undefined;
 
-      return <span style={{float:'right', textAlign:'right', marginLeft:'50px'}}><SummaryCount results={results} path={key} cutoff={101}/></span>
+      return <span style={{float:'right', textAlign:'right', marginLeft:'50px'}}><SummaryCount results={results} path={path} cutoff={101}/></span>
     }
   }
 
@@ -167,7 +170,7 @@ export default class Results extends React.Component {
               if (mode.active) {
                 return (
                   <div key={idx}>
-                    {React.createElement(mode.component)}
+                    {React.createElement(mode.component,mode)}
                   </div>
                 )
               }
