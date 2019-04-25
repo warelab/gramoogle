@@ -33,14 +33,14 @@ export default class Feedback extends React.Component {
   validateField(fieldName) {
     if (fieldName === 'subject') {
       const length = this.state.subject.length;
-      if (length > 10) return 'success';
-      else if (length > 5) return 'warning';
+      if (length > 2) return 'success';
+      else if (length > 1) return 'warning';
       else if (length > 0) return 'error';
     }
     if (fieldName === 'name') {
       const length = this.state.name.length;
-      if (length > 4) return 'success';
-      else if (length > 2) return 'warning';
+      if (length > 2) return 'success';
+      else if (length > 1) return 'warning';
       else if (length > 0) return 'error';
     }
     if (fieldName === 'email') {
