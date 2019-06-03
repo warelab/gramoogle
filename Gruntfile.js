@@ -139,6 +139,10 @@ module.exports = function (grunt) {
           {
             src: 'node_modules/dalliance/prebuilt/dalliance-all.js',
             dest: 'build/assets/gramene-dalliance/dalliance-all.js'
+          },
+          {
+            src: 'node_modules/react-table/react-table.css',
+            dest: 'build/assets/react-table.css'
           }
         ]
       },

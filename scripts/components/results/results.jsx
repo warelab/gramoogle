@@ -6,6 +6,7 @@ import ResultsVisualization from './resultsVisualization.jsx';
 import Fireworks from './Fireworks.jsx';
 import Downloads from './downloads.jsx';
 import Ontology from './Ontology.jsx';
+import DomainsTable from './DomainsTable.jsx';
 import SummaryCount from "../search/SummaryCount.jsx";
 import {resultTypes} from "gramene-search-client";
 import QueryActions from "../../actions/queryActions";
@@ -31,23 +32,26 @@ export default class Results extends React.Component {
         {
           name: "Domains",
           active: false,
-          component: Ontology,
+          component: DomainsTable,
           facet: 'domains__ancestors',
-          path: 'domains.count'
+          path: 'domains.count',
+          collection: 'domains'
         },
         {
           name: "GO Terms",
           active: false,
           component: Ontology,
           facet: 'GO__ancestors',
-          path: 'GO.count'
+          path: 'GO.count',
+          collection: 'GO'
         },
         {
           name: "PO Terms",
           active: false,
           component: Ontology,
           facet: 'PO__ancestors',
-          path: 'PO.count'
+          path: 'PO.count',
+          collection: 'PO'
         },
         {
           name: "Genes",

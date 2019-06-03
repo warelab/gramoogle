@@ -6,10 +6,10 @@ import {resultTypes} from "gramene-search-client";
 import QueryActions from "../../actions/queryActions";
 import docStore from "../../stores/docStore";
 import DocActions from "../../actions/docActions";
-import _ from 'lodash';
+import ReactTable from 'react-table'
 
 
-export default class Ontology extends React.Component {
+export default class DomainsTable extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -28,19 +28,43 @@ export default class Ontology extends React.Component {
     QueryActions.removeResultType(this.props.facet);
     this.unsubscribeFromSearchStore();
   }
-  buildHierarchy(docs) {
+  gatherDomainInfo(docs) {
     docs.forEach(d => {
       d.count = this.state.terms.data[d._id].count
     });
-    console.log("buildHierarchy",docs);
-    this.setState({hierarchy:docs})
+    this.setState({domains:docs})
   }
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (this.state.terms && !prevState.terms) {
       console.log('requesting term ancestors from docstore',this.state.terms);
       var idList = this.state.terms.sorted.map(term => term.id);
-      DocActions.needDocs(this.props.collection, idList, null, ids => this.buildHierarchy(ids), {fl:'_id,id,name,description,is_a',rows:-1});
+      DocActions.needDocs(this.props.collection, idList, null, ids => this.gatherDomainInfo(ids), {fl:'_id,id,name,description',rows:-1});
     }
+  }
+  renderTable() {
+    return (
+      <ReactTable
+        data={this.state.domains}
+        columns={[
+          {
+            Header: 'Id',
+            accessor: 'id'
+          },
+          {
+            Header: 'Number of Genes',
+            accessor: 'count'
+          },
+          {
+            Header: 'Name',
+            accessor: 'name'
+          },
+          {
+            Header: 'Description',
+            accessor: 'description'
+          }
+        ]}
+      />
+    )
   }
   render() {
     return (
@@ -48,7 +72,7 @@ export default class Ontology extends React.Component {
         <h1>{this.props.name}</h1>
         {/*<pre>{JSON.stringify(this.props,null,2)}</pre>*/}
         {/*<pre>{this.state.terms && JSON.stringify(this.state.terms,null,2)}</pre>*/}
-        <pre>{this.state.hierarchy && JSON.stringify(this.state.hierarchy, null, 2)}</pre>
+        {this.state.domains && this.renderTable()}
       </div>
     );
   }
