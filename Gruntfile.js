@@ -143,6 +143,10 @@ module.exports = function (grunt) {
           {
             src: 'node_modules/react-table/react-table.css',
             dest: 'build/assets/react-table.css'
+          },
+          {
+            src: 'node_modules/react-tabs/style/react-tabs.css',
+            dest: 'build/assets/react-tabs.css'
           }
         ]
       },
