@@ -51,9 +51,7 @@ export default class Ontology extends React.Component {
         })
       }
     });
-    console.log("buildHierarchy",docs);
     console.log('nodes', nodes);
-    console.log('edges', edges);
     this.setState({nodes:nodes, edges: edges})
   }
   componentDidUpdate(prevProps, prevState, snapshot) {
@@ -94,11 +92,12 @@ export default class Ontology extends React.Component {
       <CytoscapeComponent
         cy = {cy => {
           cy.layout({name: 'dagre', nodeDimensionsIncludeLabels: true, rankDir: 'BT'}).run();
-          var makeTippy = function(node, text){
+          var makeTippy = function(node, data){
               return tippy( node.popperRef(), {
                 content: function(){
+                  console.log(data)
                   var div = document.createElement('div');
-                  div.innerHTML = 'ID: ' + text;
+                  div.innerHTML = 'ID: ' + data.id + '<br>Count: ' + data.count;
                   return div;
                 },
                 trigger: 'manual',
@@ -110,11 +109,11 @@ export default class Ontology extends React.Component {
             };
 
           cy.nodes().forEach(n => {
-              let tip = makeTippy(n, n.data('id'));
-              // tip.show();
+              let tip = makeTippy(n, {id: n.data('id'), count: n.data('count')});
               n.on('tap',() => tip.show());
+              cy.on('click', () => tip.hide());
           })
-          
+
           this.cy = cy.fit();
         }}
         elements = {CytoscapeComponent.normalizeElements({nodes:this.state.nodes, edges:this.state.edges})}
