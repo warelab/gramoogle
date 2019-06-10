@@ -23,17 +23,23 @@ cytoscape.use(popper);
 export default class Ontology extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { tabIndex: 0 };
+    this.state = {
+      tabIndex: 0
+    };
+  }
+
+  handleSearchResults(searchState) {
+    const terms = searchState.results[this.props.facet];
+    var idList = terms.sorted.map(term => term.id);
+    DocActions.needDocs(this.props.collection, idList, null, ids => this.buildHierarchy(ids), {fl:'_id,id,name,def,is_a',rows:-1});
+    this.setState({terms})
   }
 
   componentWillMount() {
     QueryActions.setResultType(this.props.facet, resultTypes.get('distribution',{
       'facet.field' : this.props.facet
     }));
-    this.unsubscribeFromSearchStore = searchStore.listen((searchState) =>
-      this.setState({terms: searchState.results[this.props.facet]})
-    );
-
+    this.unsubscribeFromSearchStore = searchStore.listen(searchState => this.handleSearchResults(searchState));
   }
   componentWillUnmount() {
     QueryActions.removeResultType(this.props.facet);
@@ -54,13 +60,8 @@ export default class Ontology extends React.Component {
     console.log('nodes', nodes);
     this.setState({nodes:nodes, edges: edges})
   }
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    if (this.state.terms && !prevState.terms) {
-      console.log('requesting term ancestors from docstore',this.state.terms);
-      var idList = this.state.terms.sorted.map(term => term.id);
-      DocActions.needDocs(this.props.collection, idList, null, ids => this.buildHierarchy(ids), {fl:'_id,id,name,def,is_a',rows:-1});
-    }
-  }
+
+
   renderTable() {
     let tableData = this.state.nodes.map(node => node.data);
     return (
@@ -95,7 +96,6 @@ export default class Ontology extends React.Component {
           var makeTippy = function(node, data){
               return tippy( node.popperRef(), {
                 content: function(){
-                  console.log(data)
                   var div = document.createElement('div');
                   div.innerHTML = 'ID: ' + data.id + '<br>Count: ' + data.count;
                   return div;
