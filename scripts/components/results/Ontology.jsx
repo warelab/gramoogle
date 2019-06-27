@@ -50,6 +50,7 @@ export default class Ontology extends React.Component {
   componentWillUnmount() {
     QueryActions.removeResultType(this.props.facet);
     this.unsubscribeFromSearchStore();
+    this.unsubscribeFromBackgroundSetStore();
   }
   buildHierarchy(docs) {
     let nodes = [];
