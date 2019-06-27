@@ -94,6 +94,8 @@ export default class Ontology extends React.Component {
             accessor: 'definition'
           }
         ]}
+        defaultPageSize={tableData.length < 20 ? tableData.length : 20}
+        showPagination={tableData.length > 20}
       />
     )
   }
