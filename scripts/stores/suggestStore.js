@@ -159,8 +159,8 @@ module.exports = Reflux.createStore({
         }
 
         result = [];
-        arrA = top.slice();
-        arrB = category.suggestions.slice();
+        arrA = _.filter(top.slice(),'num_genes');
+        arrB = _.filter(category.suggestions.slice(),'num_genes');
 
         // while we don't have NUM_TOP and there are still suggestions available
         while (result.length < NUM_TOP && (arrA.length || arrB.length)) {

@@ -123,22 +123,39 @@
   margin-left: -@col-padding;
 
   .posts {
+    ul {
+      overflow: auto;
+      height: 500px;
+    }
     li {
       padding-bottom: @padding-large-vertical;
     }
 
-    li:first-child {
+    li:last-child {
     }
 
-    li:first-child::after {
+    li:last-child::before {
       display: block;
-      content: "Older news";
-      padding-top: @padding-large-vertical * 3;
+      content: "For older news";
+      padding-top: @padding-large-vertical * 2;
     }
 
-    li:not(:first-child) {
-      font-size: @font-size-base * 0.85;
+    li:not(:last-child) {
+      font-size: @font-size-base * 0.90;
     }
+
+    //li:first-child {
+    //}
+    //
+    //li:first-child::after {
+    //  display: block;
+    //  content: "Older news";
+    //  padding-top: @padding-large-vertical * 3;
+    //}
+    //
+    //li:not(:first-child) {
+    //  font-size: @font-size-base * 0.85;
+    //}
   }
 }
 

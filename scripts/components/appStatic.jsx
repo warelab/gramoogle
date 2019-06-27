@@ -17,12 +17,22 @@
 
 import React from 'react';
 import Header from './header.jsx';
+import Footer from './footer/Footer.jsx';
 import Welcome from "./welcome/WelcomePage.jsx";
 
-const App = () =>
-      <div className="app">
-        <Header search={ {query: {}, results: {}} }/>
-        <Welcome context="compile"/>
-      </div>;
+export default class App extends React.Component {
 
-export default App;
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <div className="app">
+        <Header />
+        <Welcome {...this.props}/>
+        <Footer noSocial/>
+      </div>
+    );
+  }
+};

@@ -1,4 +1,5 @@
 import React from "react";
+import ReactGA from "react-ga";
 import {Detail, Title, Description, Content, Explore, Links} from "./generic/detail.jsx";
 import TreeVis from "gramene-genetree-vis";
 import queryActions from "../../../actions/queryActions";
@@ -6,6 +7,10 @@ import DocActions from "../../../actions/docActions";
 import searchStore from "../../../stores/searchStore";
 import _ from "lodash";
 import treesClient from "gramene-trees-client";
+import Spinner from "../../Spinner.jsx";
+import {Glyphicon} from "react-bootstrap";
+var ensemblURL = require('../../../../package.json').gramene.ensemblURL;
+
 const processGenetreeDoc = treesClient.genetree.tree;
 
 export default class Homology extends React.Component {
@@ -30,7 +35,9 @@ export default class Homology extends React.Component {
     this.orthologs = this.orthologList();
     this.paralogs = this.paralogList();
     this.treeId = _.get(this.props.gene, 'homology.gene_tree.id');
-
+    if (!this.treeId) {
+      this.treeId = _.get(this.props.gene, 'homology.pan_tree.id');
+    }
     if (this.treeId) {
       DocActions.needDocs('genetrees', this.treeId, processGenetreeDoc);
     }
@@ -122,29 +129,42 @@ export default class Homology extends React.Component {
 
   filterAllHomologs() {
     queryActions.setAllFilters(this.createAllHomologsFilters());
+    if (this.props.closeModal) this.props.closeModal();
   }
 
   filterOrthologs() {
     queryActions.setAllFilters(this.createOrthologFilters());
+    if (this.props.closeModal) this.props.closeModal();
   }
 
   filterParalogs() {
     queryActions.setAllFilters(this.createParalogFilters());
+    if (this.props.closeModal) this.props.closeModal();
   }
 
   renderTreeVis() {
     if (this.genetree && this.state.taxonomy) {
       return (
         <div className="gene-genetree">
-          <h5>Gene Tree</h5>
           <TreeVis genetree={this.genetree}
                    initialGeneOfInterest={this.props.gene}
                    genomesOfInterest={this.state.genomesOfInterest}
                    taxonomy={this.state.taxonomy}
                    allowGeneSelection={true}
+                   pivotTree={true}
+                   enablePhyloview={true}
+                   numberOfNeighbors={10}
+                   ensemblUrl={ensemblURL}
           />
         </div>
       );
+    }
+    else {
+      return (
+        <div className="gene-genetree">
+          Loading <Spinner />
+        </div>
+      )
     }
   }
 
@@ -189,7 +209,7 @@ export default class Homology extends React.Component {
     var gene, ensemblGenetreeUrl;
 
     gene = this.props.gene;
-    ensemblGenetreeUrl = '//ensembl.gramene.org/' + gene.system_name + '/Gene/Compara_Tree?g=' + gene._id;
+    ensemblGenetreeUrl = `//${ensemblURL}/${gene.system_name}/Gene/Compara_Tree?g=${gene._id}`;
 
     return [
       {name: 'Ensembl Gene Tree view', url: ensemblGenetreeUrl}
@@ -197,11 +217,21 @@ export default class Homology extends React.Component {
   }
 
   render() {
+    let external = <small title="This link opens a page from an external site"> <Glyphicon glyph="new-window" /></small>;
     return (
       <Detail>
         <Title key="title">Compara Gene Tree</Title>
-        <Description key="description">This phylogram shows the relationships between this genes and others similar to it, as determined
-          by <a href="http://ensembl.org/info/genome/compara/index.html">Ensembl Compara</a>.</Description>
+        <Description key="description">
+          <p>This phylogram shows the relationships between this gene and others similar to it, as determined by
+          &nbsp;<ReactGA.OutboundLink
+            eventLabel="Ensembl Compara"
+            target="_blank"
+            to="http://ensembl.org/info/genome/compara/index.html">
+            Ensembl Compara{external}
+          </ReactGA.OutboundLink>
+          .
+          </p>
+        </Description>
         <Content key="content">{this.renderTreeVis()}</Content>
         <Explore key="explore" explorations={this.explorations()}/>
         <Links key="links" links={this.links()}/>
@@ -212,5 +242,6 @@ export default class Homology extends React.Component {
 
 Homology.propTypes = {
   gene: React.PropTypes.object.isRequired,
-  docs: React.PropTypes.object.isRequired
+  docs: React.PropTypes.object.isRequired,
+  closeModal: React.PropTypes.func
 };

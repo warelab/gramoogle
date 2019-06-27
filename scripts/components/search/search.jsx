@@ -7,7 +7,7 @@ import SearchBox from "./searchBox.jsx";
 import QueryActions from "../../actions/queryActions";
 import Suggest from "../suggest/suggest.jsx";
 import Filters from "./filters.jsx";
-
+import searchStore from "../../stores/searchStore";
 
 export default class Search extends React.Component {
   constructor(props) {
@@ -27,6 +27,16 @@ export default class Search extends React.Component {
     ]);
   }
 
+  componentWillMount() {
+    this.unsubscribeFromSearchStore = searchStore.listen((searchState) =>
+      this.setState({search: searchState})
+    );
+  }
+
+  componentWillUnmount() {
+    this.unsubscribeFromSearchStore();
+  }
+
   componentDidMount() {
     // listen directly to an action method.
 
@@ -39,6 +49,12 @@ export default class Search extends React.Component {
     // of app state and we must manually clear it here if the query string is
     // removed (e.g. when a suggestion is picked)
     QueryActions.removeQueryString.listen(this.clearInputString);
+    QueryActions.setFilter.listen(this.clearInputString);
+    QueryActions.setAllFilters.listen(this.clearInputString);
+    QueryActions.removeFilter.listen(this.clearInputString);
+    QueryActions.removeFilters.listen(this.clearInputString);
+    QueryActions.removeAllFilters.listen(this.clearInputString);
+    QueryActions.toggleFilter.listen(this.clearInputString);
   }
 
   handleQueryChange(queryString) {
@@ -55,6 +71,8 @@ export default class Search extends React.Component {
 
   clearInputString() {
     this.refs.searchBox.clearSearchString();
+    this.refs.searchBox.focus();
+    window.scrollTo(0,0);
     this.setState({
       suggestionsVisible: false
     });
@@ -75,13 +93,11 @@ export default class Search extends React.Component {
   }
 
   render() {
-    var search = this.props.search;
 
     return (
         <Nav pullRight
              className="search-box-nav">
           <SearchBox ref="searchBox"
-                     results={search.results}
                      onQueryChange={this.handleQueryChange}
                      toggleGenomesOfInterest={this.toggleGenomesDropdownVisibility}
                      showGenomesOfInterest={this.state.genomesDropdownVisible}
@@ -96,22 +112,14 @@ export default class Search extends React.Component {
   }
 
   renderSuggestions() {
-    if (this.state.suggestionsVisible) {
-      return <Suggest queryString={this.props.search.query.q}/>;
+    if (this.state.suggestionsVisible && this.state.search) {
+      return <Suggest queryString={this.state.search.query.q}/>;
     }
-  }
-
-  shouldShowFilters(props = this.props) {
-    return _.size(props.search.query.filters);
   }
 
   renderFilters() {
-    if (this.shouldShowFilters()) {
-      return <Filters filters={this.props.search.query.filters}/>;
+    if (this.state.search && this.state.search.query.filters) {
+      return <Filters filters={this.state.search.query.filters}/>;
     }
   }
-};
-
-Search.propTypes = {
-  search: React.PropTypes.object.isRequired,
 };

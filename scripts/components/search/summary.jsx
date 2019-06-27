@@ -7,29 +7,36 @@ var _ = require('lodash');
 
 import SummaryCount from "./SummaryCount.jsx";
 import Spinner from "../Spinner.jsx";
+import searchStore from "../../stores/searchStore";
 
 var resultType = resultTypes.get('facet');
 
-var Summary = React.createClass({
-  propTypes: {
-    results: React.PropTypes.object.isRequired
-  },
-  componentWillMount: function () {
+export default class Summary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+    }
+  componentWillMount() {
+    resultType['facet.field'] = resultType['facet.field'].replace('50','200');
     QueryActions.setResultType('taxon_id', resultType);
-  },
-  componentWillUnmount: function () {
+    this.unsubscribeFromSearchStore = searchStore.listen((searchState) =>
+      this.setState({search: searchState})
+    );
+  }
+  componentWillUnmount() {
     QueryActions.removeResultType('taxon_id');
-  },
-  render: function () {
-    var results;
-    results = this.props.results;
+    this.unsubscribeFromSearchStore();
+  }
+  render() {
+    let results = this.state.search ? this.state.search.results : undefined;
 
     // this only happens when the page is statically rendered during compile.
-    if (_.size(results) === 0) {
+    if (!results) {
       return (
           <div className="results-summary">
-            <span>Initializing</span>
-            <Spinner />
+            <span className="gene-count"><Spinner /> genes</span>
+            <span className="join"> in </span>
+            <span className="genomes-count"><Spinner /> genomes</span>
           </div>
       )
     }
@@ -42,6 +49,4 @@ var Summary = React.createClass({
         </div>
     );
   }
-});
-
-module.exports = Summary;
+}

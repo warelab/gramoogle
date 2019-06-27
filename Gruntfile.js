@@ -5,6 +5,8 @@ var moment = require('moment');
 var fs = require('fs');
 
 var grameneRelease = require('./package.json').gramene.dbRelease;
+var reactomeURL = require('./package.json').gramene.reactomeURL;
+
 var webserviceVersion = 'v' + grameneRelease;
 
 module.exports = function (grunt) {
@@ -29,11 +31,11 @@ module.exports = function (grunt) {
     },
 
     exec: {
-      generateStaticApp: {
-        cmd: 'node scripts/babel.js'
+      generateStaticWelcome: {
+        cmd: 'node scripts/babel.js -c app'
       },
-      blogFeed: {
-        cmd: 'node scripts/getBlogFeed.js'
+      generateStaticApp: {
+        cmd: 'node scripts/babel.js -c static'
       }
     },
 
@@ -96,7 +98,7 @@ module.exports = function (grunt) {
       },
       html: {
         files: ['*.template.html'],
-        tasks: ['packageIndexHtml']
+        tasks: ['packageIndexHtml','packageStaticHtml']
       },
       styles: {
         files: ['styles/*.less'],
@@ -121,7 +123,7 @@ module.exports = function (grunt) {
           {expand: true, cwd: 'assets/', src: ['**'], dest: 'build/assets/'},
           {
             expand: true,
-            cwd: 'node_modules/gramene-dalliance', 
+            cwd: 'node_modules/dalliance',
             src: [
               'css/*-scoped.css',
               'css/font-awesome.min.css',
@@ -131,8 +133,12 @@ module.exports = function (grunt) {
             dest: 'build/assets/gramene-dalliance/'
           },
           {
-            src: 'node_modules/gramene-dalliance/prebuilt/worker-all.js',
+            src: 'node_modules/dalliance/prebuilt/worker-all.js',
             dest: 'build/assets/gramene-dalliance/worker-all.js'
+          },
+          {
+            src: 'node_modules/dalliance/prebuilt/dalliance-all.js',
+            dest: 'build/assets/gramene-dalliance/dalliance-all.js'
           }
         ]
       },
@@ -161,7 +167,7 @@ module.exports = function (grunt) {
           defaultServer = DEV_SERVER;
         }
 
-        defaultServer += webserviceVersion + '/swagger';
+        defaultServer += webserviceVersion;
 
         return defaultServer;
       }
@@ -179,9 +185,9 @@ module.exports = function (grunt) {
         grameneRelease: grameneRelease
       };
 
-      props.defaultServer = defaultServer();
+      props.defaultServer = defaultServer() + '/swagger';
+      props.apiServer = defaultServer();
       console.log("This build will use " + props.defaultServer + " as default web service server");
-
       return template(props);
     })();
 
@@ -195,7 +201,8 @@ module.exports = function (grunt) {
         footer: footer,
         content: content,
         loadingMessage: loadingMessage,
-        hideIntro: hideIntro
+        hideIntro: hideIntro,
+        reactomeURL: reactomeURL
       };
 
       return template(props);
@@ -205,9 +212,78 @@ module.exports = function (grunt) {
 
     var atlas = grunt.file.read('./static/atlasWidget.template.html')
     grunt.file.write('build/atlasWidget.html', atlas);
+
+    // var htaccess = "RewriteBase /\n"
+    //  + "RewriteRule ^index\.html$ - [L]\n"
+    //  + "RewriteCond %{REQUEST_FILENAME} !-f\n"
+    //  + "RewriteCond %{REQUEST_FILENAME} !-d\n"
+    //  + "RewriteRule . /index.html [L]\n";
+    // grunt.file.write('build/.htaccess', htaccess);
   });
-  
-  grunt.registerTask('generateStaticFiles', ['exec:blogFeed', 'copy:assets', 'copy:icons', 'exec:generateStaticApp', 'packageIndexHtml']);
+
+  grunt.registerTask('packageStaticHtml', 'Build static.html for distribution.', function () {
+    var footer = (function compileFooterTemplate() {
+      function defaultServer() {
+        const PROD_SERVER = 'http://data.gramene.org/';
+        const DEV_SERVER = 'http://devdata.gramene.org/';
+        var defaultServer;
+
+        if (process.env.GRAMENE_SERVER) {
+          defaultServer = process.env.GRAMENE_SERVER;
+        }
+        else if (props.tag || props.branch === 'master') {
+          defaultServer = PROD_SERVER;
+        }
+        else {
+          defaultServer = DEV_SERVER;
+        }
+
+        defaultServer += webserviceVersion;
+
+        return defaultServer;
+      }
+
+      var template = _.template(grunt.file.read('./static/footer.template.html'));
+
+      var props = {
+        jobId: process.env.TRAVIS_JOB_ID,
+        jobNumber: process.env.TRAVIS_JOB_NUMBER,
+        branch: process.env.TRAVIS_BRANCH,
+        tag: process.env.TRAVIS_TAG,
+        user: process.env.USER,
+        date: moment().format('MMMM Do YYYY [at] h:mm:ss a'),
+        isDev: process.env.isDev,
+        grameneRelease: grameneRelease
+      };
+
+      props.defaultServer = defaultServer() + '/swagger';
+      props.apiServer = defaultServer();
+      console.log("This build will use " + props.defaultServer + " as default web service server");
+
+      return template(props);
+    })();
+
+    var index = (function compileIndexTemplate() {
+      var template = _.template(grunt.file.read('./static/index.template.html'));
+      var content = grunt.file.read('./static/static.html.fragment');
+      var loadingMessage = grunt.file.read('./static/loading-message.html.fragment');
+      var hideIntro = grunt.file.read('./static/hide-intro.html.fragment');
+
+      var props = {
+        footer: footer,
+        content: content,
+        loadingMessage: loadingMessage,
+        hideIntro: hideIntro,
+        reactomeURL: reactomeURL
+      };
+
+      return template(props);
+    })();
+
+    grunt.file.write('build/static.html', index);
+  });
+
+  grunt.registerTask('generateStaticFiles', ['copy:assets', 'copy:icons', 'exec:generateStaticApp', 'exec:generateStaticWelcome', 'packageStaticHtml', 'packageIndexHtml']);
   grunt.registerTask('test', ['jasmine_node']);
   grunt.registerTask('default', ['env:dev', 'generateStaticFiles', 'less:dev', 'browserify:dev', 'watch']);
   grunt.registerTask('package', ['env:prod', 'generateStaticFiles', 'less:production', 'browserify:production', 'test']);

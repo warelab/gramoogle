@@ -1,10 +1,10 @@
 import React from "react";
 import isEqual from "lodash/isEqual";
-import {browser as Dalliance} from "gramene-dalliance";
+var ensemblREST = require('../../../../../package.json').gramene.ensemblREST;
 
 // calculate this once.
-const PREFIX = (global.location ? global.location.origin + global.location.pathname : '')
-  + 'assets/gramene-dalliance/';
+const PREFIX = (global.location ? global.location.origin : '')
+  + '/assets/gramene-dalliance/';
 
 export default class DallianceBrowser extends React.Component {
 
@@ -16,7 +16,7 @@ export default class DallianceBrowser extends React.Component {
   shouldComponentUpdate(newProps) {
     // should we reset the view to initial state?
     if(isEqual(newProps.visibleRange, this.initialVisibleRange)) {
-      this.browser.setLocation(newProps.visibleRange.chr, newProps.visibleRange.start, newProps.visibleRange.end);
+      // this.browser.setLocation(newProps.visibleRange.chr, newProps.visibleRange.start, newProps.visibleRange.end);
     }
 
     return false;
@@ -33,7 +33,7 @@ export default class DallianceBrowser extends React.Component {
     start = view.start;
     end = view.end;
 
-    this.browser = browser = new Dalliance(
+    this.browser = browser = new Browser(
       {
         pageName: this.biodallianceElementId(),
         chr: g.location.region,
@@ -46,38 +46,41 @@ export default class DallianceBrowser extends React.Component {
           speciesName: g.system_name,
           taxon: g.taxon_id,
           auth: 'Gramene',
-          version: '3'
+          version: '3',
+          ucscName: 'IRGSP-1.0'
         },
 
         sources: [
           {
             name: 'DNA',
-            ensemblURI: 'http://data.gramene.org/ensembl',
+            ensemblURI: ensemblREST,
             species: g.system_name,
             tier_type: 'sequence'
           },
           {
             name: 'Genes',
-            uri: 'http://data.gramene.org/ensembl',
+            uri: ensemblREST,
             tier_type: 'ensembl',
             species: g.system_name,
             type: ['gene', 'transcript', 'exon', 'cds']
           }
         ],
+
+        hubs: ['/Track_Hubs/DRP000315/hub.txt'],
         disablePoweredBy: true,
         setDocumentTitle: false,
-        noDefaultLabels: true,
+        noDefaultLabels: !this.props.expanded,
         noPersist: true,
         noPersistView: true,
         maxWorkers: 2,
         noTitle: true,
-        noLocationField: true, //!this.props.expanded,
-        noLeapButtons: true, //!this.props.expanded,
+        noLocationField: true,
+        noLeapButtons: !this.props.expanded,
         noZoomSlider: false, //!this.props.expanded,
-        noTrackAdder: true, //!this.props.expanded,
-        noTrackEditor: true,
-        noExport: true,
-        noOptions: true , // !this.props.expanded,
+        noTrackAdder: !this.props.expanded,
+        noTrackEditor: !this.props.expanded,
+        noExport: !this.props.expanded,
+        noOptions: !this.props.expanded,
         noHelp: true,
         maxViewWidth: 1000000
       }

@@ -12,10 +12,23 @@ export default class Result extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
+    if (props.expandDetail) {
+      this.requestGeneDoc();
+    }
   }
 
   componentWillUnmount() {
     DocActions.noLongerNeedDocs('genes', this.props.searchResult.id);
+  }
+
+  componentDidMount() {
+    if (this.props.expandDetail) {
+      var idx = this.props.searchResult.capabilities.indexOf(this.props.expandDetail.toLowerCase());
+      console.log(this.props.searchResult.capabilities, this.props.expandDetail, idx);
+      if (idx >= 0) {
+        this.setState({visibleDetail: _.find(detailsInventory, {name: this.props.expandDetail})})
+      }
+    }
   }
 
   requestGeneDoc() {
@@ -65,7 +78,7 @@ export default class Result extends React.Component {
                          hoverDetailCapability={_.get(this.state.hoverDetail, 'capability')}
                          geneDoc={this.props.geneDoc}
                          docs={this.props.docs}
-
+                         speciesName={this.props.searchResult.species_name}
                          onDetailSelect={this.updateVisibleDetail.bind(this)}
           />
         </li>

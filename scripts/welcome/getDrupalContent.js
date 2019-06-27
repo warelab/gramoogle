@@ -8,11 +8,12 @@ export const parseFeed = (response) => {
   return Q.nfcall(RSSParser.parseString, response.data);
 };
 
-const getBlogFeed = () => axios.get("http://gramene.org/blog/feed")
+export const getBlogFeed = () => axios.get("http://news.gramene.org/blog/feed")
                                .then(parseFeed)
                                .then((rss)=> {
                                  console.log(rss);
                                  return _.get(rss, 'feed.entries');
                                });
 
-export default getBlogFeed;
+// export const getDrupalPage = (path) => axios.get('http://data.gramene.org/drupal/'+path)
+//                                     .then(response => {return {path:path,page:response.data}});

@@ -39,7 +39,7 @@ var Suggest = React.createClass({
             <strong>No suggestions found.</strong> You may still attempt a full text search, though it is unlikely to find any genes for you.
           </bs.Alert>
           <ul className="categories">
-            <Category idx="2" category={suggestionCategories[0]} hideLabel={true} />
+            <Category idx={2} category={suggestionCategories[0]} hideLabel={true} />
           </ul>
         </bs.Panel>
       )

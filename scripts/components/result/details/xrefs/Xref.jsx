@@ -1,5 +1,7 @@
 import React from "react";
+import ReactGA from "react-ga";
 import _ from "lodash";
+import {Glyphicon} from "react-bootstrap";
 
 const HOW_MANY_TO_SHOW_BY_DEFAULT = 10;
 
@@ -41,7 +43,8 @@ export default class Xref extends React.Component {
   }
 
   render() {
-    var members, vals;
+    var members, vals, db;
+    db = this.props.displayName;
 
     members = this.props.members;
 
@@ -55,8 +58,17 @@ export default class Xref extends React.Component {
       .map(function (item, idx) {
         var url = members[0].url(item),
           liClass = idx < HOW_MANY_TO_SHOW_BY_DEFAULT ? "default" : "extra";
+        let external = <small title="This link opens a page from an external site"> <Glyphicon glyph="new-window" /></small>;
         return (
-          <li key={idx} className={liClass}><a href={url}>{item}</a></li>
+          <li key={idx} className={liClass}>
+            <ReactGA.OutboundLink
+              eventLabel={db}
+              to={url}
+              target="_blank"
+            >
+              {item}{external}
+            </ReactGA.OutboundLink>
+          </li>
         )
       })
       .value();

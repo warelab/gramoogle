@@ -5,6 +5,7 @@ import _ from "lodash";
 import {resultTypes} from "gramene-search-client";
 import QueryActions from "../../actions/queryActions";
 import docStore from "../../stores/docStore";
+import searchStore from "../../stores/searchStore";
 import Result from "./../result/result.jsx";
 
 
@@ -24,6 +25,13 @@ export default class ResultsList extends React.Component {
   componentWillMount() {
     QueryActions.setResultType('list', this.getResultType());
 
+    this.unsubscribeFromSearchStore = searchStore.listen((searchState) =>
+      {
+        if (searchState.results) {
+          this.setState({results: searchState.results})
+        }
+      }
+    );
     this.unsubDocs = docStore.listen(
         (docs) => this.setState({docs})
     );
@@ -32,6 +40,9 @@ export default class ResultsList extends React.Component {
   componentWillUnmount() {
     QueryActions.removeResultType('list');
 
+    if (this.unsubscribeFromSearchStore) {
+      this.unsubscribeFromSearchStore();
+    }
     if (this.unsubDocs) {
       this.unsubDocs();
     }
@@ -44,17 +55,31 @@ export default class ResultsList extends React.Component {
   render() {
     const docs = this.state.docs;
     const geneDocs = _.get(docs, 'genes') || {};
-    const list = this.props.results.list;
+    const list = this.state.results ? this.state.results.list : undefined;
 
     if (list && list.length) {
-      var searchResults = list.map(function (searchResult) {
-        return (
+      if (list.length === 1) {
+        var searchResults = list.map(function (searchResult) {
+          return (
+            <Result key={searchResult.id}
+                    searchResult={searchResult}
+                    geneDoc={geneDocs[searchResult.id]}
+                    docs={docs}
+                    expandDetail='Homology'
+            />
+          );
+        });
+      }
+      else {
+        var searchResults = list.map(function (searchResult) {
+          return (
             <Result key={searchResult.id}
                     searchResult={searchResult}
                     geneDoc={geneDocs[searchResult.id]}
                     docs={docs}/>
-        );
-      });
+          );
+        });
+      }
 
       return (
           <div className="results-list-container">
@@ -73,8 +98,8 @@ export default class ResultsList extends React.Component {
   }
 
   moreButton() {
-    const list = this.props.results.list;
-    const totalResults = this.props.results.metadata.count;
+    const list = this.state.results.list;
+    const totalResults = this.state.results.metadata.count;
     if (list.length < totalResults) {
       return (
           <ul className="more-results">
@@ -87,6 +112,3 @@ export default class ResultsList extends React.Component {
   }
 }
 
-ResultsList.propTypes = {
-  results: React.PropTypes.object.isRequired,
-};

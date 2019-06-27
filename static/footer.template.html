@@ -1,33 +1,33 @@
-<nav class="submenu navbar navbar-default">
-    <div class="container">
-        <ul class="nav navbar-nav">
-            <li><a href="//gramene.org/release-notes-<%= grameneRelease %>">
-                Release Notes (v<%= grameneRelease %>)
-            </a></li>
-            <li><a href="//gramene.org/contact">Contact</a></li>
-            <li><a href="//gramene.org/about-gramene">About</a></li>
-            <li><a href="//gramene.org/cite">Cite</a></li>
-            <li><a href="//tools.gramene.org/feedback">Feedback</a></li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right social">
-            <li>
-                <iframe src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2FGramene&amp;layout=button_count&amp;show_faces=false&amp;width=80&amp;font=arial&amp;height=20&amp;action=like&amp;colorscheme=light&amp;locale=en_US&amp;send=false&amp;share=false"
-                        scrolling="no"
-                        frameborder="0"
-                        style="border: none; overflow: hidden; width: 80px; height: 20px;"
-                        allowTransparency="true">
-                </iframe>
-            </li>
-            <li>
-                <a href="https://twitter.com/GrameneDatabase"
-                   class="twitter-follow-button"
-                   data-show-count="true">
-                    Follow @Gramene
-                </a>
-            </li>
-        </ul>
-    </div>
-</nav>
+<!--<nav class="submenu navbar navbar-default">-->
+    <!--<div class="container">-->
+        <!--<ul class="nav navbar-nav">-->
+            <!--<li><a href="//gramene.org/release-notes-<%= grameneRelease %>">-->
+                <!--Release Notes (v<%= grameneRelease %>)-->
+            <!--</a></li>-->
+            <!--<li><a href="//gramene.org/contact">Contact</a></li>-->
+            <!--<li><a href="//gramene.org/about-gramene">About</a></li>-->
+            <!--<li><a href="//gramene.org/cite">Cite</a></li>-->
+            <!--<li><a href="//tools.gramene.org/feedback">Feedback</a></li>-->
+        <!--</ul>-->
+        <!--<ul class="nav navbar-nav navbar-right social">-->
+            <!--<li>-->
+                <!--<iframe src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2FGramene&amp;layout=button_count&amp;show_faces=false&amp;width=80&amp;font=arial&amp;height=20&amp;action=like&amp;colorscheme=light&amp;locale=en_US&amp;send=false&amp;share=false"-->
+                        <!--scrolling="no"-->
+                        <!--frameborder="0"-->
+                        <!--style="border: none; overflow: hidden; width: 80px; height: 20px;"-->
+                        <!--allowTransparency="true">-->
+                <!--</iframe>-->
+            <!--</li>-->
+            <!--<li>-->
+                <!--<a href="https://twitter.com/GrameneDatabase"-->
+                   <!--class="twitter-follow-button"-->
+                   <!--data-show-count="true">-->
+                    <!--Follow @Gramene-->
+                <!--</a>-->
+            <!--</li>-->
+        <!--</ul>-->
+    <!--</div>-->
+<!--</nav>-->
 <div class="footer">
     <div class="container">
         <div class="row">
@@ -48,7 +48,8 @@
                 <div class="tech-info well">
                     <h5>Application Info</h5>
                     <ul class="buildInfo">
-                        <li>Data Release <%= grameneRelease %></li>
+                        <li><a title="API"
+                               href="<%= apiServer %>">Data Release <%= grameneRelease %></a></li>
                         <li>Gramene Search UI
                             <% if(tag) { %>
                             <a title="Release available on github"
@@ -102,18 +103,27 @@
 
     window.gramene = {
         defaultServer: searchParams.server || "<%= defaultServer %>",
-        searchParams: searchParams
+        searchParams: searchParams,
+        grameneRelease: "<%= grameneRelease %>",
     };
 
+//    function onReactomeFireworksReady() {
+//      var event = new Event('launchFireworks');
+//      window.dispatchEvent(event);
+//    }
+//    function onReactomeDiagramReady() {
+//      var event = new Event('launchDiagram');
+//      window.dispatchEvent(event);
+//    }
     // update the URL so that the search component only specifies the data server
-    if (history.pushState) {
-        var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname;
-        if(searchParams.server) {
-            newurl += '?server=' + searchParams.server;
-        }
-        if(window.location.hash) {
-            newurl += window.location.hash;
-        }
-        window.history.pushState({path:newurl},'',newurl);
-    }
+//    if (history.pushState) {
+//        var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+//        if(searchParams.server) {
+//            newurl += '?server=' + searchParams.server;
+//        }
+//        if(window.location.hash) {
+//            newurl += window.location.hash;
+//        }
+//        window.history.pushState({path:newurl},'',newurl);
+//    }
 </script>

@@ -30,20 +30,28 @@ function getClientPromise(collection) {
   return client[collection];
 }
 
-DocActions.needDocs.listen(function (collection, id, postprocessFn) {
+DocActions.needDocs.listen(function (collection, id, postprocessFn, callbackFn) {
   var cacheKey, clientCall;
   cacheKey = [collection,id];
   console.log('DocActions.needDocs', collection, id);
 
   clientCall = getClientPromise(collection);
-
+  if (typeof id === 'number') {
+    id = [id,0];
+  }
   if (!(_.isString(id) || _.isArray(id))) {
     throw new Error('id must be a string or array, you gave me a ' + typeof id);
   }
 
   var promise, cached;
   if ((cached = docCache.get(cacheKey))) {
-    promise = Q(cached);
+    promise = Q(cached)
+      .then(function callbackMaybe(result) {
+        if (callbackFn) {
+          callbackFn(result.docs);
+        }
+        return result;
+      });
   }
   else {
     docCache.set(id, 'loading…');
@@ -68,6 +76,12 @@ DocActions.needDocs.listen(function (collection, id, postprocessFn) {
       .then(function postprocessMaybe(result) {
         if(postprocessFn) {
           result.docs = postprocessFn(result.docs);
+        }
+        return result;
+      })
+      .then(function callbackMaybe(result) {
+        if (callbackFn) {
+          callbackFn(result.docs);
         }
         return result;
       })

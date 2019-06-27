@@ -1,10 +1,19 @@
 import React from "react";
+import ReactGA from "react-ga";
+import {Glyphicon} from "react-bootstrap";
 
 export default class Links extends React.Component {
   renderLinks() {
+    let external = <small title="This link opens a page from an external site"> <Glyphicon glyph="new-window" /></small>;
     return this.props.links.map((link, idx) =>
       <li key={idx}>
-        <a className="external-link" href={link.url}>{link.name}</a>
+        <ReactGA.OutboundLink
+          eventLabel={link.name}
+          to={link.url}
+          className="external-link"
+        >
+          {link.name}{external}
+        </ReactGA.OutboundLink>
       </li>
     )
   }

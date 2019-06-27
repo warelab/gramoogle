@@ -1,23 +1,18 @@
 'use strict';
 
-var React = require('react');
-var _ = require('lodash');
-
+import React from 'react';
+import _ from 'lodash';
 import Search from './search/search.jsx';
-var QueryActions = require('../actions/queryActions');
+import QueryActions from '../actions/queryActions';
+import { browserHistory } from 'react-router';
+import { Navbar, SplitButton, MenuItem } from 'react-bootstrap';
 
-var bs = require('react-bootstrap');
-var Navbar = bs.Navbar;
-
-var Header = React.createClass({
-  propTypes: {
-    search: React.PropTypes.object.isRequired
-  },
+const Header = React.createClass({
   removeAllFilters: function() {
     QueryActions.removeAllFilters();
+    browserHistory.push('/');
   },
   render: function() {
-    var search = this.props.search;
 
     var logo = (
       <a className="logo-link" onClick={this.removeAllFilters}><div className="logo"></div></a>
@@ -28,9 +23,11 @@ var Header = React.createClass({
     return (
       <Navbar id="search-header" className="header" fixedTop={true}>
         <Navbar.Header>
-          <Navbar.Brand>{logo}</Navbar.Brand>
+          <Navbar.Brand>
+            {logo}
+          </Navbar.Brand>
         </Navbar.Header>
-        <Search search={search} />
+        <Search />
       </Navbar>
     );
   }
