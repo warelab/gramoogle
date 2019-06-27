@@ -4,10 +4,10 @@
   "description": "Gramene search interface",
   "main": "index.js",
   "gramene": {
-    "dbRelease": 60,
+    "dbRelease": 1,
     "reactomeURL": "//plantreactomedev.gramene.org",
-    "ensemblURL": "//ensembl-dev.gramene.org",
-    "ensemblREST": "//data.gramene.org/ensembl60"
+    "ensemblURL": "//ensembl.gramene.org",
+    "ensemblREST": "//data.gramene.org/ensembl61"
   },
   "scripts": {
     "build": "grunt package",
@@ -41,7 +41,7 @@
     "gramene-client-cache": "1.0.0",
     "gramene-dbxrefs": "^3.0.4",
     "gramene-genetree-vis": "^3.1.8",
-    "gramene-search-client": "^3.0.5",
+    "gramene-search-client": "^3.0.6",
     "gramene-search-vis": "^4.1.3",
     "gramene-taxonomy-with-genomes": "^3.0.9",
     "gramene-trees-client": "^2.5.6",

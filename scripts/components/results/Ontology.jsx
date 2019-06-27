@@ -2,11 +2,10 @@
 
 import React from "react";
 import searchStore from "../../stores/searchStore";
+import backgroundSetStore from "../../stores/backgroundSetStore";
 import {resultTypes} from "gramene-search-client";
 import QueryActions from "../../actions/queryActions";
-import docStore from "../../stores/docStore";
 import DocActions from "../../actions/docActions";
-import _ from 'lodash';
 import cytoscape from 'cytoscape';
 import CytoscapeComponent from 'react-cytoscapejs'
 import popper from 'cytoscape-popper';
@@ -14,6 +13,7 @@ import tippy from 'tippy.js';
 import dagre from 'cytoscape-dagre';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import ReactTable from 'react-table';
+import _ from 'lodash';
 
 cytoscape.use(dagre);
 cytoscape.use(tippy);
@@ -31,8 +31,13 @@ export default class Ontology extends React.Component {
   handleSearchResults(searchState) {
     const terms = searchState.results[this.props.facet];
     var idList = terms.sorted.map(term => term.id);
-    DocActions.needDocs(this.props.collection, idList, null, ids => this.buildHierarchy(ids), {fl:'_id,id,name,def,is_a',rows:-1});
+    DocActions.needDocs(this.props.collection, idList, null, ids => this.buildHierarchy(ids), {fl:'_id,id,name,def,description,is_a',rows:-1});
     this.setState({terms})
+  }
+
+  handleBgSet(searchState) {
+    const background = searchState.results[this.props.facet];
+    this.setState({background})
   }
 
   componentWillMount() {
@@ -40,6 +45,7 @@ export default class Ontology extends React.Component {
       'facet.field' : this.props.facet
     }));
     this.unsubscribeFromSearchStore = searchStore.listen(searchState => this.handleSearchResults(searchState));
+    this.unsubscribeFromBackgroundSetStore = backgroundSetStore.listen(bgsetState => this.handleBgSet(bgsetState));
   }
   componentWillUnmount() {
     QueryActions.removeResultType(this.props.facet);
@@ -48,16 +54,18 @@ export default class Ontology extends React.Component {
   buildHierarchy(docs) {
     let nodes = [];
     let edges = [];
+    const nodeIdx = _.keyBy(docs, '_id');
     docs.forEach(d => {
-      let result = {id: d._id, name: d.id, label: d.name, count: this.state.terms.data[d._id].count, definition: d.def};
+      let result = {id: d._id, name: d.id, label: d.name, count: this.state.terms.data[d._id].count, definition: d.def || d.description};
       nodes.push({data: result});
       if(d.is_a) {
         d.is_a.forEach(e => {
-          edges.push({data: {source: d._id, target: e}});
+          if (nodeIdx[e]) {
+            edges.push({data: {source: d._id, target: e}});
+          }
         })
       }
     });
-    console.log('nodes', nodes);
     this.setState({nodes:nodes, edges: edges})
   }
 
