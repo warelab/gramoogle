@@ -32,21 +32,36 @@ export default class Ontology extends React.Component {
     const terms = searchState.results[this.props.facet];
     var idList = terms.sorted.map(term => term.id);
     DocActions.needDocs(this.props.collection, idList, null, ids => this.buildHierarchy(ids), {fl:'_id,id,name,def,description,is_a',rows:-1});
-    this.setState({terms})
+    this.setState({terms: terms, stateGenes: searchState.results.metadata.count})
   }
 
   handleBgSet(searchState) {
     const background = searchState.results[this.props.facet];
-    this.setState({background})
+    var idList = background.sorted.map(term => term.id);
+    // DocActions.needDocs(this.props.collection, idList, null, ids => this.buildBgHierarchy(ids), {fl:'_id,id,name,def,description,is_a',rows:-1})
+    this.setState({background:background, bgGenes: searchState.results.metadata.count})
   }
+  // handleResults(selectionState, backgroundState) {
+  //   const terms = selectionState.results[this.props.facet];
+  //   const background = background.results[this.props.facet];
+  //   var idList = terms.sorted.map(term => term.id);
+  //   this.setState({terms: terms, stateGenes: selectionState.results.metadata.count, background:background, bgGenes: backgroundState.results.metadata.count})
+  //   DocActions.needDocs(this.props.collection, idList, null, ids => this.buildHierarchy(ids), {fl:'_id,id,name,def,description,is_a',rows:-1});
+  // }
 
   componentWillMount() {
     QueryActions.setResultType(this.props.facet, resultTypes.get('distribution',{
       'facet.field' : this.props.facet
     }));
+    var selectionState, backgroundState;
     this.unsubscribeFromSearchStore = searchStore.listen(searchState => this.handleSearchResults(searchState));
     this.unsubscribeFromBackgroundSetStore = backgroundSetStore.listen(bgsetState => this.handleBgSet(bgsetState));
+
+    // this.handleResults(selectionState, backgroundState);
   }
+
+
+
   componentWillUnmount() {
     QueryActions.removeResultType(this.props.facet);
     this.unsubscribeFromSearchStore();
@@ -71,8 +86,100 @@ export default class Ontology extends React.Component {
   }
 
 
+  // buildBgHierarchy(docs) {
+  //   let nodes = [];
+  //   const nodeIdx = _.keyBy(docs, '_id');
+  //   docs.forEach(d => {
+  //     let result = {id: d._id, name: d.id, label: d.name, count: this.state.background.data[d._id].count, definition: d.def || d.description};
+  //     nodes.push({data: result});
+  //   });
+  //   this.setState({bgNodes:nodes})
+  // }
+
+
+
   renderTable() {
+
+    function lngamm (z) {
+       // Reference: "Lanczos, C. 'A precision approximation
+       // of the gamma function', J. SIAM Numer. Anal., B, 1, 86-96, 1964."
+       // Translation of  Alan Miller's FORTRAN-implementation
+       // See http://lib.stat.cmu.edu/apstat/245
+
+       var x = 0;
+       x += 0.1659470187408462e-06 / (z + 7);
+       x += 0.9934937113930748e-05 / (z + 6);
+       x -= 0.1385710331296526     / (z + 5);
+       x += 12.50734324009056      / (z + 4);
+       x -= 176.6150291498386      / (z + 3);
+       x += 771.3234287757674      / (z + 2);
+       x -= 1259.139216722289      / (z + 1);
+       x += 676.5203681218835      / (z);
+       x += 0.9999999999995183;
+       return (Math.log (x) - 5.58106146679532777 - z + (z - 0.5) * Math.log (z + 6.5));
+    }
+
+    function lnfact (n) {
+       if (n <= 1) return (0);
+       return (lngamm (n + 1));
+    }
+
+    function lnbico (n, k) {
+       return (lnfact (n) - lnfact (k) - lnfact (n - k));
+    }
+
+    function exact_nc (n11, n12, n21, n22, w) {
+     var x = n11;
+     var m1 = n11 + n21;
+     var m2 = n12 + n22;
+     var n = n11 + n12;
+     var x_min = Math.max (0, n - m2);
+     var x_max = Math.min (n, m1);
+     var l = [];
+
+     for (var y = x_min; y <= x_max; y++) {
+       l[y - x_min] = (lnbico (m1, y) + lnbico (m2, n - y) + y * Math.log (w));
+     }
+     var max_l = Math.max.apply (Math, l);
+
+     var sum_l = l.map (function (x) { return Math.exp (x - max_l); }).reduce (function (a, b) {
+       return a + b; }, 0);
+     sum_l = Math.log (sum_l);
+
+     var den_sum = 0;
+     for (var y = x; y <= x_max; y++) {
+       den_sum += Math.exp (l[y - x_min] - max_l);
+     }
+     den_sum = Math.log (den_sum);
+     return Math.exp (den_sum - sum_l);
+   };
+
     let tableData = this.state.nodes.map(node => node.data);
+    let bgTotal = this.state.bgGenes;
+    let selTotal = this.state.stateGenes;
+    var nodes = this.state.nodes
+    var bgData = this.state.background.data
+    // for (var bg in bgData) {
+    //     bgTotal += bgData[bg].count
+    // }
+    // for (var sel in nodes) {
+    //     selTotal += nodes[sel].data.count
+    // }
+
+
+    for (var row in tableData) {
+      var m = Object.values(bgData).find(x => x.id === tableData[row].id).id
+      console.log(m)
+      var n11 = tableData[row].count;
+      var n12 = selTotal - n11;
+      var n21 = m - n11;
+      var n22 = bgTotal - m - (selTotal - n11);
+      console.log(n11 + ','+ n12 + ',' +n21 + ',' +n22 + ',')
+      var w = 1.25;
+      var enrichment = exact_nc(n11, n12, n21, n22, w);
+      console.log(enrichment);
+    }
+
     return (
       <ReactTable
         data={tableData}
