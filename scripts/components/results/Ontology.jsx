@@ -38,7 +38,7 @@ export default class Ontology extends React.Component {
   handleBgSet(searchState) {
     const background = searchState.results[this.props.facet];
     var idList = background.sorted.map(term => term.id);
-    // DocActions.needDocs(this.props.collection, idList, null, ids => this.buildBgHierarchy(ids), {fl:'_id,id,name,def,description,is_a',rows:-1})
+    DocActions.needDocs(this.props.collection, idList, null, ids => this.buildBgHierarchy(ids), {fl:'_id,id,name,def,description,is_a',rows:-1})
     this.setState({background:background, bgGenes: searchState.results.metadata.count})
   }
   // handleResults(selectionState, backgroundState) {
@@ -56,8 +56,15 @@ export default class Ontology extends React.Component {
     var selectionState, backgroundState;
     this.unsubscribeFromSearchStore = searchStore.listen(searchState => this.handleSearchResults(searchState));
     this.unsubscribeFromBackgroundSetStore = backgroundSetStore.listen(bgsetState => this.handleBgSet(bgsetState));
+  }
 
-    // this.handleResults(selectionState, backgroundState);
+  shouldComponentUpdate(nextProps, nextState) {
+    // May not function correctly if background data is exact same between searches
+    if(this.state.bgnodes === nextState.bgnodes) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
 
@@ -85,17 +92,16 @@ export default class Ontology extends React.Component {
     this.setState({nodes:nodes, edges: edges})
   }
 
-
-  // buildBgHierarchy(docs) {
-  //   let nodes = [];
-  //   const nodeIdx = _.keyBy(docs, '_id');
-  //   docs.forEach(d => {
-  //     let result = {id: d._id, name: d.id, label: d.name, count: this.state.background.data[d._id].count, definition: d.def || d.description};
-  //     nodes.push({data: result});
-  //   });
-  //   this.setState({bgNodes:nodes})
-  // }
-
+  buildBgHierarchy(docs) {
+    let nodes = [];
+    let edges = [];
+    const nodeIdx = _.keyBy(docs, '_id');
+    docs.forEach(d => {
+      let result = {id: d._id, name: d.id, label: d.name, count: this.state.background.data[d._id].count, definition: d.def || d.description};
+      nodes.push({data: result});
+    });
+    this.setState({bgnodes:nodes})
+  }
 
 
   renderTable() {
@@ -155,29 +161,21 @@ export default class Ontology extends React.Component {
    };
 
     let tableData = this.state.nodes.map(node => node.data);
+    let bgData = this.state.bgnodes.map(node => node.data);
     let bgTotal = this.state.bgGenes;
     let selTotal = this.state.stateGenes;
-    var nodes = this.state.nodes
-    var bgData = this.state.background.data
-    // for (var bg in bgData) {
-    //     bgTotal += bgData[bg].count
-    // }
-    // for (var sel in nodes) {
-    //     selTotal += nodes[sel].data.count
-    // }
-
 
     for (var row in tableData) {
-      var m = Object.values(bgData).find(x => x.id === tableData[row].id).id
-      console.log(m)
+      var m = bgData.find(x => x.name === tableData[row].name).count
       var n11 = tableData[row].count;
       var n12 = selTotal - n11;
       var n21 = m - n11;
       var n22 = bgTotal - m - (selTotal - n11);
-      console.log(n11 + ','+ n12 + ',' +n21 + ',' +n22 + ',')
+      console.log(n11 + ', '+ n12 + ', ' +n21 + ', ' +n22)
       var w = 1.25;
       var enrichment = exact_nc(n11, n12, n21, n22, w);
       console.log(enrichment);
+      tableData[row].enrichment = enrichment
     }
 
     return (
