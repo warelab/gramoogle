@@ -164,7 +164,6 @@ export default class Ontology extends React.Component {
     let bgData = this.state.bgnodes.map(node => node.data);
     let bgTotal = this.state.bgGenes;
     let selTotal = this.state.stateGenes;
-
     for (var row in tableData) {
       var m = bgData.find(x => x.name === tableData[row].name).count
       var n11 = tableData[row].count;
@@ -177,6 +176,14 @@ export default class Ontology extends React.Component {
       console.log(enrichment);
       tableData[row].enrichment = enrichment
     }
+
+    tableData.sort((a, b) => (a.enrichment > b.enrichment) ? 1 : -1);
+    let mValue = tableData.length;
+    let qValue = 0.25;
+    for (var i = 0; i < mValue; i++) {
+      tableData[i].BHValue = i / mValue * qValue;
+    }
+    console.log(tableData);
 
     return (
       <ReactTable
