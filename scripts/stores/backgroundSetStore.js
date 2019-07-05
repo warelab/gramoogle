@@ -67,7 +67,7 @@ module.exports = Reflux.createStore({
   },
 
   searchComplete: function (results) {
-    console.log('Got data: ', results);
+    // console.log('Got data: ', results);
     this.state.results = results;
     this.trigger(this.state);
   },

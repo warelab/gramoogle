@@ -183,7 +183,7 @@ module.exports = Reflux.createStore({
   },
 
   searchComplete: function (results) {
-    console.log('Got data: ', results);
+    // console.log('Got data: ', results);
     this.addSpeciesNamesToResults(results);
 
     this.persistQueryState();

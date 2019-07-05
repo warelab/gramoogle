@@ -33,7 +33,7 @@ function getClientPromise(collection) {
 DocActions.needDocs.listen(function (collection, id, postprocessFn, callbackFn, extraParams) {
   var cacheKey, clientCall;
   cacheKey = [collection,id];
-  console.log('DocActions.needDocs', collection, id);
+  // console.log('DocActions.needDocs', collection, id);
 
   clientCall = getClientPromise(collection);
   if (typeof id === 'number') {

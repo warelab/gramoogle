@@ -19,6 +19,59 @@ cytoscape.use(dagre);
 cytoscape.use(tippy);
 cytoscape.use(popper);
 
+function lngamm (z) {
+  // Reference: "Lanczos, C. 'A precision approximation
+  // of the gamma function', J. SIAM Numer. Anal., B, 1, 86-96, 1964."
+  // Translation of  Alan Miller's FORTRAN-implementation
+  // See http://lib.stat.cmu.edu/apstat/245
+
+  let x = 0;
+  x += 0.1659470187408462e-06 / (z + 7);
+  x += 0.9934937113930748e-05 / (z + 6);
+  x -= 0.1385710331296526     / (z + 5);
+  x += 12.50734324009056      / (z + 4);
+  x -= 176.6150291498386      / (z + 3);
+  x += 771.3234287757674      / (z + 2);
+  x -= 1259.139216722289      / (z + 1);
+  x += 676.5203681218835      / (z);
+  x += 0.9999999999995183;
+  return (Math.log (x) - 5.58106146679532777 - z + (z - 0.5) * Math.log (z + 6.5));
+}
+
+function lnfact (n) {
+  if (n <= 1) return (0);
+  return (lngamm (n + 1));
+}
+
+function lnbico (n, k) {
+  return (lnfact (n) - lnfact (k) - lnfact (n - k));
+}
+
+function exact_nc (n11, n12, n21, n22, w) {
+  let x = n11;
+  let m1 = n11 + n21;
+  let m2 = n12 + n22;
+  let n = n11 + n12;
+  let x_min = Math.max (0, n - m2);
+  let x_max = Math.min (n, m1);
+  let l = [];
+
+  for (let y = x_min; y <= x_max; y++) {
+    l[y - x_min] = (lnbico (m1, y) + lnbico (m2, n - y) + y * Math.log (w));
+  }
+  let max_l = Math.max.apply (Math, l);
+
+  let sum_l = l.map (function (x) { return Math.exp (x - max_l); }).reduce (function (a, b) {
+    return a + b; }, 0);
+  sum_l = Math.log (sum_l);
+
+  let den_sum = 0;
+  for (let y = x; y <= x_max; y++) {
+    den_sum += Math.exp (l[y - x_min] - max_l);
+  }
+  den_sum = Math.log (den_sum);
+  return Math.exp (den_sum - sum_l);
+}
 
 export default class Ontology extends React.Component {
   constructor(props) {
@@ -36,38 +89,38 @@ export default class Ontology extends React.Component {
   }
 
   handleBgSet(searchState) {
-    const background = searchState.results[this.props.facet];
-    var idList = background.sorted.map(term => term.id);
-    DocActions.needDocs(this.props.collection, idList, null, ids => this.buildBgHierarchy(ids), {fl:'_id,id,name,def,description,is_a',rows:-1})
-    this.setState({background:background, bgGenes: searchState.results.metadata.count})
+    let tableData = this.state.nodes.map(node => node.data);
+    let bgData = searchState.results[this.props.facet].data;
+    let bgTotal = searchState.results.metadata.count;
+    let selTotal = this.state.stateGenes;
+    tableData.forEach(term => {
+      const m = bgData[term.id].count; //.find(x => x.name === tableData[row].name).count
+      const n11 = term.count;
+      const n12 = selTotal - n11;
+      const n21 = m - n11;
+      const n22 = bgTotal - m - (selTotal - n11);
+      const w = 1.25;
+      term.enrichment = exact_nc(n11, n12, n21, n22, w);
+      term.bgCount = m;
+    });
+
+    tableData.sort((a, b) => (a.enrichment > b.enrichment) ? 1 : -1);
+    let mValue = tableData.length;
+    let qValue = 0.25;
+    for (let i = 0; i < mValue; i++) {
+      tableData[i].BHValue = i / mValue * qValue;
+    }
+
+    this.setState({tableData})
   }
-  // handleResults(selectionState, backgroundState) {
-  //   const terms = selectionState.results[this.props.facet];
-  //   const background = background.results[this.props.facet];
-  //   var idList = terms.sorted.map(term => term.id);
-  //   this.setState({terms: terms, stateGenes: selectionState.results.metadata.count, background:background, bgGenes: backgroundState.results.metadata.count})
-  //   DocActions.needDocs(this.props.collection, idList, null, ids => this.buildHierarchy(ids), {fl:'_id,id,name,def,description,is_a',rows:-1});
-  // }
 
   componentWillMount() {
     QueryActions.setResultType(this.props.facet, resultTypes.get('distribution',{
       'facet.field' : this.props.facet
     }));
-    var selectionState, backgroundState;
     this.unsubscribeFromSearchStore = searchStore.listen(searchState => this.handleSearchResults(searchState));
     this.unsubscribeFromBackgroundSetStore = backgroundSetStore.listen(bgsetState => this.handleBgSet(bgsetState));
   }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    // May not function correctly if background data is exact same between searches
-    if(this.state.bgnodes === nextState.bgnodes) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-
 
   componentWillUnmount() {
     QueryActions.removeResultType(this.props.facet);
@@ -92,125 +145,50 @@ export default class Ontology extends React.Component {
     this.setState({nodes:nodes, edges: edges})
   }
 
-  buildBgHierarchy(docs) {
-    let nodes = [];
-    let edges = [];
-    const nodeIdx = _.keyBy(docs, '_id');
-    docs.forEach(d => {
-      let result = {id: d._id, name: d.id, label: d.name, count: this.state.background.data[d._id].count, definition: d.def || d.description};
-      nodes.push({data: result});
-    });
-    this.setState({bgnodes:nodes})
-  }
+  renderTable() { return (
+    <ReactTable
+      data={this.state.tableData}
+      columns={[
+        {
+          Header: 'ID',
+          accessor: 'name',
+          width: 90
+        },
+        {
+          Header: 'Enrichment',
+          accessor: 'BHValue',
+          Cell: row => (
+            <span>{row.value.toFixed(3)}</span>
+          ),
+          style: {'text-align':'right'},
+          width: 100
+        },
+        {
+          Header: 'Genes',
+          accessor: 'count',
+          style: {'text-align':'right'},
+          width: 100
+        },
+        {
+          Header: 'Total',
+          accessor: 'bgCount',
+          style: {'text-align':'right'},
+          width: 100
+        },
+        {
+          Header: 'Name',
+          accessor: 'label'
+        },
+        {
+          Header: 'Definition',
+          accessor: 'definition'
+        }
+      ]}
+      defaultPageSize={this.state.tableData.length < 20 ? this.state.tableData.length : 20}
+      showPagination={this.state.tableData.length > 20}
+    />
+  ) }
 
-
-  renderTable() {
-
-    function lngamm (z) {
-       // Reference: "Lanczos, C. 'A precision approximation
-       // of the gamma function', J. SIAM Numer. Anal., B, 1, 86-96, 1964."
-       // Translation of  Alan Miller's FORTRAN-implementation
-       // See http://lib.stat.cmu.edu/apstat/245
-
-       var x = 0;
-       x += 0.1659470187408462e-06 / (z + 7);
-       x += 0.9934937113930748e-05 / (z + 6);
-       x -= 0.1385710331296526     / (z + 5);
-       x += 12.50734324009056      / (z + 4);
-       x -= 176.6150291498386      / (z + 3);
-       x += 771.3234287757674      / (z + 2);
-       x -= 1259.139216722289      / (z + 1);
-       x += 676.5203681218835      / (z);
-       x += 0.9999999999995183;
-       return (Math.log (x) - 5.58106146679532777 - z + (z - 0.5) * Math.log (z + 6.5));
-    }
-
-    function lnfact (n) {
-       if (n <= 1) return (0);
-       return (lngamm (n + 1));
-    }
-
-    function lnbico (n, k) {
-       return (lnfact (n) - lnfact (k) - lnfact (n - k));
-    }
-
-    function exact_nc (n11, n12, n21, n22, w) {
-     var x = n11;
-     var m1 = n11 + n21;
-     var m2 = n12 + n22;
-     var n = n11 + n12;
-     var x_min = Math.max (0, n - m2);
-     var x_max = Math.min (n, m1);
-     var l = [];
-
-     for (var y = x_min; y <= x_max; y++) {
-       l[y - x_min] = (lnbico (m1, y) + lnbico (m2, n - y) + y * Math.log (w));
-     }
-     var max_l = Math.max.apply (Math, l);
-
-     var sum_l = l.map (function (x) { return Math.exp (x - max_l); }).reduce (function (a, b) {
-       return a + b; }, 0);
-     sum_l = Math.log (sum_l);
-
-     var den_sum = 0;
-     for (var y = x; y <= x_max; y++) {
-       den_sum += Math.exp (l[y - x_min] - max_l);
-     }
-     den_sum = Math.log (den_sum);
-     return Math.exp (den_sum - sum_l);
-   };
-
-    let tableData = this.state.nodes.map(node => node.data);
-    let bgData = this.state.bgnodes.map(node => node.data);
-    let bgTotal = this.state.bgGenes;
-    let selTotal = this.state.stateGenes;
-    for (var row in tableData) {
-      var m = bgData.find(x => x.name === tableData[row].name).count
-      var n11 = tableData[row].count;
-      var n12 = selTotal - n11;
-      var n21 = m - n11;
-      var n22 = bgTotal - m - (selTotal - n11);
-      console.log(n11 + ', '+ n12 + ', ' +n21 + ', ' +n22)
-      var w = 1.25;
-      var enrichment = exact_nc(n11, n12, n21, n22, w);
-      console.log(enrichment);
-      tableData[row].enrichment = enrichment
-    }
-
-    tableData.sort((a, b) => (a.enrichment > b.enrichment) ? 1 : -1);
-    let mValue = tableData.length;
-    let qValue = 0.25;
-    for (var i = 0; i < mValue; i++) {
-      tableData[i].BHValue = i / mValue * qValue;
-    }
-    console.log(tableData);
-
-    return (
-      <ReactTable
-        data={tableData}
-        columns={[
-          {
-            Header: 'Id',
-            accessor: 'name'
-          },
-          {
-            Header: 'Number of Genes',
-            accessor: 'count'
-          },
-          {
-            Header: 'Name',
-            accessor: 'label'
-          },
-          {
-            Header: 'Definition',
-            accessor: 'definition'
-          }
-        ]}
-        defaultPageSize={tableData.length < 20 ? tableData.length : 20}
-        showPagination={tableData.length > 20}
-      />
-    )
-  }
   renderGraph() {
     return (
       <CytoscapeComponent
@@ -275,7 +253,7 @@ export default class Ontology extends React.Component {
             <Tab>Graph</Tab>
           </TabList>
           <TabPanel>
-            { this.state.nodes && this.renderTable() }
+            { this.state.tableData && this.renderTable() }
           </TabPanel>
           <TabPanel>
             { this.state.nodes && this.renderGraph() }

@@ -99,10 +99,8 @@ export default class Results extends React.Component {
     });
 
     this.unsubscribeFromSearchStore = searchStore.listen((searchState) => {
-      console.log('results.jsx got searchState', searchState);
       if (searchState.results.species) {
         let s = searchState.results.species.sorted.map(s => +s.id);
-        console.log('need only these',s);
         BackgroundSetActions.setTaxa(s);
         BackgroundSetActions.setResultType('GO__ancestors', resultTypes.get('distribution',{
           'key':'GO__ancestors',
@@ -176,36 +174,45 @@ export default class Results extends React.Component {
     }
   }
 
+  renderSidebar() {
+    return (
+      <div role="group" className="btn-group-vertical" style={{padding:"10px"}}>
+        {
+          this.state.resultModes.map((mode,idx) => {
+            if (mode.available) {
+              return (
+                <button key={idx} className={this.css(idx)} onClick={() => this.toggleMode(idx)}>
+                  <span><span style={{float:'left', textAlign:'left'}}>{mode.name}</span>{this.tally(idx)}</span>
+                </button>
+              )
+            }
+          })
+        }
+      </div>
+    )
+  }
+
+
   render() {
     return (
-      <section className="results container">
-        <div className="sidenav">
-          <div role="group" className="btn-group-vertical" style={{padding:"10px"}}>
+      <section className="results">
+        <div className="row">
+          <div className="main col-sm-10">
             {
               this.state.resultModes.map((mode,idx) => {
-                if (mode.available) {
+                if (mode.active && mode.available) {
                   return (
-                    <button key={idx} className={this.css(idx)} onClick={() => this.toggleMode(idx)}>
-                      <span><span style={{float:'left', textAlign:'left'}}>{mode.name}</span>{this.tally(idx)}</span>
-                    </button>
+                    <div key={idx}>
+                      {React.createElement(mode.component, mode)}
+                    </div>
                   )
                 }
               })
             }
           </div>
-        </div>
-        <div className="main">
-          {
-            this.state.resultModes.map((mode,idx) => {
-              if (mode.active && mode.available) {
-                return (
-                  <div key={idx}>
-                    {React.createElement(mode.component,mode)}
-                  </div>
-                )
-              }
-            })
-          }
+          <div className="sidenav col-sm-2">
+            {this.renderSidebar()}
+          </div>
         </div>
       </section>
     );

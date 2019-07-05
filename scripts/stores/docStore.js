@@ -34,7 +34,7 @@ var DocStore = Reflux.createStore({
     indexedDocs = index(docs, '_id');
     if(!collection) {
       this.docs[collectionName] = indexedDocs;
-      console.log('needDocsCompleted new docs', collectionName, docs);
+      // console.log('needDocsCompleted new docs', collectionName, docs);
       this.trigger(this.docs);
     }
     else {
