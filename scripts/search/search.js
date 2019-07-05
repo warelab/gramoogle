@@ -43,7 +43,7 @@ function prepFilters(filters: map): map {
   for (category in filterCategories) {
     newFilters['('+filterCategories[category].join(') OR (')+')'] = {};
   }
-  console.log('prepFilters',filters,newFilters);
+  // console.log('prepFilters',filters,newFilters);
   return newFilters;
 }
 
@@ -75,7 +75,7 @@ module.exports = {
     }
 
 
-    console.log('performing search', queryCopy);
+    // console.log('performing search', queryCopy);
 
     // find cached results and move them from
     // query.resultTypes to query.cachedResultTypes
@@ -117,13 +117,13 @@ module.exports = {
   },
 
   searchPromise: function(query: map): Promise {
-    console.log('asking search interface for', query);
+    // console.log('asking search interface for', query);
     return searchInterface.geneSearch(query);
   },
 
   nullSearchPromise: function(query: map): map {
     return Q.fcall(function refactorQueryToHaveShapeOfResponse() {
-      console.log('remote query not required');
+      // console.log('remote query not required');
       var metadata = {searchQuery: query, count: query.count};
       return {metadata: metadata};
     });

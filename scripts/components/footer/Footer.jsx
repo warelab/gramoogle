@@ -9,7 +9,7 @@ const Footer = ({noSocial}) => {
   const releaseLabel = `Release Notes (${grameneRelease})`;
   const socialMaybe = noSocial ? undefined : <StaticSocialButtons />;
   return (
-    <nav className="submenu navbar navbar-default">
+    <nav className="submenu navbar navbar-default" id="search-footer">
       <div className="container">
         <ul className="nav navbar-nav">
           <li>

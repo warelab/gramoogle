@@ -7,7 +7,7 @@ var fs = require('fs');
 var grameneRelease = require('./package.json').gramene.dbRelease;
 var reactomeURL = require('./package.json').gramene.reactomeURL;
 
-var webserviceVersion = 'v' + grameneRelease;
+var webserviceVersion = 'sorghum' + grameneRelease;
 
 module.exports = function (grunt) {
   require('jit-grunt')(grunt);
@@ -139,6 +139,14 @@ module.exports = function (grunt) {
           {
             src: 'node_modules/dalliance/prebuilt/dalliance-all.js',
             dest: 'build/assets/gramene-dalliance/dalliance-all.js'
+          },
+          {
+            src: 'node_modules/react-table/react-table.css',
+            dest: 'build/assets/react-table.css'
+          },
+          {
+            src: 'node_modules/react-tabs/style/react-tabs.css',
+            dest: 'build/assets/react-tabs.css'
           }
         ]
       },

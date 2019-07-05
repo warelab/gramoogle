@@ -30,10 +30,10 @@ function getClientPromise(collection) {
   return client[collection];
 }
 
-DocActions.needDocs.listen(function (collection, id, postprocessFn, callbackFn) {
+DocActions.needDocs.listen(function (collection, id, postprocessFn, callbackFn, extraParams) {
   var cacheKey, clientCall;
   cacheKey = [collection,id];
-  console.log('DocActions.needDocs', collection, id);
+  // console.log('DocActions.needDocs', collection, id);
 
   clientCall = getClientPromise(collection);
   if (typeof id === 'number') {
@@ -55,7 +55,7 @@ DocActions.needDocs.listen(function (collection, id, postprocessFn, callbackFn) 
   }
   else {
     docCache.set(id, 'loading…');
-    promise = clientCall(id)
+    promise = clientCall(id, extraParams)
       .then(function checkForErrorsAndGetTheDocs(response) {
         if (!response) {
           throw new Error('Got a falesy response from the API call');
