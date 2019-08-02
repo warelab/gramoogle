@@ -4,6 +4,7 @@ import {InputGroup, FormControl} from "react-bootstrap";
 import Summary from "./summary.jsx";
 import TaxonomyMenu from "../GoI/TaxonomyMenu.jsx";
 import HelpButton from "./HelpButton.jsx";
+import UploadButton from "./Uploadbutton.jsx";
 import WelcomeActions from "../../actions/welcomeActions";
 import getQueryStringFromURLParams from "../../search/getQueryStringFromURLParams";
 
@@ -80,6 +81,8 @@ export default class SearchBox extends React.Component {
                        spellCheck="false" autoCorrect="off" autoCapitalize="off"
                        onChange={this.handleQueryStringChange}/>
           <InputGroup.Button>
+            <UploadButton toggleUpload={this.props.toggleUpload}
+                          showUpload={this.props.showUpload}/>
             <HelpButton toggleHelp={this.props.toggleHelp}
                         showHelp={this.props.showHelp}/>
             <TaxonomyMenu toggleGenomesOfInterest={this.props.toggleGenomesOfInterest}
@@ -98,5 +101,7 @@ SearchBox.propTypes = {
   toggleGenomesOfInterest: React.PropTypes.func.isRequired,
   showGenomesOfInterest: React.PropTypes.bool.isRequired,
   toggleHelp: React.PropTypes.func.isRequired,
-  showHelp: React.PropTypes.bool.isRequired
+  showHelp: React.PropTypes.bool.isRequired,
+  toggleUpload: React.PropTypes.func.isRequired,
+  showUpload: React.PropTypes.bool.isRequired
 };

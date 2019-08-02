@@ -15,6 +15,7 @@ export default class Search extends React.Component {
     this.state = {
       suggestionsVisible: false,
       helpVisible: false,
+      uploadVisible: false,
       genomesDropdownVisible: false
     };
 
@@ -23,6 +24,7 @@ export default class Search extends React.Component {
       'handleQueryChange',
       'toggleGenomesDropdownVisibility',
       'toggleHelpVisibility',
+      'toggleUploadVisibility',
       'clearInputString'
     ]);
   }
@@ -65,7 +67,8 @@ export default class Search extends React.Component {
     // For now, show typeahead if query string is not empty
     this.setState({
       suggestionsVisible: suggestionsVisible,
-      helpVisible: this.state.helpVisible && !suggestionsVisible
+      helpVisible: this.state.helpVisible && !suggestionsVisible,
+      uploadVisible: this.state.uploadVisible && !suggestionsVisible
     });
   }
 
@@ -92,6 +95,14 @@ export default class Search extends React.Component {
     this.refs.searchBox.focus();
   }
 
+  toggleUploadVisibility(newState) {
+    this.setState({
+      uploadVisible: newState
+    });
+
+    this.refs.searchBox.focus();
+  }
+
   render() {
 
     return (
@@ -102,7 +113,9 @@ export default class Search extends React.Component {
                      toggleGenomesOfInterest={this.toggleGenomesDropdownVisibility}
                      showGenomesOfInterest={this.state.genomesDropdownVisible}
                      toggleHelp={this.toggleHelpVisibility}
-                     showHelp={this.state.helpVisible}>
+                     showHelp={this.state.helpVisible}
+                     toggleUpload={this.toggleUploadVisibility}
+                     showUpload={this.state.uploadVisible}>
           </SearchBox>
 
              {this.renderFilters()}
