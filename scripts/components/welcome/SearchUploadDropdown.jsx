@@ -49,13 +49,29 @@ export default class SearchUploadDropdown extends React.Component {
       idValidity[row[field]] = false;
     });
     const idList = Object.keys(idValidity);
-    console.log('this is where we post the idList',idList);
+    const url = global.gramene.defaultServer.replace('swagger','search');
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ids:idList})
+    })
+    .then(response => response.json())
+    .then(json => {
+      let idValidity = this.state.idValidity;
+      json.mapped.forEach(id => {
+        idValidity[id] = true
+      });
+      this.setState({idValidity: idValidity, listId: json.listId, mappedCount: json.mapped.length, mappingStatus: 'Mapping complete'});
+    });
     this.setState({idValidity: idValidity, idCount: idList.length, mappingStatus: 'Mapping in progress'})
   }
   renderMapping() {
     return (
       <div>
         <p>The selected column has {this.state.idCount} unique values</p>
+        {this.state.mappedCount && <p>{this.state.mappedCount} ids have been mapped. <button>search</button></p>}
       </div>
     )
   }
