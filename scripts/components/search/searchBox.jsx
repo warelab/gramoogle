@@ -4,7 +4,7 @@ import {InputGroup, FormControl} from "react-bootstrap";
 import Summary from "./summary.jsx";
 import TaxonomyMenu from "../GoI/TaxonomyMenu.jsx";
 import HelpButton from "./HelpButton.jsx";
-import UploadButton from "./Uploadbutton.jsx";
+import UploadButton from "./UploadButton.jsx";
 import WelcomeActions from "../../actions/welcomeActions";
 import getQueryStringFromURLParams from "../../search/getQueryStringFromURLParams";
 
