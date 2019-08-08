@@ -222,7 +222,7 @@ export default class Homology extends React.Component {
       <Detail>
         <Title key="title">Compara Gene Tree</Title>
         <Description key="description">
-          <p>This phylogram shows the relationships between this gene and others similar to it, as determined by
+          This phylogram shows the relationships between this gene and others similar to it, as determined by
           &nbsp;<ReactGA.OutboundLink
             eventLabel="Ensembl Compara"
             target="_blank"
@@ -230,7 +230,6 @@ export default class Homology extends React.Component {
             Ensembl Compara{external}
           </ReactGA.OutboundLink>
           .
-          </p>
         </Description>
         <Content key="content">{this.renderTreeVis()}</Content>
         <Explore key="explore" explorations={this.explorations()}/>

@@ -2,6 +2,8 @@ import React from "react";
 import {Alert} from "react-bootstrap";
 import XLSX from 'xlsx';
 import ReactTable from 'react-table'
+import {Explore} from "../result/details/generic/detail.jsx";
+import queryActions from "../../actions/queryActions";
 
 export default class SearchUploadDropdown extends React.Component {
   constructor(props) {
@@ -13,6 +15,7 @@ export default class SearchUploadDropdown extends React.Component {
   }
   handleFile(e) {
     var files = e.target.files, f = files[0];
+    e.target.value = null;
     var reader = new FileReader();
     var theCmp = this;
     reader.onload = function(e) {
@@ -27,7 +30,8 @@ export default class SearchUploadDropdown extends React.Component {
       if (workbook && workbook.Sheets) {
         theCmp.setState({
           sheet: XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]),
-          mappingStatus: 'Select the column that contains gene ids'
+          mappingStatus: 'Select the column that contains gene ids',
+          fileName: f.name
         })
       }
       else {
@@ -38,6 +42,14 @@ export default class SearchUploadDropdown extends React.Component {
   }
   componentDidMount() {
     this.stopListening = this.refs.userFile.addEventListener('change', this.handleFile.bind(this), false);
+  }
+  componentDidUpdate(prevProps) {
+    if (prevProps.show && ! this.props.show) {
+      this.setState({
+        sheet: null,
+        mappingStatus: 'Upload a set of gene IDs from a file'
+      });
+    }
   }
   componentWillUnmount() {
     this.stopListening();
@@ -65,13 +77,41 @@ export default class SearchUploadDropdown extends React.Component {
       });
       this.setState({idValidity: idValidity, listId: json.listId, mappedCount: json.mapped.length, mappingStatus: 'Mapping complete'});
     });
-    this.setState({idValidity: idValidity, idCount: idList.length, mappingStatus: 'Mapping in progress'})
+    this.setState({idValidity: idValidity, idCount: idList.length, idColumn: field, mappingStatus: 'Mapping in progress'})
+  }
+  createMappingFilter() {
+    let fq, result;
+    fq = 'saved_search:' + this.state.listId;
+    result = {};
+    result[fq] = {
+      category: 'ID list',
+      fq: fq,
+      id: fq,
+      display_name: `${this.state.fileName} ${this.state.idColumn}`
+    };
+    return result;
+  }
+  filterMapping() {
+    queryActions.setAllFilters(this.createMappingFilter());
+    if (this.props.closeModal) this.props.closeModal();
   }
   renderMapping() {
     return (
       <div>
         <p>The selected column has {this.state.idCount} unique values</p>
-        {this.state.mappedCount && <p>{this.state.mappedCount} ids have been mapped. <button>search</button></p>}
+        {this.state.mappedCount && (
+          <div>
+            <p>{this.state.mappedCount} ids have been mapped.</p>
+            <Button onClick={this.filterMapping.bind(this)}>Search</Button>
+            {/*<Explore key="explore" explorations={[*/}
+              {/*{*/}
+                {/*name: 'Search',*/}
+                {/*handleClick: this.filterMapping.bind(this),*/}
+                {/*count: this.state.mappedCount*/}
+              {/*}*/}
+            {/*]}/>*/}
+          </div>
+        )}
       </div>
     )
   }
@@ -100,8 +140,9 @@ export default class SearchUploadDropdown extends React.Component {
   render() {
     return (
       <div>
+        { this.state.sheet && <Alert bsStyle="success"><b>Selected file: </b>{this.state.fileName}</Alert> }
         <Alert bsStyle="info">{this.state.mappingStatus}</Alert>
-        { !this.state.sheet && <input ref="userFile" type="file"/> }
+        <input ref="userFile" type="file" style={{display: this.state.sheet ? "none" : "block"}}/>
         { this.state.sheet && this.renderSheet() }
       </div>
     );
@@ -109,5 +150,6 @@ export default class SearchUploadDropdown extends React.Component {
 }
 
 SearchUploadDropdown.propTypes = {
-  onSelect: React.PropTypes.func.isRequired
+  onSelect: React.PropTypes.func.isRequired,
+  show: React.PropTypes.bool.isRequired
 };

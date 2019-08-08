@@ -14,7 +14,7 @@ export default class UploadButton extends React.Component {
                   open={this.props.showUpload}>
           <Dropdown.Toggle noCaret><Glyphicon glyph="upload"/></Dropdown.Toggle>
           <Dropdown.Menu className="search-upload-popover">
-            <SearchUploadDropdown onSelect={this.props.toggleUpload} />
+            <SearchUploadDropdown onSelect={this.props.toggleUpload} show={this.props.showUpload}/>
           </Dropdown.Menu>
         </Dropdown>
     );
