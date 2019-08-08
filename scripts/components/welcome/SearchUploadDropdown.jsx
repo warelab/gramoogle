@@ -2,7 +2,7 @@ import React from "react";
 import {Alert} from "react-bootstrap";
 import XLSX from 'xlsx';
 import ReactTable from 'react-table'
-import {Explore} from "../result/details/generic/detail.jsx";
+import QueryTerm from "../result/queryTerm.jsx";
 import queryActions from "../../actions/queryActions";
 
 export default class SearchUploadDropdown extends React.Component {
@@ -93,7 +93,7 @@ export default class SearchUploadDropdown extends React.Component {
   }
   filterMapping() {
     queryActions.setAllFilters(this.createMappingFilter());
-    if (this.props.closeModal) this.props.closeModal();
+    this.props.onSelect();
   }
   renderMapping() {
     return (
@@ -101,15 +101,11 @@ export default class SearchUploadDropdown extends React.Component {
         <p>The selected column has {this.state.idCount} unique values</p>
         {this.state.mappedCount && (
           <div>
-            <p>{this.state.mappedCount} ids have been mapped.</p>
-            <Button onClick={this.filterMapping.bind(this)}>Search</Button>
-            {/*<Explore key="explore" explorations={[*/}
-              {/*{*/}
-                {/*name: 'Search',*/}
-                {/*handleClick: this.filterMapping.bind(this),*/}
-                {/*count: this.state.mappedCount*/}
-              {/*}*/}
-            {/*]}/>*/}
+            <div className="explore">
+              <QueryTerm name='Mapped IDs' count={this.state.mappedCount}
+                         handleClick={this.filterMapping.bind(this)}
+              />
+            </div>
           </div>
         )}
       </div>
