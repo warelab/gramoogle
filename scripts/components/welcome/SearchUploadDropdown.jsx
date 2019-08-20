@@ -11,7 +11,7 @@ export default class SearchUploadDropdown extends React.Component {
     this.state = {
       sheet: null,
       mappingStatus: 'Upload a set of gene IDs from a file'
-    }
+    };
   }
   handleFile(e) {
     var files = e.target.files, f = files[0];
@@ -47,7 +47,13 @@ export default class SearchUploadDropdown extends React.Component {
     if (prevProps.show && ! this.props.show) {
       this.setState({
         sheet: null,
-        mappingStatus: 'Upload a set of gene IDs from a file'
+        mappingStatus: 'Upload a set of gene IDs from a file',
+        fileName: undefined,
+        idValidity: [],
+        listId: undefined,
+        mappedCount: undefined,
+        idCount: undefined,
+        idColumn: undefined
       });
     }
   }
@@ -93,6 +99,7 @@ export default class SearchUploadDropdown extends React.Component {
   }
   filterMapping() {
     queryActions.setAllFilters(this.createMappingFilter());
+    this.setState(this.baseState);
     this.props.onSelect();
   }
   renderMapping() {
