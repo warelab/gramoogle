@@ -99,7 +99,6 @@ export default class SearchUploadDropdown extends React.Component {
   }
   filterMapping() {
     queryActions.setAllFilters(this.createMappingFilter());
-    this.setState(this.baseState);
     this.props.onSelect();
   }
   renderMapping() {
