@@ -73,7 +73,7 @@ module.exports = function (grunt) {
             ['babelify', {presets: ["es2015", "react"]}]
           ]
         },
-        src: './scripts/gramoogle.js',
+        src: './scripts/gramoogle_split.js',
         dest: 'build/bundle.js'
       },
       production: {
