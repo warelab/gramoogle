@@ -21,7 +21,7 @@ const Header = React.createClass({
     setTimeout(updateBodyTopPadding, 20);
 
     return (
-      <Navbar id="search-header" className="header" fixedTop={true}>
+      <Navbar id="search-header" className="header" fixedTop={false}>
         <Navbar.Header>
           <Navbar.Brand>
             {logo}
