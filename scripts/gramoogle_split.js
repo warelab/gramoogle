@@ -11,6 +11,6 @@ import TaxonomyActions from './actions/taxonomyActions'; // to listen to taxonom
 
 TaxonomyActions.getTaxonomy();
 
-ReactDOM.render((<Header />), document.getElementById('gramoogle_header'));
+ReactDOM.render((<Header noLogo={true}/>), document.getElementById('gramoogle_header'));
 ReactDOM.render((<Results />), document.getElementById('gramoogle_results'));
 

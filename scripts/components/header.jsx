@@ -22,11 +22,12 @@ const Header = React.createClass({
 
     return (
       <Navbar id="search-header" className="header" fixedTop={false}>
-        <Navbar.Header>
+        {this.props.noLogo || <Navbar.Header>
           <Navbar.Brand>
             {logo}
           </Navbar.Brand>
         </Navbar.Header>
+        }
         <Search />
       </Navbar>
     );
