@@ -21,7 +21,8 @@ export default class Results extends React.Component {
         {
           name: "Species",
           available: true,
-          active: false,
+          active: true,
+          default: true,
           component: ResultsVisualization,
           key: 'species',
           tally: 'taxon_id',
@@ -60,7 +61,7 @@ export default class Results extends React.Component {
         },
         {
           name: "PO Terms",
-          available: true,
+          available: false,
           active: false,
           component: Ontology,
           key: 'PO',
@@ -202,7 +203,7 @@ export default class Results extends React.Component {
               this.state.resultModes.map((mode,idx) => {
                 if (mode.active && mode.available) {
                   return (
-                    <div key={idx}>
+                    <div style={{padding:10}} key={idx}>
                       {React.createElement(mode.component, mode)}
                     </div>
                   )

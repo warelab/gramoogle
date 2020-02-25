@@ -14,7 +14,7 @@ export default class Explore extends React.Component {
   render() {
     return (
       <div className="explore">
-        <h5>Search Gramene</h5>
+        <h5>Search</h5>
         <ul>
           {this.renderExplorations()}
         </ul>

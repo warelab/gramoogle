@@ -13,19 +13,10 @@ const Footer = ({noSocial}) => {
       <div className="container">
         <ul className="nav navbar-nav">
           <li>
-            <EmbeddedDrupalPageLink text={releaseLabel} path={releaseUrl} />
-          </li>
-          <li>
-            <EmbeddedDrupalPageLink text="About" path="/about-gramene" />
-          </li>
-          <li>
-            <EmbeddedDrupalPageLink text="Cite" path="/cite" />
+            <a href="http://www.gramene.org">Gramene main site</a>
           </li>
           <li>
             <EmbeddedDrupalPageLink text="Feedback" path="/feedback" />
-          </li>
-          <li>
-            <EmbeddedDrupalPageLink text="Privacy" path="/personal-data-privacy" />
           </li>
         </ul>
         {socialMaybe}

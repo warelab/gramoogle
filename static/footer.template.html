@@ -48,31 +48,12 @@
                 <div class="tech-info well">
                     <h5>Application Info</h5>
                     <ul class="buildInfo">
-                        <li><a title="API"
-                               href="<%= apiServer %>">Data Release <%= grameneRelease %></a></li>
-                        <li>Gramene Search UI
-                            <% if(tag) { %>
-                            <a title="Release available on github"
-                               href="https://github.com/warelab/gramoogle/releases/tag/<%= tag %>">Release <%= tag
-                                %></a>
-                            <% }
-
-                            if (jobNumber) { %>
-                            <a title="Built by Travis-CI"
-                               href="https://travis-ci.org/warelab/gramoogle/jobs/<%= jobId %>">Build #<%= jobNumber
-                                %></a>
-                            <% } else if(isDev) { %>
-                            LOCAL DEVELOPMENT BUILD
-                            <% } else { %>
-                            LOCAL PACKAGED BUILD
-                            <% } %>
-                        </li>
                         <li>Built on <%= date %></li>
                     </ul>
                     <h5>Actions</h5>
                     <button class="btn btn-xs btn-danger"
                             onclick="clearLocalStorage()">
-                        Reset Gramene Search
+                        Reset Search
                     </button>
                 </div>
             </div>

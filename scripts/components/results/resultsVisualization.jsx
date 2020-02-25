@@ -34,7 +34,7 @@ var ResultsVisualization = React.createClass({
     var summary;
 
     if (this.state.visData) {
-      if (this.state.visData.taxonomy.model.results.count > 1) {
+      if (this.state.visData.taxonomy.model.results.count > 0) {
         summary = (
           <div>
             <Vis {...this.state.visData}

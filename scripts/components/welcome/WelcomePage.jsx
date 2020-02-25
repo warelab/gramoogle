@@ -65,13 +65,28 @@ export default class Welcome extends React.Component {
               </Col>
             </Row>
             <Row>
-              <Col sm={9} className="tools-col">
+              <Col sm={12} className="tools-col">
                 {this.bodyContent()}
               </Col>
-              <Col sm={3} className="posts-col">
-                <Posts feed={this.state.drupal.feed}/>
-              </Col>
             </Row>
+            <Row>
+                <Col sm={6} className="posts-col">
+<h2>  Prelimiary NAM genome assembly and Gene Annotations</h2>
+
+This is a preliminary release of some of the genomes sequenced and assembled from NAM project. They are 
+<ul><li>B73 AGPv5, NC350, Ki11</li> <li>non-stiff-stalks: Ky21i, M162W, Ms71</li> <li>Tropicals lines: CML247, CML333, Ki3 and CML52</li></ul>
+We also includeded public released assembly  Zea mays B73_RefGen_v4 for comparision.
+
+<p>Gene annotation was performed in the laboratory of Doreen Ware (CSHL/USDA). Protein-coding genes were identified using MAKER-P software version 3.1 (Campbell <i>et al</i>, 2014) with various edivence including flcDNAs, proteins. 
+
+</p><p><b>This sequence has been released under the&nbsp;Toronto Agreement. No whole-genome research may be submitted for publication until the official publication for this genome assembly has been published.
+</b></p>
+            </Col>
+            <Col sm={6} className="posts-col">
+              <h2>Comparative analyses</h2>
+              A total of 24,073 GeneTree families were constructed comprising 676,084 individual genes from 19 plant genomes with 716,754 input proteins. See stats <a href="http://maize-pangenome-ensembl.gramene.org/prot_tree_stats.html">here</a>
+            </Col>
+          </Row>
           </Grid>
         </div>
     );

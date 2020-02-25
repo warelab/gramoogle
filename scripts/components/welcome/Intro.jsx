@@ -4,10 +4,7 @@ import {Jumbotron, Button} from 'react-bootstrap';
 
 const Intro = ({onClose}) => <Jumbotron className="gramene-intro">
   <Button bsClass="close" onClick={onClose}>&times;</Button>
-  <p><strong>Gramene</strong> is a <em>curated</em>, <em>open-source</em>, <em>
-    integrated</em> data resource for comparative
-    functional genomics in crops and model
-    plant species.</p>
+  <p>Welcome to the Maize pan-genome <i>beta</i> site</p>
 </Jumbotron>;
 
 Intro.propTypes = {
