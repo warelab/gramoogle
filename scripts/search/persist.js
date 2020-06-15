@@ -40,10 +40,16 @@ function possiblyCopyStateFromLocalStorage() {
 function possiblyHandleIdList() {
   var idList = getidListFromURLParams();
   if (idList.length > 0) {
+    const params = _.get(global.gramene, 'searchParams');
+    let fqField = params.hasOwnProperty('field') ? params.field : 'id';
+    const category = fqField;
+    if (fqField === 'terms') {
+      fqField = '_terms';
+    }
     var state = {filters: {}, taxa: {}};
-    var fqString = 'id:(' + idList.join(' ') + ')';
+    var fqString = `${fqField}:(${idList.join(' ')})`;
     state.filters[fqString] = {
-      category: "Gene",
+      category: category,
       display_name: idList.length <= maxLengthToShow ? idList.join(', ')
         : idList.slice(0,maxLengthToShow).join(', ') + ' and ' + (idList.length - maxLengthToShow) + ' more',
       exclude: false,
