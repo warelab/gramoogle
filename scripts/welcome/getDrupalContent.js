@@ -8,7 +8,7 @@ export const parseFeed = (response) => {
   return Q.nfcall(RSSParser.parseString, response.data);
 };
 
-export const getBlogFeed = () => axios.get("http://news.gramene.org/blog/feed")
+export const getBlogFeed = () => axios.get("https://news.gramene.org/blog/feed")
                                .then(parseFeed)
                                .then((rss)=> {
                                  console.log(rss);
