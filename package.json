@@ -25,7 +25,7 @@
   },
   "homepage": "https://github.com/warelab/gramoogle",
   "dependencies": {
-    "axios": "^0.9.1",
+    "axios": "^0.21.1",
     "body-parser": "^1.18.2",
     "component-closest": "^1.0.1",
     "compression": "^1.6.2",
