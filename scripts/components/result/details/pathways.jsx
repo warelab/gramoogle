@@ -102,7 +102,7 @@ var Pathways = React.createClass({
   },
 
   makeTaxonSpecific: function (docs,taxon_id) {
-    if (taxon_id === 39947) taxon_id = 4530;
+//    if (taxon_id === 39947) taxon_id = 4530;
     let lineageField = 'lineage_'+taxon_id;
     let tsDocs = docs.map(function(doc) {
       let tsDoc = _.pick(doc,['_id','name','type']);

@@ -76,7 +76,7 @@ const GrameneTools = () =>
                      {/*imgSrc="/assets/images/gramene_leaves.svg"/>*/}
         <GrameneTool title="Genome Browser"
                      description="Browse genomes with annotations, variation and comparative tools"
-                     link={externalLink(`${ensemblURL}/genome_browser/index.html`)}
+                     link={externalLink(`${ensemblURL}/index.html`)}
                      imgSrc="/assets/images/welcome/ensemblgramene.png"/>
         <GrameneTool title="Plant Reactome"
                      description="Browse and analyze metabolic and regulatory pathways"

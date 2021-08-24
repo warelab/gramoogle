@@ -153,8 +153,8 @@ module.exports = function (grunt) {
   grunt.registerTask('packageIndexHtml', 'Build index.html for distribution.', function () {
     var footer = (function compileFooterTemplate() {
       function defaultServer() {
-        const PROD_SERVER = 'http://data.gramene.org/';
-        const DEV_SERVER = 'http://devdata.gramene.org/';
+        const PROD_SERVER = 'https://data.gramene.org/';
+        const DEV_SERVER = 'https://data.gramene.org/';
         var defaultServer;
 
         if (process.env.GRAMENE_SERVER) {
@@ -224,8 +224,8 @@ module.exports = function (grunt) {
   grunt.registerTask('packageStaticHtml', 'Build static.html for distribution.', function () {
     var footer = (function compileFooterTemplate() {
       function defaultServer() {
-        const PROD_SERVER = 'http://data.gramene.org/';
-        const DEV_SERVER = 'http://devdata.gramene.org/';
+        const PROD_SERVER = 'https://data.gramene.org/';
+        const DEV_SERVER = 'https://devdata.gramene.org/';
         var defaultServer;
 
         if (process.env.GRAMENE_SERVER) {

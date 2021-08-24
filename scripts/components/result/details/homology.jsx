@@ -151,6 +151,7 @@ export default class Homology extends React.Component {
                    genomesOfInterest={this.state.genomesOfInterest}
                    taxonomy={this.state.taxonomy}
                    allowGeneSelection={true}
+                   enableCuration={false}
                    pivotTree={true}
                    enablePhyloview={true}
                    numberOfNeighbors={10}
