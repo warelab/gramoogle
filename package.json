@@ -89,7 +89,7 @@
     "jit-grunt": "^0.9.1",
     "less-plugin-autoprefix": "^1.4.1",
     "less-plugin-clean-css": "^1.5.1",
-    "moment": "^2.10.6",
+    "moment": "^2.29.2",
     "q-io": "^1.13.2",
     "uglifyify": "^3.0.1"
   },
